@@ -3,13 +3,13 @@ import axios from "axios";
 import FormData from "form-data";
 import fs from "fs";
 
-const SLACK_SIGNING_SECRET = "acf31a7376b19c7d55fafabfd3bed248";
-const SLACK_CLIENT_ID = "12922529104.5894776759175";
-const SLACK_CLIENT_SECRET = "cf00d1d6730ca5b040d79309530ecef6";
+const SLACK_SIGNING_SECRET = "";
+const SLACK_CLIENT_ID = "";
+const SLACK_CLIENT_SECRET = "";
 
 const SRCDIR = "src/";
 
-let access_token = "";
+let ACCESS_TOKEN = "";
 
 const app = express();
 const port = 3001;
@@ -18,8 +18,8 @@ const port = 3001;
 app.use(express.json());
 
 // OAuth Callback URL has to be the same as in the Slack Application Panel under OAuth page
-// const redirectUri = "http://localhost:3001/slack/auth/callback";
-const redirectUri = "https://real-hands-tickle.loca.lt/slack/auth/callback";
+// const redirectUri = `http://localhost:${port}/slack/auth/callback`;
+const redirectUri = "https://modern-carrots-rule.loca.lt/slack/auth/callback";
 
 // OAuth Step 1: Redirect users to Slack's authorization URL
 app.get("/slack/auth", (req, res) => {
@@ -49,13 +49,9 @@ app.get("/slack/auth/callback", async (req, res) => {
 
         console.log(response);
 
-        access_token = response.data.authed_user.access_token;
+        ACCESS_TOKEN = response.data.authed_user.access_token;
 
-        // Now you have the user's access token
-        console.log("User Access Token:", access_token);
-
-        // You can save it for later use, typically in a database
-        // or associate it with the user's account
+        console.log("User Access Token:", ACCESS_TOKEN);
 
         res.send("OAuth process completed successfully!");
     } catch (error) {
@@ -68,7 +64,6 @@ app.get("/slack/auth/callback", async (req, res) => {
 app.get("/slack/auth/send-message", async (req, res) => {
     const { mess, conversations } = req.query;
     console.log(mess, conversations);
-    console.log(access_token);
 
     try {
         const data = {
@@ -77,7 +72,7 @@ app.get("/slack/auth/send-message", async (req, res) => {
         };
         const config = {
             headers: {
-                Authorization: `Bearer ${access_token}`,
+                Authorization: `Bearer ${ACCESS_TOKEN}`,
             },
         };
 
@@ -87,9 +82,37 @@ app.get("/slack/auth/send-message", async (req, res) => {
             config
         );
 
-        // Now you have the code received from Slack
-        // You can save it for later use, typically in a database
-        // or associate it with the user's account
+        res.send(`Message successful. \n ${response}`);
+    } catch (error) {
+        console.error("Sending Message error:", error);
+        res.status(500).send(`Process of Sending Message failed. \n ${error}`);
+    }
+});
+
+// Status endpoint
+app.get("/slack/auth/set-status", async (req, res) => {
+    const date = new Date();
+    date.setDate(date.getDate() + 1);
+
+    try {
+        const data = {
+            profile: {
+                status_text: "testing",
+                status_emoji: ":train:",
+                status_expiration: date,
+            },
+        };
+        const config = {
+            headers: {
+                Authorization: `Bearer ${ACCESS_TOKEN}`,
+            },
+        };
+
+        const response = await axios.post(
+            "https://slack.com/api/users.profile.set",
+            data,
+            config
+        );
 
         res.send(`Message successful. \n ${response}`);
     } catch (error) {
@@ -101,6 +124,7 @@ app.get("/slack/auth/send-message", async (req, res) => {
 // Start the Express server
 app.listen(port, () => {
     console.log(`⚡️ Express server is running on port ${port}`);
+    console.log(`⚡️ Link: http://localhost:${port}/slack/auth/callback`);
 });
 
 function save_authed_user(obj: Object): void {

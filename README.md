@@ -55,3 +55,13 @@
 > Example
 
 `https://pretty-tips-rush.loca.lt/slack/auth/send-message?mess=testing_sending&conversations=D05AAAAAAAA`
+
+### Changing profile status
+
+> Changes profile status to "testing"
+
+`https://localhost:{PORT}/slack/auth/set-status` - API Route
+
+> Example
+
+`https://pretty-tips-rush.loca.lt/slack/auth/set-status`
