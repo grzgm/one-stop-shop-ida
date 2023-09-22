@@ -12,14 +12,14 @@ export const codeChallenge = base64UrlEncode(crypto.createHash('sha256').update(
 function base64UrlEncode(str: Buffer) {
     let base64 = Buffer.from(str).toString('base64');
     base64 = base64.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
-    console.log(`codeVerifier ${codeVerifier}`)
-    console.log(`codeChallenge ${base64}`)
+    // console.log(`codeVerifier ${codeVerifier}`)
+    // console.log(`codeChallenge ${base64}`)
     return base64;
 }
 
 export function save_authed_user(obj: Object): void {
     const json = JSON.stringify(obj);
-    fs.writeFile(SRCDIR + "authed_user.json", json, "utf8", (err) => {
+    fs.writeFile(SRCDIR + "authed_user_refresh.json", json, "utf8", (err) => {
         if (err) throw err;
     });
 }
