@@ -33,7 +33,7 @@
 
 ### OAuth callback
 
-> Handles the OAuth callback
+> Handles the OAuth callback and acquires Access Token
 
 `https://localhost:{PORT}/slack/auth/callback` - API Route
 
@@ -43,7 +43,7 @@
 
 ### Sending personalised message
 
-> Handles sending the message
+> Handles sending a message
 
 `https://localhost:{PORT}/slack/auth/send-message` - API Route
 
