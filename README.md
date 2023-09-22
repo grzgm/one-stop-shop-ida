@@ -11,47 +11,73 @@
 ## Features
 
 - Microsoft Graph OAuth 2.0 flow authentication,
-- Storing user access tokens
-- Sending custom Outlook emails as a User
-- Accessing Outlook Calendar
+- Storing user Access Tokens
+- Refreshing user Access Tokens
+- Sending Outlook Emails as a User
+- Creating Outlook Calendar Events as a User
 
 ## Microsoft Permissions
 
-- 
+offline_access user.read mail.read mail.send calendars.readwrite
 
 ## Endpoints
 
-<!-- ### Slack's authorization URL
+### Microsoft's authorization URL
 
 > Redirects to Slack's authorization page
 
-`https://localhost:{PORT}/slack/auth` - API Route
+`https://localhost:{PORT}/microsoft/auth` - API Route
 
 > Example
 
-`https://pretty-tips-rush.loca.lt/slack/auth`
+`http://localhost:3002/microsoft/auth`
 
 ### OAuth callback
 
-> Handles the OAuth callback
+> Handles the OAuth callback and acquires Access Token
 
-`https://localhost:{PORT}/slack/auth/callback` - API Route
-
-> Example
-
-`https://pretty-tips-rush.loca.lt/slack/auth/callback`
-
-### Sending personalised message
-
-> Handles sending the message
-
-`https://localhost:{PORT}/slack/auth/send-message` - API Route
-
-| Query Parameter | Type   | Description        |
-| --------------- | ------ | ------------------ |
-| *mess*          | string | Message to be send |
-| *conversations* | string | Conversation id    |
+`https://localhost:{PORT}/microsoft/auth/callback` - API Route
 
 > Example
 
-`https://pretty-tips-rush.loca.lt/slack/auth/send-message?mess=testing_sending&conversations=D05AAAAAAAA` -->
+`http://localhost:3002/microsoft/auth/callback`
+
+### OAuth callback refresh
+
+> Handles the OAuth callback and refreshes Access Token
+
+`https://localhost:{PORT}/microsoft/auth/refresh` - API Route
+
+> Example
+
+`http://localhost:3002/microsoft/auth/refresh`
+
+### Sending email
+
+> Sends an email as a user, to the user itself and one more recipient
+
+`https://localhost:{PORT}/microsoft/auth/send-email` - API Route
+
+| Query Parameter | Type   | Description      |
+| --------------- | ------ | ---------------- |
+| *mess*          | string | Contetn of Email |
+| *address*       | string | Email Address    |
+
+> Example
+
+`http://localhost:3002/microsoft/auth/send-email?mess=testing_sending&address=test@test.pl`
+
+### Creating new calendar event
+
+> Creates new event as a user, as attendees adds user and one more person
+
+`https://localhost:{PORT}/microsoft/auth/new-event` - API Route
+
+| Query Parameter | Type   | Description      |
+| --------------- | ------ | ---------------- |
+| *mess*          | string | Contetn of Email |
+| *address*       | string | Email Address    |
+
+> Example
+
+`http://localhost:3002/microsoft/auth/new-event?address=test@test.pl`
