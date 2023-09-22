@@ -1,4 +1,7 @@
 import crypto from "crypto"
+import fs from "fs";
+
+const SRCDIR = "src/";
 
 // Generate a random code verifier (43-128 characters in length)
 export const codeVerifier = crypto.randomBytes(32).toString('hex');
@@ -12,4 +15,11 @@ function base64UrlEncode(str: Buffer) {
     console.log(`codeVerifier ${codeVerifier}`)
     console.log(`codeChallenge ${base64}`)
     return base64;
+}
+
+export function save_authed_user(obj: Object): void {
+    const json = JSON.stringify(obj);
+    fs.writeFile(SRCDIR + "authed_user.json", json, "utf8", (err) => {
+        if (err) throw err;
+    });
 }
