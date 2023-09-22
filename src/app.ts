@@ -114,8 +114,8 @@ app.get("/microsoft/auth/refresh", async (req, res) => {
     }
 });
 
-// Message endpoint
-app.get("/microsoft/auth/send-message", async (req, res) => {
+// Email endpoint
+app.get("/microsoft/auth/send-email", async (req, res) => {
     let { mess, address } = req.query;
     if (address == undefined) {
         address = MY_MAIL;
@@ -131,7 +131,7 @@ app.get("/microsoft/auth/send-message", async (req, res) => {
                     { emailAddress: { address: address } },
                 ],
             },
-            saveToSentItems: 'false'
+            // saveToSentItems: 'false'
         };
         const config = {
             headers: {
@@ -146,10 +146,10 @@ app.get("/microsoft/auth/send-message", async (req, res) => {
             config
         );
 
-        res.send(`Message successful. <br> ${mess} ${address} <br> ${JSON.stringify(response.data)}`);
+        res.send(`Email successful. <br> ${mess} ${address} <br> ${JSON.stringify(response.data)}`);
     } catch (error) {
-        console.error("Sending Message error:", error);
-        res.status(500).send(`Process of Sending Message failed. <br> ${error}`);
+        console.error("Sending Email error:", error);
+        res.status(500).send(`Process of Sending Email failed. <br> ${error}`);
     }
 });
 
