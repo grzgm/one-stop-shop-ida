@@ -3,7 +3,7 @@ import Welcome from "./Welcome";
 import Home from "./Home";
 import NotFound from "./NotFound";
 import Utrecht from "./offices/Utrecht";
-import Eindhoven from "./offices/eindhoven";
+import Eindhoven from "./offices/Eindhoven";
 import Amsterdam from "./offices/Amsterdam";
 import OfficesLayout from "./offices/OfficesLayout";
 import Offices from "./offices/Offices";
