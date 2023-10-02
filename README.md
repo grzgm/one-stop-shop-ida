@@ -1,2 +1,9 @@
-# one_stop_shop_ida
-Repository for “One Stop Shop” iDA welcoming application
+# “One Stop Shop” iDA welcoming application
+
+## Technology
+
+- Node.js,
+- TypeScript,
+- PWA,
+- React,
+- Vite,
