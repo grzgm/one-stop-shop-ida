@@ -14,10 +14,11 @@ function Navbar() {
           <Link className="nav__option heading--small" to="/company101">Company 101</Link>
           <Link className="nav__option heading--small" to="/personal-skills">Personal Skills</Link>
           <Link className="nav__option heading--small" to="/expenses">Expenses</Link>
+          
         </div>
         <div id="nav__separator" />
         <div id="nav__options__right">
-          <Link className="nav__option heading--small" to="/offices">Offices</Link>
+          <Link className="nav__option heading--small" to="/offices">Change Offices</Link>
           <Link className="nav__option heading--small" to="/settings">Settings</Link>
         </div>
       </div>
