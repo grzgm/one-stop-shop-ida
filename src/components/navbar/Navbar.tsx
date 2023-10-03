@@ -1,34 +1,26 @@
 import { Link } from "react-router-dom";
+import idaLogo from "../../assets/ida-logo.svg";
+import "../../css/navbar.css";
 
 function Navbar() {
   return (
     <nav>
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/employee-portal">EmployeePortal</Link>
-        </li>
-        <li>
-          <Link to="/office-details">Office Details</Link>
-        </li>
-        <li>
-          <Link to="/company101">Company 101</Link>
-        </li>
-        <li>
-          <Link to="/personal-skills">Personal Skills</Link>
-        </li>
-        <li>
-          <Link to="/expenses">Expenses</Link>
-        </li>
-        <li>
-          <Link to="/offices">Offices</Link>
-        </li>
-        <li>
-          <Link to="/settings">Settings</Link>
-        </li>
-      </ul>
+      <img id="nav__logo" src={idaLogo} alt="iDA" />
+      <div id="nav__options">
+        <div id="nav__options__left">
+          <Link className="nav__option heading--small" to="/">Home</Link>
+          <Link className="nav__option heading--small" to="/employee-portal">EmployeePortal</Link>
+          <Link className="nav__option heading--small" to="/office-details">Office Details</Link>
+          <Link className="nav__option heading--small" to="/company101">Company 101</Link>
+          <Link className="nav__option heading--small" to="/personal-skills">Personal Skills</Link>
+          <Link className="nav__option heading--small" to="/expenses">Expenses</Link>
+        </div>
+        <div id="nav__separator" />
+        <div id="nav__options__right">
+          <Link className="nav__option heading--small" to="/offices">Offices</Link>
+          <Link className="nav__option heading--small" to="/settings">Settings</Link>
+        </div>
+      </div>
     </nav>
   );
 }
