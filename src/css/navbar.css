@@ -1,22 +1,22 @@
-nav{
+#navbar{
     height: 100px;
     display: flex;
     border-bottom: 1px var(--grey2) solid;
 }
 
-#nav__logo{
+#navbar__logo{
     height: 100%;
     padding: 30px;
 }
 
-#nav__options{
+#navbar__options{
     width: 100%;
     display: flex;
     justify-content: space-around;
     align-items: center;
 }
 
-#nav__options__left{
+#navbar__options__left{
     height: 100%;
     display: flex;
     justify-content: space-around;
@@ -25,7 +25,7 @@ nav{
     overflow-y: hidden;
 }
 
-#nav__options__right{
+#navbar__options__right{
     height: 100%;
     min-width: 315px;
     display: flex;
@@ -34,31 +34,31 @@ nav{
     flex-wrap: wrap;
 }
 
-#nav__separator{
+#navbar__separator{
     width: 2px;
     background-color: var(--main-red);
     height: 80%;
 }
 
-.nav__option{
+.navbar__option{
     display: flex;
     height: 100%;
     padding: 0 10px;
     align-items: center;
 }
 
-.nav__option:hover{
+.navbar__option:hover{
     padding: 0 10px;
     background-color: var(--grey2);
     border-bottom: 2px var(--main-red) solid;
 }
 
-.nav__burger-menu{
+.navbar__burger-menu{
     display: none;
 }
 
 @media (max-width: 1450px) {
-    .nav__burger-menu{
+    .navbar__burger-menu{
         height: 100%;
         padding: 0 10px;
         display: flex;

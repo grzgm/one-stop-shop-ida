@@ -5,22 +5,22 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 function Navbar() {
   return (
-    <nav>
-      <img id="nav__logo" src={idaLogo} alt="iDA" />
-      <div id="nav__options">
-        <div id="nav__options__left" className="heading--small">
-          <Link className="nav__option heading--small" to="/">Home</Link>
-          <Link className="nav__option heading--small" to="/employee-portal">EmployeePortal</Link>
-          <Link className="nav__option heading--small" to="/office-details">Office Details</Link>
-          <Link className="nav__option heading--small" to="/company101">Company 101</Link>
-          <Link className="nav__option heading--small" to="/personal-skills">Personal Skills</Link>
-          <Link className="nav__option heading--small" to="/expenses">Expenses</Link>
+    <nav id="navbar">
+      <img id="navbar__logo" src={idaLogo} alt="iDA" />
+      <div id="navbar__options">
+        <div id="navbar__options__left" className="heading--small">
+          <Link className="navbar__option heading--small" to="/">Home</Link>
+          <Link className="navbar__option heading--small" to="/employee-portal">EmployeePortal</Link>
+          <Link className="navbar__option heading--small" to="/office-details">Office Details</Link>
+          <Link className="navbar__option heading--small" to="/company101">Company 101</Link>
+          <Link className="navbar__option heading--small" to="/personal-skills">Personal Skills</Link>
+          <Link className="navbar__option heading--small" to="/expenses">Expenses</Link>
         </div>
-        <div className="nav__burger-menu"><MenuIcon fontSize="inherit"/></div>
-        <div id="nav__separator" />
-        <div id="nav__options__right">
-          <Link className="nav__option heading--small" to="/offices">Change Offices</Link>
-          <Link className="nav__option heading--small" to="/settings">Settings</Link>
+        <div className="navbar__burger-menu"><MenuIcon fontSize="inherit"/></div>
+        <div id="navbar__separator" />
+        <div id="navbar__options__right">
+          <Link className="navbar__option heading--small" to="/offices">Change Offices</Link>
+          <Link className="navbar__option heading--small" to="/settings">Settings</Link>
         </div>
       </div>
     </nav>

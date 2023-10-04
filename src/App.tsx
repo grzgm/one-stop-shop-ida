@@ -6,8 +6,8 @@ import Sidebar from "./components/bars/Sidebar";
 function App() {
   return (
     <div>
-      {/* <Navbar/> */}
-      <Sidebar />
+      <Navbar/>
+      {/* <Sidebar /> */}
       <Router />
     </div>
   );
