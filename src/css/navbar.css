@@ -1,7 +1,7 @@
 nav{
     height: 100px;
     display: flex;
-    border-bottom: 1px #7C7C7C33 solid;
+    border-bottom: 1px var(--grey2) solid;
 }
 
 #nav__logo{
@@ -27,6 +27,7 @@ nav{
 
 #nav__options__right{
     height: 100%;
+    min-width: 315px;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -35,7 +36,7 @@ nav{
 
 #nav__separator{
     width: 2px;
-    background-color: red;
+    background-color: var(--main-red);
     height: 80%;
 }
 
@@ -48,6 +49,20 @@ nav{
 
 .nav__option:hover{
     padding: 0 10px;
-    background-color: #7C7C7C33;
-    border-bottom: 1px red solid;
+    background-color: var(--grey2);
+    border-bottom: 2px var(--main-red) solid;
+}
+
+.nav__burger-menu{
+    display: none;
+}
+
+@media (max-width: 1450px) {
+    .nav__burger-menu{
+        height: 100%;
+        padding: 0 10px;
+        display: flex;
+        align-items: center;
+        font-size: 2.25rem;
+    }
 }
