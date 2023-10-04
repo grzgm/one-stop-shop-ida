@@ -11,7 +11,7 @@
     color: var(--font-colour-white);
 }
 
-#navbarbar__options{
+#sidebar__options{
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -19,7 +19,7 @@
     align-items: center;
 }
 
-#navbar__options__top{
+#sidebar__options__top{
     width: 100%;
     padding: 10px;
     display: flex;
@@ -30,7 +30,7 @@
     border-bottom: 2px var(--main-red) solid;
 }
 
-#navbar__options__bottom{
+#sidebar__options__bottom{
     width: 100%;
     padding: 10px;
     display: flex;
@@ -41,26 +41,26 @@
     border-bottom: 2px var(--main-red) solid;
 }
 
-.navbar__option{
+.sidebar__option{
     height: 100%;
     padding: 10px;
     display: flex;
     align-items: center;
 }
 
-.navbar__option:hover{
+.sidebar__option:hover{
     color: var(--main-red);
     border-bottom: 2px var(--main-red) solid;
 }
 
-.navbar__burger-menu{
+.sidebar__burger-menu{
     padding: 10px;
     display: flex;
     align-items: center;
     font-size: 2.25rem;
 }
 
-.navbar__arrow{
+.sidebar__arrow{
     display: flex;
     height: 100%;
     padding: 0 10px;
