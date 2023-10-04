@@ -1,0 +1,16 @@
+.card-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.card-container__title {
+    border-top: 2px var(--main-red) solid;
+    border-bottom: 2px var(--main-red) solid;
+}
+
+.card-container__cards{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}

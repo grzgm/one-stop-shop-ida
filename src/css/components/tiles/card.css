@@ -1,0 +1,21 @@
+.card {
+    display: flex;
+    background-color: var(--light-blue);
+}
+
+.card__text {
+    display: flex;
+    flex-direction: column;
+}
+
+.card__text__title {
+    display: flex;
+}
+
+.card__text__icon{
+    height: 50px;
+}
+
+.card__arrow{
+
+}
