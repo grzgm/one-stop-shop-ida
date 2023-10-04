@@ -1,6 +1,23 @@
 :root {
     font-family: 'Open Sans';
     color-scheme: dark light;
+
+    --main-red: #E30C31;
+    --dark-red: #B12028;
+    --light-red: #F8C1CA;
+    --main-blue: #000C6E;
+    --light-blue: #ABDBEB;
+    --very-light-blue: #ABDBEB7F;
+    --grey1: #7C7C7C;
+    --grey2: #7C7C7C33;
+    --grey3: #F2F5F6;
+    --success: #6BC16D;
+    --moderate: #FFD101;
+    --fail: #E65049;
+    --font-colour: #192B33;
+    --font-colour-white: #FFFFFF;
+
+    color: var(--font-colour);
 }
 
 * {
@@ -11,7 +28,7 @@
 
 a {
     text-decoration: none;
-    color: black;
+    color: var(--font-colour);
 }
 
 html, body {
