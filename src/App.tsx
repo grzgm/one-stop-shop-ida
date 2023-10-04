@@ -2,8 +2,7 @@ import "./css/App.css";
 import Navbar from "./components/navbar/Navbar";
 import Router from "./routes/Router";
 import Sidebar from "./components/bars/Sidebar";
-import { useContext, useEffect, useState } from "react";
-import { ShowSidebarContext } from "./contexts/SidebarContext";
+import { useEffect, useState } from "react";
 
 function App() {
   const maxWindowWidth = 1450

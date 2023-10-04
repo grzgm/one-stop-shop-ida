@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import "../../css/sidebar.css";
-import MenuIcon from "@mui/icons-material/Menu";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import CloseIcon from "@mui/icons-material/Close";
 import { Dispatch, SetStateAction } from "react";
