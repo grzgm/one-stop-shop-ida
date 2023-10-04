@@ -23,6 +23,7 @@
     align-items: center;
     flex-wrap: wrap;
     overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 #navbar__options__right{
@@ -36,6 +37,7 @@
 
 #navbar__separator{
     width: 2px;
+    min-width: 2px;
     background-color: var(--main-red);
     height: 80%;
 }
@@ -64,5 +66,15 @@
         display: flex;
         align-items: center;
         font-size: 2.25rem;
+    }
+}
+
+@media (max-width: 750px) {
+    #navbar__options__right{
+        display: none;
+    }
+    
+    #navbar__separator{
+        display: none;
     }
 }
