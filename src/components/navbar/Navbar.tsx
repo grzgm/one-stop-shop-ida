@@ -2,8 +2,13 @@ import { Link } from "react-router-dom";
 import idaLogo from "../../assets/ida-logo.svg";
 import "../../css/navbar.css";
 import MenuIcon from '@mui/icons-material/Menu';
+import { Dispatch, SetStateAction } from "react";
 
-function Navbar() {
+interface NavbarProps {
+  onPressOpenSidebar: Dispatch<SetStateAction<boolean>>;
+}
+
+function Navbar({onPressOpenSidebar}: NavbarProps) {
   return (
     <nav id="navbar">
       <img id="navbar__logo" src={idaLogo} alt="iDA" />
@@ -16,7 +21,7 @@ function Navbar() {
           <Link className="navbar__option heading--small" to="/personal-skills">Personal Skills</Link>
           <Link className="navbar__option heading--small" to="/expenses">Expenses</Link>
         </div>
-        <div className="navbar__burger-menu"><MenuIcon fontSize="inherit"/></div>
+        <div className="navbar__burger-menu" onClick={() => onPressOpenSidebar(true)}><MenuIcon fontSize="inherit"/></div>
         <div id="navbar__separator" />
         <div id="navbar__options__right">
           <Link className="navbar__option heading--small" to="/offices">Change Offices</Link>

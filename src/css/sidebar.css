@@ -1,14 +1,15 @@
 #sidebar{
-    min-width: 400px;
-    height: 100%;
     position: absolute;
     top: 0;
     left: 0;
+    min-width: 400px;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     background-color: var(--main-blue);
     color: var(--font-colour-white);
+    z-index: 100;
 }
 
 #sidebar__options{
@@ -65,4 +66,14 @@
     height: 100%;
     padding: 0 10px;
     align-items: center;
+}
+
+#cover{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 90;
+    background-color: var(--grey2);
 }
