@@ -28,7 +28,7 @@
 
 a {
     text-decoration: none;
-    color: var(--font-colour);
+    color: inherit;
 }
 
 html, body {
