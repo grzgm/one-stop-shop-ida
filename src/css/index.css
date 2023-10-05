@@ -77,3 +77,8 @@ p, .body--normal {
     font-weight: bold;
     line-height: 2.125rem;
 }
+
+.description{
+    padding: 1.25rem;
+    text-align: center;
+}
