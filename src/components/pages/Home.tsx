@@ -1,6 +1,7 @@
 import CardContainer from "../tiles/CardContainer";
 import "../../css/components/pages/home.css";
 import { BodyNormal, HeadingLarge } from "../text-wrapers/TextWrapers";
+import { CardProps } from "../tiles/Card";
 
 function Home() {
   return (
@@ -14,6 +15,7 @@ function Home() {
       </div>
       <CardContainer />
       <CardContainer />
+      {/* <CardContainer cardProps={[{ linkAddress: "/office-details", title: "Test", description: "Test" }]}/> */}
     </div>
   );
 }

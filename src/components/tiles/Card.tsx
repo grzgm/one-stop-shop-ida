@@ -2,21 +2,28 @@ import personHappy from "../../assets/avatar-person-happy.svg";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import "../../css/components/tiles/card.css";
 import { BodySmall, HeadingSmall } from "../text-wrapers/TextWrapers";
+import { Link } from "react-router-dom";
 
-function Card() {
+export interface CardProps {
+  linkAddress?: string;
+  title?: string;
+  description?: string;
+}
+
+function Card({linkAddress = "/", title = "Title", description = "Description"}: CardProps) {
   return (
-    <div className="card">
+    <Link className="card" to={linkAddress}>
       <div className="card__text">
         <div className="card__text__title">
           <img className="card__text__icon" src={personHappy} alt="iDA" />
-          <HeadingSmall>Title</HeadingSmall>
+          <HeadingSmall>{title}</HeadingSmall>
         </div>
-        <BodySmall>Description</BodySmall>
+        <BodySmall>{description}</BodySmall>
       </div>
       <div className="card__arrow">
         <KeyboardArrowRightIcon fontSize="inherit" />
       </div>
-    </div>
+    </Link>
   );
 }
 

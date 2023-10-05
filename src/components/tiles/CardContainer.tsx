@@ -1,11 +1,23 @@
-import Card from "./Card";
+import Card, { CardProps } from "./Card";
 import "../../css/components/tiles/card-container.css";
 import { HeadingLarge } from "../text-wrapers/TextWrapers";
 
-function CardContainer({ amountOfChildren = 4 }) {
+interface CardContainerProps {
+  cardProps?: CardProps[];
+}
+
+function CardContainer({ cardProps = [] }: CardContainerProps) {
   const cards = [];
-  for (let i = 0; i < amountOfChildren; i++) {
-    cards.push(<Card key={i} />);
+  console.log(cardProps)
+  if (cardProps.length < 1) {
+    for (let i = 0; i < 4; i++) {
+      cards.push(<Card key={i} />);
+    }
+  }
+  else {
+    for (let i = 0; i < cardProps.length; i++) {
+      cards.push(<Card key={i} linkAddress={cardProps[i].linkAddress} title={cardProps[i].title} description={cardProps[i].description}/>);
+    }
   }
 
   return (
