@@ -1,9 +1,10 @@
 #sidebar{
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     min-width: 400px;
     height: 100%;
+    min-height: 40rem;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -69,7 +70,7 @@
 }
 
 #cover{
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
