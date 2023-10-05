@@ -19,6 +19,7 @@ import PersonalSkills from "../components/pages/PersonalSkills";
 import Expenses from "../components/pages/Expenses";
 import Settings from "../components/pages/Settings";
 import ReserveDeskOverview from "../components/pages/office-details/ReserveDeskOverview";
+import Scheduling from "../components/pages/employee-portal/Scheduling";
 
 function Router() {
   return (
@@ -29,6 +30,7 @@ function Router() {
           <Route index element={<EmployeePortal />} />
           <Route path="sick-leave" element={<SickLeave />} />
           <Route path="vacation" element={<Vacation />} />
+          <Route path="scheduling" element={<Scheduling />} />
         </Route>
         <Route path="/office-details">
           <Route index element={<OfficeDetails />} />

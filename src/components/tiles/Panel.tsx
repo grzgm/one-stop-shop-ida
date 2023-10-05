@@ -1,18 +1,20 @@
 import personHappy from "../../assets/avatar-person-happy.svg";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import "../../css/components/tiles/panel.css";
+import { Link } from "react-router-dom";
 
-// interface PanelProps {
-//   linkAddress: string;
-// }
+interface PanelProps {
+  linkAddress: string;
+  title?: string;
+  description?: string;
+}
 
-// function Panel({linkAddress}: PanelProps) {
-function Panel() {
+function Panel({linkAddress, title = "Title", description = "Description"}: PanelProps) {
   return (
-    <div className="panel">
+    <Link className="panel" to={linkAddress}>
       <div className="panel__text">
-        <h1>Title</h1>
-        <p>Description</p>
+        <h3>{title}</h3>
+        <p className="body--small">{description}</p>
       </div>
       <div className="panel__icons">
         <img className="panel__icons__icon" src={personHappy} alt="iDA" />
@@ -20,7 +22,7 @@ function Panel() {
           <KeyboardArrowRightIcon fontSize="inherit" />
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
