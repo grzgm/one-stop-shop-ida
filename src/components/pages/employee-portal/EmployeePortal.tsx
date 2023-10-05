@@ -1,13 +1,14 @@
 import "../../../css/components/pages/employee-portal/employee-portal.css";
+import { BodyNormal, HeadingLarge } from "../../text-wrapers/TextWrapers";
 import Panel from "../../tiles/Panel";
 
 function EmployeePortal() {
   return (
     <div className="content">
       <div className="description">
-        <h1>Employee Portal</h1>
-        <p>Manage all work</p>
-        <p>related tasks from one place!</p>
+        <HeadingLarge>Employee Portal</HeadingLarge>
+        <BodyNormal>Manage all work</BodyNormal>
+        <BodyNormal>related tasks from one place!</BodyNormal>
       </div>
       <div className="content__panels">
         <Panel linkAddress="https://werknemer.loket.nl/#/login?returnUrl=%2Fstart" title="External" description="Werknemerloket Web Page"/>

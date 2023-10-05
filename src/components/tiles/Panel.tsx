@@ -2,6 +2,7 @@ import personHappy from "../../assets/avatar-person-happy.svg";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import "../../css/components/tiles/panel.css";
 import { Link } from "react-router-dom";
+import { BodySmall, HeadingSmall } from "../text-wrapers/TextWrapers";
 
 interface PanelProps {
   linkAddress: string;
@@ -13,8 +14,8 @@ function Panel({linkAddress, title = "Title", description = "Description"}: Pane
   return (
     <Link className="panel" to={linkAddress}>
       <div className="panel__text">
-        <h3>{title}</h3>
-        <p className="body--small">{description}</p>
+        <HeadingSmall>{title}</HeadingSmall>
+        <BodySmall>{description}</BodySmall>
       </div>
       <div className="panel__icons">
         <img className="panel__icons__icon" src={personHappy} alt="iDA" />

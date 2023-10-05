@@ -1,15 +1,16 @@
 import CardContainer from "../tiles/CardContainer";
 import "../../css/components/pages/home.css";
+import { BodyNormal, HeadingLarge } from "../text-wrapers/TextWrapers";
 
 function Home() {
   return (
     <div className="content">
       <div className="description">
-        <h1>Welcome to</h1>
-        <h1>iDA</h1>
-        <h1>One Stop Shop</h1>
-        <p>Place where you</p>
-        <p>have everything you need!</p>
+        <HeadingLarge>Welcome to</HeadingLarge>
+        <HeadingLarge>iDA</HeadingLarge>
+        <HeadingLarge>One Stop Shop</HeadingLarge>
+        <BodyNormal>Place where you</BodyNormal>
+        <BodyNormal>have everything you need!</BodyNormal>
       </div>
       <CardContainer />
       <CardContainer />

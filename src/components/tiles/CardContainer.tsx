@@ -1,5 +1,6 @@
 import Card from "./Card";
 import "../../css/components/tiles/card-container.css";
+import { HeadingLarge } from "../text-wrapers/TextWrapers";
 
 function CardContainer({ amountOfChildren = 4 }) {
   const cards = [];
@@ -10,7 +11,7 @@ function CardContainer({ amountOfChildren = 4 }) {
   return (
     <div className="card-container">
       <div className="card-container__title">
-        <h1>Category</h1>
+        <HeadingLarge>Category</HeadingLarge>
       </div>
       <div className="card-container__cards">{cards}</div>
     </div>

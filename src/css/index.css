@@ -35,18 +35,25 @@ html, body {
     width: 100%;
 }
 
-h3, .heading--small {
+.heading--large {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 2.8125rem;
+}
+
+.heading--small {
     font-family: 'Ubuntu', sans-serif;
     font-size: 1.5rem;
     font-weight: 700;
     line-height: 1.875rem;
 }
 
-h1, .heading--large {
-    font-family: 'Ubuntu', sans-serif;
-    font-size: 2.25rem;
-    font-weight: 700;
-    line-height: 2.8125rem;
+.body--normal {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.125rem;
+    font-weight: 400;
+    line-height: 1.6875rem;
 }
 
 .body--small {
@@ -56,11 +63,11 @@ h1, .heading--large {
     line-height: 1.25rem;
 }
 
-p, .body--normal {
-    font-family: 'Open Sans', sans-serif;
-    font-size: 1.125rem;
-    font-weight: 400;
-    line-height: 1.6875rem;
+.buttons--large {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 1.875rem;
+    font-weight: bold;
+    line-height: 2.125rem;
 }
 
 .buttons--normal {
@@ -68,13 +75,6 @@ p, .body--normal {
     font-size: 0.875rem;
     font-weight: bold;
     line-height: 1rem;
-}
-
-.buttons--large {
-    font-family: 'Ubuntu', sans-serif;
-    font-size: 1.875rem;
-    font-weight: bold;
-    line-height: 2.125rem;
 }
 
 .description{
