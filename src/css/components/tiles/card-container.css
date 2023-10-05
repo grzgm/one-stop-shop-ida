@@ -1,16 +1,25 @@
 .card-container {
+    /* max-width: 63.75rem; */
+    padding: 1.25rem;
     display: flex;
     flex-direction: column;
-    padding: 20px;
+    gap: 1.25rem;
+    background-color: var(--main-blue);
 }
 
 .card-container__title {
+    padding: 10px;
     border-top: 2px var(--main-red) solid;
     border-bottom: 2px var(--main-red) solid;
+    text-align: center;
+    color: var(--font-colour-white);
 }
 
 .card-container__cards{
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(17.5rem, 1fr));
+    gap: 1.25rem;
+    /* display: flex;
+    flex-wrap: wrap;
+    justify-content: center; */
 }

@@ -9,6 +9,7 @@ function Home() {
         <h2>Place where you have everything you need!</h2>
       </div>
       <CardContainer />
+      <CardContainer />
     </div>
   );
 }

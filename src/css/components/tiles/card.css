@@ -1,21 +1,38 @@
 .card {
+    max-width: 30rem;
+    min-width: 17.5rem;
+    aspect-ratio: 1.8;
+    padding: 1.25rem;
     display: flex;
+    /* flex: 0 0 calc(10% - 200px); */
+    justify-content: space-between;
     background-color: var(--light-blue);
+    color: var(--main-blue);
 }
 
 .card__text {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    gap: 0.625rem;
 }
 
 .card__text__title {
     display: flex;
+    align-items: center;
+    gap: 0.625rem;
 }
 
 .card__text__icon{
-    height: 50px;
+    height: 3rem;
+    aspect-ratio: 1;
+    border-radius: 100%;
+    background-color: var(--font-colour-white);
 }
 
 .card__arrow{
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 4rem;
 }
