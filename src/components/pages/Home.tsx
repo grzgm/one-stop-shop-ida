@@ -1,5 +1,5 @@
 import CardContainer from "../tiles/CardContainer";
-import "../../css/components/pages/home.css"
+import "../../css/components/pages/home.css";
 
 function Home() {
   return (

@@ -23,14 +23,14 @@
     gap: 0.625rem;
 }
 
-.card__text__icon{
+.card__text__icon {
     height: 3rem;
     aspect-ratio: 1;
     border-radius: 100%;
     background-color: var(--font-colour-white);
 }
 
-.card__arrow{
+.card__arrow {
     display: flex;
     justify-content: center;
     align-items: center;
