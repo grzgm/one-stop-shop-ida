@@ -82,3 +82,10 @@ p, .body--normal {
     padding: 1.25rem;
     text-align: center;
 }
+
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
