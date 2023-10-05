@@ -1,7 +1,7 @@
 import CardContainer from "../tiles/CardContainer";
 import "../../css/components/pages/home.css";
 import { BodyNormal, HeadingLarge } from "../text-wrapers/TextWrapers";
-import { CardProps } from "../tiles/Card";
+// import { CardProps } from "../tiles/Card";
 
 function Home() {
   return (
