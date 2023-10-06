@@ -1,5 +1,5 @@
 import "./css/App.css";
-import Navbar from "./components/navbar/Navbar";
+import Navbar from "./components/bars/Navbar";
 import Router from "./routes/Router";
 import Sidebar from "./components/bars/Sidebar";
 import { useEffect, useState } from "react";
