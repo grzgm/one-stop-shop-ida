@@ -1,9 +1,20 @@
-function Vacation() {
+import "../../../css/components/pages/employee-portal/vacation.css"
+import Button from "../../Buttons";
+import Calendar from "../../Calendar";
+import { BodyNormal, HeadingLarge } from "../../text-wrapers/TextWrapers";
 
-    return (
-          <h1>Vacation</h1>
-    );
-  }
-  
-  export default Vacation;
-  
+function Vacation() {
+      return (
+        <div className="content">
+          <div className="description">
+            <HeadingLarge>Plan your Vacation</HeadingLarge>
+            <BodyNormal>Choose time slot</BodyNormal>
+          </div>
+          <main className="vacation-main">
+            <Calendar/>
+          </main>
+        </div>
+      );
+}
+
+export default Vacation;

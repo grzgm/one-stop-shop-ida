@@ -3,17 +3,18 @@ import { ButtonsLarge, ButtonsNormal } from "./text-wrapers/TextWrapers";
 
 interface ButtonsProps {
   child: string;
+  onClick: () => void;
 }
 
-function Button({ child }: ButtonsProps) {
+function Button({ child, onClick }: ButtonsProps) {
   return (
-    <button className="button button-animation buttons--normal">{child}</button>
+    <button className="button button-animation buttons--normal" onClick={onClick}>{child}</button>
   );
 }
 
-function ButtonAlt({ child }: ButtonsProps) {
+function ButtonAlt({ child, onClick }: ButtonsProps) {
     return (
-      <button className="button-alt buttons--normal">{child}</button>
+      <button className="button-alt buttons--normal" onClick={onClick}>{child}</button>
     );
   }
 
