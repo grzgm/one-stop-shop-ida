@@ -8,13 +8,13 @@ interface ButtonsProps {
 
 function Button({ child, onClick }: ButtonsProps) {
   return (
-    <button className="button button-animation buttons--normal" onClick={onClick}>{child}</button>
+    <button className="button button-animation buttons--normal" onClick={onClick} type="button">{child}</button>
   );
 }
 
 function ButtonAlt({ child, onClick }: ButtonsProps) {
     return (
-      <button className="button-alt buttons--normal" onClick={onClick}>{child}</button>
+      <button className="button-alt buttons--normal" onClick={onClick} type="button">{child}</button>
     );
   }
 
