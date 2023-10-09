@@ -23,46 +23,37 @@ function Sidebar({ onPressCloseSidebar }: SidebarProps) {
         </div>
         <div id="sidebar__options">
           <div id="sidebar__options__top" className="heading--small">
-            <Link className="sidebar__option heading--small" to="/">
+            <Link className="sidebar__option heading--small" to="/" onClick={() => onPressCloseSidebar(false)}>
               Home
               <div className="sidebar__arrow heading--large">
                 <KeyboardArrowRightIcon fontSize="inherit" />
               </div>
             </Link>
-            <Link
-              className="sidebar__option heading--small"
-              to="/employee-portal"
-            >
+            <Link className="sidebar__option heading--small" to="/employee-portal" onClick={() => onPressCloseSidebar(false)}>
               EmployeePortal
               <div className="sidebar__arrow heading--large">
                 <KeyboardArrowRightIcon fontSize="inherit" />
               </div>
             </Link>
-            <Link
-              className="sidebar__option heading--small"
-              to="/office-details"
-            >
+            <Link className="sidebar__option heading--small" to="/office-details" onClick={() => onPressCloseSidebar(false)}>
               Office Details
               <div className="sidebar__arrow heading--large">
                 <KeyboardArrowRightIcon fontSize="inherit" />
               </div>
             </Link>
-            <Link className="sidebar__option heading--small" to="/company101">
+            <Link className="sidebar__option heading--small" to="/company101" onClick={() => onPressCloseSidebar(false)}>
               Company 101
               <div className="sidebar__arrow heading--large">
                 <KeyboardArrowRightIcon fontSize="inherit" />
               </div>
             </Link>
-            <Link
-              className="sidebar__option heading--small"
-              to="/personal-skills"
-            >
+            <Link className="sidebar__option heading--small" to="/personal-skills" onClick={() => onPressCloseSidebar(false)}>
               Personal Skills
               <div className="sidebar__arrow heading--large">
                 <KeyboardArrowRightIcon fontSize="inherit" />
               </div>
             </Link>
-            <Link className="sidebar__option heading--small" to="/expenses">
+            <Link className="sidebar__option heading--small" to="/expenses" onClick={() => onPressCloseSidebar(false)}>
               Expenses
               <div className="sidebar__arrow heading--large">
                 <KeyboardArrowRightIcon fontSize="inherit" />
@@ -70,13 +61,13 @@ function Sidebar({ onPressCloseSidebar }: SidebarProps) {
             </Link>
           </div>
           <div id="sidebar__options__bottom">
-            <Link className="sidebar__option heading--small" to="/offices">
+            <Link className="sidebar__option heading--small" to="/offices" onClick={() => onPressCloseSidebar(false)}>
               Change Offices
               <div className="sidebar__arrow heading--large">
                 <KeyboardArrowRightIcon fontSize="inherit" />
               </div>
             </Link>
-            <Link className="sidebar__option heading--small" to="/settings">
+            <Link className="sidebar__option heading--small" to="/settings" onClick={() => onPressCloseSidebar(false)}>
               Settings
               <div className="sidebar__arrow heading--large">
                 <KeyboardArrowRightIcon fontSize="inherit" />
