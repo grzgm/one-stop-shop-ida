@@ -59,7 +59,7 @@
     display: none;
 }
 
-@media (max-width: 1450px) {
+@media (max-width: 95rem) {
     .navbar__burger-menu{
         height: 100%;
         padding: 0 10px;
@@ -69,12 +69,22 @@
     }
 }
 
-@media (max-width: 750px) {
+@media (max-width: 47rem) {
     #navbar__options__right{
         display: none;
     }
     
     #navbar__separator{
+        display: none;
+    }
+}
+
+@media (max-width: 30rem) {
+    #navbar__options{
+        justify-content: flex-end;
+    }
+
+    #navbar__options__left{
         display: none;
     }
 }
