@@ -1,3 +1,12 @@
+.content__panels{
+    min-width: 45rem;
+    width: 50%;
+    margin: 1.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
 .panel {
     min-width: 20rem;
     aspect-ratio: 1.8;
@@ -56,6 +65,10 @@
 }
 
 @media (max-width: 46.875rem) {
+    .content__panels{
+        min-width: auto;
+    }
+
     .panel {
         min-width: 20rem;
         margin: 0.625rem 1.25rem;

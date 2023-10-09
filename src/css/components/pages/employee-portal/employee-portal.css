@@ -1,8 +1,0 @@
-.content__panels{
-    min-width: 45rem;
-    width: 50%;
-    margin: 1.25rem;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}

@@ -1,4 +1,3 @@
-import "../../../css/components/pages/employee-portal/employee-portal.css";
 import { BodyNormal, HeadingLarge } from "../../text-wrapers/TextWrapers";
 import Panel from "../../tiles/Panel";
 
