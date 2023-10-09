@@ -25,7 +25,9 @@ function CardContainer({ cardProps = [] }: CardContainerProps) {
       <div className="card-container__title">
         <HeadingLarge>Category</HeadingLarge>
       </div>
-      <div className="card-container__cards">{cards}</div>
+      <div className="card-container__cards">
+        {cards}
+      </div>
     </div>
   );
 }
