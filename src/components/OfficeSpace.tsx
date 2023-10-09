@@ -6,7 +6,6 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import Button from "./Buttons";
 import { useState } from "react";
-import React from "react";
 
 interface IDesk {
     state: number;
