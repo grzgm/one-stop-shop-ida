@@ -1,18 +1,24 @@
-import { Link } from "react-router-dom";
+import { BodyNormal, HeadingLarge } from "../../text-wrapers/TextWrapers";
+import Panel from "../../tiles/Panel";
 
 function OfficeDetails() {
 
-    return (
-      <>
-          <h1>Office Details</h1>
-          <Link to="/office-details/reserve-desk">Reserve a Desk</Link>
-          <Link to="/office-details/reserve-desk-overview">Reserve a Desk Overview</Link>
-          <Link to="/office-details/lunch">Lunch</Link>
-          <Link to="/office-details/office-information">Office Information</Link>
-          <Link to="/office-details/presence">Presence</Link>
-      </>
-    );
-  }
-  
-  export default OfficeDetails;
-  
+  return (
+    <div className="content">
+      <div className="description">
+        <HeadingLarge>Office Details</HeadingLarge>
+        <BodyNormal>Manage all office</BodyNormal>
+        <BodyNormal>related information!</BodyNormal>
+      </div>
+      <div className="content__panels">
+        <Panel linkAddress="/office-details/reserve-desk" title="Reserve a Desk" description="Reserve a Desk"/>
+        {/* <Panel linkAddress="/office-details/reserve-desk-overview" title="Reserve a Desk Overview" description=""/> */}
+        <Panel linkAddress="/office-details/lunch" title="Lunch" description="Sign up for Lunch"/>
+        <Panel linkAddress="/office-details/office-information" title="Office Information" description="Office Information Access Parking Wi-Fi How many ppl in the office"/>
+        <Panel linkAddress="/office-details/presence" title="Presence" description="Let your colleague know when you are present"/>
+      </div>
+    </div>
+  );
+}
+
+export default OfficeDetails;
