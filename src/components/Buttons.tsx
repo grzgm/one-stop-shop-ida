@@ -1,5 +1,4 @@
 import "../css/components/buttons.css";
-import { ButtonsLarge, ButtonsNormal } from "./text-wrapers/TextWrapers";
 
 interface ButtonsProps {
   child: string;

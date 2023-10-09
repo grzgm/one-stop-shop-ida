@@ -1,5 +1,4 @@
 import "../../../css/components/pages/employee-portal/vacation.css"
-import Button from "../../Buttons";
 import Calendar from "../../Calendar";
 import { BodyNormal, HeadingLarge } from "../../text-wrapers/TextWrapers";
 

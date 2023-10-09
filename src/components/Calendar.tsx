@@ -1,8 +1,6 @@
 import "../css/components/calendar.css";
 import {
-  BodyNormal,
   BodySmall,
-  HeadingLarge,
 } from "./text-wrapers/TextWrapers";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
