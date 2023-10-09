@@ -2,7 +2,8 @@
     position: fixed;
     top: 0;
     left: 0;
-    min-width: 400px;
+    width: 80%;
+    min-width: 20rem;
     height: 100%;
     min-height: 40rem;
     display: flex;
