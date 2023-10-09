@@ -20,35 +20,45 @@ function OfficeSpace() {
     const [selectedDesk, setSelectedDesk] = useState([-1, -1]);
     const [checkboxValues, setCheckboxValues] = useState([false, false]);
 
-    const originalDeskClusters: IDeskCluster[] = [{ desks: [{ state: 0 }, { state: 4 }, { state: 2 }, { state: 3 },] },{ desks: [{ state: 0 }, { state: 3 }, { state: 4 }, { state: 3 },] },{ desks: [{ state: 2 }, { state: 0 }, { state: 0 }, { state: 3 },] },]
+    const originalDeskClusters: IDeskCluster[] = [{ desks: [{ state: 0 }, { state: 4 }, { state: 2 }, { state: 3 },] }, { desks: [{ state: 0 }, { state: 3 }, { state: 4 }, { state: 3 },] }, { desks: [{ state: 2 }, { state: 0 }, { state: 0 }, { state: 3 },] },]
     const [deskClusters, setDeskClusters] = useState<IDeskCluster[]>(originalDeskClusters)
 
-    const PreviousMonth = () => {
+    const PreviousDay = () => {
         const newDate = new Date(displayedDate);
-        const previousMonthDate = new Date(
-            newDate.setMonth(newDate.getMonth() - 1)
-        );
+        const PreviousDayDate = new Date(newDate.setDate(newDate.getDate() - 1));
         if (
-            new Date() < previousMonthDate ||
+            new Date() < PreviousDayDate ||
             (new Date().getFullYear() == newDate.getFullYear() &&
-                new Date().getMonth() == newDate.getMonth())
+                new Date().getMonth() == newDate.getMonth() &&
+                new Date().getDate() == newDate.getDate())
         ) {
-            setDisplayedDate(previousMonthDate);
+            setDisplayedDate(PreviousDayDate);
         }
     };
-    const NextMonth = () => {
+    const NextDay = () => {
         const newDate = new Date(displayedDate);
-        const NextMonthDate = new Date(newDate.setMonth(newDate.getMonth() + 1));
-        setDisplayedDate(NextMonthDate);
+        const NextDayDate = new Date(newDate.setDate(newDate.getDate() + 1));
+    
+        // To calculate the time difference of two dates 
+        const differenceInTime = new Date().getTime() - NextDayDate.getTime(); 
+          
+        // To calculate the no. of days between two dates 
+        const differenceInDays = Math.abs(differenceInTime / (1000 * 3600 * 24)); 
+
+        console.log(differenceInDays)
+
+        if ( differenceInDays <= 14
+        ) {
+            setDisplayedDate(NextDayDate);
+        }
     };
     const SelectDesk = (clusterId: number, deskId: number) => {
-        if(deskClusters[clusterId].desks[deskId].state == 0 ||deskClusters[clusterId].desks[deskId].state ==  2)
-        {
+        if (deskClusters[clusterId].desks[deskId].state == 0 || deskClusters[clusterId].desks[deskId].state == 2) {
             const updatedDeskClusters = [...originalDeskClusters];
-    
+
             // Toggle the class for the selected desk
             updatedDeskClusters[clusterId].desks[deskId].state = 1;
-    
+
             // Update the state with the modified deskClusters
             setDeskClusters(updatedDeskClusters);
             setSelectedDesk([clusterId, deskId])
@@ -62,19 +72,19 @@ function OfficeSpace() {
     };
 
     const GetData = () => {
-        console.log(displayedDate.toLocaleDateString().slice(3), checkboxValues, selectedDesk);
+        console.log(displayedDate.toLocaleDateString(), checkboxValues, selectedDesk);
     }
 
     return (
         <div className="office-space body--normal">
             <div className="office-space__date-picker">
-                <div className="office-space__date-picker__arrows" onClick={PreviousMonth}>
+                <div className="office-space__date-picker__arrows" onClick={PreviousDay}>
                     <KeyboardArrowLeftIcon fontSize="inherit" />
                 </div>
                 <div className="office-space__date-picker__date">
-                    {displayedDate.toLocaleDateString().slice(3)}
+                    {displayedDate.toLocaleDateString()}
                 </div>
-                <div className="office-space__date-picker__arrows" onClick={NextMonth}>
+                <div className="office-space__date-picker__arrows" onClick={NextDay}>
                     <KeyboardArrowRightIcon fontSize="inherit" />
                 </div>
             </div>
