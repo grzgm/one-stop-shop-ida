@@ -24,40 +24,40 @@
 
 #sidebar__options__top{
     width: 100%;
-    padding: 10px;
+    padding: 0.625rem;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    border-top: 2px var(--main-red) solid;
-    border-bottom: 2px var(--main-red) solid;
+    border-top: 0.125rem var(--main-red) solid;
+    border-bottom: 0.125rem var(--main-red) solid;
 }
 
 #sidebar__options__bottom{
     width: 100%;
-    padding: 10px;
+    padding: 0.625rem;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    border-top: 2px var(--main-red) solid;
-    border-bottom: 2px var(--main-red) solid;
+    border-top: 0.125rem var(--main-red) solid;
+    border-bottom: 0.125rem var(--main-red) solid;
 }
 
 .sidebar__option{
     height: 100%;
-    padding: 10px;
+    padding: 0.625rem;
     display: flex;
     align-items: center;
 }
 
 .sidebar__option:hover{
     color: var(--main-red);
-    border-bottom: 2px var(--main-red) solid;
+    border-bottom: 0.125rem var(--main-red) solid;
 }
 
 .sidebar__burger-menu{
-    padding: 10px;
+    padding: 0.625rem;
     display: flex;
     align-items: center;
     font-size: 2.25rem;
@@ -66,7 +66,7 @@
 .sidebar__arrow{
     display: flex;
     height: 100%;
-    padding: 0 10px;
+    padding: 0 0.625rem;
     align-items: center;
 }
 

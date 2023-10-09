@@ -8,9 +8,9 @@
 }
 
 .card-container__title {
-    padding: 10px;
-    border-top: 2px var(--main-red) solid;
-    border-bottom: 2px var(--main-red) solid;
+    padding: 0.625rem;
+    border-top: 0.125rem var(--main-red) solid;
+    border-bottom: 0.125rem var(--main-red) solid;
     text-align: center;
     color: var(--font-colour-white);
 }
