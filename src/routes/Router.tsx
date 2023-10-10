@@ -5,7 +5,6 @@ import NotFound from "../components/pages/NotFound";
 import Utrecht from "../components/pages/offices/Utrecht";
 import Eindhoven from "../components/pages/offices/Eindhoven";
 import Amsterdam from "../components/pages/offices/Amsterdam";
-import OfficesLayout from "../components/pages/offices/OfficesLayout";
 import Offices from "../components/pages/offices/Offices";
 import SickLeave from "../components/pages/employee-portal/SickLeave";
 import Vacation from "../components/pages/employee-portal/Vacation";
@@ -43,7 +42,7 @@ function Router() {
         <Route path="/company101" element={<Company101 />} />
         <Route path="/personal-skills" element={<PersonalSkills />} />
         <Route path="/expenses" element={<Expenses />} />
-        <Route path="/offices" element={<OfficesLayout />}>
+        <Route path="/offices">
           <Route index element={<Offices />} />
           <Route path="utrecht" element={<Utrecht />} />
           <Route path="eindhoven" element={<Eindhoven />} />
