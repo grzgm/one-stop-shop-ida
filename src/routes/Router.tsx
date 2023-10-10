@@ -9,19 +9,20 @@ import Offices from "../components/pages/offices/Offices";
 import SickLeave from "../components/pages/employee-portal/SickLeave";
 import Vacation from "../components/pages/employee-portal/Vacation";
 import OfficeDetails from "../components/pages/office-details/OfficeDetails";
-import ReserveDesk from "../components/pages/office-details/ReserveDesk";
-import Lunch from "../components/pages/office-details/Lunch";
+import ReserveDesk, { ReserveDeskLoader } from "../components/pages/office-details/ReserveDesk";
+import Lunch, { LunchLoader } from "../components/pages/office-details/Lunch";
 import OfficeInformation from "../components/pages/office-details/OfficeInformation";
-import Presence from "../components/pages/office-details/Presence";
+import Presence, { PresenceLoader } from "../components/pages/office-details/Presence";
 import Company101 from "../components/pages/Company101";
 import PersonalSkills from "../components/pages/PersonalSkills";
 import Expenses from "../components/pages/Expenses";
 import Settings from "../components/pages/Settings";
-import ReserveDeskOverview from "../components/pages/office-details/ReserveDeskOverview";
+// import ReserveDeskOverview from "../components/pages/office-details/ReserveDeskOverview";
 import Scheduling from "../components/pages/employee-portal/Scheduling";
 import AppOverlay from "../AppOverlay";
 
-function Router() {
+function Router(currentOfficeName: string) {
+
   return (
     <>
       <Route path="/" element={<AppOverlay />}>
@@ -34,11 +35,11 @@ function Router() {
         </Route>
         <Route path="/office-details">
           <Route index element={<OfficeDetails />} />
-          <Route path="reserve-desk" element={<ReserveDesk />} />
-          <Route path="reserve-desk-overview" element={<ReserveDeskOverview />} />
-          <Route path="lunch" element={<Lunch />} />
+          <Route path="reserve-desk" element={<ReserveDesk />} loader={() => ReserveDeskLoader(currentOfficeName)} />
+          {/* <Route path="reserve-desk-overview" element={<ReserveDeskOverview />} /> */}
+          <Route path="lunch" element={<Lunch />} loader={() => LunchLoader(currentOfficeName)} />
           <Route path="office-information" element={<OfficeInformation />} />
-          <Route path="presence" element={<Presence />} />
+          <Route path="presence" element={<Presence />} loader={() => PresenceLoader(currentOfficeName)} />
         </Route>
         <Route path="/company101" element={<Company101 />} />
         <Route path="/personal-skills" element={<PersonalSkills />} />

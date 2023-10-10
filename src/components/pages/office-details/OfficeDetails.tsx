@@ -7,7 +7,6 @@ import { officeInformationData } from "../../../assets/OfficeInformationData";
 function OfficeDetails() {
   const officeName = useContext(CurrentOfficeContext).currentOffice;
   const currentOfficeInformationData = officeInformationData[officeName]
-  console.log(currentOfficeInformationData)
 
   return (
     <div className="content">

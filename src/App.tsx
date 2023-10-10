@@ -5,11 +5,11 @@ import CurrentOfficeContext from "../src/contexts/CurrentOfficeContext.ts"
 import { RouterProvider, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
 
 function App() {
-  const [currentOffice, setCurrentOffice] = useState("Utrecht")
+  const [currentOffice, setCurrentOffice] = useState("Eindhoven")
 
 
   const customBrowserRouter = createBrowserRouter(createRoutesFromElements(
-    Router()
+    Router(currentOffice)
   ))
 
   return (

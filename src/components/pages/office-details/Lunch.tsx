@@ -2,6 +2,16 @@ import { useState } from "react";
 import { BodyNormal, BodySmall, HeadingLarge, HeadingSmall } from "../../text-wrapers/TextWrapers";
 import Button from "../../Buttons";
 import "../../../css/components/pages/office-details/lunch.css"
+import { officeInformationData } from "../../../assets/OfficeInformationData";
+import { redirect } from "react-router-dom";
+
+function LunchLoader(officeName: string) {
+      const currentOfficeInformationData = officeInformationData[officeName]
+      if (currentOfficeInformationData && currentOfficeInformationData.canRegisterLunch == true) {
+            return null
+      }
+      throw redirect("/")
+}
 
 function Lunch() {
       const [weekRegistration, setWeekRegistration] = useState<boolean[]>([false, false, false, false, false]);
@@ -61,3 +71,4 @@ function Lunch() {
 }
 
 export default Lunch;
+export { LunchLoader };
