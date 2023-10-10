@@ -8,11 +8,12 @@ interface PanelProps {
   linkAddress: string;
   title?: string;
   description?: string;
+  onClick?: () => void;
 }
 
-function Panel({linkAddress, title = "Title", description = "Description"}: PanelProps) {
+function Panel({ linkAddress, title = "Title", description = "Description", onClick = () => { } }: PanelProps) {
   return (
-    <Link className="panel" to={linkAddress}>
+    <Link className="panel" to={linkAddress} onClick={() => onClick()}>
       <div className="panel__text">
         <HeadingSmall>{title}</HeadingSmall>
         <BodySmall>{description}</BodySmall>

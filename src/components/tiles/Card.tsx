@@ -8,9 +8,10 @@ export interface CardProps {
   linkAddress?: string;
   title?: string;
   description?: string;
+  onClick?: () => void;
 }
 
-function Card({linkAddress = "/", title = "Title", description = "Description"}: CardProps) {
+function Card({ linkAddress = "/", title = "Title", description = "Description", onClick = () => { } }: CardProps) {
   return (
     <Link className="card" to={linkAddress}>
       <div className="card__text">
