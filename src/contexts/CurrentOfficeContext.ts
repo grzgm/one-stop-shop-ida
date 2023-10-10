@@ -2,7 +2,7 @@ import { createContext, Dispatch, SetStateAction } from "react";
 
 interface CurrentOfficeContextProps {
   currentOffice: string;
-  setCurrentOffice: Dispatch<SetStateAction<string>>;
+  setCurrentOffice: (newCurrentOffice: string) => void;
 }
 
 const CurrentOfficeContext = createContext<CurrentOfficeContextProps>({
