@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 import EmployeePortal from "../components/pages/employee-portal/EmployeePortal";
 import Home from "../components/pages/Home";
 import NotFound from "../components/pages/NotFound";
@@ -19,12 +19,13 @@ import Expenses from "../components/pages/Expenses";
 import Settings from "../components/pages/Settings";
 import ReserveDeskOverview from "../components/pages/office-details/ReserveDeskOverview";
 import Scheduling from "../components/pages/employee-portal/Scheduling";
+import AppOverlay from "../AppOverlay";
 
 function Router() {
   return (
-    <main>
-      <Routes>
-        <Route path="/" element={<Home />} />
+    <>
+      <Route path="/" element={<AppOverlay />}>
+        <Route index element={<Home />} />
         <Route path="/employee-portal">
           <Route index element={<EmployeePortal />} />
           <Route path="sick-leave" element={<SickLeave />} />
@@ -50,8 +51,8 @@ function Router() {
         </Route>
         <Route path="/settings" element={<Settings />} />
         <Route path="*" element={<NotFound />} />
-      </Routes>
-    </main>
+      </Route>
+    </>
   );
 }
 
