@@ -1,4 +1,5 @@
 .card {
+    width: 100%;
     max-width: 30rem;
     min-width: 17.5rem;
     aspect-ratio: 1.8;
