@@ -1,7 +1,11 @@
 #navbar{
     height: 6.25rem;
+    position: sticky;
+    top: 0;
     display: flex;
+    background-color: var(--font-colour-white);
     border-bottom: 0.0625rem var(--grey2) solid;
+    z-index: 80;
 }
 
 #navbar__logo{
