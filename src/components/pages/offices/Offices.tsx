@@ -1,10 +1,26 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { BodyNormal, HeadingLarge } from "../../text-wrapers/TextWrapers";
 import Panel from "../../tiles/Panel";
 import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
 
 function Offices() {
   const {currentOffice, setCurrentOffice} = useContext(CurrentOfficeContext);
+  const [position, setPosition] = useState<GeolocationPosition | null>(null);
+
+  useEffect(() => {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setPosition(pos);
+        },
+        (error) => {
+          console.error('Error getting geolocation:', error);
+        }
+      );
+    } else {
+      console.error('Geolocation not supported');
+    }
+  }, []);
   
   return (
     <div className="content">
