@@ -3,25 +3,16 @@ import { BodyNormal, HeadingLarge } from "../../text-wrapers/TextWrapers";
 import Panel from "../../tiles/Panel";
 import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
 import OfficeMap from "../../OfficeMap";
+import { useNavigate } from "react-router-dom";
 
 function Offices() {
   const {currentOffice, setCurrentOffice} = useContext(CurrentOfficeContext);
-  const [position, setPosition] = useState<GeolocationPosition | null>(null);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          setPosition(pos);
-        },
-        (error) => {
-          console.error('Error getting geolocation:', error);
-        }
-      );
-    } else {
-      console.error('Geolocation not supported');
-    }
-  }, []);
+  const SwitchOffice = (officeName: string) => {
+    setCurrentOffice(officeName);
+    navigate("/");
+  }
   
   return (
     <div className="content">
@@ -31,7 +22,7 @@ function Offices() {
         <BodyNormal>or tap on the office!</BodyNormal>
       </div>
       <div>
-        <OfficeMap />
+        <OfficeMap switchOffice={SwitchOffice}/>
       </div>
       <div className="content__panels">
         <Panel linkAddress="/office-details" title="Utrecht" description="Orteliuslaan 25 3528BA" onClick={()=>setCurrentOffice("Utrecht")}/>
