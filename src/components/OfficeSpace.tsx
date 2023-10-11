@@ -38,17 +38,16 @@ function OfficeSpace() {
     const NextDay = () => {
         const newDate = new Date(displayedDate);
         const NextDayDate = new Date(newDate.setDate(newDate.getDate() + 1));
-    
+
         // To calculate the time difference of two dates 
-        const differenceInTime = new Date().getTime() - NextDayDate.getTime(); 
-          
+        const differenceInTime = new Date().getTime() - NextDayDate.getTime();
+
         // To calculate the no. of days between two dates 
-        const differenceInDays = Math.abs(differenceInTime / (1000 * 3600 * 24)); 
+        const differenceInDays = Math.abs(differenceInTime / (1000 * 3600 * 24));
 
         console.log(differenceInDays)
 
-        if ( differenceInDays <= 14
-        ) {
+        if (differenceInDays <= 14) {
             setDisplayedDate(NextDayDate);
         }
     };
@@ -90,7 +89,7 @@ function OfficeSpace() {
             </div>
             <div className="office-space__overview">
                 {deskClusters.map((deskCluster, index) => (
-                    <DeskCluster desks={deskCluster.desks} clusterId={index} selectDesk={SelectDesk} />
+                    <DeskCluster desks={deskCluster.desks} clusterId={index} selectDesk={SelectDesk} key={index} />
                 ))}
             </div>
             <div className="office-space__availability-bar">
@@ -145,7 +144,7 @@ function DeskCluster({ clusterId, desks, selectDesk }: DeskClusterProps) {
     return (
         <div className="desk-cluster" id={clusterId.toString()}>
             {desks.map((desk, index) => (
-                <Desk clusterId={clusterId} deskId={index} state={desk.state} selectDesk={selectDesk} />
+                <Desk clusterId={clusterId} deskId={index} state={desk.state} selectDesk={selectDesk} key={index} />
             ))}
         </div>
     );

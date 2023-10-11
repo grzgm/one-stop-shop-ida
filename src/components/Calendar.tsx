@@ -49,7 +49,7 @@ function Calendar() {
   };
 
   const GetData = (startSelected: Date | null, endSelected: Date | null) => {
-      console.log(startSelected, endSelected);
+    console.log(startSelected, endSelected);
   }
 
   return (
@@ -85,7 +85,7 @@ function Calendar() {
       </div>
       <div className="calendar__info">
         <BodySmall>Outlook and Slack will be automatically updated</BodySmall>
-        <Button child="Book" onClick={() => (GetData(startSelected, endSelected))}/>
+        <Button child="Book" onClick={() => (GetData(startSelected, endSelected))} />
       </div>
     </div>
   );
@@ -110,7 +110,7 @@ function GenerateCalendarDays(
   selectedEnd: Date | null,
   selectDate: (dayNumber: number) => void
 ) {
-  let days = Array.from({ length: 42 }, () => <div />);
+  let days = Array.from({ length: 42 }, (_, index) => <div key={index} />);
   const today = new Date();
   const currentMonthLength = DaysInMonth(year, month);
   const currentMonthStart = GetDayNumberInWeek(new Date(year, month - 1, 1));
@@ -119,7 +119,7 @@ function GenerateCalendarDays(
   // Previous Month
   for (let i = currentMonthStart; i >= 0; i--) {
     days[i - 1] = (
-      <div className="calendar__month__day calendar__month__day--disabled">
+      <div className="calendar__month__day calendar__month__day--disabled" key={i - 1}>
         {previousMonthLength - currentMonthStart + i}
       </div>
     );
@@ -129,9 +129,7 @@ function GenerateCalendarDays(
   for (let i = 0; i < currentMonthLength; i++) {
     days[currentMonthStart + i] = (
       <div
-        className="calendar__month__day calendar__month__day--default"
-        onClick={() => selectDate(i + 1)}
-      >
+        className="calendar__month__day calendar__month__day--default" onClick={() => selectDate(i + 1)} key={currentMonthStart + i}>
         {i + 1}
       </div>
     );
@@ -140,7 +138,7 @@ function GenerateCalendarDays(
   // Next Month
   for (let i = currentMonthStart + currentMonthLength; i < 42; i++) {
     days[i] = (
-      <div className="calendar__month__day calendar__month__day--disabled">
+      <div className="calendar__month__day calendar__month__day--disabled" key={i}>
         {i - currentMonthStart - currentMonthLength + 1}
       </div>
     );

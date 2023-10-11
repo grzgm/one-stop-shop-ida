@@ -42,7 +42,7 @@ function Lunch() {
                               <BodySmall>before 12:00 on the mentioned day</BodySmall>
                               <form className="lunch-main__form body--normal">
                                     {weekRegistration.map((isChecked, index) => (
-                                          <div className="lunch-main__form__checkboxes">
+                                          <div className="lunch-main__form__checkboxes" key={index}>
                                                 <input
                                                       type="checkbox"
                                                       checked={isChecked}
