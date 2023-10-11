@@ -4,10 +4,32 @@ import Panel from "../../tiles/Panel";
 import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
 import OfficeMap from "../../OfficeMap";
 import { useNavigate } from "react-router-dom";
+import { officeInformationData } from "../../../assets/OfficeInformationData";
 
 function Offices() {
   const { currentOffice, setCurrentOffice } = useContext(CurrentOfficeContext);
+  const [position, setPosition] = useState<GeolocationPosition | null>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setPosition(pos);
+        },
+        (error) => {
+          console.error('Error getting geolocation:', error);
+        }
+      );
+    } else {
+      console.error('Geolocation not supported');
+    }
+  }, []);
+
+  if (position?.coords) {
+    const closestOffice = CalculateClosestOffice(position.coords.latitude, position.coords.longitude);
+    console.log("Closest Office: ", closestOffice);
+  }
 
   const SwitchOffice = (officeName: string) => {
     setCurrentOffice(officeName);
@@ -34,6 +56,37 @@ function Offices() {
       </div>
     </div>
   );
+}
+
+function CalculateClosestOffice(userLat: number, userLng: number) {
+  let firstOffice = Object.values(officeInformationData)[0]
+  let shortestDistance = CalculateDistance(userLat, userLng, firstOffice.officeInformation.coords.lat, firstOffice.officeInformation.coords.lat);
+  let closestOffice = firstOffice.officeName;
+
+  for (let office of Object.values(officeInformationData)) {
+    let newDistance = CalculateDistance(userLat, userLng, office.officeInformation.coords.lat, office.officeInformation.coords.lat);
+    if (newDistance < shortestDistance) {
+      shortestDistance = newDistance;
+      closestOffice = office.officeName;
+    }
+  }
+
+  return closestOffice;
+}
+
+function CalculateDistance(userLat: number, userLng: number, destLat: number, destLng: number) {
+  const earthRadius = 6371; // Radius of the Earth in km
+  const latDiff = (destLat - userLat) * (Math.PI / 180);
+  const lngDiff = (destLng - userLng) * (Math.PI / 180);
+  const a =
+    Math.sin(latDiff / 2) * Math.sin(latDiff / 2) +
+    Math.cos(userLat * (Math.PI / 180)) *
+    Math.cos(destLat * (Math.PI / 180)) *
+    Math.sin(lngDiff / 2) *
+    Math.sin(lngDiff / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = earthRadius * c; // Distance in km
+  return distance;
 }
 
 export default Offices;
