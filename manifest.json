@@ -3,6 +3,7 @@
     "short_name": "One Stop Shop",
     "description": "“One Stop Shop” iDA welcoming application",
     "theme_color": "#ffffff",
+    "permissions": ["geolocation"],
     "icons": [
         {
             "src": "pwa-64x64.png",
