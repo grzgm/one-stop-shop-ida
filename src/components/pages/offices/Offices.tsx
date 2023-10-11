@@ -9,6 +9,7 @@ import { officeInformationData } from "../../../assets/OfficeInformationData";
 function Offices() {
   const { currentOffice, setCurrentOffice } = useContext(CurrentOfficeContext);
   const [position, setPosition] = useState<GeolocationPosition | null>(null);
+  const [closestOfficeName, setClosestOfficeName] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,6 +17,7 @@ function Offices() {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           setPosition(pos);
+          setClosestOfficeName(CalculateClosestOffice(pos.coords.latitude, pos.coords.longitude));
         },
         (error) => {
           console.error('Error getting geolocation:', error);
@@ -25,11 +27,6 @@ function Offices() {
       console.error('Geolocation not supported');
     }
   }, []);
-
-  if (position?.coords) {
-    const closestOffice = CalculateClosestOffice(position.coords.latitude, position.coords.longitude);
-    console.log("Closest Office: ", closestOffice);
-  }
 
   const SwitchOffice = (officeName: string) => {
     setCurrentOffice(officeName);
@@ -44,7 +41,7 @@ function Offices() {
         <BodyNormal>or tap on the office!</BodyNormal>
       </div>
       <div>
-        <OfficeMap switchOffice={SwitchOffice} />
+        <OfficeMap switchOffice={SwitchOffice} closestOfficeName={closestOfficeName}/>
       </div>
       <div className="content__panels">
         <Panel linkAddress="/office-details" title="Utrecht" description="Orteliuslaan 25 3528BA" onClick={() => setCurrentOffice("Utrecht")} />
@@ -61,17 +58,17 @@ function Offices() {
 function CalculateClosestOffice(userLat: number, userLng: number) {
   let firstOffice = Object.values(officeInformationData)[0]
   let shortestDistance = CalculateDistance(userLat, userLng, firstOffice.officeInformation.coords.lat, firstOffice.officeInformation.coords.lat);
-  let closestOffice = firstOffice.officeName;
+  let closestOfficeName = firstOffice.officeName;
 
   for (let office of Object.values(officeInformationData)) {
     let newDistance = CalculateDistance(userLat, userLng, office.officeInformation.coords.lat, office.officeInformation.coords.lat);
     if (newDistance < shortestDistance) {
       shortestDistance = newDistance;
-      closestOffice = office.officeName;
+      closestOfficeName = office.officeName;
     }
   }
 
-  return closestOffice;
+  return closestOfficeName;
 }
 
 function CalculateDistance(userLat: number, userLng: number, destLat: number, destLng: number) {

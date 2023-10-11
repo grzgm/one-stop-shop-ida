@@ -1,4 +1,4 @@
-import { GoogleMap, MarkerF, useLoadScript } from '@react-google-maps/api';
+import { GoogleMap, InfoWindow, MarkerF, useLoadScript } from '@react-google-maps/api';
 import { officeInformationData } from '../assets/OfficeInformationData';
 
 const mapStyles = {
@@ -7,13 +7,40 @@ const mapStyles = {
 };
 
 interface OfficeMapProps {
+    closestOfficeName?: string | null;
     switchOffice: (officeName: string) => void;
 }
 
-function OfficeMap({ switchOffice }: OfficeMapProps) {
+function OfficeMap({closestOfficeName, switchOffice }: OfficeMapProps) {
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: 'AIzaSyDSE5J50qb82mBZfTGZheGJ0Jg8_vnk0_o',
     });
+
+    const markers = []
+
+    for (let office of Object.values(officeInformationData)) {
+        if (closestOfficeName && office.officeName == closestOfficeName) {
+            console.log(closestOfficeName)
+            markers.push(
+                <MarkerF
+                    key={office.officeName}
+                    position={office.officeInformation.coords}
+                    title={office.officeName}
+                    onClick={() => switchOffice(office.officeName)}>
+                    <InfoWindow position={office.officeInformation.coords}>
+                        <div>Closest Office</div>
+                    </InfoWindow>
+                </MarkerF>)
+        }
+        else {
+            markers.push(
+                <MarkerF
+                    key={office.officeName}
+                    position={office.officeInformation.coords}
+                    title={office.officeName}
+                    onClick={() => switchOffice(office.officeName)} />)
+        }
+    }
 
     if (isLoaded) {
         return (
@@ -21,13 +48,7 @@ function OfficeMap({ switchOffice }: OfficeMapProps) {
                 mapContainerStyle={mapStyles}
                 center={officeInformationData['Utrecht'].officeInformation.coords}
                 zoom={7}>
-                {Object.values(officeInformationData).map((office) => (
-                    <MarkerF
-                        key={office.officeName}
-                        position={office.officeInformation.coords}
-                        title={office.officeName}
-                        onClick={() => switchOffice(office.officeName)} />
-                ))}
+                {markers}
             </GoogleMap>
         );
     }
