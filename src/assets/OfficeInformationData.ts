@@ -5,6 +5,10 @@ export interface IOfficeInformationData {
   canRegisterPresence: Boolean;
   officeInformation: {
     address: string;
+    coords: {
+      lat: number;
+      lng: number;
+    };
     oppeningHours: string;
     accessInformation: string;
     parkingInformation: string;
@@ -20,6 +24,10 @@ export const officeInformationData: Record<string, IOfficeInformationData> = {
     canRegisterPresence: true,
     officeInformation: {
       address: "Orteliuslaan 25 3528BA",
+      coords: {
+        lat: 52.0722482,
+        lng: 5.0746558,
+      },
       oppeningHours: "6:00 - 21:30 working days",
       accessInformation:
         "You need a Creative Valley Papendorp access pass to enter the Creative Valley building and its Xplore Group office.",
@@ -36,6 +44,10 @@ export const officeInformationData: Record<string, IOfficeInformationData> = {
     canRegisterPresence: true,
     officeInformation: {
       address: "Cruquiusweg 110F 1019AK",
+      coords: {
+        lat: 52.368519,
+        lng: 4.9533974,
+      },
       oppeningHours: "-",
       accessInformation:
         "You need a key to access the office building. To get a Amsterdam office key, send an e-mail to the Xplore Group HR team via  office@ida-mediafoundry.nl. ",
@@ -52,6 +64,10 @@ export const officeInformationData: Record<string, IOfficeInformationData> = {
     canRegisterPresence: true,
     officeInformation: {
       address: "High Tech Campus 69 5656AE",
+      coords: {
+        lat: 51.4085791,
+        lng: 5.4538161,
+      },
       oppeningHours: "6:30 - 20:30 working days",
       accessInformation:
         "You need a HTC access pass to enter the HTC 69 building and its Xplore Group office (on the 3rd floor of building 69). You can enter the office with a key.  Open the keyvault with code 1513. Please put the key back after usage... The HTC 69 access pass is arranged via Xplore Group HR and provided by the HTC Badge Office. The Badge Office is located in building The Strip at the 1st floor and is opened Monday-Friday 9:00-13:00.",
@@ -68,6 +84,10 @@ export const officeInformationData: Record<string, IOfficeInformationData> = {
     canRegisterPresence: false,
     officeInformation: {
       address: "string",
+      coords: {
+        lat: 0,
+        lng: 0,
+      },
       oppeningHours: "string",
       accessInformation: "string",
       parkingInformation: "string",

@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { BodyNormal, HeadingLarge } from "../../text-wrapers/TextWrapers";
 import Panel from "../../tiles/Panel";
 import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
+import OfficeMap from "../../OfficeMap";
 
 function Offices() {
   const {currentOffice, setCurrentOffice} = useContext(CurrentOfficeContext);
@@ -28,6 +29,9 @@ function Offices() {
         <HeadingLarge>Choose your office</HeadingLarge>
         <BodyNormal>Pick from the map</BodyNormal>
         <BodyNormal>or tap on the office!</BodyNormal>
+      </div>
+      <div>
+        <OfficeMap />
       </div>
       <div className="content__panels">
         <Panel linkAddress="/office-details" title="Utrecht" description="Orteliuslaan 25 3528BA" onClick={()=>setCurrentOffice("Utrecht")}/>
