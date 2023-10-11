@@ -17,22 +17,12 @@
     justify-content: space-between;
 }
 
-.panel:nth-child(4n+1) {
+.panel:nth-child(4n+1), .panel:nth-child(4n+4), .panel:nth-child(odd):last-child {
     background-color: var(--main-blue);
     color: var(--font-colour-white);
 }
 
-.panel:nth-child(4n+4) {
-    background-color: var(--main-blue);
-    color: var(--font-colour-white);
-}
-
-.panel:nth-child(4n+2) {
-    background-color: var(--light-blue);
-    color: var(--main-blue);
-}
-
-.panel:nth-child(4n+3) {
+.panel:nth-child(4n+2), .panel:nth-child(4n+3) {
     background-color: var(--light-blue);
     color: var(--main-blue);
 }
