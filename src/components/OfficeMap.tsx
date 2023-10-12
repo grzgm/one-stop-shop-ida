@@ -13,7 +13,7 @@ interface OfficeMapProps {
 
 function OfficeMap({closestOfficeName, switchOffice }: OfficeMapProps) {
     const { isLoaded } = useLoadScript({
-        googleMapsApiKey: 'AIzaSyDSE5J50qb82mBZfTGZheGJ0Jg8_vnk0_o',
+        googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY ? process.env.GOOGLE_MAPS_API_KEY : "",
     });
 
     const markers = []
