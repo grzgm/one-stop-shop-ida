@@ -40,9 +40,7 @@ function Offices() {
         <BodyNormal>Pick from the map</BodyNormal>
         <BodyNormal>or tap on the office!</BodyNormal>
       </div>
-      <div>
-        <OfficeMap switchOffice={SwitchOffice} closestOfficeName={closestOfficeName}/>
-      </div>
+      <OfficeMap switchOffice={SwitchOffice} closestOfficeName={closestOfficeName}/>
       <div className="content__panels">
         <Panel linkAddress="/office-details" title="Utrecht" description="Orteliuslaan 25 3528BA" onClick={() => setCurrentOffice("Utrecht")} />
         <Panel linkAddress="/office-details" title="Amsterdam" description="Cruquiusweg 110F 1019AK" onClick={() => setCurrentOffice("Amsterdam")} />

@@ -3,7 +3,7 @@ import { officeInformationData } from '../assets/OfficeInformationData';
 
 const mapStyles = {
     height: '400px',
-    width: '1000px',
+    width: '100%',
 };
 
 interface OfficeMapProps {
