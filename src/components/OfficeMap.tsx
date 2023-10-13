@@ -13,7 +13,8 @@ interface OfficeMapProps {
 
 function OfficeMap({closestOfficeName, switchOffice }: OfficeMapProps) {
     const { isLoaded } = useLoadScript({
-        googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY ? process.env.GOOGLE_MAPS_API_KEY : "",
+        // create .env.local file with VITE_GOOGLE_MAPS_API_KEY = "your_google_maps_api_key"
+        googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY ? import.meta.env.VITE_GOOGLE_MAPS_API_KEY : "",
     });
 
     const markers = []

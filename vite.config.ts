@@ -14,7 +14,4 @@ export default defineConfig({
       enabled: true
     }
   })],
-  define: {
-    'process.env': process.env,
-  },
 })
