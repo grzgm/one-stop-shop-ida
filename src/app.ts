@@ -2,14 +2,14 @@ import express from "express";
 import axios from "axios";
 import cors from "cors";
 import { codeVerifier, codeChallenge, save_authed_user } from "./helper";
+import 'dotenv/config'
 
 const MY_MAIL = ""
-const MICROSOFT_CLIENT_ID = "";
+const MICROSOFT_CLIENT_ID = process.env.MICROSOFT_CLIENT_ID;
 const TENANT = "organizations";
 const SCOPES = "offline_access user.read mail.read mail.send calendars.readwrite";
 let ACCESS_TOKEN = "";
 let REFRESH_TOKEN = "";
-
 
 // Server setup
 const PORT = 3002;
