@@ -20,7 +20,7 @@
     justify-content: flex-end;
     align-items: center;
     container-type: inline-size;
-    container-name: navbar;
+    container-name: navbar__options;
 }
 
 #navbar__options__left{
@@ -67,7 +67,7 @@
     display: none;
 }
 
-@container navbar (max-width: 81rem) {
+@container navbar__options (max-width: 85rem) {
     .navbar__burger-menu{
         height: 100%;
         padding: 0 2rem;
@@ -77,7 +77,7 @@
     }
 }
 
-@container navbar (max-width: 35rem) {
+@container navbar__options (max-width: 35rem) {
     #navbar__options__right{
         display: none;
     }
@@ -87,12 +87,18 @@
     }
 }
 
-@container navbar (max-width: 25rem) {
+@container navbar__options (max-width: 25rem) {
     #navbar__options{
         justify-content: flex-end;
     }
 
     #navbar__options__left{
         display: none;
+    }
+}
+
+@media (max-width: 35rem){
+    #navbar{
+        padding: 0;
     }
 }
