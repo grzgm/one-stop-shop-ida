@@ -32,6 +32,9 @@ function Offices() {
     setCurrentOffice(officeName);
     navigate("/");
   }
+  {(Object.values(officeInformationData)).map((office, index)=>{
+    <Panel linkAddress="/office-details" title={officeInformationData["Utrecht"].officeName} description="Orteliuslaan 25 3528BA" onClick={() => setCurrentOffice("Utrecht")} />
+  })}
 
   return (
     <div className="content">
@@ -42,12 +45,9 @@ function Offices() {
       </div>
       <OfficeMap switchOffice={SwitchOffice} closestOfficeName={closestOfficeName}/>
       <div className="content__panels">
-        <Panel linkAddress="/office-details" title="Utrecht" description="Orteliuslaan 25 3528BA" onClick={() => setCurrentOffice("Utrecht")} />
-        <Panel linkAddress="/office-details" title="Amsterdam" description="Cruquiusweg 110F 1019AK" onClick={() => setCurrentOffice("Amsterdam")} />
-        <Panel linkAddress="/office-details" title="Eindhoven" description="High Tech Campus 69 5656AE" onClick={() => setCurrentOffice("Eindhoven")} />
-        <Panel linkAddress="/office-details" title="Kontich" description="Prins boudewijnlaan 24e 2550" onClick={() => setCurrentOffice("Kontich")} />
-        <Panel linkAddress="/office-details" title="Hasselt" description="Kempische Steenweg 311 3500" onClick={() => setCurrentOffice("Hasselt")} />
-        <Panel linkAddress="/office-details" title="Merelbeke" description="Guldensporenpark 88 9820" onClick={() => setCurrentOffice("Merelbeke")} />
+        {(Object.values(officeInformationData)).map((office, index)=>{
+            return (<Panel linkAddress="/office-details" title={office.officeName} description={office.officeInformation.address} onClick={() => setCurrentOffice(office.officeName)} />)
+        })}
       </div>
     </div>
   );
