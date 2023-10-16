@@ -32,9 +32,6 @@ function Offices() {
     setCurrentOffice(officeName);
     navigate("/");
   }
-  {(Object.values(officeInformationData)).map((office, index)=>{
-    <Panel linkAddress="/office-details" title={officeInformationData["Utrecht"].officeName} description="Orteliuslaan 25 3528BA" onClick={() => setCurrentOffice("Utrecht")} />
-  })}
 
   return (
     <div className="content">
@@ -55,11 +52,11 @@ function Offices() {
 
 function CalculateClosestOffice(userLat: number, userLng: number) {
   let firstOffice = Object.values(officeInformationData)[0]
-  let shortestDistance = CalculateDistance(userLat, userLng, firstOffice.officeInformation.coords.lat, firstOffice.officeInformation.coords.lat);
+  let shortestDistance = CalculateDistance(userLat, userLng, firstOffice.officeInformation.coords.lat, firstOffice.officeInformation.coords.lng);
   let closestOfficeName = firstOffice.officeName;
 
   for (let office of Object.values(officeInformationData)) {
-    let newDistance = CalculateDistance(userLat, userLng, office.officeInformation.coords.lat, office.officeInformation.coords.lat);
+    let newDistance = CalculateDistance(userLat, userLng, office.officeInformation.coords.lat, office.officeInformation.coords.lng);
     if (newDistance < shortestDistance) {
       shortestDistance = newDistance;
       closestOfficeName = office.officeName;
@@ -81,6 +78,8 @@ function CalculateDistance(userLat: number, userLng: number, destLat: number, de
     Math.sin(lngDiff / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const distance = earthRadius * c; // Distance in km
+  // console.log("userLat: ", userLat, "userLng: ", userLng, "destLat: ", destLat, "destLng: ", destLng)
+  // console.log("distance ", distance)
   return distance;
 }
 
