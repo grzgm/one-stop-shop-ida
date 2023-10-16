@@ -1,7 +1,6 @@
 import CardContainer from "../tiles/CardContainer";
 import "../../css/components/pages/home.css";
 import { BodyNormal, HeadingLarge } from "../text-wrapers/TextWrapers";
-// import { CardProps } from "../tiles/Card";
 
 
 const officeDetails = [{linkAddress:"/office-details/reserve-desk", title:"Reserve a Desk", description:"Reserve a Desk"},
@@ -27,7 +26,6 @@ function Home() {
       </div>
       <CardContainer title="EmployeePortal" cardProps={employeePortal}/>
       <CardContainer title="Office Details" cardProps={officeDetails}/>
-      {/* <CardContainer cardProps={[{ linkAddress: "/office-details", title: "Test", description: "Test" }]}/> */}
     </div>
   );
 }
