@@ -9,7 +9,7 @@ export interface IOfficeInformationData {
       lat: number;
       lng: number;
     };
-    oppeningHours: string;
+    openingHours: string;
     accessInformation: string;
     parkingInformation: string;
     lunchInformation: string;
@@ -28,7 +28,7 @@ export const officeInformationData: Record<string, IOfficeInformationData> = {
         lat: 52.0722482,
         lng: 5.0746558,
       },
-      oppeningHours: "6:00 - 21:30 working days",
+      openingHours: "6:00 - 21:30 working days",
       accessInformation:
         "You need a Creative Valley Papendorp access pass to enter the Creative Valley building and its Xplore Group office.",
       parkingInformation:
@@ -48,7 +48,7 @@ export const officeInformationData: Record<string, IOfficeInformationData> = {
         lat: 52.368519,
         lng: 4.9533974,
       },
-      oppeningHours: "-",
+      openingHours: "-",
       accessInformation:
         "You need a key to access the office building. To get a Amsterdam office key, send an e-mail to the Xplore Group HR team via  office@ida-mediafoundry.nl. ",
       parkingInformation:
@@ -68,7 +68,7 @@ export const officeInformationData: Record<string, IOfficeInformationData> = {
         lat: 51.4085791,
         lng: 5.4538161,
       },
-      oppeningHours: "6:30 - 20:30 working days",
+      openingHours: "6:30 - 20:30 working days",
       accessInformation:
         "You need a HTC access pass to enter the HTC 69 building and its Xplore Group office (on the 3rd floor of building 69). You can enter the office with a key.  Open the keyvault with code 1513. Please put the key back after usage... The HTC 69 access pass is arranged via Xplore Group HR and provided by the HTC Badge Office. The Badge Office is located in building The Strip at the 1st floor and is opened Monday-Friday 9:00-13:00.",
       parkingInformation:
@@ -88,7 +88,7 @@ export const officeInformationData: Record<string, IOfficeInformationData> = {
         lat: 51.1415231,
         lng: 4.4360194,
       },
-      oppeningHours: "string",
+      openingHours: "string",
       accessInformation: "string",
       parkingInformation: "string",
       lunchInformation: "-",
@@ -105,7 +105,7 @@ export const officeInformationData: Record<string, IOfficeInformationData> = {
         lat: 50.9517131,
         lng: 5.3497578,
       },
-      oppeningHours: "string",
+      openingHours: "string",
       accessInformation: "string",
       parkingInformation: "string",
       lunchInformation: "-",
@@ -122,7 +122,7 @@ export const officeInformationData: Record<string, IOfficeInformationData> = {
         lat: 51.0053017,
         lng: 3.7520626,
       },
-      oppeningHours: "string",
+      openingHours: "string",
       accessInformation: "string",
       parkingInformation: "string",
       lunchInformation: "-",
