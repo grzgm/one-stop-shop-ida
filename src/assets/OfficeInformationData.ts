@@ -77,21 +77,55 @@ export const officeInformationData: Record<string, IOfficeInformationData> = {
         "You can lunch in one of the restaurants, or buy a packed lunch in supermarket AH-To-Go on the HTC Strip.",
     },
   },
-  Test: {
-    officeName: "Test",
+  Kontich: {
+    officeName: "Kontich",
     canReserveDesk: false,
     canRegisterLunch: false,
     canRegisterPresence: false,
     officeInformation: {
-      address: "string",
+      address: "Prins boudewijnlaan 24e 2550",
       coords: {
-        lat: 0,
-        lng: 0,
+        lat: 51.1415231,
+        lng: 4.4360194,
       },
       oppeningHours: "string",
       accessInformation: "string",
       parkingInformation: "string",
-      lunchInformation: "string",
+      lunchInformation: "-",
+    },
+  },
+  Hasselt: {
+    officeName: "Hasselt",
+    canReserveDesk: false,
+    canRegisterLunch: false,
+    canRegisterPresence: false,
+    officeInformation: {
+      address: "Kempische Steenweg 311 3500",
+      coords: {
+        lat: 50.9517131,
+        lng: 5.3497578,
+      },
+      oppeningHours: "string",
+      accessInformation: "string",
+      parkingInformation: "string",
+      lunchInformation: "-",
+    },
+  },
+  Merelbeke: {
+    officeName: "Merelbeke",
+    canReserveDesk: false,
+    canRegisterLunch: false,
+    canRegisterPresence: false,
+    officeInformation: {
+      address: "Guldensporenpark 88 9820",
+      coords: {
+        lat: 51.0053017,
+        lng: 3.7520626,
+      },
+      oppeningHours: "string",
+      accessInformation: "string",
+      parkingInformation: "string",
+      lunchInformation: "-",
     },
   },
 };
