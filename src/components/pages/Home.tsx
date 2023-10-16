@@ -25,8 +25,8 @@ function Home() {
         <BodyNormal>Place where you</BodyNormal>
         <BodyNormal>have everything you need!</BodyNormal>
       </div>
-      <CardContainer cardProps={employeePortal}/>
-      <CardContainer cardProps={officeDetails}/>
+      <CardContainer title="EmployeePortal" cardProps={employeePortal}/>
+      <CardContainer title="Office Details" cardProps={officeDetails}/>
       {/* <CardContainer cardProps={[{ linkAddress: "/office-details", title: "Test", description: "Test" }]}/> */}
     </div>
   );

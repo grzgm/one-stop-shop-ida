@@ -3,10 +3,11 @@ import "../../css/components/tiles/card-container.css";
 import { HeadingLarge } from "../text-wrapers/TextWrapers";
 
 interface CardContainerProps {
+  title: string;
   cardProps?: CardProps[];
 }
 
-function CardContainer({ cardProps = [] }: CardContainerProps) {
+function CardContainer({title, cardProps = [] }: CardContainerProps) {
   const cards = [];
   console.log(cardProps)
   if (cardProps.length < 1) {
@@ -23,7 +24,7 @@ function CardContainer({ cardProps = [] }: CardContainerProps) {
   return (
     <div className="card-container">
       <div className="card-container__title">
-        <HeadingLarge>Category</HeadingLarge>
+        <HeadingLarge>{title}</HeadingLarge>
       </div>
       <div className="card-container__cards">
         {cards}
