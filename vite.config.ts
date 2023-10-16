@@ -8,7 +8,10 @@ import manifest from './manifest.json';
 export default defineConfig({
   plugins: [react(), VitePWA({
     manifest,
-    includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+    registerType: 'autoUpdate',
     injectRegister: 'auto',
+    devOptions: {
+      enabled: true
+    }
   })],
 })
