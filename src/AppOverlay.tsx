@@ -1,32 +1,44 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Navbar from "./components/bars/Navbar";
 import Sidebar from "./components/bars/Sidebar";
 import { Outlet } from "react-router-dom";
 
 function AppOverlay() {
-    const maxWindowWidth = 1450
-    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+    const navbarOptionsRef = useRef<HTMLDivElement>(null);
+    const maxNavbarOptionsWidth = 1360
+    const [navbarOptionsWidth, setNavbarOptionsWidth] = useState(navbarOptionsRef?.current?.offsetWidth);
     const [showSidebar, switchShowSidebar] = useState(false)
 
     useEffect(() => {
-        const handleResize = () => {
-            setWindowWidth(window.innerWidth);
-            if (window.innerWidth > maxWindowWidth) {
-                switchShowSidebar(false)
+        setNavbarOptionsWidth(navbarOptionsRef?.current?.offsetWidth);
+
+        const resizeObserver = new ResizeObserver((entries) => {
+            for (const entry of entries) {
+                const newWidth = entry.contentRect.width;
+                setNavbarOptionsWidth(newWidth);
+                console.log(newWidth);
+
+                if (newWidth > maxNavbarOptionsWidth) {
+                    switchShowSidebar(false);
+                }
             }
-        };
+        });
 
-        window.addEventListener('resize', handleResize);
+        const navbarOptions = navbarOptionsRef.current
 
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
+        if (navbarOptions) {
+            resizeObserver.observe(navbarOptions);
+
+            return () => {
+                resizeObserver.disconnect();
+            };
+        }
+    }, [navbarOptionsRef.current?.offsetWidth]);
 
     return (
         <>
-            <Navbar onPressOpenSidebar={switchShowSidebar} />
-            {windowWidth <= maxWindowWidth && showSidebar && (<Sidebar onPressCloseSidebar={switchShowSidebar} />)}
+            <Navbar onPressOpenSidebar={switchShowSidebar} navbarOptionsRef={navbarOptionsRef} />
+            {(navbarOptionsWidth && navbarOptionsWidth <= maxNavbarOptionsWidth) && showSidebar && (<Sidebar onPressCloseSidebar={switchShowSidebar} />)}
             <Outlet />
         </>
     );

@@ -6,13 +6,14 @@ import { Dispatch, SetStateAction } from "react";
 
 interface NavbarProps {
   onPressOpenSidebar: Dispatch<SetStateAction<boolean>>;
+  navbarOptionsRef:React.RefObject<HTMLDivElement>;
 }
 
-function Navbar({onPressOpenSidebar}: NavbarProps) {
+function Navbar({onPressOpenSidebar, navbarOptionsRef}: NavbarProps) {
   return (
     <nav id="navbar">
       <img id="navbar__logo" src={idaLogo} alt="iDA" />
-      <div id="navbar__options">
+      <div id="navbar__options" ref={navbarOptionsRef}>
         <div id="navbar__options__left" className="heading--small">
           <Link className="navbar__option heading--small" to="/">Home</Link>
           <Link className="navbar__option heading--small" to="/employee-portal">EmployeePortal</Link>
