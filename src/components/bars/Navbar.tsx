@@ -6,13 +6,13 @@ import { Dispatch, SetStateAction } from "react";
 
 interface NavbarProps {
   onPressOpenSidebar: Dispatch<SetStateAction<boolean>>;
-  navbarOptionsRef:React.RefObject<HTMLDivElement>;
+  navbarOptionsRef: React.RefObject<HTMLDivElement>;
 }
 
-function Navbar({onPressOpenSidebar, navbarOptionsRef}: NavbarProps) {
+function Navbar({ onPressOpenSidebar, navbarOptionsRef }: NavbarProps) {
   return (
     <nav id="navbar">
-      <img id="navbar__logo" src={idaLogo} alt="iDA" />
+      <Link to="/"><img id="navbar__logo" src={idaLogo} alt="iDA" /></Link>
       <div id="navbar__options" ref={navbarOptionsRef}>
         <div id="navbar__options__left" className="heading--small">
           <Link className="navbar__option heading--small" to="/">Home</Link>
@@ -22,7 +22,7 @@ function Navbar({onPressOpenSidebar, navbarOptionsRef}: NavbarProps) {
           <Link className="navbar__option heading--small" to="/personal-skills">Personal Skills</Link>
           <Link className="navbar__option heading--small" to="/expenses">Expenses</Link>
         </div>
-        <div className="navbar__burger-menu" onClick={() => onPressOpenSidebar(true)}><MenuIcon fontSize="inherit"/></div>
+        <div className="navbar__burger-menu" onClick={() => onPressOpenSidebar(true)}><MenuIcon fontSize="inherit" /></div>
         <div id="navbar__separator" />
         <div id="navbar__options__right">
           <Link className="navbar__option heading--small" to="/offices">Change Offices</Link>
