@@ -39,25 +39,16 @@ app.use(cors({
 }));
 // Parse JSON body
 app.use(express.json());
-
-app.get('/set-session', (req, res) => {
-  // Set session data
-  console.log("set: ", req.sessionID)
-  req.session!.userId = req.sessionID; // You can set any user-specific data here
-  res.send('Session set');
-});
   
 app.get('/get-session', (req, res) => {
     // Get session data
-  console.log("get: ", req.sessionID)
-    const userId = req.session!.userId;
-    res.json({ userId });
+    console.log("get-session: ", req.sessionID)
+    res.send(req.sessionID);
 });
   
 app.get('/get-token', (req, res) => {
-    const { sessionid } = req.query;
-    
-    res.json(tokenStorage[sessionid as string]);
+    console.log("get-token: ", req.sessionID)
+    res.json(tokenStorage[req.sessionID]);
 });
 
 // OAuth Callback URL has to be the same as in the Microsoft Application Panel under OAuth page
@@ -65,8 +56,7 @@ const redirectUri = "http://localhost:3002/microsoft/auth/callback";
 
 // OAuth Step 1: Redirect users to microsoft's authorization URL
 app.get("/microsoft/auth", (req, res) => {
-    const reqSessionIdParam = req.query.sessionid;
-    console.log("state sended: ", reqSessionIdParam)
+    console.log("state sended: ", req.sessionID)
     const authUrl =
         `https://login.microsoftonline.com/${TENANT}/oauth2/v2.0/authorize?` +
         `client_id=${MICROSOFT_CLIENT_ID}` +
@@ -74,7 +64,7 @@ app.get("/microsoft/auth", (req, res) => {
         `&redirect_uri=${redirectUri}` +
         `&response_mode=query` +
         `&scope=${SCOPES}` +
-        `&state=${reqSessionIdParam}` +
+        `&state=${req.sessionID}` +
         `&code_challenge=${codeChallenge}` +
         `&code_challenge_method=S256`;
     res.redirect(encodeURI(authUrl));
@@ -82,7 +72,6 @@ app.get("/microsoft/auth", (req, res) => {
 
 // OAuth Step 2: Handle the OAuth callback
 app.get("/microsoft/auth/callback", async (req, res) => {
-    console.log(req.query)
     const { code, state } = req.query;
     try {
         const data = {
@@ -116,7 +105,7 @@ app.get("/microsoft/auth/callback", async (req, res) => {
         // Save access token to file
         // save_authed_user(response.data);
 
-        res.send("OAuth process completed successfully!");
+        res.redirect(encodeURI("http://localhost:5173"));
     } catch (error) {
         console.error("OAuth error:", error);
         res.status(500).send("OAuth process failed.");
