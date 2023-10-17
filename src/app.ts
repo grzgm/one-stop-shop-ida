@@ -40,10 +40,16 @@ app.use(cors({
 // Parse JSON body
 app.use(express.json());
   
-app.get('/get-session', (req, res) => {
-    // Get session data
-    console.log("get-session: ", req.sessionID)
-    res.send(req.sessionID);
+app.get('/check-token', (req, res) => {
+    // console.log("check-token: ", req.sessionID)
+    if(Object.keys(tokenStorage).includes(req.sessionID)){
+        res.send(true);
+        console.log("check-token: ", true)
+    }
+    else{
+        res.send(false);
+        console.log("check-token: ", false)
+    }
 });
   
 app.get('/get-token', (req, res) => {
