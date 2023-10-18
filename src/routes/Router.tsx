@@ -20,6 +20,7 @@ import Settings from "../components/pages/Settings";
 // import ReserveDeskOverview from "../components/pages/office-details/ReserveDeskOverview";
 import Scheduling from "../components/pages/employee-portal/Scheduling";
 import AppOverlay from "../AppOverlay";
+import MicrosoftAuth from "../components/pages/MicrosoftAuth";
 
 function Router(currentOfficeName: string) {
 
@@ -37,7 +38,7 @@ function Router(currentOfficeName: string) {
           <Route index element={<OfficeDetails />} />
           <Route path="reserve-desk" element={<ReserveDesk />} loader={() => ReserveDeskLoader(currentOfficeName)} />
           {/* <Route path="reserve-desk-overview" element={<ReserveDeskOverview />} /> */}
-          <Route path="lunch" element={<Lunch />} loader={() => LunchLoader(currentOfficeName)} />
+          <Route path="lunch" element={<Lunch />} loader={async () => await LunchLoader(currentOfficeName)} />
           <Route path="office-information" element={<OfficeInformation />} />
           <Route path="presence" element={<Presence />} loader={() => PresenceLoader(currentOfficeName)} />
         </Route>
@@ -51,6 +52,7 @@ function Router(currentOfficeName: string) {
           <Route path="amsterdam" element={<Amsterdam />} />
         </Route>
         <Route path="/settings" element={<Settings />} />
+        <Route path="/microsoft-auth" element={<MicrosoftAuth />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </>

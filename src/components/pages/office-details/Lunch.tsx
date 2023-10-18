@@ -4,10 +4,12 @@ import Button from "../../Buttons";
 import "../../../css/components/pages/office-details/lunch.css"
 import { officeInformationData } from "../../../assets/OfficeInformationData";
 import { redirect } from "react-router-dom";
+import { isAuth } from "../microsoft-graph-api/MicrosoftGraphAPI";
 
-function LunchLoader(officeName: string) {
+async function LunchLoader(officeName: string) {
 	const currentOfficeInformationData = officeInformationData[officeName]
-	if (currentOfficeInformationData && currentOfficeInformationData.canRegisterLunch == true) {
+	if (currentOfficeInformationData.canRegisterLunch == true) {
+		if (await isAuth() == true)
 		return null
 	}
 	throw redirect("/")
