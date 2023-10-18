@@ -19,7 +19,7 @@ namespace OneStopShopIdaBackend.Controllers
         private readonly HttpClient _httpClient;
 
         private string MY_MAIL = "";
-        private string MICROSOFT_CLIENT_ID = "";
+        private string MICROSOFT_CLIENT_ID = "ff6757d9-6533-46f4-99c7-32db8a7d606d";
         private string TENANT = "organizations";
         private string SCOPES = "offline_access user.read mail.read mail.send calendars.readwrite";
         private string redirectUri = "http://localhost:3002/microsoft/auth/callback";
@@ -37,14 +37,18 @@ namespace OneStopShopIdaBackend.Controllers
         [HttpGet("auth")]
         public async Task<IActionResult> GetAuth()
         {
+            var sessionId = HttpContext.Session.Id;
+
+            HttpContext.Session.SetString("key", "value");
+
             string authUrl =
             $"https://login.microsoftonline.com/{TENANT}/oauth2/v2.0/authorize?" +
-            $"client_id={ MICROSOFT_CLIENT_ID}" +
+            $"client_id={MICROSOFT_CLIENT_ID}" +
             $"&response_type=code" +
-            $"&redirect_uri={ redirectUri}" +
+            $"&redirect_uri={redirectUri}" +
             $"&response_mode=query" +
-            $"&scope={ SCOPES}" +
-            //"&state={ req.sessionID}" +
+            $"&scope={SCOPES}" +
+            $"&state={sessionId}" +
             $"&code_challenge={codeChallenge}" +
             $"&code_challenge_method=S256";
             try
@@ -69,7 +73,7 @@ namespace OneStopShopIdaBackend.Controllers
 
         // OAuth Step 2: Handle the OAuth callback
         [HttpGet("auth/callback")]
-        public async Task<IActionResult> GetAuthCallback([FromQuery] string code, [FromQuery] int state)
+        public async Task<IActionResult> GetAuthCallback([FromQuery] string code, [FromQuery] string state)
         {
             try
             {
@@ -95,7 +99,7 @@ namespace OneStopShopIdaBackend.Controllers
                 string REFRESH_TOKEN = responseObject.refresh_token;
 
                 SessionEntryItem sessionEntryItem = new SessionEntryItem();
-                sessionEntryItem.Id = 1;
+                sessionEntryItem.Id = state;
                 sessionEntryItem.AccessToken = accessToken;
                 sessionEntryItem.RefreshToken = REFRESH_TOKEN;
 
@@ -111,7 +115,7 @@ namespace OneStopShopIdaBackend.Controllers
             }
         }
         // GET: api/TodoItems
-        [HttpGet]
+        [HttpGet("auth/tokens")]
         public async Task<ActionResult<IEnumerable<SessionEntryItem>>> GetSessionEntryItems()
         {
             if (_context.SessionEntryItems == null)
