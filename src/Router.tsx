@@ -1,6 +1,6 @@
 import { Route } from "react-router-dom";
 import Welcome from "./sections/pages/Welcome";
-import Home from "./sections/pages/Home";
+import Home, { HomeLoader } from "./sections/pages/Home";
 import NotFound from "./sections/pages/NotFound";
 import Utrecht from "./sections/pages/offices/Utrecht";
 import Eindhoven from "./sections/pages/offices/Eindhoven";
@@ -13,7 +13,7 @@ function Router() {
   return (
     <>
       <Route path="/" element={<Navbar />} >
-        <Route index element={<Home />} />
+        <Route index element={<Home />} loader={async () => HomeLoader()}/>
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/offices" element={<OfficesLayout />}>
           <Route index element={<Offices />} />
