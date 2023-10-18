@@ -1,12 +1,15 @@
 import './App.css'
-import Navbar from './sections/navbar/Navbar'
-import Pages from './sections/pages/Pages'
+import { RouterProvider, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
+import Router from './Router';
 
 function App() {
+  const customBrowserRouter = createBrowserRouter(createRoutesFromElements(
+    Router()
+  ))
+
   return (
     <div>
-      <Navbar/>
-      <Pages/>
+      <RouterProvider router={customBrowserRouter} />
     </div>
   )
 }
