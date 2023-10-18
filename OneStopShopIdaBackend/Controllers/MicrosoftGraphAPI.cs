@@ -115,6 +115,37 @@ namespace OneStopShopIdaBackend.Controllers
             }
         }
         // GET: api/TodoItems
+        [HttpGet("/check-token")]
+        public async Task<ActionResult<Boolean>> GetCheckToken()
+        {
+            var sessionId = HttpContext.Session.Id;
+
+            var items = await _context.SessionEntryItems.ToListAsync();
+
+            Boolean isToken = false;
+
+            foreach (var item in items)
+            {
+                if (item.Id == sessionId)
+                {
+                    isToken = true;
+                    break; // At least one item has an id
+                }
+            }
+
+            return isToken;
+        }
+        // GET: api/TodoItems
+        [HttpGet("/get-token")]
+        public async Task<ActionResult<SessionEntryItem>> GetGetToken()
+        {
+            var sessionId = HttpContext.Session.Id;
+            return await _context.SessionEntryItems.FindAsync(sessionId);
+        }
+
+
+
+        // GET: api/TodoItems
         [HttpGet("auth/tokens")]
         public async Task<ActionResult<IEnumerable<SessionEntryItem>>> GetSessionEntryItems()
         {
