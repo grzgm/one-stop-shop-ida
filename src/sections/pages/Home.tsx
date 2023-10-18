@@ -11,7 +11,7 @@ async function HomeLoader() {
   }
   catch (error) {
     console.error('Error:', error);
-    return true;
+    return false;
   }
 }
 
