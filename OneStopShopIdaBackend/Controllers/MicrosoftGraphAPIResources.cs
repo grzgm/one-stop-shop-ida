@@ -52,5 +52,59 @@ namespace OneStopShopIdaBackend.Controllers
                 return StatusCode(500, "Internal Server Error");
             }
         }
+
+        [HttpPost("resources/create-event")]
+        public async Task<IActionResult> PostCreateEvent([FromQuery] string address)
+        {
+            try
+            {
+                Event microsoftEvent = new()
+                {
+                    Subject = "Test event",
+                    Body = new Body
+                    {
+                        ContentType = "text",
+                        Content = "Testing if adding events with new participants works"
+                    },
+                    Start = new Start
+                    {
+                        DateTime = "2023-10-25T09:00:00",
+                        TimeZone = "Europe/Warsaw"
+                    },
+                    End = new End
+                    {
+                        DateTime = "2023-10-25T10:00:00",
+                        TimeZone = "Europe/Warsaw"
+                    },
+                    Attendees = new List<Attendee>
+                    {
+                        new Attendee
+                        {
+                            EmailAddress = new EmailAddress
+                            {
+                                Address = address
+                            },
+                            Type = "required"
+                        },
+                    }
+                };
+
+                var data = JsonSerializer.Serialize(microsoftEvent);
+
+                var content = new StringContent(data, Encoding.UTF8, "application/json");
+                // Add the Authorization header to the request
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("accessToken"));
+
+                HttpResponseMessage response = await _httpClient.PostAsync("https://graph.microsoft.com/v1.0/me/events", content);
+                string responseData = await response.Content.ReadAsStringAsync();
+                dynamic responseObject = JsonSerializer.Deserialize<Object>(responseData);
+                return Ok();
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError($"Error calling external API: {ex.Message}");
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
     }
 }
