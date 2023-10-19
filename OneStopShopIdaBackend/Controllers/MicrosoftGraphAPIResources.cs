@@ -9,8 +9,7 @@ namespace OneStopShopIdaBackend.Controllers
 {
     public partial class MicrosoftGraphAPIController : ControllerBase
     {
-        // OAuth Step 1: Redirect users to microsoft's authorization URL
-        [HttpGet("resources/send-email")]
+        [HttpPost("resources/send-email")]
         public async Task<IActionResult> PostSendEmail([FromQuery] string message, [FromQuery] string address)
         {
             try
@@ -29,13 +28,13 @@ namespace OneStopShopIdaBackend.Controllers
                         {
                             EmailAddress = new EmailAddress
                             {
-                                Address = "grzegorz.malisz@weareida.digital"
+                                Address = address
                             }
                         }
                     }
                 };
 
-                var data = JsonSerializer.Serialize(new {message = message});
+                var data = JsonSerializer.Serialize(new { message = email });
 
                 var content = new StringContent(data, Encoding.UTF8, "application/json");
                 // Add the Authorization header to the request
@@ -43,6 +42,7 @@ namespace OneStopShopIdaBackend.Controllers
 
                 HttpResponseMessage response = await _httpClient.PostAsync("https://graph.microsoft.com/v1.0/me/sendMail", content);
                 string responseData = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(responseData);
                 dynamic responseObject = JsonSerializer.Deserialize<Object>(responseData);
                 return Ok();
             }
