@@ -3,7 +3,7 @@ import { Link, useLoaderData } from "react-router-dom";
 
 async function HomeLoader() {
   try {
-    const res = await fetch(`http://localhost:3002/check-token`, {
+    const res = await fetch(`http://localhost:3002/microsoft/auth/check-token`, {
       method: 'GET',
       credentials: 'include' // Include credentials (cookies) in the request
     })
