@@ -6,8 +6,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+// Add Db Context
 builder.Services.AddDbContext<TodoContext>(opt =>
     opt.UseInMemoryDatabase("TodoList"));
+
+// Add Sessoion Context
 builder.Services.AddDbContext<SessionEntryContext>(opt =>
     opt.UseInMemoryDatabase("SessionEntryList"));
 

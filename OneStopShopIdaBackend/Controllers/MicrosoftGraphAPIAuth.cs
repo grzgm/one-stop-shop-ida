@@ -20,7 +20,6 @@ namespace OneStopShopIdaBackend.Controllers
             try
             {
                 string sessionId = HttpContext.Session.Id;
-                Console.WriteLine(sessionId);
 
                 HttpContext.Session.SetString("accessToken", "null");
                 HttpContext.Session.SetString("refreshToken", "null");
@@ -41,7 +40,7 @@ namespace OneStopShopIdaBackend.Controllers
             catch (HttpRequestException ex)
             {
                 _logger.LogError($"Error calling external API: {ex.Message}");
-                return StatusCode(500, "Internal Server Error");
+                return StatusCode(500, $"Internal Server Error \n {ex.Message}");
             }
         }
 
@@ -94,12 +93,12 @@ namespace OneStopShopIdaBackend.Controllers
             catch (HttpRequestException ex)
             {
                 _logger.LogError($"Error calling external API: {ex.Message}");
-                return StatusCode(500, "Internal Server Error");
+                return StatusCode(500, $"Internal Server Error \n {ex.Message}");
             }
         }
 
         // OAuth Step 2: Handle the OAuth callback
-        [HttpGet("auth/refresh")]
+        [HttpPut("auth/refresh")]
         public async Task<IActionResult> GetAuthRefresh()
         {
             try
@@ -131,12 +130,12 @@ namespace OneStopShopIdaBackend.Controllers
                 HttpContext.Session.SetString("accessToken", accessToken);
                 HttpContext.Session.SetString("refreshToken", refreshToken);
 
-                return Ok();
+                return NoContent();
             }
             catch (HttpRequestException ex)
             {
                 _logger.LogError($"Error calling external API: {ex.Message}");
-                return StatusCode(500, "Internal Server Error");
+                return StatusCode(500, $"Internal Server Error \n {ex.Message}");
             }
         }
         // GET: api/TodoItems
@@ -166,7 +165,7 @@ namespace OneStopShopIdaBackend.Controllers
             //    }
             //}
 
-            return isToken;
+            return Ok(isToken);
         }
         // GET: api/TodoItems
         [HttpGet("auth/get-token")]
@@ -177,7 +176,7 @@ namespace OneStopShopIdaBackend.Controllers
             //return await _context.SessionEntryItems.FindAsync(sessionId);
 
             // Get token from session
-            return new { accessToken = HttpContext.Session.GetString("accessToken") };
+            return Ok(new { accessToken = HttpContext.Session.GetString("accessToken") });
         }
 
 

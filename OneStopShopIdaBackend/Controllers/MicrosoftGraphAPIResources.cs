@@ -14,6 +14,7 @@ namespace OneStopShopIdaBackend.Controllers
         {
             try
             {
+                // Create E-mail
                 Email email = new()
                 {
                     Body = new Body
@@ -41,15 +42,12 @@ namespace OneStopShopIdaBackend.Controllers
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("accessToken"));
 
                 HttpResponseMessage response = await _httpClient.PostAsync("https://graph.microsoft.com/v1.0/me/sendMail", content);
-                string responseData = await response.Content.ReadAsStringAsync();
-                Console.WriteLine(responseData);
-                dynamic responseObject = JsonSerializer.Deserialize<Object>(responseData);
-                return Ok();
+                return NoContent();
             }
             catch (HttpRequestException ex)
             {
                 _logger.LogError($"Error calling external API: {ex.Message}");
-                return StatusCode(500, "Internal Server Error");
+                return StatusCode(500, $"Internal Server Error \n {ex.Message}");
             }
         }
 
@@ -58,6 +56,7 @@ namespace OneStopShopIdaBackend.Controllers
         {
             try
             {
+                // Create event
                 Event microsoftEvent = new()
                 {
                     Subject = "Test event",
@@ -96,14 +95,12 @@ namespace OneStopShopIdaBackend.Controllers
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("accessToken"));
 
                 HttpResponseMessage response = await _httpClient.PostAsync("https://graph.microsoft.com/v1.0/me/events", content);
-                string responseData = await response.Content.ReadAsStringAsync();
-                dynamic responseObject = JsonSerializer.Deserialize<Object>(responseData);
-                return Ok();
+                return NoContent();
             }
             catch (HttpRequestException ex)
             {
                 _logger.LogError($"Error calling external API: {ex.Message}");
-                return StatusCode(500, "Internal Server Error");
+                return StatusCode(500, $"Internal Server Error \n {ex.Message}");
             }
         }
     }
