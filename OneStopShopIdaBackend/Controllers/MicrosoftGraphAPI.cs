@@ -19,7 +19,6 @@ namespace OneStopShopIdaBackend.Controllers
         private readonly ILogger<MicrosoftGraphAPIController> _logger;
         private readonly HttpClient _httpClient;
 
-        private const string MyMail = "";
         private const string MicrosoftClientId = "ff6757d9-6533-46f4-99c7-32db8a7d606d";
         private const string Tenant = "organizations";
         private const string Scopes = "offline_access user.read mail.read mail.send calendars.readwrite";
