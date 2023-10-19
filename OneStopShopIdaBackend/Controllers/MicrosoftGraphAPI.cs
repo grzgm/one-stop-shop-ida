@@ -7,24 +7,28 @@ using System.Web;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using OneStopShopIdaBackend.Models;
 using Microsoft.EntityFrameworkCore;
+using Azure.Core;
 
 namespace OneStopShopIdaBackend.Controllers
 {
     [ApiController]
     [Route("microsoft")]
-    public class MicrosoftGraphAPIController : ControllerBase
+    public partial class MicrosoftGraphAPIController : ControllerBase
     {
         private readonly SessionEntryContext _context;
         private readonly ILogger<MicrosoftGraphAPIController> _logger;
         private readonly HttpClient _httpClient;
 
-        private string MY_MAIL = "";
-        private string MICROSOFT_CLIENT_ID = "ff6757d9-6533-46f4-99c7-32db8a7d606d";
-        private string TENANT = "organizations";
-        private string SCOPES = "offline_access user.read mail.read mail.send calendars.readwrite";
-        private string redirectUri = "http://localhost:3002/microsoft/auth/callback";
-        private string codeVerifier = "4fe484d8f9b55c7bbf2e1eceae2d3f069f2b99735dcde507df69e8e23cc461a4";
-        private string codeChallenge = "Dhi_pRwq9DzmaCpZynqxaaNMreGnAuZwvzX-gQrcbgQ";
+        private const string MyMail = "";
+        private const string MicrosoftClientId = "ff6757d9-6533-46f4-99c7-32db8a7d606d";
+        private const string Tenant = "organizations";
+        private const string Scopes = "offline_access user.read mail.read mail.send calendars.readwrite";
+        private const string CodeVerifier = "4fe484d8f9b55c7bbf2e1eceae2d3f069f2b99735dcde507df69e8e23cc461a4";
+        private const string CodeChallenge = "Dhi_pRwq9DzmaCpZynqxaaNMreGnAuZwvzX-gQrcbgQ";
+
+
+        private const string RedirectUri = "http://localhost:3002/microsoft/auth/callback";
+        private const string FrontendUri = "http://localhost:5173";
 
         public MicrosoftGraphAPIController(SessionEntryContext context, ILogger<MicrosoftGraphAPIController> logger, HttpClient httpClient)
         {
@@ -37,31 +41,25 @@ namespace OneStopShopIdaBackend.Controllers
         [HttpGet("auth")]
         public async Task<IActionResult> GetAuth()
         {
-            var sessionId = HttpContext.Session.Id;
-
-            HttpContext.Session.SetString("key", "value");
-
-            string authUrl =
-            $"https://login.microsoftonline.com/{TENANT}/oauth2/v2.0/authorize?" +
-            $"client_id={MICROSOFT_CLIENT_ID}" +
-            $"&response_type=code" +
-            $"&redirect_uri={redirectUri}" +
-            $"&response_mode=query" +
-            $"&scope={SCOPES}" +
-            $"&state={sessionId}" +
-            $"&code_challenge={codeChallenge}" +
-            $"&code_challenge_method=S256";
             try
             {
-                //HttpResponseMessage response = await _httpClient.GetAsync(authUrl);
-                //response.EnsureSuccessStatusCode();
+                string sessionId = HttpContext.Session.Id;
+                Console.WriteLine(sessionId);
 
-                // Deserialize the response body if necessary
-                // Example: var result = await response.Content.ReadAsAsync<MyModel>();
+                HttpContext.Session.SetString("accessToken", "null");
+                HttpContext.Session.SetString("refreshToken", "null");
 
-                // Handle the response data as needed
-                // Example: return Ok(result);
-                //return Ok(HttpUtility.UrlEncode(authUrl));
+                string authUrl =
+                $"https://login.microsoftonline.com/{Tenant}/oauth2/v2.0/authorize?" +
+                $"client_id={MicrosoftClientId}" +
+                $"&response_type=code" +
+                $"&redirect_uri={RedirectUri}" +
+                $"&response_mode=query" +
+                $"&scope={Scopes}" +
+                $"&state={sessionId}" +
+                $"&code_challenge={CodeChallenge}" +
+                $"&code_challenge_method=S256";
+
                 return Redirect(authUrl);
             }
             catch (HttpRequestException ex)
@@ -78,14 +76,15 @@ namespace OneStopShopIdaBackend.Controllers
             try
             {
                 var data = new Dictionary<string, string>
-            {
-                { "client_id", MICROSOFT_CLIENT_ID },
-                { "scope", SCOPES },
-                { "code", code },
-                { "redirect_uri", redirectUri },
-                { "grant_type", "authorization_code" },
-                { "code_verifier", codeVerifier }
-            }; 
+                {
+                    { "client_id", MicrosoftClientId },
+                    { "scope", Scopes },
+                    { "code", code },
+                    { "redirect_uri", RedirectUri },
+                    { "grant_type", "authorization_code" },
+                    { "code_verifier", CodeVerifier }
+                };
+
                 var content = new FormUrlEncodedContent(data);
                 content.Headers.Clear();
                 content.Headers.Add("content-type", "application/x-www-form-urlencoded");
@@ -94,19 +93,27 @@ namespace OneStopShopIdaBackend.Controllers
                 HttpResponseMessage response = await _httpClient.PostAsync("https://login.microsoftonline.com/organizations/oauth2/v2.0/token", content);
                 string responseData = await response.Content.ReadAsStringAsync();
                 dynamic responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject(responseData);
+
                 // Access the access_token property
                 string accessToken = responseObject.access_token;
-                string REFRESH_TOKEN = responseObject.refresh_token;
+                string refreshToken = responseObject.refresh_token;
 
-                SessionEntryItem sessionEntryItem = new SessionEntryItem();
-                sessionEntryItem.Id = state;
-                sessionEntryItem.AccessToken = accessToken;
-                sessionEntryItem.RefreshToken = REFRESH_TOKEN;
 
-                _context.SessionEntryItems.Add(sessionEntryItem);
-                await _context.SaveChangesAsync();
+                // Store accessToken and refreshToken in database with session Id
+                //SessionEntryItem sessionEntryItem = new SessionEntryItem();
+                //sessionEntryItem.Id = state;
+                //sessionEntryItem.AccessToken = accessToken;
+                //sessionEntryItem.RefreshToken = refreshToken;
 
-                return Redirect("http://localhost:5173");
+                //_context.SessionEntryItems.Add(sessionEntryItem);
+                //await _context.SaveChangesAsync();
+
+
+                // Store accessToken and refreshToken in the session
+                HttpContext.Session.SetString("accessToken", accessToken);
+                HttpContext.Session.SetString("refreshToken", refreshToken);
+
+                return Redirect(FrontendUri);
             }
             catch (HttpRequestException ex)
             {
@@ -115,32 +122,44 @@ namespace OneStopShopIdaBackend.Controllers
             }
         }
         // GET: api/TodoItems
-        [HttpGet("/check-token")]
+        [HttpGet("auth/check-token")]
         public async Task<ActionResult<Boolean>> GetCheckToken()
         {
-            var sessionId = HttpContext.Session.Id;
-
-            var items = await _context.SessionEntryItems.ToListAsync();
-
+            // Check if the accessToken and refreshToken are stored in session
+            string accessToken = HttpContext.Session.GetString("accessToken");
+            string refreshToken = HttpContext.Session.GetString("refreshToken");
             Boolean isToken = false;
-
-            foreach (var item in items)
+            if (accessToken != null && refreshToken != null)
             {
-                if (item.Id == sessionId)
-                {
-                    isToken = true;
-                    break; // At least one item has an id
-                }
+                isToken = true;
             }
+
+            // Check if the token is in database
+            //var sessionId = HttpContext.Session.Id;
+            //var items = await _context.SessionEntryItems.ToListAsync();
+
+            //Boolean isToken = false;
+            //foreach (var item in items)
+            //{
+            //    if (item.Id == sessionId)
+            //    {
+            //        isToken = true;
+            //        break; // At least one item has an id
+            //    }
+            //}
 
             return isToken;
         }
         // GET: api/TodoItems
-        [HttpGet("/get-token")]
-        public async Task<ActionResult<SessionEntryItem>> GetGetToken()
+        [HttpGet("auth/get-token")]
+        public async Task<ActionResult<Object>> GetGetToken()
         {
-            var sessionId = HttpContext.Session.Id;
-            return await _context.SessionEntryItems.FindAsync(sessionId);
+            // Get token from database by current session Id
+            //var sessionId = HttpContext.Session.Id;
+            //return await _context.SessionEntryItems.FindAsync(sessionId);
+
+            // Get token from session
+            return new { accessToken = HttpContext.Session.GetString("accessToken") };
         }
 
 
