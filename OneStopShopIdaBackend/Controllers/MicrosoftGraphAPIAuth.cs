@@ -97,6 +97,48 @@ namespace OneStopShopIdaBackend.Controllers
                 return StatusCode(500, "Internal Server Error");
             }
         }
+
+        // OAuth Step 2: Handle the OAuth callback
+        [HttpGet("auth/refresh")]
+        public async Task<IActionResult> GetAuthRefresh()
+        {
+            try
+            {
+                var data = new Dictionary<string, string>
+                {
+                    { "client_id", MicrosoftClientId },
+                    { "scope", Scopes },
+                    { "refresh_token", HttpContext.Session.GetString("refreshToken") },
+                    { "redirect_uri", RedirectUri },
+                    { "grant_type", "refresh_token" },
+                };
+
+                var content = new FormUrlEncodedContent(data);
+                content.Headers.Clear();
+                content.Headers.Add("content-type", "application/x-www-form-urlencoded");
+                content.Headers.Add("Origin", "http://localhost");
+
+                HttpResponseMessage response = await _httpClient.PostAsync("https://login.microsoftonline.com/organizations/oauth2/v2.0/token", content);
+                string responseData = await response.Content.ReadAsStringAsync();
+                dynamic responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject(responseData);
+
+                // Access the access_token property
+                string accessToken = responseObject.access_token;
+                string refreshToken = responseObject.refresh_token;
+
+
+                // Store accessToken and refreshToken in the session
+                HttpContext.Session.SetString("accessToken", accessToken);
+                HttpContext.Session.SetString("refreshToken", refreshToken);
+
+                return Ok();
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError($"Error calling external API: {ex.Message}");
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
         // GET: api/TodoItems
         [HttpGet("auth/check-token")]
         public async Task<ActionResult<Boolean>> GetCheckToken()
