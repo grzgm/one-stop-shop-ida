@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using OneStopShopIdaBackend.Models;
+using OneStopShopIdaBackend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,9 @@ builder.Services.AddDbContext<TodoContext>(opt =>
 // Add Sessoion Context
 builder.Services.AddDbContext<SessionEntryContext>(opt =>
     opt.UseInMemoryDatabase("SessionEntryList"));
+
+// Add the CodeChallengeGeneratorService as a singleton service
+builder.Services.AddSingleton<CodeChallengeGeneratorService>();
 
 // Register HttpClient as a singleton service
 builder.Services.AddHttpClient();

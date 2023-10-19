@@ -32,7 +32,7 @@ namespace OneStopShopIdaBackend.Controllers
                 $"&response_mode=query" +
                 $"&scope={Scopes}" +
                 $"&state={sessionId}" +
-                $"&code_challenge={CodeChallenge}" +
+                $"&code_challenge={_codeChallengeGeneratorService.CodeChallenge}" +
                 $"&code_challenge_method=S256";
 
                 return Redirect(authUrl);
@@ -57,7 +57,7 @@ namespace OneStopShopIdaBackend.Controllers
                     { "code", code },
                     { "redirect_uri", RedirectUri },
                     { "grant_type", "authorization_code" },
-                    { "code_verifier", CodeVerifier }
+                    { "code_verifier", _codeChallengeGeneratorService.CodeVerifier }
                 };
 
                 var content = new FormUrlEncodedContent(data);
