@@ -15,11 +15,11 @@ namespace OneStopShopIdaBackend.Controllers
     {
         // OAuth Step 1: Redirect users to microsoft's authorization URL
         [HttpGet("auth")]
-        public async Task<IActionResult> GetAuth()
+        public async Task<IActionResult> GetAuth([FromQuery] string route)
         {
             try
             {
-                string sessionId = HttpContext.Session.Id;
+                // string sessionId = HttpContext.Session.Id;
 
                 HttpContext.Session.SetString("accessToken", "null");
                 HttpContext.Session.SetString("refreshToken", "null");
@@ -31,7 +31,8 @@ namespace OneStopShopIdaBackend.Controllers
                 $"&redirect_uri={RedirectUri}" +
                 $"&response_mode=query" +
                 $"&scope={Scopes}" +
-                $"&state={sessionId}" +
+                // $"&state={sessionId}" +
+                $"&state={route}" +
                 $"&code_challenge={_codeChallengeGeneratorService.CodeChallenge}" +
                 $"&code_challenge_method=S256";
 
@@ -88,7 +89,7 @@ namespace OneStopShopIdaBackend.Controllers
                 HttpContext.Session.SetString("accessToken", accessToken);
                 HttpContext.Session.SetString("refreshToken", refreshToken);
 
-                return Redirect(FrontendUri);
+                return Redirect(FrontendUri + state);
             }
             catch (HttpRequestException ex)
             {
