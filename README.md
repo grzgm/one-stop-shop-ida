@@ -2,7 +2,7 @@
 
 ## Description
 
-Development branch for frontend.
+Development branch for Front-end.
 
 ## Technology
 
