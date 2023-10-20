@@ -4,18 +4,24 @@ import Button from "../../Buttons";
 import "../../../css/components/pages/office-details/lunch.css"
 import { officeInformationData } from "../../../assets/OfficeInformationData";
 import { redirect } from "react-router-dom";
-import { isAuth } from "../microsoft-graph-api/MicrosoftGraphAPI";
+import { IsAuth, SendEmail } from "../../../api/microsoft-graph-api/MicrosoftGraphAPI";
 
 async function LunchLoader(officeName: string) {
 	const currentOfficeInformationData = officeInformationData[officeName]
 	if (currentOfficeInformationData.canRegisterLunch == true) {
-		if (await isAuth() == true)
-		return null
+		if (await IsAuth() == true)
+		{
+			return null
+		}
+		else{
+			return redirect("/microsoft-auth")
+		}
 	}
 	throw redirect("/")
 }
 
 function Lunch() {
+	const [response, setResponse] = useState<string|null>(null)
 	const [weekRegistration, setWeekRegistration] = useState<boolean[]>([false, false, false, false, false]);
 	const weekDaysNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
@@ -27,8 +33,9 @@ function Lunch() {
 	const saveLunchDays = () => {
 		console.log(weekRegistration)
 	};
-	const registerForToday = () => {
+	const registerForToday = async () => {
 		console.log("today register")
+		setResponse(await SendEmail());
 	};
 
 	return (
@@ -63,6 +70,7 @@ function Lunch() {
 					<HeadingSmall>Register for today</HeadingSmall>
 					<BodySmall>Only for today</BodySmall>
 					<BodySmall>before 12:00</BodySmall>
+					{response && <BodySmall>{response}</BodySmall>}
 					<form>
 						<Button child="Register" onClick={() => registerForToday()} />
 					</form>

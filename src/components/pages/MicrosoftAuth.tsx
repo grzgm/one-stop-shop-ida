@@ -10,7 +10,7 @@ function MicrosoftAuth() {
 				<BodyNormal>Get access to all the benefits of app!</BodyNormal>
 			</div>
 			<main className="microsoft-auth-main">
-				<Button child="Log in" onClick={() => (console.log())} />
+				<Button child="Log in" onClick={() => window.location.href = "http://localhost:3002/microsoft/auth"} />
 			</main>
 		</div>
 	);
