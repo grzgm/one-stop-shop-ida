@@ -15,7 +15,7 @@ async function LunchLoader(officeName: string) {
 			return null
 		}
 		else{
-			return redirect("/microsoft-auth")
+			return redirect(`/microsoft-auth?previousLocation=${encodeURI("/office-details/lunch")}`)
 		}
 	}
 	throw redirect("/")
