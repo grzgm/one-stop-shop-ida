@@ -1,23 +1,32 @@
 # Slack API PoC
 
+## Description
+
+Development branch for Back-end.
+
 ## Technology
 
-- Slack API,
-- Node.js,
-- TypeScript,
-- Express server,
-- Localtunnel for creating HTTPS endpoint
+* Slack API,
+* Node.js,
+* TypeScript,
+* Express server,
+* Localtunnel for creating HTTPS endpoint
+
+## Setup Local Development Environment
+
+* Install all dependencies using `npm i`,
+* Run the project with `npm run dev`,
 
 ## Features
 
-- Slack V2 OAuth 2.0 flow authentication,
-- Storing user access tokens
-- Sending custom message to any conversation
+* Slack V2 OAuth 2.0 flow authentication,
+* Storing user access tokens
+* Sending custom message to any conversation
 
 ## Slack Permissions
 
-- Conversation Manipulation
-- Setting custom Status
+* Conversation Manipulation
+* Setting custom Status
 
 ## Endpoints
 
