@@ -1,20 +1,30 @@
 # Microsoft Graph API PoC
 
+## Description
+
+Development branch for Back-end.
+
 ## Technology
 
-- Microsoft Graph API,
-- Node.js,
-- TypeScript,
-- Express server,
-- Localtunnel for creating HTTPS endpoint
+* Microsoft Graph API,
+* Node.js,
+* TypeScript,
+* Express server,
+* Localtunnel for creating HTTPS endpoint
+
+## Setup Local Development Environment
+
+* Install all dependencies using `npm i`,
+* Create a `.env` file with `MICROSOFT_CLIENT_ID="your-microsoft-client-id"`,
+* Run the project with `npm run dev`,
 
 ## Features
 
-- Microsoft Graph OAuth 2.0 flow authentication,
-- Storing user Access Tokens
-- Refreshing user Access Tokens
-- Sending Outlook Emails as a User
-- Creating Outlook Calendar Events as a User
+* Microsoft Graph OAuth 2.0 flow authentication [docs](https://learn.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow#refresh-the-access-token),
+* Storing user Access Tokens
+* Refreshing user Access Tokens
+* Sending Outlook Emails as a User
+* Creating Outlook Calendar Events as a User
 
 ## Microsoft Permissions
 
