@@ -1,3 +1,8 @@
+export interface IActionResult {
+  success: boolean;
+  status: string;
+}
+
 async function IsAuth() {
   try {
     const res = await fetch(
@@ -14,7 +19,7 @@ async function IsAuth() {
   }
 }
 
-async function SendEmail(message: string, address: string) {
+async function SendEmail(message: string, address: string): Promise<IActionResult> {
   try {
     const res = await fetch(
       `http://localhost:3002/microsoft/resources/send-email?message=${encodeURI(message)}&address=${encodeURI(address)}`,
@@ -25,15 +30,15 @@ async function SendEmail(message: string, address: string) {
     );
     if (res.ok) {
       // Handle successful response (status code 200-299)
-      return "Request has been sent correctly.";
+      return {success: true, status: "Request has been sent correctly."};
     } else {
       // Handle non-successful response (status code outside 200-299)
       console.error("HTTP error! status: ", res.status);
-      return "Request could not be send.";
+      return {success: false, status: "Request could not be send."};
     }
   } catch (error) {
     console.error("Error:", error);
-	return "Request could not be send.";
+	return {success: false, status: "Request could not be send."};
   }
 }
 

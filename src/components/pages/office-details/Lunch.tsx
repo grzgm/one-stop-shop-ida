@@ -4,7 +4,7 @@ import Button from "../../Buttons";
 import "../../../css/components/pages/office-details/lunch.css"
 import { officeInformationData } from "../../../assets/OfficeInformationData";
 import { redirect } from "react-router-dom";
-import { IsAuth, SendEmail } from "../../../api/microsoft-graph-api/MicrosoftGraphAPI";
+import { IActionResult, IsAuth, SendEmail } from "../../../api/microsoft-graph-api/MicrosoftGraphAPI";
 import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
 
 async function LunchLoader(officeName: string) {
@@ -23,7 +23,7 @@ async function LunchLoader(officeName: string) {
 
 function Lunch() {
 	const officeName = useContext(CurrentOfficeContext).currentOffice;
-	const [response, setResponse] = useState<string|null>(null)
+	const [response, setResponse] = useState<IActionResult|null>(null)
 	const [weekRegistration, setWeekRegistration] = useState<boolean[]>([false, false, false, false, false]);
 	const weekDaysNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
@@ -36,9 +36,9 @@ function Lunch() {
 		console.log(weekRegistration)
 	};
 	const registerForToday = async () => {
-		console.log("today register")
+		const response = await SendEmail(RegisterForTodayMail(officeName), "grzegorz.malisz@weareida.digital");
 		// setResponse(await SendEmail(RegisterForTodayMail(officeName), "office@ida-mediafoundry.nl"));
-		setResponse(await SendEmail(RegisterForTodayMail(officeName), "grzegorz.malisz@weareida.digital"));
+		setResponse(response);
 	};
 
 	return (
@@ -73,7 +73,7 @@ function Lunch() {
 					<HeadingSmall>Register for today</HeadingSmall>
 					<BodySmall>Only for today</BodySmall>
 					<BodySmall>before 12:00</BodySmall>
-					{response && <BodySmall>{response}</BodySmall>}
+					{response && <BodySmall additionalClasses={[response.success ? "font-colour--success" : "font-colour--fail"]}>{response.status}</BodySmall>}
 					<form>
 						<Button child="Register" onClick={() => registerForToday()} />
 					</form>
