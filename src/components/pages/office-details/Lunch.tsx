@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { BodyNormal, BodySmall, HeadingLarge, HeadingSmall } from "../../text-wrapers/TextWrapers";
 import Button from "../../Buttons";
 import "../../../css/components/pages/office-details/lunch.css"
 import { officeInformationData } from "../../../assets/OfficeInformationData";
 import { redirect } from "react-router-dom";
 import { IsAuth, SendEmail } from "../../../api/microsoft-graph-api/MicrosoftGraphAPI";
+import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
 
 async function LunchLoader(officeName: string) {
 	const currentOfficeInformationData = officeInformationData[officeName]
@@ -21,6 +22,7 @@ async function LunchLoader(officeName: string) {
 }
 
 function Lunch() {
+	const officeName = useContext(CurrentOfficeContext).currentOffice;
 	const [response, setResponse] = useState<string|null>(null)
 	const [weekRegistration, setWeekRegistration] = useState<boolean[]>([false, false, false, false, false]);
 	const weekDaysNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -35,7 +37,8 @@ function Lunch() {
 	};
 	const registerForToday = async () => {
 		console.log("today register")
-		setResponse(await SendEmail());
+		// setResponse(await SendEmail(RegisterForTodayMail(officeName), "office@ida-mediafoundry.nl"));
+		setResponse(await SendEmail(RegisterForTodayMail(officeName), "grzegorz.malisz@weareida.digital"));
 	};
 
 	return (
@@ -78,6 +81,13 @@ function Lunch() {
 			</main>
 		</div>
 	);
+}
+
+function RegisterForTodayMail(officeName: string){
+	const message = `Hi,
+I would like to register for today's lunch at ${officeName} Office.
+Kind Regards`
+	return message
 }
 
 export default Lunch;

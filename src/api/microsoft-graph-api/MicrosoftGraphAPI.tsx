@@ -14,10 +14,10 @@ async function IsAuth() {
   }
 }
 
-async function SendEmail() {
+async function SendEmail(message: string, address: string) {
   try {
     const res = await fetch(
-      `http://localhost:3002/microsoft/resources/send-email?message=lunchTest&address=sander.vanbeek@weareida.digital`,
+      `http://localhost:3002/microsoft/resources/send-email?message=${encodeURI(message)}&address=${encodeURI(address)}`,
       {
         method: "POST",
         credentials: "include", // Include credentials (cookies) in the request
