@@ -6,14 +6,14 @@ Repository for “One Stop Shop” iDA welcoming application
 
 Development Branches:
 
-* frontend - Frontend with React, TypeScript, Vite, PWA. Main Front-end application development.
-* backend - Backend with ASP.NET Core. Main Back-end application development.
+* [frontend](https://github.com/grzgm/one-stop-shop-ida/tree/frontend) - Front-end with React, TypeScript, Vite, PWA. Main Front-end application development.
+* [backend](https://github.com/grzgm/one-stop-shop-ida/tree/backend) - Back-end with ASP.NET Core. Main Back-end application development.
 
 PoC Branches:
 
-* poc-pwa - Frontend PoC with React, TypeScript, Vite, PWA. Used for testing the React features, PWA implementation, connection with backend.
-* poc-microsoft - Backend PoC with Node.js, TypeScript, Express server, Microsoft Graph API. Used for testing the Microsoft Graph API service.
-* poc-slack - Backend PoC with Node.js, TypeScript, Express server, Slack API. Used for testing the Slack API service.
+* [poc-pwa](https://github.com/grzgm/one-stop-shop-ida/tree/poc-pwa) - Front-end PoC with React, TypeScript, Vite, PWA. Used for testing the React features, PWA implementation, connection with Back-end.
+* [poc-microsoft](https://github.com/grzgm/one-stop-shop-ida/tree/poc-microsoft) - Back-end PoC with Node.js, TypeScript, Express server, Microsoft Graph API. Used for testing the Microsoft Graph API service.
+* [poc-slack](https://github.com/grzgm/one-stop-shop-ida/tree/poc-slack) - Back-end PoC with Node.js, TypeScript, Express server, Slack API. Used for testing the Slack API service.
 
 ## Setup Local Development Environment
 
