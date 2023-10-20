@@ -2,10 +2,11 @@ import express from "express";
 import axios from "axios";
 import FormData from "form-data";
 import fs from "fs";
+import 'dotenv/config'
 
-const SLACK_SIGNING_SECRET = "";
-const SLACK_CLIENT_ID = "";
-const SLACK_CLIENT_SECRET = "";
+const SLACK_SIGNING_SECRET = process.env.SLACK_SIGNING_SECRET;
+const SLACK_CLIENT_ID = process.env.SLACK_CLIENT_ID;
+const SLACK_CLIENT_SECRET = process.env.SLACK_CLIENT_SECRET;
 
 const SRCDIR = "src/";
 
