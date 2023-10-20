@@ -134,5 +134,6 @@ dist
 *.js
 *.js.map
 
-#PrivateToken.txt 
-src/PrivateToken.txt
+# dotenv
+.env
+.env*
