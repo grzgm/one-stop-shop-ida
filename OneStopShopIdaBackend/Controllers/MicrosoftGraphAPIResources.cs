@@ -42,7 +42,7 @@ namespace OneStopShopIdaBackend.Controllers
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("accessToken"));
 
                 HttpResponseMessage response = await _httpClient.PostAsync("https://graph.microsoft.com/v1.0/me/sendMail", content);
-                return NoContent();
+                return StatusCode((int)response.StatusCode);
             }
             catch (HttpRequestException ex)
             {
@@ -95,7 +95,7 @@ namespace OneStopShopIdaBackend.Controllers
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("accessToken"));
 
                 HttpResponseMessage response = await _httpClient.PostAsync("https://graph.microsoft.com/v1.0/me/events", content);
-                return NoContent();
+                return StatusCode((int)response.StatusCode);
             }
             catch (HttpRequestException ex)
             {
