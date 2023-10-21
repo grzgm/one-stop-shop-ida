@@ -8,6 +8,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using OneStopShopIdaBackend.Models;
 using Microsoft.EntityFrameworkCore;
 using Azure.Core;
+using System.Text.Json;
 
 namespace OneStopShopIdaBackend.Controllers
 {
@@ -20,9 +21,6 @@ namespace OneStopShopIdaBackend.Controllers
             try
             {
                 // string sessionId = HttpContext.Session.Id;
-
-                HttpContext.Session.SetString("accessToken", "null");
-                HttpContext.Session.SetString("refreshToken", "null");
 
                 string authUrl =
                 $"https://login.microsoftonline.com/{Tenant}/oauth2/v2.0/authorize?" +
@@ -94,7 +92,14 @@ namespace OneStopShopIdaBackend.Controllers
             catch (HttpRequestException ex)
             {
                 _logger.LogError($"Error calling external API: {ex.Message}");
-                return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+                //return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+                return Redirect(FrontendUri + $"/microsoft-auth?serverResponse={JsonSerializer.Serialize(StatusCode(500, $"Internal Server Error \n {ex.Message}"))}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error calling external API: {ex.Message}");
+                //return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+                return Redirect(FrontendUri + $"/microsoft-auth?serverResponse={JsonSerializer.Serialize(StatusCode(500, $"Internal Server Error \n {ex.Message}"))}");
             }
         }
 
