@@ -3,6 +3,16 @@ export interface IActionResult {
   status: string;
 }
 
+function InspectResponse(res: Response) {
+  if (res.ok) {
+    // Handle successful response (status code 200-299)
+    return { success: true, status: "Request has been sent correctly." };
+  }
+  // Handle non-successful response (status code outside 200-299)
+  console.error("HTTP error! status: ", res.status);
+  return { success: false, status: "Request could not be send." };
+}
+
 async function IsAuth() {
   try {
     const res = await fetch(
@@ -28,18 +38,11 @@ async function SendEmail(message: string, address: string): Promise<IActionResul
         credentials: "include", // Include credentials (cookies) in the request
       }
     );
-    if (res.ok) {
-      // Handle successful response (status code 200-299)
-      return {success: true, status: "Request has been sent correctly."};
-    } else {
-      // Handle non-successful response (status code outside 200-299)
-      console.error("HTTP error! status: ", res.status);
-      return {success: false, status: "Request could not be send."};
-    }
+    return InspectResponse(res);
   } catch (error) {
     console.error("Error:", error);
-	return {success: false, status: "Request could not be send."};
+    return { success: false, status: "Request could not be send." };
   }
 }
 
-export { IsAuth, SendEmail };
+export { IsAuth, SendEmail, InspectResponse };
