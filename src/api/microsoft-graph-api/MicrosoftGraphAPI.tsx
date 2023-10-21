@@ -22,7 +22,7 @@ async function IsAuth() {
         credentials: "include", // Include credentials (cookies) in the request
       }
     );
-    return res.json();
+    return await res.json();
   } catch (error) {
     console.error("Error:", error);
     return false;
