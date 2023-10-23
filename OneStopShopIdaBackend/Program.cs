@@ -5,12 +5,7 @@ using OneStopShopIdaBackend.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-
-// Add Db Context
-builder.Services.AddDbContext<TodoContext>(opt =>
-    opt.UseInMemoryDatabase("TodoList"));
 
 // Add the CodeChallengeGeneratorService as a singleton service
 builder.Services.AddSingleton<CodeChallengeGeneratorService>();
