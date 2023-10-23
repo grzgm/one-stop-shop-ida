@@ -12,10 +12,6 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<TodoContext>(opt =>
     opt.UseInMemoryDatabase("TodoList"));
 
-// Add Sessoion Context
-builder.Services.AddDbContext<SessionEntryContext>(opt =>
-    opt.UseInMemoryDatabase("SessionEntryList"));
-
 // Add the CodeChallengeGeneratorService as a singleton service
 builder.Services.AddSingleton<CodeChallengeGeneratorService>();
 

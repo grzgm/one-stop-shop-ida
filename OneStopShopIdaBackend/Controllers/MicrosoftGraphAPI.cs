@@ -16,7 +16,6 @@ namespace OneStopShopIdaBackend.Controllers
     [Route("microsoft")]
     public partial class MicrosoftGraphAPIController : ControllerBase
     {
-        private readonly SessionEntryContext _context;
         private readonly ILogger<MicrosoftGraphAPIController> _logger;
         private readonly HttpClient _httpClient;
         private readonly CodeChallengeGeneratorService _codeChallengeGeneratorService;
@@ -28,9 +27,8 @@ namespace OneStopShopIdaBackend.Controllers
         private const string RedirectUri = "http://localhost:3002/microsoft/auth/callback";
         private const string FrontendUri = "http://localhost:5173";
 
-        public MicrosoftGraphAPIController(SessionEntryContext context, ILogger<MicrosoftGraphAPIController> logger, HttpClient httpClient, CodeChallengeGeneratorService codeChallengeGeneratorService)
+        public MicrosoftGraphAPIController(ILogger<MicrosoftGraphAPIController> logger, HttpClient httpClient, CodeChallengeGeneratorService codeChallengeGeneratorService)
         {
-            _context = context;
             _logger = logger;
             _httpClient = httpClient;
             _codeChallengeGeneratorService = codeChallengeGeneratorService;

@@ -20,8 +20,6 @@ namespace OneStopShopIdaBackend.Controllers
         {
             try
             {
-                // string sessionId = HttpContext.Session.Id;
-
                 string authUrl =
                 $"https://login.microsoftonline.com/{Tenant}/oauth2/v2.0/authorize?" +
                 $"client_id={MicrosoftClientId}" +
@@ -29,7 +27,6 @@ namespace OneStopShopIdaBackend.Controllers
                 $"&redirect_uri={RedirectUri}" +
                 $"&response_mode=query" +
                 $"&scope={Scopes}" +
-                // $"&state={sessionId}" +
                 $"&state={route}" +
                 $"&code_challenge={_codeChallengeGeneratorService.CodeChallenge}" +
                 $"&code_challenge_method=S256";
@@ -71,17 +68,6 @@ namespace OneStopShopIdaBackend.Controllers
                 // Access the access_token property
                 string accessToken = responseObject.access_token;
                 string refreshToken = responseObject.refresh_token;
-
-
-                // Store accessToken and refreshToken in database with session Id
-                //SessionEntryItem sessionEntryItem = new SessionEntryItem();
-                //sessionEntryItem.Id = state;
-                //sessionEntryItem.AccessToken = accessToken;
-                //sessionEntryItem.RefreshToken = refreshToken;
-
-                //_context.SessionEntryItems.Add(sessionEntryItem);
-                //await _context.SaveChangesAsync();
-
 
                 // Store accessToken and refreshToken in the session
                 HttpContext.Session.SetString("accessToken", accessToken);
@@ -157,45 +143,14 @@ namespace OneStopShopIdaBackend.Controllers
                 isToken = true;
             }
 
-            // Check if the token is in database
-            //var sessionId = HttpContext.Session.Id;
-            //var items = await _context.SessionEntryItems.ToListAsync();
-
-            //Boolean isToken = false;
-            //foreach (var item in items)
-            //{
-            //    if (item.Id == sessionId)
-            //    {
-            //        isToken = true;
-            //        break; // At least one item has an id
-            //    }
-            //}
-
             return Ok(isToken);
         }
         // GET: api/TodoItems
         [HttpGet("auth/get-token")]
         public async Task<ActionResult<Object>> GetGetToken()
         {
-            // Get token from database by current session Id
-            //var sessionId = HttpContext.Session.Id;
-            //return await _context.SessionEntryItems.FindAsync(sessionId);
-
             // Get token from session
             return Ok(new { accessToken = HttpContext.Session.GetString("accessToken") });
-        }
-
-
-
-        // GET: api/TodoItems
-        [HttpGet("auth/tokens")]
-        public async Task<ActionResult<IEnumerable<SessionEntryItem>>> GetSessionEntryItems()
-        {
-            if (_context.SessionEntryItems == null)
-            {
-                return NotFound();
-            }
-            return await _context.SessionEntryItems.ToListAsync();
         }
     }
 }
