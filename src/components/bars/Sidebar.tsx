@@ -53,7 +53,7 @@ function Sidebar({ onPressCloseSidebar }: SidebarProps) {
                 <KeyboardArrowRightIcon fontSize="inherit" />
               </div>
             </Link>
-            <Link className="sidebar__option heading--small" to="/expenses" onClick={() => onPressCloseSidebar(false)}>
+            <Link className="sidebar__option heading--small" to="https://accounts.rydoo.com/login?signin=4bfbb925942188e56808788796a0fe72" target="_blank" onClick={() => onPressCloseSidebar(false)}>
               Expenses
               <div className="sidebar__arrow heading--large">
                 <KeyboardArrowRightIcon fontSize="inherit" />

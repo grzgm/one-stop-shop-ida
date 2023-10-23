@@ -20,7 +20,7 @@ function Navbar({ onPressOpenSidebar, navbarOptionsRef }: NavbarProps) {
           <Link className="navbar__option heading--small" to="/office-details">Office Details</Link>
           <Link className="navbar__option heading--small" to="/company101">Company 101</Link>
           <Link className="navbar__option heading--small" to="/personal-skills">Personal Skills</Link>
-          <Link className="navbar__option heading--small" to="/expenses">Expenses</Link>
+          <Link className="navbar__option heading--small" to="https://accounts.rydoo.com/login?signin=4bfbb925942188e56808788796a0fe72" target="_blank">Expenses</Link>
         </div>
         <div className="navbar__burger-menu" onClick={() => onPressOpenSidebar(true)}><MenuIcon fontSize="inherit" /></div>
         <div id="navbar__separator" />
