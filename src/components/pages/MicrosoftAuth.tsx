@@ -1,7 +1,7 @@
 import { useSearchParams } from 'react-router-dom';
 import Button from "../Buttons";
 import { BodyNormal, BodySmall, HeadingLarge } from "../text-wrapers/TextWrapers";
-import { InspectResponse } from '../../api/microsoft-graph-api/MicrosoftGraphAPI';
+import { InspectResponseSync } from '../../api/microsoft-graph-api/MicrosoftGraphAPI';
 
 function MicrosoftAuth() {
 	// Get the search parameters from the URL
@@ -24,7 +24,7 @@ function MicrosoftAuth() {
 			</div>
 			<main className="microsoft-auth-main">
 				{serverResponse 
-				? <BodySmall additionalClasses={[InspectResponse(serverResponse).success ? "font-colour--success" : "font-colour--fail"]}>{`${InspectResponse(serverResponse).status} Try again later.`}</BodySmall>
+				? <BodySmall additionalClasses={[InspectResponseSync(serverResponse).success ? "font-colour--success" : "font-colour--fail"]}>{`${InspectResponseSync(serverResponse).status} Try again later.`}</BodySmall>
 				: <Button child="Log in" onClick={() => window.location.href = `http://localhost:3002/microsoft/auth?route=${encodeURI(previousLocation)}`} />}
 			</main>
 		</div>

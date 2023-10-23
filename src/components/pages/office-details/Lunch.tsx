@@ -10,7 +10,7 @@ import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
 async function LunchLoader(officeName: string) {
 	const currentOfficeInformationData = officeInformationData[officeName]
 	if (currentOfficeInformationData.canRegisterLunch == true) {
-		if (await IsAuth() == true)
+		if ((await IsAuth()).payload == true)
 		{
 			return null
 		}
@@ -23,7 +23,7 @@ async function LunchLoader(officeName: string) {
 
 function Lunch() {
 	const officeName = useContext(CurrentOfficeContext).currentOffice;
-	const [response, setResponse] = useState<IActionResult|null>(null)
+	const [response, setResponse] = useState<IActionResult<null>|null>(null)
 	const [weekRegistration, setWeekRegistration] = useState<boolean[]>([false, false, false, false, false]);
 	const weekDaysNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
