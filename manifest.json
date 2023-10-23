@@ -1,7 +1,7 @@
 {
     "name": "“One Stop Shop” iDA",
     "short_name": "One Stop Shop",
-    "description": "“One Stop Shop” iDA welcoming application",
+    "description": "“One Stop Shop” iDA employee application",
     "theme_color": "#ffffff",
     "permissions": ["geolocation"],
     "icons": [
