@@ -78,13 +78,11 @@ namespace OneStopShopIdaBackend.Controllers
             catch (HttpRequestException ex)
             {
                 _logger.LogError($"Error calling external API: {ex.Message}");
-                //return StatusCode(500, $"Internal Server Error \n {ex.Message}");
                 return Redirect(FrontendUri + $"/microsoft-auth?serverResponse={JsonSerializer.Serialize(StatusCode(500, $"Internal Server Error \n {ex.Message}"))}");
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Error calling external API: {ex.Message}");
-                //return StatusCode(500, $"Internal Server Error \n {ex.Message}");
                 return Redirect(FrontendUri + $"/microsoft-auth?serverResponse={JsonSerializer.Serialize(StatusCode(500, $"Internal Server Error \n {ex.Message}"))}");
             }
         }
