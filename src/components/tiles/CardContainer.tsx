@@ -17,7 +17,7 @@ function CardContainer({title, cardProps = [] }: CardContainerProps) {
   }
   else {
     for (let i = 0; i < cardProps.length; i++) {
-      cards.push(<Card key={i} linkAddress={cardProps[i].linkAddress} title={cardProps[i].title} description={cardProps[i].description}/>);
+      cards.push(<Card key={i} linkAddress={cardProps[i].linkAddress} title={cardProps[i].title} description={cardProps[i].description} isOpenInNewTab={cardProps[i].isOpenInNewTab}/>);
     }
   }
 

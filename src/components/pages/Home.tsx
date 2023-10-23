@@ -15,7 +15,7 @@ function Home() {
   (currentOfficeInformationData.canRegisterPresence ? {linkAddress:"/office-details/presence", title:"Presence", description:"Let your colleague know when you are present"} : {})].filter(item => Object.keys(item).length !== 0);
   
   const employeePortal = [
-  {linkAddress: "https://werknemer.loket.nl/#/login?returnUrl=start", title: "External", description: "Werknemerloket Web Page"},
+  {linkAddress: "https://werknemer.loket.nl/#/login?returnUrl=start", title: "External", description: "Werknemerloket Web Page", isOpenInNewTab: true},
   {linkAddress: "/employee-portal/sick-leave", title: "Sick Leave", description: "Register your absence"},
   {linkAddress: "/employee-portal/vacation", title: "Vacation", description: "Plan your off days and see their balance"},
   {linkAddress: "/employee-portal/scheduling", title: "Scheduling", description: "Plan out your wor schedule"}]
