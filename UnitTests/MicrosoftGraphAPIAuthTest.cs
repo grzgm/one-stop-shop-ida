@@ -28,7 +28,6 @@ namespace UnitTests
             // Needs to run server
             // Arrange
             var http = new HttpClient();
-
             // Act
             var response = await http.GetAsync($"http://localhost:3002/microsoft/auth/callback?code=test&state=test");
 
