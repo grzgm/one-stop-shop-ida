@@ -3,13 +3,13 @@ import Button from "../Buttons";
 import { BodyNormal, BodySmall, HeadingLarge } from "../text-wrapers/TextWrapers";
 import { InspectResponseSync } from '../../api/Response';
 
-function MicrosoftAuth() {
+function SlackAuth() {
 	// Get the search parameters from the URL
 	const [searchParams] = useSearchParams();
   
 	// Access specific query parameters
 	const queryPreviousLocation = searchParams.get('previousLocation');
-	const previousLocation = queryPreviousLocation ? queryPreviousLocation : "/microsoft-auth";
+	const previousLocation = queryPreviousLocation ? queryPreviousLocation : "/slack-auth";
 	// Access server response
 	const queryServerResponse = searchParams.get('serverResponse');
 	console.log("queryServerResponse: ", queryServerResponse)
@@ -19,16 +19,16 @@ function MicrosoftAuth() {
 		<div className="content">
 			<div className="description">
 				<HeadingLarge>Login with your</HeadingLarge>
-				<HeadingLarge>Microsoft Account</HeadingLarge>
+				<HeadingLarge>Slack Account</HeadingLarge>
 				<BodyNormal>Get access to all the benefits of app!</BodyNormal>
 			</div>
-			<main className="microsoft-auth-main">
+			<main className="slack-auth-main">
 				{serverResponse 
 				? <BodySmall additionalClasses={[InspectResponseSync(serverResponse).success ? "font-colour--success" : "font-colour--fail"]}>{`${InspectResponseSync(serverResponse).status} Try again later.`}</BodySmall>
-				: <Button child="Log in" onClick={() => window.location.href = `http://localhost:3002/microsoft/auth?route=${encodeURI(previousLocation)}`} />}
+				: <Button child="Log in" onClick={() => window.location.href = `http://localhost:3002/slack/auth?route=${encodeURI(previousLocation)}`} />}
 			</main>
 		</div>
 	);
 }
 
-export default MicrosoftAuth;
+export default SlackAuth;

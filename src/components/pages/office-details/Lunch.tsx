@@ -4,8 +4,9 @@ import Button from "../../Buttons";
 import "../../../css/components/pages/office-details/lunch.css"
 import { officeInformationData } from "../../../assets/OfficeInformationData";
 import { redirect } from "react-router-dom";
-import { IActionResult, IsAuth, SendEmail } from "../../../api/microsoft-graph-api/MicrosoftGraphAPI";
+import { IsAuth, SendEmail } from "../../../api/MicrosoftGraphAPI";
 import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
+import { IActionResult } from "../../../api/Response";
 
 async function LunchLoader(officeName: string) {
 	const currentOfficeInformationData = officeInformationData[officeName]
