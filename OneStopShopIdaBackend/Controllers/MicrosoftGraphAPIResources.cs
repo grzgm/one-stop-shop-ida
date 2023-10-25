@@ -52,27 +52,27 @@ namespace OneStopShopIdaBackend.Controllers
         }
 
         [HttpPost("resources/create-event")]
-        public async Task<IActionResult> PostCreateEvent([FromQuery] string address)
+        public async Task<IActionResult> PostCreateEvent([FromQuery] string address, [FromQuery] string title, [FromQuery] string startDate, [FromQuery] string endDate, [FromQuery] string description)
         {
             try
             {
                 // Create event
                 Event microsoftEvent = new()
                 {
-                    Subject = "Test event",
+                    Subject = title,
                     Body = new Body
                     {
                         ContentType = "text",
-                        Content = "Testing if adding events with new participants works"
+                        Content = description,
                     },
                     Start = new Start
                     {
-                        DateTime = "2023-10-25T09:00:00",
+                        DateTime = startDate,
                         TimeZone = "Europe/Warsaw"
                     },
                     End = new End
                     {
-                        DateTime = "2023-10-25T10:00:00",
+                        DateTime = endDate,
                         TimeZone = "Europe/Warsaw"
                     },
                     Attendees = new List<Attendee>
