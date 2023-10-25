@@ -12,6 +12,10 @@ builder.Services.AddControllers();
 // Add the CodeChallengeGeneratorService as a singleton service
 builder.Services.AddSingleton<CodeChallengeGeneratorService>();
 
+// Database connection
+builder.Services.AddDbContext<DatabaseContext>(opt =>
+    opt.UseMySQL(builder.Configuration["ConnectionStrings:MySqlConnection"]));
+
 // Register HttpClient as a singleton service
 builder.Services.AddHttpClient();
 
