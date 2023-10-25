@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Channels;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace OneStopShopIdaBackend.Controllers
 {
@@ -20,14 +21,20 @@ namespace OneStopShopIdaBackend.Controllers
                     Method = HttpMethod.Post,
                     RequestUri = new Uri("https://slack.com/api/chat.postMessage"),
                     Headers =
-                {
-                { "Authorization", $"Bearer {slackAccessToken}" },
-                },
-                    Content = new FormUrlEncodedContent(new Dictionary<string, string>
                     {
-                        { "channel", channel },
-                        { "text", message },
-                    }),
+                        { "Authorization", $"Bearer {slackAccessToken}" },
+                    },
+                    Content = new StringContent(JsonSerializer.Serialize(
+                    new {
+                        text = message,
+                        channel = channel
+                    }))
+                    {
+                        Headers =
+                        {
+                            ContentType = new MediaTypeHeaderValue("application/json")
+                        }
+                    }
                 };
 
                 using (var response = await _httpClient.SendAsync(request))
