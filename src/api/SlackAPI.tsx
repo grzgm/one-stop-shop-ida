@@ -32,4 +32,20 @@ async function SendMessage(message: string, channel: string): Promise<IActionRes
 	}
 }
 
-export { IsAuth, SendMessage };
+async function SetStatus(text?: string, emoji?: string, expiration?: string): Promise<IActionResult<null>> {
+	try {
+		const res = await fetch(
+			`http://localhost:3002/slack/set-status?text=${text}&emoji=${emoji}&expiration=${expiration}`,
+			{
+				method: "PUT",
+				credentials: "include", // Include credentials (cookies) in the request
+			}
+		);
+		return InspectResponseAsync(res);
+	} catch (error) {
+		console.error("Error:", error);
+		return { success: false, status: "Request could not be send." };
+	}
+}
+
+export { IsAuth, SendMessage, SetStatus };

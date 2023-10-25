@@ -2,7 +2,7 @@ import { useSearchParams } from 'react-router-dom';
 import Button from "../Buttons";
 import { BodyNormal, BodySmall, HeadingLarge } from "../text-wrapers/TextWrapers";
 import { InspectResponseSync } from '../../api/Response';
-import { SendMessage } from '../../api/SlackAPI';
+import { SendMessage, SetStatus } from '../../api/SlackAPI';
 
 function SlackAuth() {
 	// Get the search parameters from the URL
@@ -29,6 +29,7 @@ function SlackAuth() {
 				: <Button child="Log in" onClick={() => window.location.href = `http://localhost:3002/slack/auth?route=${encodeURI(previousLocation)}`} />}
 			</main>
 			<Button child="send message" onClick={() => SendMessage("new message", "D05QWNGJMAR")} />
+			<Button child="set status" onClick={() => SetStatus("ReAcT ApP", ":v:")} />
 		</div>
 	);
 }
