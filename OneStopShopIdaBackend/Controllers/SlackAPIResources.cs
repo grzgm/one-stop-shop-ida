@@ -23,7 +23,7 @@ namespace OneStopShopIdaBackend.Controllers
                     RequestUri = new Uri("https://slack.com/api/chat.postMessage"),
                     Headers =
                     {
-                        { "Authorization", $"Bearer {slackAccessToken}" },
+                        { "Authorization", $"Bearer {SlackAccessToken}" },
                     },
                     Content = new StringContent(JsonSerializer.Serialize(
                     new {
@@ -64,7 +64,7 @@ namespace OneStopShopIdaBackend.Controllers
                     RequestUri = new Uri("https://slack.com/api/users.profile.set"),
                     Headers =
                     {
-                        { "Authorization", $"Bearer {slackAccessToken}" },
+                        { "Authorization", $"Bearer {SlackAccessToken}" },
                     },
                     Content = new StringContent(JsonSerializer.Serialize(
                     new { 

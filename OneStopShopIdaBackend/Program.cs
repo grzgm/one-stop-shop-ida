@@ -3,6 +3,8 @@ using OneStopShopIdaBackend.Models;
 using OneStopShopIdaBackend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+var SlackClientSecret = builder.Configuration["Slack:SlackClientSecret"];
+var SlackAccessToken = builder.Configuration["Slack:SlackAccessToken"];
 
 // Add services to the container.
 builder.Services.AddControllers();
