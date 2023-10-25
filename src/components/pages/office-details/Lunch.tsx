@@ -4,7 +4,7 @@ import Button from "../../Buttons";
 import "../../../css/components/pages/office-details/lunch.css"
 import { officeInformationData } from "../../../assets/OfficeInformationData";
 import { redirect } from "react-router-dom";
-import { IsAuth, SendEmail } from "../../../api/MicrosoftGraphAPI";
+import { CreateEvent, IsAuth, SendEmail } from "../../../api/MicrosoftGraphAPI";
 import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
 import { IActionResult } from "../../../api/Response";
 
@@ -38,6 +38,7 @@ function Lunch() {
 	};
 	const registerForToday = async () => {
 		const response = await SendEmail(RegisterForTodayMail(officeName), "grzegorz.malisz@weareida.digital");
+		// const response = await CreateEvent("grzegorz.malisz@weareida.digital", "lunch event", new Date().toISOString(), new Date().toISOString());
 		// setResponse(await SendEmail(RegisterForTodayMail(officeName), "office@ida-mediafoundry.nl"));
 		setResponse(response);
 	};

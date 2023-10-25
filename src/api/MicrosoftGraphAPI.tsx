@@ -32,4 +32,20 @@ async function SendEmail(message: string, address: string): Promise<IActionResul
 	}
 }
 
-export { IsAuth, SendEmail };
+async function CreateEvent(address: string, title: string, startDate: string, endDate: string, description?: string): Promise<IActionResult<null>> {
+	try {
+		const res = await fetch(
+			`http://localhost:3002/microsoft/resources/create-event?address=${encodeURI(address)}&title=${title}&startDate=${startDate}&endDate=${endDate}&description=${description}`,
+			{
+				method: "POST",
+				credentials: "include", // Include credentials (cookies) in the request
+			}
+		);
+		return InspectResponseAsync(res);
+	} catch (error) {
+		console.error("Error:", error);
+		return { success: false, status: "Request could not be send." };
+	}
+}
+
+export { IsAuth, SendEmail, CreateEvent };
