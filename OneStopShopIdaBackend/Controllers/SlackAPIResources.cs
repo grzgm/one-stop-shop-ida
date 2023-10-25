@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OneStopShopIdaBackend.Models;
+using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -53,40 +54,45 @@ namespace OneStopShopIdaBackend.Controllers
 
         // OAuth Step 2: Handle the OAuth callback
         [HttpPut("set-status")]
-        public async Task<IActionResult> PutSetStatus([FromQuery] string code, [FromQuery] string state)
+        public async Task<IActionResult> PutSetStatus([FromQuery] string text = "", [FromQuery] string emoji = "", [FromQuery] string expiration = "0")
         {
             try
             {
-                var formData = new FormUrlEncodedContent(new Dictionary<string, string>
+                var request = new HttpRequestMessage
                 {
-                    { "code", code },
-                    { "client_id", SlackClientId },
-                    { "client_secret", SlackClientSecret }
-                });
+                    Method = HttpMethod.Post,
+                    RequestUri = new Uri("https://slack.com/api/users.profile.set"),
+                    Headers =
+                    {
+                        { "Authorization", $"Bearer {slackAccessToken}" },
+                    },
+                    Content = new StringContent(JsonSerializer.Serialize(
+                    new { 
+                        profile = new {
+                                status_text = text,
+                                status_emoji = emoji,
+                                status_expiration = expiration,
+                            }
+                    }))
+                    {
+                        Headers =
+                        {
+                            ContentType = new MediaTypeHeaderValue("application/json")
+                        }
+                    }
+                };
 
-                var response = await _httpClient.PostAsync("https://slack.com/api/oauth.v2.access", formData);
-                response.EnsureSuccessStatusCode();
-
-                var responseData = await response.Content.ReadAsStringAsync();
-                dynamic responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject(responseData);
-
-                // Access the access_token property
-                string slackAccessToken = responseObject.authed_user.access_token;
-
-                // Store accessToken and refreshToken in the session
-                HttpContext.Session.SetString("slackAccessToken", slackAccessToken);
-
-                return Redirect(FrontendUri + state);
+                using (var response = await _httpClient.SendAsync(request))
+                {
+                    response.EnsureSuccessStatusCode();
+                    var body = await response.Content.ReadAsStringAsync();
+                    return StatusCode((int)response.StatusCode);
+                }
             }
             catch (HttpRequestException ex)
             {
                 _logger.LogError($"Error calling external API: {ex.Message}");
-                return Redirect(FrontendUri + $"/slack-auth?serverResponse={JsonSerializer.Serialize(StatusCode(500, $"Internal Server Error \n {ex.Message}"))}");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error calling external API: {ex.Message}");
-                return Redirect(FrontendUri + $"/slack-auth?serverResponse={JsonSerializer.Serialize(StatusCode(500, $"Internal Server Error \n {ex.Message}"))}");
+                return StatusCode(500, $"Internal Server Error \n {ex.Message}");
             }
         }
     }
