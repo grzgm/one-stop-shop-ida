@@ -27,10 +27,10 @@ namespace OneStopShopIdaBackend.Controllers
         }
         public async Task<ActionResult<UserItem>> GetUserItem(string id)
         {
-          if (_context.Users == null)
-          {
-              return NotFound();
-          }
+            if (_context.Users == null)
+            {
+                return NotFound();
+            }
             var userItem = await _context.Users.FindAsync(id);
 
             if (userItem == null)
@@ -39,6 +39,21 @@ namespace OneStopShopIdaBackend.Controllers
             }
 
             return userItem;
+        }
+        public async Task<bool> GetIsUserInDatabase(string id)
+        {
+            if (_context.Users == null)
+            {
+                return false;
+            }
+            var userItem = await _context.Users.FindAsync(id);
+
+            if (userItem == null)
+            {
+                return false;
+            }
+
+            return true;
         }
         public async Task<IActionResult> PutUserItem(string id, UserItem userItem)
         {

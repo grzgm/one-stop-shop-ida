@@ -73,7 +73,13 @@ namespace OneStopShopIdaBackend.Controllers
                 HttpContext.Session.SetString("accessToken", accessToken);
                 HttpContext.Session.SetString("refreshToken", refreshToken);
 
-                await this.GetMe();
+                UserItem user = await this.GetMe();
+
+                if (! await _userItemsController.GetIsUserInDatabase(user.MicrosoftId))
+                {
+                    await _userItemsController.PostUserItem(user);
+                    await _lunchTodayItemsController.PostLunchTodayItem(user.MicrosoftId);
+                }
 
                 return Redirect(FrontendUri + state);
             }

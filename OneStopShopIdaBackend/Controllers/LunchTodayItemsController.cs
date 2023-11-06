@@ -20,45 +20,32 @@ namespace OneStopShopIdaBackend.Controllers
             _context = context;
         }
 
-        // GET: api/LunchTodayItems
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<LunchTodayItem>>> GetLunchToday()
+        [HttpGet("is-registered")]
+        public async Task<ActionResult<bool>> GetLunchTodayIsRegistered()
         {
-          if (_context.LunchToday == null)
-          {
-              return NotFound();
-          }
-            return await _context.LunchToday.ToListAsync();
-        }
-
-        // GET: api/LunchTodayItems/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<LunchTodayItem>> GetLunchTodayItem(string id)
-        {
-          if (_context.LunchToday == null)
-          {
-              return NotFound();
-          }
-            var lunchTodayItem = await _context.LunchToday.FindAsync(id);
+            if (_context.LunchToday == null)
+            {
+                return NotFound();
+            }
+            var lunchTodayItem = await _context.LunchToday.FindAsync(HttpContext.Session.GetString("microsoftId"));
 
             if (lunchTodayItem == null)
             {
                 return NotFound();
             }
 
-            return lunchTodayItem;
+            return lunchTodayItem.IsRegistered;
         }
 
-        // PUT: api/LunchTodayItems/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutLunchTodayItem(string id, LunchTodayItem lunchTodayItem)
+        [HttpPut("update-is-registered")]
+        public async Task<IActionResult> PutLunchTodayRegister([FromQuery] string? id, [FromQuery] bool IsRegistered)
         {
-            if (id != lunchTodayItem.MicrosoftId)
+            if (id == null)
             {
-                return BadRequest();
+                id = HttpContext.Session.GetString("microsoftId");
             }
-
+            var lunchTodayItem = await _context.LunchToday.FindAsync(id);
+            lunchTodayItem.IsRegistered = IsRegistered;
             _context.Entry(lunchTodayItem).State = EntityState.Modified;
 
             try
@@ -80,15 +67,13 @@ namespace OneStopShopIdaBackend.Controllers
             return NoContent();
         }
 
-        // POST: api/LunchTodayItems
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<LunchTodayItem>> PostLunchTodayItem(LunchTodayItem lunchTodayItem)
+        [HttpPost("create-is-registered/{microsoftId}")]
+        public async Task PostLunchTodayItem(string microsoftId)
         {
-          if (_context.LunchToday == null)
-          {
-              return Problem("Entity set 'DatabaseContext.LunchToday'  is null.");
-          }
+            LunchTodayItem lunchTodayItem = new();
+            lunchTodayItem.MicrosoftId = microsoftId;
+            lunchTodayItem.IsRegistered = false;
+
             _context.LunchToday.Add(lunchTodayItem);
             try
             {
@@ -96,37 +81,8 @@ namespace OneStopShopIdaBackend.Controllers
             }
             catch (DbUpdateException)
             {
-                if (LunchTodayItemExists(lunchTodayItem.MicrosoftId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                throw new DbUpdateException();
             }
-
-            return CreatedAtAction("GetLunchTodayItem", new { id = lunchTodayItem.MicrosoftId }, lunchTodayItem);
-        }
-
-        // DELETE: api/LunchTodayItems/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteLunchTodayItem(string id)
-        {
-            if (_context.LunchToday == null)
-            {
-                return NotFound();
-            }
-            var lunchTodayItem = await _context.LunchToday.FindAsync(id);
-            if (lunchTodayItem == null)
-            {
-                return NotFound();
-            }
-
-            _context.LunchToday.Remove(lunchTodayItem);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
         }
 
         private bool LunchTodayItemExists(string id)

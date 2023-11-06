@@ -147,7 +147,7 @@ namespace OneStopShopIdaBackend.Controllers
         }
 
         [HttpGet("resources/me")]
-        public async Task<ActionResult<UserItem>> GetMe()
+        public async Task<UserItem> GetMe()
         {
             try
             {
@@ -163,8 +163,6 @@ namespace OneStopShopIdaBackend.Controllers
                 user.FirstName = responseObject.givenName;
                 user.Surname = responseObject.surname;
                 user.Email = responseObject.mail;
-
-                await _userItemsController.PostUserItem(user);
                 HttpContext.Session.SetString("microsoftId", user.MicrosoftId);
 
                 return user;
@@ -172,7 +170,7 @@ namespace OneStopShopIdaBackend.Controllers
             catch (HttpRequestException ex)
             {
                 _logger.LogError($"Error calling external API: {ex.Message}");
-                return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+                throw ex;
             }
         }
     }

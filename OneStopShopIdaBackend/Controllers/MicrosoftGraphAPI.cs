@@ -20,6 +20,7 @@ namespace OneStopShopIdaBackend.Controllers
         private readonly HttpClient _httpClient;
         private readonly CodeChallengeGeneratorService _codeChallengeGeneratorService;
         private readonly UserItemsController _userItemsController;
+        private readonly LunchTodayItemsController _lunchTodayItemsController;
 
         private const string LunchEmailAddress = "grzegorz.malisz@weareida.digital";
 
@@ -30,12 +31,13 @@ namespace OneStopShopIdaBackend.Controllers
         private const string RedirectUri = "http://localhost:3002/microsoft/auth/callback";
         private const string FrontendUri = "http://localhost:5173";
 
-        public MicrosoftGraphAPIController(ILogger<MicrosoftGraphAPIController> logger, HttpClient httpClient, CodeChallengeGeneratorService codeChallengeGeneratorService, UserItemsController userItemsController)
+        public MicrosoftGraphAPIController(ILogger<MicrosoftGraphAPIController> logger, HttpClient httpClient, CodeChallengeGeneratorService codeChallengeGeneratorService, UserItemsController userItemsController, LunchTodayItemsController lunchTodayItemsController)
         {
             _logger = logger;
             _httpClient = httpClient;
             _codeChallengeGeneratorService = codeChallengeGeneratorService;
             _userItemsController = userItemsController;
+            _lunchTodayItemsController = lunchTodayItemsController;
         }
     }
 }

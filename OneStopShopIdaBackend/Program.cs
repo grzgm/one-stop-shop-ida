@@ -20,6 +20,9 @@ builder.Services.AddDbContext<DatabaseContext>(opt =>
 // Add the UserItemsController as a Scoped service
 builder.Services.AddScoped<UserItemsController>();
 
+// Add the LunchTodayItemsController as a Scoped service
+builder.Services.AddScoped<LunchTodayItemsController>();
+
 // Register HttpClient as a singleton service
 builder.Services.AddHttpClient();
 
