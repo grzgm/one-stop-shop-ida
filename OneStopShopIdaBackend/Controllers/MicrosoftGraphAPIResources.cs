@@ -20,7 +20,7 @@ namespace OneStopShopIdaBackend.Controllers
                     Body = new Body
                     {
                         Content = message,
-                        ContentType = "Text"
+                        ContentType = "Text",
                     },
                     Subject = "Local application test",
                     ToRecipients = new List<Recipient>
@@ -29,7 +29,48 @@ namespace OneStopShopIdaBackend.Controllers
                         {
                             EmailAddress = new EmailAddress
                             {
-                                Address = address
+                                Address = address,
+                            }
+                        }
+                    }
+                };
+
+                var data = JsonSerializer.Serialize(new { message = email });
+
+                var content = new StringContent(data, Encoding.UTF8, "application/json");
+                // Add the Authorization header to the request
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("accessToken"));
+
+                HttpResponseMessage response = await _httpClient.PostAsync("https://graph.microsoft.com/v1.0/me/sendMail", content);
+                return StatusCode((int)response.StatusCode);
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError($"Error calling external API: {ex.Message}");
+                return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+            }
+        }
+        [HttpPost("resources/register-lunch-today")]
+        public async Task<IActionResult> PostRegisterLunchToday([FromQuery] string message)
+        {
+            try
+            {
+                // Create E-mail
+                Email email = new()
+                {
+                    Body = new Body
+                    {
+                        Content = message,
+                        ContentType = "Text",
+                    },
+                    Subject = "Local application test",
+                    ToRecipients = new List<Recipient>
+                    {
+                        new Recipient
+                        {
+                            EmailAddress = new EmailAddress
+                            {
+                                Address = LunchEmailAddress,
                             }
                         }
                     }
