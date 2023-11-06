@@ -38,12 +38,8 @@ namespace OneStopShopIdaBackend.Controllers
         }
 
         [HttpPut("update-is-registered")]
-        public async Task<IActionResult> PutLunchTodayRegister([FromQuery] string? id, [FromQuery] bool IsRegistered)
+        public async Task<IActionResult> PutLunchTodayRegister([FromQuery] string id, [FromQuery] bool IsRegistered)
         {
-            if (id == null)
-            {
-                id = HttpContext.Session.GetString("microsoftId");
-            }
             var lunchTodayItem = await _context.LunchToday.FindAsync(id);
             lunchTodayItem.IsRegistered = IsRegistered;
             _context.Entry(lunchTodayItem).State = EntityState.Modified;

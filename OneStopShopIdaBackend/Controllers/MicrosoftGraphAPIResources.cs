@@ -84,6 +84,10 @@ namespace OneStopShopIdaBackend.Controllers
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("accessToken"));
 
                 HttpResponseMessage response = await _httpClient.PostAsync("https://graph.microsoft.com/v1.0/me/sendMail", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    await _lunchTodayItemsController.PutLunchTodayRegister(HttpContext.Session.GetString("microsoftId"), true);
+                }
                 return StatusCode((int)response.StatusCode);
             }
             catch (HttpRequestException ex)
