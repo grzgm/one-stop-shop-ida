@@ -17,7 +17,7 @@ builder.Services.AddSingleton<CodeChallengeGeneratorService>();
 builder.Services.AddDbContext<DatabaseContext>(opt =>
     opt.UseMySQL(builder.Configuration["ConnectionStrings:MySqlConnection"]));
 
-// Add the UserItemsController as a singleton service
+// Add the UserItemsController as a Scoped service
 builder.Services.AddScoped<UserItemsController>();
 
 // Register HttpClient as a singleton service
