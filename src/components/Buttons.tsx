@@ -2,18 +2,19 @@ import "../css/components/buttons.css";
 
 interface ButtonsProps {
   child: string;
+  disabled?: boolean;
   onClick: () => void;
 }
 
-function Button({ child, onClick }: ButtonsProps) {
+function Button({ child, disabled, onClick }: ButtonsProps) {
   return (
-    <button className="button button-animation buttons--large" onClick={onClick} type="button">{child}</button>
+    <button className="button button-animation buttons--large" onClick={onClick} disabled={disabled} type="button">{child}</button>
   );
 }
 
-function ButtonAlt({ child, onClick }: ButtonsProps) {
+function ButtonAlt({ child, disabled, onClick }: ButtonsProps) {
     return (
-      <button className="button-alt buttons--large" onClick={onClick} type="button">{child}</button>
+      <button className="button-alt buttons--large" onClick={onClick} disabled={disabled} type="button">{child}</button>
     );
   }
 

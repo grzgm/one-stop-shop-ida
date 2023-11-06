@@ -4,18 +4,17 @@ import Button from "../../Buttons";
 import "../../../css/components/pages/office-details/lunch.css"
 import { officeInformationData } from "../../../assets/OfficeInformationData";
 import { redirect } from "react-router-dom";
-import { CreateEvent, IsAuth, SendEmail } from "../../../api/MicrosoftGraphAPI";
+import { CreateEvent, IsAuth, RegisterLunchToday, SendEmail } from "../../../api/MicrosoftGraphAPI";
 import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
 import { IActionResult } from "../../../api/Response";
 
 async function LunchLoader(officeName: string) {
 	const currentOfficeInformationData = officeInformationData[officeName]
 	if (currentOfficeInformationData.canRegisterLunch == true) {
-		if ((await IsAuth()).payload == true)
-		{
+		if ((await IsAuth()).payload == true) {
 			return null
 		}
-		else{
+		else {
 			return redirect(`/microsoft-auth?previousLocation=${encodeURI("/office-details/lunch")}`)
 		}
 	}
@@ -24,7 +23,7 @@ async function LunchLoader(officeName: string) {
 
 function Lunch() {
 	const officeName = useContext(CurrentOfficeContext).currentOffice;
-	const [response, setResponse] = useState<IActionResult<null>|null>(null)
+	const [response, setResponse] = useState<IActionResult<null> | null>(null)
 	const [weekRegistration, setWeekRegistration] = useState<boolean[]>([false, false, false, false, false]);
 	const weekDaysNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
@@ -37,10 +36,13 @@ function Lunch() {
 		console.log(weekRegistration)
 	};
 	const registerForToday = async () => {
-		const response = await SendEmail(RegisterForTodayMail(officeName), "grzegorz.malisz@weareida.digital");
-		// const response = await CreateEvent("grzegorz.malisz@weareida.digital", "lunch event", new Date().toISOString(), new Date().toISOString());
-		// setResponse(await SendEmail(RegisterForTodayMail(officeName), "office@ida-mediafoundry.nl"));
-		setResponse(response);
+		if(!isPastNoon())
+		{
+			const response = await RegisterLunchToday(RegisterForTodayMail(officeName));
+			// const response = await CreateEvent("grzegorz.malisz@weareida.digital", "lunch event", new Date().toISOString(), new Date().toISOString());
+			// setResponse(await SendEmail(RegisterForTodayMail(officeName), "office@ida-mediafoundry.nl"));
+			setResponse(response);
+		}
 	};
 
 	return (
@@ -77,7 +79,7 @@ function Lunch() {
 					<BodySmall>before 12:00</BodySmall>
 					{response && <BodySmall additionalClasses={[response.success ? "font-colour--success" : "font-colour--fail"]}>{response.status}</BodySmall>}
 					<form>
-						<Button child="Register" onClick={() => registerForToday()} />
+						<Button child="Register" disabled={isPastNoon()} onClick={() => registerForToday()} />
 					</form>
 				</div>
 			</main>
@@ -85,11 +87,19 @@ function Lunch() {
 	);
 }
 
-function RegisterForTodayMail(officeName: string){
+function RegisterForTodayMail(officeName: string) {
 	const message = `Hi,
 I would like to register for today's lunch at ${officeName} Office.
 Kind Regards`
 	return message
+}
+
+function isPastNoon(): boolean {
+	const currentTime = new Date();
+	const currentHours = currentTime.getHours();
+
+	// Compare the current hours with 12 (noon)
+	return currentHours >= 12;
 }
 
 export default Lunch;
