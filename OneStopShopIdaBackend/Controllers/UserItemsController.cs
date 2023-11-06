@@ -9,8 +9,6 @@ using OneStopShopIdaBackend.Models;
 
 namespace OneStopShopIdaBackend.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class UserItemsController : ControllerBase
     {
         private readonly DatabaseContext _context;
@@ -19,9 +17,6 @@ namespace OneStopShopIdaBackend.Controllers
         {
             _context = context;
         }
-
-        // GET: api/UserItems
-        [HttpGet]
         public async Task<ActionResult<IEnumerable<UserItem>>> GetUsers()
         {
           if (_context.Users == null)
@@ -30,9 +25,6 @@ namespace OneStopShopIdaBackend.Controllers
           }
             return await _context.Users.ToListAsync();
         }
-
-        // GET: api/UserItems/5
-        [HttpGet("{id}")]
         public async Task<ActionResult<UserItem>> GetUserItem(string id)
         {
           if (_context.Users == null)
@@ -48,10 +40,6 @@ namespace OneStopShopIdaBackend.Controllers
 
             return userItem;
         }
-
-        // PUT: api/UserItems/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
         public async Task<IActionResult> PutUserItem(string id, UserItem userItem)
         {
             if (id != userItem.MicrosoftId)
@@ -79,10 +67,6 @@ namespace OneStopShopIdaBackend.Controllers
 
             return NoContent();
         }
-
-        // POST: api/UserItems
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
         public async Task<ActionResult<UserItem>> PostUserItem(UserItem userItem)
         {
           if (_context.Users == null)
@@ -108,9 +92,6 @@ namespace OneStopShopIdaBackend.Controllers
 
             return CreatedAtAction("GetUserItem", new { id = userItem.MicrosoftId }, userItem);
         }
-
-        // DELETE: api/UserItems/5
-        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUserItem(string id)
         {
             if (_context.Users == null)

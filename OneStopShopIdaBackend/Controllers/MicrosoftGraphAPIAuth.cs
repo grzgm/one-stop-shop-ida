@@ -73,6 +73,8 @@ namespace OneStopShopIdaBackend.Controllers
                 HttpContext.Session.SetString("accessToken", accessToken);
                 HttpContext.Session.SetString("refreshToken", refreshToken);
 
+                await this.GetMe();
+
                 return Redirect(FrontendUri + state);
             }
             catch (HttpRequestException ex)

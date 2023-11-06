@@ -103,5 +103,34 @@ namespace OneStopShopIdaBackend.Controllers
                 return StatusCode(500, $"Internal Server Error \n {ex.Message}");
             }
         }
+
+        [HttpGet("resources/me")]
+        public async Task<IActionResult> GetMe()
+        {
+            try
+            {
+                UserItem user = new();
+
+                // Add the Authorization header to the request
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("accessToken"));
+                HttpResponseMessage response = await _httpClient.GetAsync("https://graph.microsoft.com/v1.0/me");
+                string responseData = await response.Content.ReadAsStringAsync();
+                dynamic responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject(responseData);
+
+                user.MicrosoftId = responseObject.id;
+                user.FirstName = responseObject.givenName;
+                user.Surname = responseObject.surname;
+                user.Email = responseObject.mail;
+
+                await _userItemsController.PostUserItem(user);
+
+                return StatusCode((int)response.StatusCode);
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError($"Error calling external API: {ex.Message}");
+                return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+            }
+        }
     }
 }

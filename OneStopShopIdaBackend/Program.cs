@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using OneStopShopIdaBackend.Controllers;
 using OneStopShopIdaBackend.Models;
 using OneStopShopIdaBackend.Services;
 
@@ -15,6 +16,9 @@ builder.Services.AddSingleton<CodeChallengeGeneratorService>();
 // Database connection
 builder.Services.AddDbContext<DatabaseContext>(opt =>
     opt.UseMySQL(builder.Configuration["ConnectionStrings:MySqlConnection"]));
+
+// Add the UserItemsController as a singleton service
+builder.Services.AddScoped<UserItemsController>();
 
 // Register HttpClient as a singleton service
 builder.Services.AddHttpClient();

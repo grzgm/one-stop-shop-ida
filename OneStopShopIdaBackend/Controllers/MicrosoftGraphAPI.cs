@@ -19,6 +19,7 @@ namespace OneStopShopIdaBackend.Controllers
         private readonly ILogger<MicrosoftGraphAPIController> _logger;
         private readonly HttpClient _httpClient;
         private readonly CodeChallengeGeneratorService _codeChallengeGeneratorService;
+        private readonly UserItemsController _userItemsController;
 
         private const string MicrosoftClientId = "ff6757d9-6533-46f4-99c7-32db8a7d606d";
         private const string Tenant = "organizations";
@@ -27,11 +28,12 @@ namespace OneStopShopIdaBackend.Controllers
         private const string RedirectUri = "http://localhost:3002/microsoft/auth/callback";
         private const string FrontendUri = "http://localhost:5173";
 
-        public MicrosoftGraphAPIController(ILogger<MicrosoftGraphAPIController> logger, HttpClient httpClient, CodeChallengeGeneratorService codeChallengeGeneratorService)
+        public MicrosoftGraphAPIController(ILogger<MicrosoftGraphAPIController> logger, HttpClient httpClient, CodeChallengeGeneratorService codeChallengeGeneratorService, UserItemsController userItemsController)
         {
             _logger = logger;
             _httpClient = httpClient;
             _codeChallengeGeneratorService = codeChallengeGeneratorService;
+            _userItemsController = userItemsController;
         }
     }
 }
