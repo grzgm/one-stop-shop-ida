@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Mvc;
 using OneStopShopIdaBackend.Models;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -146,7 +147,7 @@ namespace OneStopShopIdaBackend.Controllers
         }
 
         [HttpGet("resources/me")]
-        public async Task<IActionResult> GetMe()
+        public async Task<ActionResult<UserItem>> GetMe()
         {
             try
             {
@@ -164,8 +165,9 @@ namespace OneStopShopIdaBackend.Controllers
                 user.Email = responseObject.mail;
 
                 await _userItemsController.PostUserItem(user);
+                HttpContext.Session.SetString("microsoftId", user.MicrosoftId);
 
-                return StatusCode((int)response.StatusCode);
+                return user;
             }
             catch (HttpRequestException ex)
             {
