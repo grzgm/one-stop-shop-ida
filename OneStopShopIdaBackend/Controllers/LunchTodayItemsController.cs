@@ -80,6 +80,29 @@ namespace OneStopShopIdaBackend.Controllers
                 throw new DbUpdateException();
             }
         }
+        
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<IActionResult> UpdateAllLunchTodayItems(bool isRegistered)
+        {
+            var lunchTodayItems = await _context.LunchToday.ToListAsync();
+
+            foreach (var lunchTodayItem in lunchTodayItems)
+            {
+                lunchTodayItem.IsRegistered = isRegistered;
+                _context.Entry(lunchTodayItem).State = EntityState.Modified;
+            }
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                // Handle exceptions if necessary
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
 
         private bool LunchTodayItemExists(string id)
         {

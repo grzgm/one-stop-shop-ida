@@ -23,6 +23,9 @@ builder.Services.AddScoped<UserItemsController>();
 // Add the LunchTodayItemsController as a Scoped service
 builder.Services.AddScoped<LunchTodayItemsController>();
 
+// Add the DailyTaskService as a Singleton service
+builder.Services.AddSingleton<IHostedService, MidnightTaskService>();
+
 // Register HttpClient as a singleton service
 builder.Services.AddHttpClient();
 
