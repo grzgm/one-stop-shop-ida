@@ -1,12 +1,13 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { BodyNormal, BodySmall, HeadingLarge, HeadingSmall } from "../../text-wrapers/TextWrapers";
 import Button from "../../Buttons";
 import "../../../css/components/pages/office-details/lunch.css"
 import { officeInformationData } from "../../../assets/OfficeInformationData";
 import { redirect } from "react-router-dom";
-import { CreateEvent, IsAuth, RegisterLunchToday, SendEmail } from "../../../api/MicrosoftGraphAPI";
+import { IsAuth, RegisterLunchToday } from "../../../api/MicrosoftGraphAPI";
 import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
 import { IActionResult } from "../../../api/Response";
+import { IsRegistered } from "../../../api/LunchTodayAPI";
 
 async function LunchLoader(officeName: string) {
 	const currentOfficeInformationData = officeInformationData[officeName]
@@ -24,8 +25,28 @@ async function LunchLoader(officeName: string) {
 function Lunch() {
 	const officeName = useContext(CurrentOfficeContext).currentOffice;
 	const [response, setResponse] = useState<IActionResult<null> | null>(null)
+	const [isRegisteredToday, setIsRegisteredToday] = useState<boolean>(true)
 	const [weekRegistration, setWeekRegistration] = useState<boolean[]>([false, false, false, false, false]);
 	const weekDaysNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
+	useEffect(() => {
+		const IsRegisteredWrapper = async () => {
+			const isRegisteredRes = await IsRegistered();
+			console.log(isRegisteredRes.payload);
+			console.log(isPastNoon() || isRegisteredToday);
+			if (isRegisteredRes.payload == undefined)
+			{
+				setIsRegisteredToday(true);
+			}
+			else{
+				setIsRegisteredToday(isRegisteredRes.payload);
+			}
+			console.log(isRegisteredRes.payload);
+			console.log(isPastNoon() || isRegisteredToday);
+			console.log(isPastNoon() || isRegisteredToday);
+		}
+		IsRegisteredWrapper();
+	  }, []);
 
 	const handleCheckboxChange = (index: number) => {
 		const updatedCheckedBoxes: boolean[] = [...weekRegistration];
@@ -79,7 +100,7 @@ function Lunch() {
 					<BodySmall>before 12:00</BodySmall>
 					{response && <BodySmall additionalClasses={[response.success ? "font-colour--success" : "font-colour--fail"]}>{response.status}</BodySmall>}
 					<form>
-						<Button child="Register" disabled={isPastNoon()} onClick={() => registerForToday()} />
+						<Button child="Register" disabled={isPastNoon() || isRegisteredToday} onClick={() => registerForToday()} />
 					</form>
 				</div>
 			</main>
