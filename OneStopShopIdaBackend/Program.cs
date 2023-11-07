@@ -13,6 +13,9 @@ builder.Services.AddControllers();
 // Add the CodeChallengeGeneratorService as a singleton service
 builder.Services.AddSingleton<CodeChallengeGeneratorService>();
 
+// Add the MicrosoftGraphAPIService as a Scoped service
+builder.Services.AddScoped<MicrosoftGraphAPIService>();
+
 // Database connection
 builder.Services.AddDbContext<DatabaseContext>(opt =>
     opt.UseMySQL(builder.Configuration["ConnectionStrings:MySqlConnection"]));

@@ -1,181 +1,84 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OneStopShopIdaBackend.Models;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Text.Json;
 
-namespace OneStopShopIdaBackend.Controllers
+namespace OneStopShopIdaBackend.Controllers;
+
+public partial class MicrosoftGraphAPIController : ControllerBase
 {
-    public partial class MicrosoftGraphAPIController : ControllerBase
+    [HttpPost("resources/send-email")]
+    public async Task<IActionResult> PostSendEmail([FromQuery] string message, [FromQuery] string address)
     {
-        [HttpPost("resources/send-email")]
-        public async Task<IActionResult> PostSendEmail([FromQuery] string message, [FromQuery] string address)
+        try
         {
-            try
-            {
-                // Create E-mail
-                Email email = new()
-                {
-                    Body = new Body
-                    {
-                        Content = message,
-                        ContentType = "Text",
-                    },
-                    Subject = "Local application test",
-                    ToRecipients = new List<Recipient>
-                    {
-                        new Recipient
-                        {
-                            EmailAddress = new EmailAddress
-                            {
-                                Address = address,
-                            }
-                        }
-                    }
-                };
-
-                var data = JsonSerializer.Serialize(new { message = email });
-
-                var content = new StringContent(data, Encoding.UTF8, "application/json");
-                // Add the Authorization header to the request
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("accessToken"));
-
-                HttpResponseMessage response = await _httpClient.PostAsync("https://graph.microsoft.com/v1.0/me/sendMail", content);
-                return StatusCode((int)response.StatusCode);
-            }
-            catch (HttpRequestException ex)
-            {
-                _logger.LogError($"Error calling external API: {ex.Message}");
-                return StatusCode(500, $"Internal Server Error \n {ex.Message}");
-            }
+            var response = await
+                _microsoftGraphApiService.SendEmail(HttpContext.Session.GetString("accessToken"), message, address);
+            return StatusCode((int)response.StatusCode);
         }
-        [HttpPost("resources/register-lunch-today")]
-        public async Task<IActionResult> PostRegisterLunchToday([FromQuery] string message)
+        catch (HttpRequestException ex)
         {
-            try
-            {
-                // Create E-mail
-                Email email = new()
-                {
-                    Body = new Body
-                    {
-                        Content = message,
-                        ContentType = "Text",
-                    },
-                    Subject = "Local application test",
-                    ToRecipients = new List<Recipient>
-                    {
-                        new Recipient
-                        {
-                            EmailAddress = new EmailAddress
-                            {
-                                Address = LunchEmailAddress,
-                            }
-                        }
-                    }
-                };
-
-                var data = JsonSerializer.Serialize(new { message = email });
-
-                var content = new StringContent(data, Encoding.UTF8, "application/json");
-                // Add the Authorization header to the request
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("accessToken"));
-
-                HttpResponseMessage response = await _httpClient.PostAsync("https://graph.microsoft.com/v1.0/me/sendMail", content);
-                if (response.IsSuccessStatusCode)
-                {
-                    await _lunchTodayItemsController.PutLunchTodayRegister(HttpContext.Session.GetString("microsoftId"), true);
-                }
-                return StatusCode((int)response.StatusCode);
-            }
-            catch (HttpRequestException ex)
-            {
-                _logger.LogError($"Error calling external API: {ex.Message}");
-                return StatusCode(500, $"Internal Server Error \n {ex.Message}");
-            }
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
         }
+    }
 
-        [HttpPost("resources/create-event")]
-        public async Task<IActionResult> PostCreateEvent([FromQuery] string address, [FromQuery] string title, [FromQuery] string startDate, [FromQuery] string endDate, [FromQuery] string description)
+    [HttpPost("resources/register-lunch-today")]
+    public async Task<IActionResult> PostRegisterLunchToday([FromQuery] string message)
+    {
+        try
         {
-            try
+            var response = await
+                _microsoftGraphApiService.RegisterLunchToday(HttpContext.Session.GetString("accessToken"),
+                    HttpContext.Session.GetString("microsoftId"), message);
+
+            if (response.IsSuccessStatusCode)
             {
-                // Create event
-                Event microsoftEvent = new()
-                {
-                    Subject = title,
-                    Body = new Body
-                    {
-                        ContentType = "text",
-                        Content = description,
-                    },
-                    Start = new Start
-                    {
-                        DateTime = startDate,
-                        TimeZone = "Europe/Warsaw"
-                    },
-                    End = new End
-                    {
-                        DateTime = endDate,
-                        TimeZone = "Europe/Warsaw"
-                    },
-                    Attendees = new List<Attendee>
-                    {
-                        new Attendee
-                        {
-                            EmailAddress = new EmailAddress
-                            {
-                                Address = address
-                            },
-                            Type = "required"
-                        },
-                    }
-                };
-
-                var data = JsonSerializer.Serialize(microsoftEvent);
-
-                var content = new StringContent(data, Encoding.UTF8, "application/json");
-                // Add the Authorization header to the request
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("accessToken"));
-
-                HttpResponseMessage response = await _httpClient.PostAsync("https://graph.microsoft.com/v1.0/me/events", content);
-                return StatusCode((int)response.StatusCode);
+                await _lunchTodayItemsController.PutLunchTodayRegister(HttpContext.Session.GetString("microsoftId"),
+                    true);
             }
-            catch (HttpRequestException ex)
-            {
-                _logger.LogError($"Error calling external API: {ex.Message}");
-                return StatusCode(500, $"Internal Server Error \n {ex.Message}");
-            }
+
+            return StatusCode((int)response.StatusCode);
         }
-
-        [HttpGet("resources/me")]
-        public async Task<UserItem> GetMe()
+        catch (HttpRequestException ex)
         {
-            try
-            {
-                UserItem user = new();
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+        }
+    }
 
-                // Add the Authorization header to the request
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("accessToken"));
-                HttpResponseMessage response = await _httpClient.GetAsync("https://graph.microsoft.com/v1.0/me");
-                string responseData = await response.Content.ReadAsStringAsync();
-                dynamic responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject(responseData);
+    [HttpPost("resources/create-event")]
+    public async Task<IActionResult> PostCreateEvent([FromQuery] string address, [FromQuery] string title,
+        [FromQuery] string startDate, [FromQuery] string endDate, [FromQuery] string description)
+    {
+        try
+        {
+            var response = await
+                _microsoftGraphApiService.CreateEvent(HttpContext.Session.GetString("accessToken"), address, title,
+                    startDate, endDate, description);
 
-                user.MicrosoftId = responseObject.id;
-                user.FirstName = responseObject.givenName;
-                user.Surname = responseObject.surname;
-                user.Email = responseObject.mail;
-                HttpContext.Session.SetString("microsoftId", user.MicrosoftId);
+            return StatusCode((int)response.StatusCode);
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+        }
+    }
 
-                return user;
-            }
-            catch (HttpRequestException ex)
-            {
-                _logger.LogError($"Error calling external API: {ex.Message}");
-                throw ex;
-            }
+    [HttpGet("resources/me")]
+    public async Task<UserItem> GetMe()
+    {
+        try
+        {
+            UserItem user = await _microsoftGraphApiService.GetMe(HttpContext.Session.GetString("accessToken"));
+
+            HttpContext.Session.SetString("microsoftId", user.MicrosoftId);
+
+            return user;
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            throw ex;
         }
     }
 }
