@@ -9,7 +9,7 @@ using OneStopShopIdaBackend.Models;
 
 namespace OneStopShopIdaBackend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("lunch/today")]
     [ApiController]
     public class LunchTodayItemsController : ControllerBase
     {
