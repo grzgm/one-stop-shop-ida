@@ -32,8 +32,6 @@ function Lunch() {
 	useEffect(() => {
 		const IsRegisteredWrapper = async () => {
 			const isRegisteredRes = await IsRegistered();
-			console.log(isRegisteredRes.payload);
-			console.log(isPastNoon() || isRegisteredToday);
 			if (isRegisteredRes.payload == undefined)
 			{
 				setIsRegisteredToday(true);
@@ -41,9 +39,6 @@ function Lunch() {
 			else{
 				setIsRegisteredToday(isRegisteredRes.payload);
 			}
-			console.log(isRegisteredRes.payload);
-			console.log(isPastNoon() || isRegisteredToday);
-			console.log(isPastNoon() || isRegisteredToday);
 		}
 		IsRegisteredWrapper();
 	  }, []);
@@ -63,6 +58,7 @@ function Lunch() {
 			// const response = await CreateEvent("grzegorz.malisz@weareida.digital", "lunch event", new Date().toISOString(), new Date().toISOString());
 			// setResponse(await SendEmail(RegisterForTodayMail(officeName), "office@ida-mediafoundry.nl"));
 			setResponse(response);
+			setIsRegisteredToday(true);
 		}
 	};
 
@@ -120,7 +116,7 @@ function isPastNoon(): boolean {
 	const currentHours = currentTime.getHours();
 
 	// Compare the current hours with 12 (noon)
-	return currentHours >= 12;
+	return currentHours >= 17;
 }
 
 export default Lunch;
