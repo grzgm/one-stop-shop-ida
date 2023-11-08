@@ -16,6 +16,9 @@ builder.Services.AddSingleton<CodeChallengeGeneratorService>();
 // Add the MicrosoftGraphAPIService as a Scoped service
 builder.Services.AddScoped<MicrosoftGraphAPIService>();
 
+// Add the SlackAPIServices as a Scoped service
+builder.Services.AddScoped<SlackAPIServices>();
+
 // Database connection
 builder.Services.AddDbContext<DatabaseContext>(opt =>
     opt.UseMySQL(builder.Configuration["ConnectionStrings:MySqlConnection"]));

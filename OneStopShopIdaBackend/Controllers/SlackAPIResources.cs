@@ -1,11 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OneStopShopIdaBackend.Models;
-using System.Diagnostics;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Channels;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace OneStopShopIdaBackend.Controllers
 {
@@ -17,31 +10,8 @@ namespace OneStopShopIdaBackend.Controllers
         {
             try
             {
-                var request = new HttpRequestMessage
+                using (var response = await _slackAPIServices.SendMessage(HttpContext.Session.GetString("slackAccessToken"), message, channel))
                 {
-                    Method = HttpMethod.Post,
-                    RequestUri = new Uri("https://slack.com/api/chat.postMessage"),
-                    Headers =
-                    {
-                        { "Authorization", $"Bearer {SlackAccessToken}" },
-                    },
-                    Content = new StringContent(JsonSerializer.Serialize(
-                    new {
-                        text = message,
-                        channel = channel
-                    }))
-                    {
-                        Headers =
-                        {
-                            ContentType = new MediaTypeHeaderValue("application/json")
-                        }
-                    }
-                };
-
-                using (var response = await _httpClient.SendAsync(request))
-                {
-                    response.EnsureSuccessStatusCode();
-                    var body = await response.Content.ReadAsStringAsync();
                     return StatusCode((int)response.StatusCode);
                 }
             }
@@ -58,34 +28,8 @@ namespace OneStopShopIdaBackend.Controllers
         {
             try
             {
-                var request = new HttpRequestMessage
+                using (var response = await _slackAPIServices.SetStatus(HttpContext.Session.GetString("slackAccessToken"), text, emoji, expiration))
                 {
-                    Method = HttpMethod.Post,
-                    RequestUri = new Uri("https://slack.com/api/users.profile.set"),
-                    Headers =
-                    {
-                        { "Authorization", $"Bearer {SlackAccessToken}" },
-                    },
-                    Content = new StringContent(JsonSerializer.Serialize(
-                    new { 
-                        profile = new {
-                                status_text = text,
-                                status_emoji = emoji,
-                                status_expiration = expiration,
-                            }
-                    }))
-                    {
-                        Headers =
-                        {
-                            ContentType = new MediaTypeHeaderValue("application/json")
-                        }
-                    }
-                };
-
-                using (var response = await _httpClient.SendAsync(request))
-                {
-                    response.EnsureSuccessStatusCode();
-                    var body = await response.Content.ReadAsStringAsync();
                     return StatusCode((int)response.StatusCode);
                 }
             }

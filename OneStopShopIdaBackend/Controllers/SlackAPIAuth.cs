@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OneStopShopIdaBackend.Services;
 using System.Text.Json;
-using System.Web;
 
 namespace OneStopShopIdaBackend.Controllers
 {
@@ -13,10 +11,7 @@ namespace OneStopShopIdaBackend.Controllers
         {
             try
             {
-                string authUrl =
-                $"https://slack.com/oauth/v2/authorize?client_id={SlackClientId}&&scope=&user_scope={Scopes}&redirect_uri={RedirectUri}&state={route}";
-
-                return Redirect(authUrl);
+                return Redirect(_slackAPIServices.GenerateSlackAPIAuthUrl(route));
             }
             catch (HttpRequestException ex)
             {
@@ -31,21 +26,8 @@ namespace OneStopShopIdaBackend.Controllers
         {
             try
             {
-                var formData = new FormUrlEncodedContent(new Dictionary<string, string>
-                {
-                    { "code", code },
-                    { "client_id", SlackClientId },
-                    { "client_secret", SlackClientSecret }
-                });
-
-                var response = await _httpClient.PostAsync("https://slack.com/api/oauth.v2.access", formData);
-                response.EnsureSuccessStatusCode();
-
-                var responseData = await response.Content.ReadAsStringAsync();
-                dynamic responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject(responseData);
-
                 // Access the access_token property
-                string slackAccessToken = responseObject.authed_user.access_token;
+                string slackAccessToken = await _slackAPIServices.CallAuthCallback(code, state);
 
                 // Store accessToken and refreshToken in the session
                 HttpContext.Session.SetString("slackAccessToken", slackAccessToken);
