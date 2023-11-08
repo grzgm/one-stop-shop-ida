@@ -35,10 +35,10 @@ namespace OneStopShopIdaBackend.Controllers
         }
 
         [HttpPut("update-registered-days")]
-        public async Task<IActionResult> PutLunchRecurringItem([FromQuery] LunchRecurringItem lunchRecurringItem)
+        public async Task<IActionResult> PutLunchRecurringItem(LunchRecurringItemFrontend lunchRecurringItemFrontend)
         {
             string microsoftId = HttpContext.Session.GetString("microsoftId");
-            lunchRecurringItem.MicrosoftId = microsoftId;
+            LunchRecurringItem lunchRecurringItem = new (microsoftId, lunchRecurringItemFrontend);
 
             _context.Entry(lunchRecurringItem).State = EntityState.Modified;
 

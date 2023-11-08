@@ -5,6 +5,18 @@ namespace OneStopShopIdaBackend.Models
 {
     public class LunchRecurringItem
     {
+        public LunchRecurringItem()
+        {
+        }
+        public LunchRecurringItem(string microsoftId, LunchRecurringItemFrontend lunchRecurringItemFrontend)
+        {
+            this.MicrosoftId = microsoftId;
+            this.Monday = lunchRecurringItemFrontend.Monday;
+            this.Tuesday = lunchRecurringItemFrontend.Tuesday;
+            this.Wednesday = lunchRecurringItemFrontend.Wednesday;
+            this.Thursday = lunchRecurringItemFrontend.Thursday;
+            this.Friday = lunchRecurringItemFrontend.Friday;
+        }
         [Key]
         [ForeignKey(nameof(UserItem))]
         [StringLength(255)]
