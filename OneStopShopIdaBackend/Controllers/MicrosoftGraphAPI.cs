@@ -13,13 +13,14 @@ public partial class MicrosoftGraphAPIController : ControllerBase
     private readonly MicrosoftGraphAPIService _microsoftGraphApiService;
     private readonly UserItemsController _userItemsController;
     private readonly LunchTodayItemsController _lunchTodayItemsController;
+    private readonly LunchRecurringItemsController _lunchRecurringItemsController;
 
     private const string FrontendUri = "http://localhost:5173";
 
     public MicrosoftGraphAPIController(ILogger<MicrosoftGraphAPIController> logger, HttpClient httpClient,
         CodeChallengeGeneratorService codeChallengeGeneratorService,
         MicrosoftGraphAPIService microsoftGraphApiService, UserItemsController userItemsController,
-        LunchTodayItemsController lunchTodayItemsController)
+        LunchTodayItemsController lunchTodayItemsController, LunchRecurringItemsController lunchRecurringItemsController)
     {
         _logger = logger;
         _httpClient = httpClient;
@@ -27,5 +28,6 @@ public partial class MicrosoftGraphAPIController : ControllerBase
         _microsoftGraphApiService = microsoftGraphApiService;
         _userItemsController = userItemsController;
         _lunchTodayItemsController = lunchTodayItemsController;
+        _lunchRecurringItemsController = lunchRecurringItemsController;
     }
 }

@@ -5,7 +5,7 @@ using OneStopShopIdaBackend.Services;
 
 namespace OneStopShopIdaBackend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("lunch/recurring")]
     [ApiController]
     public class LunchRecurringItemsController : ControllerBase
     {
@@ -16,26 +16,15 @@ namespace OneStopShopIdaBackend.Controllers
             _context = context;
         }
 
-        // GET: api/LunchRecurringItems
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<LunchRecurringItem>>> GetLunchRecurring()
+        [HttpGet("get-registered-days")]
+        public async Task<ActionResult<LunchRecurringItem>> GetRegisteredDays()
         {
-          if (_context.LunchRecurring == null)
-          {
-              return NotFound();
-          }
-            return await _context.LunchRecurring.ToListAsync();
-        }
-
-        // GET: api/LunchRecurringItems/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<LunchRecurringItem>> GetLunchRecurringItem(string id)
-        {
-          if (_context.LunchRecurring == null)
-          {
-              return NotFound();
-          }
-            var lunchRecurringItem = await _context.LunchRecurring.FindAsync(id);
+            string microsoftId = HttpContext.Session.GetString("microsoftId");
+            if (_context.LunchRecurring == null)
+            {
+                return NotFound();
+            }
+            var lunchRecurringItem = await _context.LunchRecurring.FindAsync(microsoftId);
 
             if (lunchRecurringItem == null)
             {
@@ -45,15 +34,11 @@ namespace OneStopShopIdaBackend.Controllers
             return lunchRecurringItem;
         }
 
-        // PUT: api/LunchRecurringItems/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutLunchRecurringItem(string id, LunchRecurringItem lunchRecurringItem)
+        [HttpPut("update-registered-days")]
+        public async Task<IActionResult> PutLunchRecurringItem([FromQuery] LunchRecurringItem lunchRecurringItem)
         {
-            if (id != lunchRecurringItem.MicrosoftId)
-            {
-                return BadRequest();
-            }
+            string microsoftId = HttpContext.Session.GetString("microsoftId");
+            lunchRecurringItem.MicrosoftId = microsoftId;
 
             _context.Entry(lunchRecurringItem).State = EntityState.Modified;
 
@@ -63,7 +48,7 @@ namespace OneStopShopIdaBackend.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!LunchRecurringItemExists(id))
+                if (!LunchRecurringItemExists(microsoftId))
                 {
                     return NotFound();
                 }
@@ -76,15 +61,21 @@ namespace OneStopShopIdaBackend.Controllers
             return NoContent();
         }
 
-        // POST: api/LunchRecurringItems
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<LunchRecurringItem>> PostLunchRecurringItem(LunchRecurringItem lunchRecurringItem)
+        [HttpPost("create-lunch-recurring")]
+        public async Task PostLunchRecurringItem(string microsoftId)
         {
-          if (_context.LunchRecurring == null)
-          {
-              return Problem("Entity set 'DatabaseContext.LunchRecurring'  is null.");
-          }
+            LunchRecurringItem lunchRecurringItem = new();
+            lunchRecurringItem.MicrosoftId = microsoftId;
+            lunchRecurringItem.Monday = false;
+            lunchRecurringItem.Tuesday = false;
+            lunchRecurringItem.Wednesday = false;
+            lunchRecurringItem.Thursday = false;
+            lunchRecurringItem.Friday = false;
+
+            if (_context.LunchRecurring == null)
+            {
+                throw new DbUpdateException();
+            }
             _context.LunchRecurring.Add(lunchRecurringItem);
             try
             {
@@ -92,37 +83,8 @@ namespace OneStopShopIdaBackend.Controllers
             }
             catch (DbUpdateException)
             {
-                if (LunchRecurringItemExists(lunchRecurringItem.MicrosoftId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
-
-            return CreatedAtAction("GetLunchRecurringItem", new { id = lunchRecurringItem.MicrosoftId }, lunchRecurringItem);
-        }
-
-        // DELETE: api/LunchRecurringItems/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteLunchRecurringItem(string id)
-        {
-            if (_context.LunchRecurring == null)
-            {
-                return NotFound();
-            }
-            var lunchRecurringItem = await _context.LunchRecurring.FindAsync(id);
-            if (lunchRecurringItem == null)
-            {
-                return NotFound();
-            }
-
-            _context.LunchRecurring.Remove(lunchRecurringItem);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
         }
 
         private bool LunchRecurringItemExists(string id)

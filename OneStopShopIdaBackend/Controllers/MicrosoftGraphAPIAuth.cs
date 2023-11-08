@@ -40,6 +40,7 @@ public partial class MicrosoftGraphAPIController : ControllerBase
             {
                 await _userItemsController.PostUserItem(user);
                 await _lunchTodayItemsController.PostLunchTodayItem(user.MicrosoftId);
+                await _lunchRecurringItemsController.PostLunchRecurringItem(user.MicrosoftId);
             }
 
             return Redirect(FrontendUri + state);
