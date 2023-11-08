@@ -8,6 +8,7 @@ import { IsAuth, RegisterLunchToday } from "../../../api/MicrosoftGraphAPI";
 import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
 import { IActionResult } from "../../../api/Response";
 import { IsRegistered } from "../../../api/LunchTodayAPI";
+import { GetRegisteredDays, LunchRecurringItem, PutLunchRecurringItem } from "../../../api/LunchRecurringAPI";
 
 async function LunchLoader(officeName: string) {
 	const currentOfficeInformationData = officeInformationData[officeName]
@@ -26,8 +27,14 @@ function Lunch() {
 	const officeName = useContext(CurrentOfficeContext).currentOffice;
 	const [response, setResponse] = useState<IActionResult<null> | null>(null)
 	const [isRegisteredToday, setIsRegisteredToday] = useState<boolean>(true)
-	const [weekRegistration, setWeekRegistration] = useState<boolean[]>([false, false, false, false, false]);
-	const weekDaysNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+	const [registeredDays, setRegisteredDays] = useState<LunchRecurringItem>({
+		Monday: false,
+		Tuesday: false,
+		Wednesday: false,
+		Thursday: false,
+		Friday: false,
+	  });
+	// const weekDaysNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 
 	useEffect(() => {
 		const IsRegisteredWrapper = async () => {
@@ -40,16 +47,25 @@ function Lunch() {
 				setIsRegisteredToday(isRegisteredRes.payload);
 			}
 		}
+		const GetRegisteredDaysWrapper = async () => {
+			const registeredDaysRes = await GetRegisteredDays();
+			console.log(registeredDaysRes)
+			if (registeredDaysRes.payload !== undefined)
+			{
+				setRegisteredDays(registeredDaysRes.payload);
+			}
+		}
 		IsRegisteredWrapper();
+		GetRegisteredDaysWrapper();
 	  }, []);
 
-	const handleCheckboxChange = (index: number) => {
-		const updatedCheckedBoxes: boolean[] = [...weekRegistration];
-		updatedCheckedBoxes[index] = !updatedCheckedBoxes[index];
-		setWeekRegistration(updatedCheckedBoxes);
+	const handleCheckboxChange = (dayName: keyof LunchRecurringItem) => {
+		const updatedCheckedBoxes = {...registeredDays};
+		updatedCheckedBoxes[dayName] = !updatedCheckedBoxes[dayName];
+		setRegisteredDays(updatedCheckedBoxes);
 	};
-	const saveLunchDays = () => {
-		console.log(weekRegistration)
+	const saveLunchDays = async () => {
+		await PutLunchRecurringItem(registeredDays);
 	};
 	const registerForToday = async () => {
 		if(!isPastNoon())
@@ -78,21 +94,21 @@ function Lunch() {
 					<BodySmall>Information will be sent</BodySmall>
 					<BodySmall>before 12:00 on the mentioned day</BodySmall>
 					<form className="lunch-main__form body--normal">
-						{weekRegistration.map((isChecked, index) => (
-							<div className="lunch-main__form__checkboxes" key={index}>
+						{Object.keys(registeredDays).map((dayName, index) => (
+							<div className="lunch-main__form__checkboxes" key={dayName}>
 								<input
 									type="checkbox"
-									checked={isChecked}
-									onChange={() => handleCheckboxChange(index)}
-									id={weekDaysNames[index]}
+									checked={registeredDays[dayName as keyof LunchRecurringItem]}
+									onChange={() => handleCheckboxChange(dayName as keyof LunchRecurringItem)}
+									id={dayName}
 								/>
-								<label key={index} htmlFor={weekDaysNames[index]}>
-									{weekDaysNames[index]}
+								<label key={dayName} htmlFor={dayName}>
+									{dayName}
 								</label>
 							</div>
 						))}
 					</form>
-					<Button child="Save" onClick={() => saveLunchDays()} />
+					<Button child="Save" onClick={saveLunchDays} />
 				</div>
 				<div className="lunch-main__today">
 					<HeadingSmall>Register for today</HeadingSmall>
@@ -120,7 +136,7 @@ function isPastNoon(): boolean {
 	const currentHours = currentTime.getHours();
 
 	// Compare the current hours with 12 (noon)
-	return currentHours >= 17;
+	return currentHours >= 12;
 }
 
 export default Lunch;
