@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OneStopShopIdaBackend.Models;
 
-namespace OneStopShopIdaBackend.Models
+namespace OneStopShopIdaBackend.Services
 {
     public class DatabaseContext : DbContext
     {
