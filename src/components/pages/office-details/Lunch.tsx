@@ -54,11 +54,15 @@ function Lunch() {
 	const registerForToday = async () => {
 		if(!isPastNoon())
 		{
+			setIsRegisteredToday(true);
 			const response = await RegisterLunchToday(RegisterForTodayMail(officeName));
 			// const response = await CreateEvent("grzegorz.malisz@weareida.digital", "lunch event", new Date().toISOString(), new Date().toISOString());
 			// setResponse(await SendEmail(RegisterForTodayMail(officeName), "office@ida-mediafoundry.nl"));
 			setResponse(response);
-			setIsRegisteredToday(true);
+			if (!response.success)
+			{
+				setIsRegisteredToday(false);
+			}
 		}
 	};
 
