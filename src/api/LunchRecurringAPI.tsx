@@ -1,14 +1,6 @@
 import { IActionResult, InspectResponseAsync } from "./Response";
 
-export interface LunchRecurringItem {
-	Monday: boolean,
-	Tuesday: boolean,
-	Wednesday: boolean,
-	Thursday: boolean,
-	Friday: boolean,
-}
-
-interface LunchRecurringItemAPIResponse {
+export interface ILunchRecurringItem {
 	monday: boolean;
 	tuesday: boolean;
 	wednesday: boolean;
@@ -16,7 +8,7 @@ interface LunchRecurringItemAPIResponse {
 	friday: boolean;
 }
 
-async function GetRegisteredDays(): Promise<IActionResult<LunchRecurringItem>> {
+async function GetRegisteredDays(): Promise<IActionResult<ILunchRecurringItem>> {
 	try {
 		const res = await fetch(
 			`http://localhost:3002/lunch/recurring/get-registered-days`,
@@ -25,8 +17,8 @@ async function GetRegisteredDays(): Promise<IActionResult<LunchRecurringItem>> {
 				credentials: "include", // Include credentials (cookies) in the request
 			}
 		);
-		const resData = await InspectResponseAsync<LunchRecurringItemAPIResponse>(res);
-		let resDataConverted: IActionResult<LunchRecurringItem> = {
+		const resData = await InspectResponseAsync<ILunchRecurringItem>(res);
+		let resDataConverted: IActionResult<ILunchRecurringItem> = {
 			success: resData.success,
 			status: resData.status,
 			payload: undefined,
@@ -36,11 +28,11 @@ async function GetRegisteredDays(): Promise<IActionResult<LunchRecurringItem>> {
 				success: resData.success,
 				status: resData.status,
 				payload: {
-					Monday: resData.payload.monday,
-					Tuesday: resData.payload.tuesday,
-					Wednesday: resData.payload.wednesday,
-					Thursday: resData.payload.thursday,
-					Friday: resData.payload.friday,
+					monday: resData.payload.monday,
+					tuesday: resData.payload.tuesday,
+					wednesday: resData.payload.wednesday,
+					thursday: resData.payload.thursday,
+					friday: resData.payload.friday,
 				},
 			};
 		}
@@ -51,7 +43,7 @@ async function GetRegisteredDays(): Promise<IActionResult<LunchRecurringItem>> {
 	}
 }
 
-async function PutLunchRecurringItem(lunchRecurringItem: LunchRecurringItem){
+async function PutLunchRecurringItem(lunchRecurringItem: ILunchRecurringItem){
 	try {
 		const res = await fetch(
 			`http://localhost:3002/lunch/recurring/update-registered-days`,

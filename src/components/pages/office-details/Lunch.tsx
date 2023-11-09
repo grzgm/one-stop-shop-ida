@@ -8,7 +8,7 @@ import { IsAuth, RegisterLunchToday } from "../../../api/MicrosoftGraphAPI";
 import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
 import { IActionResult } from "../../../api/Response";
 import { IsRegistered } from "../../../api/LunchTodayAPI";
-import { GetRegisteredDays, LunchRecurringItem, PutLunchRecurringItem } from "../../../api/LunchRecurringAPI";
+import { GetRegisteredDays, ILunchRecurringItem, PutLunchRecurringItem } from "../../../api/LunchRecurringAPI";
 
 async function LunchLoader(officeName: string) {
 	const currentOfficeInformationData = officeInformationData[officeName]
@@ -27,14 +27,14 @@ function Lunch() {
 	const officeName = useContext(CurrentOfficeContext).currentOffice;
 	const [response, setResponse] = useState<IActionResult<null> | null>(null)
 	const [isRegisteredToday, setIsRegisteredToday] = useState<boolean>(true)
-	const [registeredDays, setRegisteredDays] = useState<LunchRecurringItem>({
-		Monday: false,
-		Tuesday: false,
-		Wednesday: false,
-		Thursday: false,
-		Friday: false,
+	const [registeredDays, setRegisteredDays] = useState<ILunchRecurringItem>({
+		monday: false,
+		tuesday: false,
+		wednesday: false,
+		thursday: false,
+		friday: false,
 	  });
-	// const weekDaysNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+	const weekDaysNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 
 	useEffect(() => {
 		const IsRegisteredWrapper = async () => {
@@ -59,7 +59,7 @@ function Lunch() {
 		GetRegisteredDaysWrapper();
 	  }, []);
 
-	const handleCheckboxChange = (dayName: keyof LunchRecurringItem) => {
+	const handleCheckboxChange = (dayName: keyof ILunchRecurringItem) => {
 		const updatedCheckedBoxes = {...registeredDays};
 		updatedCheckedBoxes[dayName] = !updatedCheckedBoxes[dayName];
 		setRegisteredDays(updatedCheckedBoxes);
@@ -98,12 +98,12 @@ function Lunch() {
 							<div className="lunch-main__form__checkboxes" key={dayName}>
 								<input
 									type="checkbox"
-									checked={registeredDays[dayName as keyof LunchRecurringItem]}
-									onChange={() => handleCheckboxChange(dayName as keyof LunchRecurringItem)}
+									checked={registeredDays[dayName as keyof ILunchRecurringItem]}
+									onChange={() => handleCheckboxChange(dayName as keyof ILunchRecurringItem)}
 									id={dayName}
 								/>
 								<label key={dayName} htmlFor={dayName}>
-									{dayName}
+									{weekDaysNames[index]}
 								</label>
 							</div>
 						))}
