@@ -7,10 +7,12 @@ export interface IActionResult<T> {
 async function InspectResponseAsync<T>(
 	res: Response
 ): Promise<IActionResult<T>> {
-	const contentLength = res.headers.get("Content-Length");
 	let payload = undefined
-	if (contentLength !== "0") {
+	try{
 		payload = await res.json();
+	}
+	catch(error){
+		console.error("Error while parsing response in InspectResponseAsync function: \n", error);
 	}
 
 	if (res.ok) {

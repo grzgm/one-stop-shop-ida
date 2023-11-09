@@ -25,7 +25,8 @@ async function LunchLoader(officeName: string) {
 
 function Lunch() {
 	const officeName = useContext(CurrentOfficeContext).currentOffice;
-	const [response, setResponse] = useState<IActionResult<null> | null>(null)
+	const [responseToday, setResponseToday] = useState<IActionResult<null> | null>(null)
+	const [responseRecurring, setResponseRecurring] = useState<IActionResult<undefined> | undefined>(undefined)
 	const [isRegisteredToday, setIsRegisteredToday] = useState<boolean>(true)
 	const [registeredDays, setRegisteredDays] = useState<ILunchRecurringItem>({
 		monday: false,
@@ -59,14 +60,18 @@ function Lunch() {
 		GetRegisteredDaysWrapper();
 	  }, []);
 
+	// Lunch Recurring 
 	const handleCheckboxChange = (dayName: keyof ILunchRecurringItem) => {
 		const updatedCheckedBoxes = {...registeredDays};
 		updatedCheckedBoxes[dayName] = !updatedCheckedBoxes[dayName];
 		setRegisteredDays(updatedCheckedBoxes);
 	};
 	const saveLunchDays = async () => {
-		await PutLunchRecurringItem(registeredDays);
+		const response = await PutLunchRecurringItem(registeredDays);
+		setResponseRecurring(response);
 	};
+
+	// Lunch Today
 	const registerForToday = async () => {
 		if(!isPastNoon())
 		{
@@ -74,7 +79,7 @@ function Lunch() {
 			const response = await RegisterLunchToday(RegisterForTodayMail(officeName));
 			// const response = await CreateEvent("grzegorz.malisz@weareida.digital", "lunch event", new Date().toISOString(), new Date().toISOString());
 			// setResponse(await SendEmail(RegisterForTodayMail(officeName), "office@ida-mediafoundry.nl"));
-			setResponse(response);
+			setResponseToday(response);
 			if (!response.success)
 			{
 				setIsRegisteredToday(false);
@@ -108,13 +113,14 @@ function Lunch() {
 							</div>
 						))}
 					</form>
+					{responseRecurring && <BodySmall additionalClasses={[responseRecurring.success ? "font-colour--success" : "font-colour--fail"]}>{responseRecurring.status}</BodySmall>}
 					<Button child="Save" onClick={saveLunchDays} />
 				</div>
 				<div className="lunch-main__today">
 					<HeadingSmall>Register for today</HeadingSmall>
 					<BodySmall>Only for today</BodySmall>
 					<BodySmall>before 12:00</BodySmall>
-					{response && <BodySmall additionalClasses={[response.success ? "font-colour--success" : "font-colour--fail"]}>{response.status}</BodySmall>}
+					{responseToday && <BodySmall additionalClasses={[responseToday.success ? "font-colour--success" : "font-colour--fail"]}>{responseToday.status}</BodySmall>}
 					<form>
 						<Button child="Register" disabled={isPastNoon() || isRegisteredToday} onClick={() => registerForToday()} />
 					</form>

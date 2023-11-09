@@ -43,7 +43,7 @@ async function GetRegisteredDays(): Promise<IActionResult<ILunchRecurringItem>> 
 	}
 }
 
-async function PutLunchRecurringItem(lunchRecurringItem: ILunchRecurringItem){
+async function PutLunchRecurringItem(lunchRecurringItem: ILunchRecurringItem): Promise<IActionResult<undefined>>{
 	try {
 		const res = await fetch(
 			`http://localhost:3002/lunch/recurring/update-registered-days`,
@@ -56,7 +56,7 @@ async function PutLunchRecurringItem(lunchRecurringItem: ILunchRecurringItem){
 				body: JSON.stringify(lunchRecurringItem),
 			}
 		);
-		const resData = await InspectResponseAsync(res);
+		const resData = await InspectResponseAsync<undefined>(res);
 		return resData;
 	} catch (error) {
 		console.error("Error:", error);
