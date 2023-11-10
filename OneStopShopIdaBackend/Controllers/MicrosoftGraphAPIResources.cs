@@ -32,8 +32,13 @@ public partial class MicrosoftGraphAPIController : ControllerBase
 
             if (response.IsSuccessStatusCode)
             {
-                await _lunchTodayItemsController.PutLunchTodayRegister(HttpContext.Session.GetString("microsoftId"),
-                    true);
+                LunchTodayItem lunchTodayItem = new()
+                {
+                    MicrosoftId = HttpContext.Session.GetString("microsoftId"),
+                    IsRegistered = true,
+                };
+
+                await _databaseService.PutLunchTodayRegister(lunchTodayItem);
             }
 
             return StatusCode((int)response.StatusCode);
@@ -65,13 +70,11 @@ public partial class MicrosoftGraphAPIController : ControllerBase
     }
 
     [HttpGet("resources/me")]
-    public async Task<UserItem> GetMe()
+    public async Task<UserItem> GetMe(string accessToken)
     {
         try
         {
-            UserItem user = await _microsoftGraphApiService.GetMe(HttpContext.Session.GetString("accessToken"));
-
-            HttpContext.Session.SetString("microsoftId", user.MicrosoftId);
+            UserItem user = await _microsoftGraphApiService.GetMe(accessToken);
 
             return user;
         }

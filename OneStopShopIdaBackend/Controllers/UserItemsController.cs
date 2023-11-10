@@ -3,127 +3,147 @@ using Microsoft.EntityFrameworkCore;
 using OneStopShopIdaBackend.Models;
 using OneStopShopIdaBackend.Services;
 
-namespace OneStopShopIdaBackend.Controllers
+namespace OneStopShopIdaBackend.Controllers;
+
+public class UserItemsController : ControllerBase
 {
-    public class UserItemsController : ControllerBase
+    private readonly ILogger<UserItemsController> _logger;
+    private readonly DatabaseService _databaseService;
+
+    public UserItemsController(ILogger<UserItemsController> logger, DatabaseService databaseService)
     {
-        private readonly DatabaseContext _context;
+        _logger = logger;
+        _databaseService = databaseService;
+    }
 
-        public UserItemsController(DatabaseContext context)
+    public async Task<ActionResult<IEnumerable<UserItem>>> GetUserItems()
+    {
+        try
         {
-            _context = context;
+            return Ok(await _databaseService.GetUserItems());
         }
-        public async Task<ActionResult<IEnumerable<UserItem>>> GetUsers()
+        catch (InvalidOperationException ex)
         {
-          if (_context.Users == null)
-          {
-              return NotFound();
-          }
-            return await _context.Users.ToListAsync();
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return Conflict();
         }
-        public async Task<ActionResult<UserItem>> GetUserItem(string id)
+        catch (KeyNotFoundException ex)
         {
-            if (_context.Users == null)
-            {
-                return NotFound();
-            }
-            var userItem = await _context.Users.FindAsync(id);
-
-            if (userItem == null)
-            {
-                return NotFound();
-            }
-
-            return userItem;
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return NotFound();
         }
-        public async Task<bool> GetIsUserInDatabase(string id)
+        catch (Exception ex)
         {
-            if (_context.Users == null)
-            {
-                return false;
-            }
-            var userItem = await _context.Users.FindAsync(id);
-
-            if (userItem == null)
-            {
-                return false;
-            }
-
-            return true;
+            _logger.LogError($"Error: {ex.Message}");
+            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
         }
-        public async Task<IActionResult> PutUserItem(string id, UserItem userItem)
+    }
+
+    public async Task<ActionResult<UserItem>> GetUserItem(string microsoftId)
+    {
+        try
         {
-            if (id != userItem.MicrosoftId)
-            {
-                return BadRequest();
-            }
+            return await _databaseService.GetUserItem(microsoftId);
+        }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return Conflict();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return NotFound();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error: {ex.Message}");
+            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+        }
+    }
 
-            _context.Entry(userItem).State = EntityState.Modified;
+    public async Task<bool> GetIsUserInDatabase(string microsoftId)
+    {
+        var userItem = await _databaseService.GetUserItem(microsoftId);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserItemExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        if (userItem == null)
+        {
+            return false;
+        }
 
+        return true;
+    }
+
+    public async Task<IActionResult> PutUserItem(UserItem userItem)
+    {
+        try
+        {
+            await _databaseService.PutUserItem(userItem);
             return NoContent();
         }
-        public async Task<ActionResult<UserItem>> PostUserItem(UserItem userItem)
+        catch (InvalidOperationException ex)
         {
-          if (_context.Users == null)
-          {
-              return Problem("Entity set 'DatabaseContext.Users'  is null.");
-          }
-            _context.Users.Add(userItem);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (UserItemExists(userItem.MicrosoftId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return Conflict();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return NotFound();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error: {ex.Message}");
+            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+        }
+    }
 
+    public async Task<ActionResult<UserItem>> PostUserItem(UserItem userItem)
+    {
+        try
+        {
+            await _databaseService.PostUserItem(userItem);
             return CreatedAtAction("GetUserItem", new { id = userItem.MicrosoftId }, userItem);
         }
-        public async Task<IActionResult> DeleteUserItem(string id)
+        catch (InvalidOperationException ex)
         {
-            if (_context.Users == null)
-            {
-                return NotFound();
-            }
-            var userItem = await _context.Users.FindAsync(id);
-            if (userItem == null)
-            {
-                return NotFound();
-            }
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return Conflict();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return NotFound();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error: {ex.Message}");
+            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+        }
+    }
 
-            _context.Users.Remove(userItem);
-            await _context.SaveChangesAsync();
+    public async Task<IActionResult> DeleteUserItem(string microsoftId)
+    {
+        try
+        {
+            _databaseService.DeleteUserItem(microsoftId);
 
             return NoContent();
         }
-
-        private bool UserItemExists(string id)
+        catch (InvalidOperationException ex)
         {
-            return (_context.Users?.Any(e => e.MicrosoftId == id)).GetValueOrDefault();
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return Conflict();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return NotFound();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error: {ex.Message}");
+            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
         }
     }
 }

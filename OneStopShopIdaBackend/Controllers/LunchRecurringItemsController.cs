@@ -3,93 +3,99 @@ using Microsoft.EntityFrameworkCore;
 using OneStopShopIdaBackend.Models;
 using OneStopShopIdaBackend.Services;
 
-namespace OneStopShopIdaBackend.Controllers
+namespace OneStopShopIdaBackend.Controllers;
+
+[Route("lunch/recurring")]
+[ApiController]
+public class LunchRecurringItemsController : ControllerBase
 {
-    [Route("lunch/recurring")]
-    [ApiController]
-    public class LunchRecurringItemsController : ControllerBase
+    private readonly ILogger<LunchTodayItemsController> _logger;
+    private readonly DatabaseService _databaseService;
+
+    public LunchRecurringItemsController(ILogger<LunchTodayItemsController> logger, DatabaseService databaseService)
     {
-        private readonly DatabaseContext _context;
+        _logger = logger;
+        _databaseService = databaseService;
+    }
 
-        public LunchRecurringItemsController(DatabaseContext context)
+    [HttpGet("get-registered-days")]
+    public async Task<ActionResult<LunchRecurringItem>> GetRegisteredDays()
+    {
+        try
         {
-            _context = context;
+            return await _databaseService.GetRegisteredDays(HttpContext.Session.GetString("microsoftId"));
         }
-
-        [HttpGet("get-registered-days")]
-        public async Task<ActionResult<LunchRecurringItem>> GetRegisteredDays()
+        catch (InvalidOperationException ex)
         {
-            string microsoftId = HttpContext.Session.GetString("microsoftId");
-            if (_context.LunchRecurring == null)
-            {
-                return NotFound();
-            }
-            var lunchRecurringItem = await _context.LunchRecurring.FindAsync(microsoftId);
-
-            if (lunchRecurringItem == null)
-            {
-                return NotFound();
-            }
-
-            return lunchRecurringItem;
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return Conflict();
         }
-
-        [HttpPut("update-registered-days")]
-        public async Task<IActionResult> PutLunchRecurringItem(LunchRecurringItemFrontend lunchRecurringItemFrontend)
+        catch (KeyNotFoundException ex)
         {
-            string microsoftId = HttpContext.Session.GetString("microsoftId");
-            LunchRecurringItem lunchRecurringItem = new (microsoftId, lunchRecurringItemFrontend);
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return NotFound();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error: {ex.Message}");
+            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+        }
+    }
 
-            _context.Entry(lunchRecurringItem).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!LunchRecurringItemExists(microsoftId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
+    [HttpPut("update-registered-days")]
+    public async Task<IActionResult> PutLunchRecurringItem(LunchRecurringItemFrontend lunchRecurringItemFrontend)
+    {
+        try
+        {
+            LunchRecurringItem lunchRecurringItem =
+                new(HttpContext.Session.GetString("microsoftId"), lunchRecurringItemFrontend);
+            await _databaseService.PutLunchRecurringItem(lunchRecurringItem);
             return NoContent();
         }
-
-        [HttpPost("create-lunch-recurring")]
-        public async Task PostLunchRecurringItem(string microsoftId)
+        catch (InvalidOperationException ex)
         {
-            LunchRecurringItem lunchRecurringItem = new();
-            lunchRecurringItem.MicrosoftId = microsoftId;
-            lunchRecurringItem.Monday = false;
-            lunchRecurringItem.Tuesday = false;
-            lunchRecurringItem.Wednesday = false;
-            lunchRecurringItem.Thursday = false;
-            lunchRecurringItem.Friday = false;
-
-            if (_context.LunchRecurring == null)
-            {
-                throw new DbUpdateException();
-            }
-            _context.LunchRecurring.Add(lunchRecurringItem);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                throw;
-            }
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return Conflict();
         }
-
-        private bool LunchRecurringItemExists(string id)
+        catch (KeyNotFoundException ex)
         {
-            return (_context.LunchRecurring?.Any(e => e.MicrosoftId == id)).GetValueOrDefault();
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return NotFound();
         }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error: {ex.Message}");
+            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+        }
+    }
+
+    [HttpPost("create-lunch-recurring")]
+    public async Task<IActionResult> PostLunchRecurringItem(string microsoftId)
+    {
+        try
+        {
+            await _databaseService.PostLunchRecurringItem(HttpContext.Session.GetString("microsoftId"));
+            return NoContent();
+        }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return Conflict();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return NotFound();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error: {ex.Message}");
+            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+        }
+    }
+
+    private bool LunchRecurringItemExists(string id)
+    {
+        return (_databaseService.LunchRecurring?.Any(e => e.MicrosoftId == id)).GetValueOrDefault();
     }
 }

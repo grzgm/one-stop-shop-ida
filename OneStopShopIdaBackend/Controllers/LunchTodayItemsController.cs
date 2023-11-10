@@ -3,106 +3,122 @@ using Microsoft.EntityFrameworkCore;
 using OneStopShopIdaBackend.Models;
 using OneStopShopIdaBackend.Services;
 
-namespace OneStopShopIdaBackend.Controllers
+namespace OneStopShopIdaBackend.Controllers;
+
+[Route("lunch/today")]
+[ApiController]
+public class LunchTodayItemsController : ControllerBase
 {
-    [Route("lunch/today")]
-    [ApiController]
-    public class LunchTodayItemsController : ControllerBase
+    private readonly ILogger<LunchTodayItemsController> _logger;
+    private readonly DatabaseService _databaseService;
+
+    public LunchTodayItemsController(ILogger<LunchTodayItemsController> logger, DatabaseService databaseService)
     {
-        private readonly DatabaseContext _context;
+        _logger = logger;
+        _databaseService = databaseService;
+    }
 
-        public LunchTodayItemsController(DatabaseContext context)
+    [HttpGet("is-registered")]
+    public async Task<ActionResult<bool>> GetLunchTodayIsRegistered()
+    {
+        try
         {
-            _context = context;
+            return await _databaseService.GetLunchTodayIsRegistered(HttpContext.Session.GetString("microsoftId"));
         }
-
-        [HttpGet("is-registered")]
-        public async Task<ActionResult<bool>> GetLunchTodayIsRegistered()
+        catch (InvalidOperationException ex)
         {
-            if (_context.LunchToday == null)
-            {
-                return NotFound();
-            }
-            var lunchTodayItem = await _context.LunchToday.FindAsync(HttpContext.Session.GetString("microsoftId"));
-
-            if (lunchTodayItem == null)
-            {
-                return NotFound();
-            }
-
-            return lunchTodayItem.IsRegistered;
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return Conflict();
         }
-
-        [HttpPut("update-is-registered")]
-        public async Task<IActionResult> PutLunchTodayRegister([FromQuery] string id, [FromQuery] bool IsRegistered)
+        catch (KeyNotFoundException ex)
         {
-            var lunchTodayItem = await _context.LunchToday.FindAsync(id);
-            lunchTodayItem.IsRegistered = IsRegistered;
-            _context.Entry(lunchTodayItem).State = EntityState.Modified;
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return NotFound();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error: {ex.Message}");
+            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+        }
+    }
 
-            try
+    [HttpPut("update-is-registered")]
+    public async Task<IActionResult> PutLunchTodayRegister([FromQuery] string microsoftId, [FromQuery] bool isRegistered)
+    {
+        try
+        {
+            LunchTodayItem lunchTodayItem = new()
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!LunchTodayItemExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
+                MicrosoftId = microsoftId,
+                IsRegistered = isRegistered,
+            };
+            await _databaseService.PutLunchTodayRegister(lunchTodayItem);
             return NoContent();
         }
-
-        [HttpPost("create-is-registered/{microsoftId}")]
-        public async Task PostLunchTodayItem(string microsoftId)
+        catch (InvalidOperationException ex)
         {
-            LunchTodayItem lunchTodayItem = new();
-            lunchTodayItem.MicrosoftId = microsoftId;
-            lunchTodayItem.IsRegistered = false;
-
-            _context.LunchToday.Add(lunchTodayItem);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                throw new DbUpdateException();
-            }
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return Conflict();
         }
-        
-        [ApiExplorerSettings(IgnoreApi = true)]
-        public async Task<IActionResult> UpdateAllLunchTodayItems(bool isRegistered)
+        catch (KeyNotFoundException ex)
         {
-            var lunchTodayItems = await _context.LunchToday.ToListAsync();
-
-            foreach (var lunchTodayItem in lunchTodayItems)
-            {
-                lunchTodayItem.IsRegistered = isRegistered;
-                _context.Entry(lunchTodayItem).State = EntityState.Modified;
-            }
-
-            try
-            {
-                await _context.SaveChangesAsync();
-                return NoContent();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                // Handle exceptions if necessary
-                return StatusCode(500, "Internal Server Error");
-            }
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return NotFound();
         }
-
-        private bool LunchTodayItemExists(string id)
+        catch (Exception ex)
         {
-            return (_context.LunchToday?.Any(e => e.MicrosoftId == id)).GetValueOrDefault();
+            _logger.LogError($"Error: {ex.Message}");
+            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+        }
+    }
+
+    [HttpPost("create-is-registered/{microsoftId}")]
+    public async Task<IActionResult> PostLunchTodayItem(string microsoftId)
+    {
+        try
+        {
+            await _databaseService.PostLunchTodayItem(microsoftId);
+            return NoContent();
+        }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return Conflict();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return NotFound();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error: {ex.Message}");
+            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+        }
+    }
+
+    [ApiExplorerSettings(IgnoreApi = true)]
+    public async Task<IActionResult> UpdateAllLunchTodayItems(bool isRegistered)
+    {
+        try
+        {
+            await _databaseService.UpdateAllLunchTodayItems(isRegistered);
+            return NoContent();
+        }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return Conflict();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return NotFound();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error: {ex.Message}");
+            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
         }
     }
 }

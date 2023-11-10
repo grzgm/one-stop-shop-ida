@@ -20,7 +20,7 @@ builder.Services.AddScoped<MicrosoftGraphAPIService>();
 builder.Services.AddScoped<SlackAPIServices>();
 
 // Add the Database connection as a Scoped service
-builder.Services.AddDbContext<DatabaseContext>(opt =>
+builder.Services.AddDbContext<DatabaseService>(opt =>
     opt.UseMySQL(builder.Configuration["ConnectionStrings:MySqlConnection"]));
 
 // Add the UserItemsController as a Scoped service

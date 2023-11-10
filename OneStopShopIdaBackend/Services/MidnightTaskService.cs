@@ -32,7 +32,7 @@ public class MidnightTaskService : IHostedService, IDisposable
     {
         using (var scope = _serviceProvider.CreateScope())
         {
-            var scopedProcessingService = scope.ServiceProvider.GetRequiredService<LunchTodayItemsController>();
+            var scopedProcessingService = scope.ServiceProvider.GetRequiredService<DatabaseService>();
             await scopedProcessingService.UpdateAllLunchTodayItems(false);
         }
     }

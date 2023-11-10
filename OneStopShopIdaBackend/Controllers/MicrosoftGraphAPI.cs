@@ -9,20 +9,15 @@ public partial class MicrosoftGraphAPIController : ControllerBase
 {
     private readonly ILogger<MicrosoftGraphAPIController> _logger;
     private readonly MicrosoftGraphAPIService _microsoftGraphApiService;
-    private readonly UserItemsController _userItemsController;
-    private readonly LunchTodayItemsController _lunchTodayItemsController;
-    private readonly LunchRecurringItemsController _lunchRecurringItemsController;
+    private readonly DatabaseService _databaseService;
 
     private const string FrontendUri = "http://localhost:5173";
 
     public MicrosoftGraphAPIController(ILogger<MicrosoftGraphAPIController> logger,
-        MicrosoftGraphAPIService microsoftGraphApiService, UserItemsController userItemsController,
-        LunchTodayItemsController lunchTodayItemsController, LunchRecurringItemsController lunchRecurringItemsController)
+        MicrosoftGraphAPIService microsoftGraphApiService, DatabaseService databaseService)
     {
         _logger = logger;
         _microsoftGraphApiService = microsoftGraphApiService;
-        _userItemsController = userItemsController;
-        _lunchTodayItemsController = lunchTodayItemsController;
-        _lunchRecurringItemsController = lunchRecurringItemsController;
+        _databaseService = databaseService;
     }
 }
