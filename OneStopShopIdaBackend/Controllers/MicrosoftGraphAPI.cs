@@ -8,8 +8,6 @@ namespace OneStopShopIdaBackend.Controllers;
 public partial class MicrosoftGraphAPIController : ControllerBase
 {
     private readonly ILogger<MicrosoftGraphAPIController> _logger;
-    private readonly HttpClient _httpClient;
-    private readonly CodeChallengeGeneratorService _codeChallengeGeneratorService;
     private readonly MicrosoftGraphAPIService _microsoftGraphApiService;
     private readonly UserItemsController _userItemsController;
     private readonly LunchTodayItemsController _lunchTodayItemsController;
@@ -17,14 +15,11 @@ public partial class MicrosoftGraphAPIController : ControllerBase
 
     private const string FrontendUri = "http://localhost:5173";
 
-    public MicrosoftGraphAPIController(ILogger<MicrosoftGraphAPIController> logger, HttpClient httpClient,
-        CodeChallengeGeneratorService codeChallengeGeneratorService,
+    public MicrosoftGraphAPIController(ILogger<MicrosoftGraphAPIController> logger,
         MicrosoftGraphAPIService microsoftGraphApiService, UserItemsController userItemsController,
         LunchTodayItemsController lunchTodayItemsController, LunchRecurringItemsController lunchRecurringItemsController)
     {
         _logger = logger;
-        _httpClient = httpClient;
-        _codeChallengeGeneratorService = codeChallengeGeneratorService;
         _microsoftGraphApiService = microsoftGraphApiService;
         _userItemsController = userItemsController;
         _lunchTodayItemsController = lunchTodayItemsController;

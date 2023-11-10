@@ -78,7 +78,7 @@ public partial class MicrosoftGraphAPIController : ControllerBase
         catch (HttpRequestException ex)
         {
             _logger.LogError($"Error calling external API: {ex.Message}");
-            throw ex;
+            throw;
         }
     }
 }
