@@ -32,22 +32,6 @@ async function SendEmail(message: string, address: string): Promise<IActionResul
 	}
 }
 
-async function RegisterLunchToday(message: string): Promise<IActionResult<null>> {
-	try {
-		const res = await fetch(
-			`http://localhost:3002/microsoft/resources/register-lunch-today?message=${encodeURI(message)}`,
-			{
-				method: "POST",
-				credentials: "include", // Include credentials (cookies) in the request
-			}
-		);
-		return InspectResponseAsync(res);
-	} catch (error) {
-		console.error("Error:", error);
-		return { success: false, status: "Request could not be send." };
-	}
-}
-
 async function CreateEvent(address: string, title: string, startDate: string, endDate: string, description?: string): Promise<IActionResult<null>> {
 	try {
 		const res = await fetch(
@@ -64,4 +48,4 @@ async function CreateEvent(address: string, title: string, startDate: string, en
 	}
 }
 
-export { IsAuth, SendEmail, RegisterLunchToday, CreateEvent };
+export { IsAuth, SendEmail, CreateEvent };

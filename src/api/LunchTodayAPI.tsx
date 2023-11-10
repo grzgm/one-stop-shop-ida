@@ -16,4 +16,20 @@ async function IsRegistered(): Promise<IActionResult<boolean>> {
 	}
 }
 
-export { IsRegistered };
+async function RegisterLunchToday(officeName: string): Promise<IActionResult<null>> {
+	try {
+		const res = await fetch(
+			`http://localhost:3002/lunch/today/register-lunch-today?officeName=${officeName}`,
+			{
+				method: "PUT",
+				credentials: "include", // Include credentials (cookies) in the request
+			}
+		);
+		return InspectResponseAsync(res);
+	} catch (error) {
+		console.error("Error:", error);
+		return { success: false, status: "Request could not be send." };
+	}
+}
+
+export { IsRegistered, RegisterLunchToday };

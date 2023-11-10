@@ -4,10 +4,10 @@ import Button from "../../Buttons";
 import "../../../css/components/pages/office-details/lunch.css"
 import { officeInformationData } from "../../../assets/OfficeInformationData";
 import { redirect } from "react-router-dom";
-import { IsAuth, RegisterLunchToday } from "../../../api/MicrosoftGraphAPI";
+import { IsAuth } from "../../../api/MicrosoftGraphAPI";
 import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
 import { IActionResult } from "../../../api/Response";
-import { IsRegistered } from "../../../api/LunchTodayAPI";
+import { IsRegistered, RegisterLunchToday } from "../../../api/LunchTodayAPI";
 import { GetRegisteredDays, ILunchRecurringItem, PutLunchRecurringItem } from "../../../api/LunchRecurringAPI";
 
 async function LunchLoader(officeName: string) {
@@ -76,7 +76,7 @@ function Lunch() {
 		if(!isPastNoon())
 		{
 			setIsRegisteredToday(true);
-			const response = await RegisterLunchToday(RegisterForTodayMail(officeName));
+			const response = await RegisterLunchToday(officeName);
 			// const response = await CreateEvent("grzegorz.malisz@weareida.digital", "lunch event", new Date().toISOString(), new Date().toISOString());
 			// setResponse(await SendEmail(RegisterForTodayMail(officeName), "office@ida-mediafoundry.nl"));
 			setResponseToday(response);
@@ -128,13 +128,6 @@ function Lunch() {
 			</main>
 		</div>
 	);
-}
-
-function RegisterForTodayMail(officeName: string) {
-	const message = `Hi,
-I would like to register for today's lunch at ${officeName} Office.
-Kind Regards`
-	return message
 }
 
 function isPastNoon(): boolean {
