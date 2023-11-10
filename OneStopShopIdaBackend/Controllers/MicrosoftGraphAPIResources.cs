@@ -21,34 +21,34 @@ public partial class MicrosoftGraphAPIController : ControllerBase
         }
     }
 
-    [HttpPost("resources/register-lunch-today")]
-    public async Task<IActionResult> PostRegisterLunchToday([FromQuery] string message)
-    {
-        try
-        {
-            var response = await
-                _microsoftGraphApiService.RegisterLunchToday(HttpContext.Session.GetString("accessToken"),
-                    HttpContext.Session.GetString("microsoftId"), message);
-
-            if (response.IsSuccessStatusCode)
-            {
-                LunchTodayItem lunchTodayItem = new()
-                {
-                    MicrosoftId = HttpContext.Session.GetString("microsoftId"),
-                    IsRegistered = true,
-                };
-
-                await _databaseService.PutLunchTodayRegister(lunchTodayItem);
-            }
-
-            return StatusCode((int)response.StatusCode);
-        }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError($"Error calling external API: {ex.Message}");
-            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
-        }
-    }
+    // [HttpPost("resources/register-lunch-today")]
+    // public async Task<IActionResult> PostRegisterLunchToday([FromQuery] string message)
+    // {
+    //     try
+    //     {
+    //         var response = await
+    //             _microsoftGraphApiService.RegisterLunchToday(HttpContext.Session.GetString("accessToken"),
+    //                 HttpContext.Session.GetString("microsoftId"), message);
+    //
+    //         if (response.IsSuccessStatusCode)
+    //         {
+    //             LunchTodayItem lunchTodayItem = new()
+    //             {
+    //                 MicrosoftId = HttpContext.Session.GetString("microsoftId"),
+    //                 IsRegistered = true,
+    //             };
+    //
+    //             await _databaseService.PutLunchTodayRegister(lunchTodayItem);
+    //         }
+    //
+    //         return StatusCode((int)response.StatusCode);
+    //     }
+    //     catch (HttpRequestException ex)
+    //     {
+    //         _logger.LogError($"Error calling external API: {ex.Message}");
+    //         return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+    //     }
+    // }
 
     [HttpPost("resources/create-event")]
     public async Task<IActionResult> PostCreateEvent([FromQuery] string address, [FromQuery] string title,

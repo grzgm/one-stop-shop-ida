@@ -10,12 +10,21 @@ namespace OneStopShopIdaBackend.Controllers;
 public class LunchTodayItemsController : ControllerBase
 {
     private readonly ILogger<LunchTodayItemsController> _logger;
+    private readonly MicrosoftGraphAPIService _microsoftGraphApiService;
     private readonly DatabaseService _databaseService;
 
-    public LunchTodayItemsController(ILogger<LunchTodayItemsController> logger, DatabaseService databaseService)
+    private static string RegisterTodayMessage (string officeName, string name) =>
+        "Hi,\n" +
+        $"I would like to register for today's lunch at {officeName} Office.\n" +
+        "Kind Regards,\n" +
+        $"{name}";
+
+    public LunchTodayItemsController(ILogger<LunchTodayItemsController> logger,
+        MicrosoftGraphAPIService microsoftGraphApiService, DatabaseService databaseService)
     {
         _logger = logger;
         _databaseService = databaseService;
+        _microsoftGraphApiService = microsoftGraphApiService;
     }
 
     [HttpGet("is-registered")]
@@ -42,18 +51,28 @@ public class LunchTodayItemsController : ControllerBase
         }
     }
 
-    [HttpPut("update-is-registered")]
-    public async Task<IActionResult> PutLunchTodayRegister([FromQuery] string microsoftId, [FromQuery] bool isRegistered)
+    [HttpPut("register-lunch-today")]
+    public async Task<IActionResult> PutLunchTodayRegister([FromQuery] string officeName)
     {
         try
         {
-            LunchTodayItem lunchTodayItem = new()
+            var user = await _microsoftGraphApiService.GetMe(HttpContext.Session.GetString("accessToken"));
+            var response = await
+                _microsoftGraphApiService.RegisterLunchToday(HttpContext.Session.GetString("accessToken"),
+                    HttpContext.Session.GetString("microsoftId"), RegisterTodayMessage(officeName,  $"{user.FirstName} {user.Surname}"));
+
+            if (response.IsSuccessStatusCode)
             {
-                MicrosoftId = microsoftId,
-                IsRegistered = isRegistered,
-            };
-            await _databaseService.PutLunchTodayRegister(lunchTodayItem);
-            return NoContent();
+                LunchTodayItem lunchTodayItem = new()
+                {
+                    MicrosoftId = HttpContext.Session.GetString("microsoftId"),
+                    IsRegistered = true,
+                };
+
+                await _databaseService.PutLunchTodayRegister(lunchTodayItem);
+            }
+
+            return StatusCode((int)response.StatusCode);
         }
         catch (InvalidOperationException ex)
         {
