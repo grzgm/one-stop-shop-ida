@@ -15,7 +15,6 @@ public partial class SlackAPIServices
 
     //private const string RedirectUri = "http://localhost:3002/slack/auth/callback";
     private const string RedirectUri = " https://6f1a-2a02-a442-e502-1-85d5-17db-f5a2-a715.ngrok-free.app/slack/auth/callback";
-    private const string FrontendUri = "http://localhost:5173";
 
     public SlackAPIServices(ILogger<SlackAPIController> logger, HttpClient httpClient, CodeChallengeGeneratorService codeChallengeGeneratorService, IConfiguration config)
     {

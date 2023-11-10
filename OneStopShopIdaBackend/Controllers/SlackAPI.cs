@@ -12,7 +12,7 @@ namespace OneStopShopIdaBackend.Controllers
 
         private const string FrontendUri = "http://localhost:5173";
 
-        public SlackAPIController(ILogger<SlackAPIController> logger, HttpClient httpClient, CodeChallengeGeneratorService codeChallengeGeneratorService, SlackAPIServices slackAPIServices)
+        public SlackAPIController(ILogger<SlackAPIController> logger, SlackAPIServices slackAPIServices)
         {
             _logger = logger;
             _slackAPIServices = slackAPIServices;
