@@ -9,10 +9,10 @@ namespace OneStopShopIdaBackend.Controllers;
 [ApiController]
 public class LunchRecurringItemsController : ControllerBase
 {
-    private readonly ILogger<LunchTodayItemsController> _logger;
+    private readonly ILogger<LunchRecurringItemsController> _logger;
     private readonly DatabaseService _databaseService;
 
-    public LunchRecurringItemsController(ILogger<LunchTodayItemsController> logger, DatabaseService databaseService)
+    public LunchRecurringItemsController(ILogger<LunchRecurringItemsController> logger, DatabaseService databaseService)
     {
         _logger = logger;
         _databaseService = databaseService;
@@ -92,10 +92,5 @@ public class LunchRecurringItemsController : ControllerBase
             _logger.LogError($"Error: {ex.Message}");
             return StatusCode(500, $"Internal Server Error \n {ex.Message}");
         }
-    }
-
-    private bool LunchRecurringItemExists(string id)
-    {
-        return (_databaseService.LunchRecurring?.Any(e => e.MicrosoftId == id)).GetValueOrDefault();
     }
 }

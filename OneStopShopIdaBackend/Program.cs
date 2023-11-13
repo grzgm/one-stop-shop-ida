@@ -23,15 +23,6 @@ builder.Services.AddScoped<SlackAPIServices>();
 builder.Services.AddDbContext<DatabaseService>(opt =>
     opt.UseMySQL(builder.Configuration["ConnectionStrings:MySqlConnection"]));
 
-// Add the UserItemsController as a Scoped service
-builder.Services.AddScoped<UserItemsController>();
-
-// Add the LunchTodayItemsController as a Scoped service
-builder.Services.AddScoped<LunchTodayItemsController>();
-
-// Add the LunchRecurringItemsController as a Scoped service
-builder.Services.AddScoped<LunchRecurringItemsController>();
-
 // Add the DailyTaskService as a Singleton service
 builder.Services.AddSingleton<IHostedService, MidnightTaskService>();
 

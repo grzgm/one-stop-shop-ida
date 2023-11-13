@@ -116,28 +116,28 @@ public class LunchTodayItemsController : ControllerBase
         }
     }
 
-    [ApiExplorerSettings(IgnoreApi = true)]
-    public async Task<IActionResult> UpdateAllLunchTodayItems(bool isRegistered)
-    {
-        try
-        {
-            await _databaseService.UpdateAllLunchTodayItems(isRegistered);
-            return NoContent();
-        }
-        catch (InvalidOperationException ex)
-        {
-            _logger.LogError($"Error calling external API: {ex.Message}");
-            return Conflict();
-        }
-        catch (KeyNotFoundException ex)
-        {
-            _logger.LogError($"Error calling external API: {ex.Message}");
-            return NotFound();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error: {ex.Message}");
-            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
-        }
-    }
+    //[ApiExplorerSettings(IgnoreApi = true)]
+    //public async Task<IActionResult> UpdateAllLunchTodayItems(bool isRegistered)
+    //{
+    //    try
+    //    {
+    //        await _databaseService.UpdateAllLunchTodayItems(isRegistered);
+    //        return NoContent();
+    //    }
+    //    catch (InvalidOperationException ex)
+    //    {
+    //        _logger.LogError($"Error calling external API: {ex.Message}");
+    //        return Conflict();
+    //    }
+    //    catch (KeyNotFoundException ex)
+    //    {
+    //        _logger.LogError($"Error calling external API: {ex.Message}");
+    //        return NotFound();
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        _logger.LogError($"Error: {ex.Message}");
+    //        return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+    //    }
+    //}
 }
