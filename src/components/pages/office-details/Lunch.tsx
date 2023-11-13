@@ -34,35 +34,32 @@ function Lunch() {
 		wednesday: false,
 		thursday: false,
 		friday: false,
-	  });
+	});
 	const weekDaysNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 
 	useEffect(() => {
 		const IsRegisteredWrapper = async () => {
 			const isRegisteredRes = await IsRegistered();
-			if (isRegisteredRes.payload == undefined)
-			{
+			if (isRegisteredRes.payload == undefined) {
 				setIsRegisteredToday(true);
 			}
-			else{
+			else {
 				setIsRegisteredToday(isRegisteredRes.payload);
 			}
 		}
 		const GetRegisteredDaysWrapper = async () => {
 			const registeredDaysRes = await GetRegisteredDays();
-			console.log(registeredDaysRes)
-			if (registeredDaysRes.payload !== undefined)
-			{
+			if (registeredDaysRes.payload !== undefined) {
 				setRegisteredDays(registeredDaysRes.payload);
 			}
 		}
 		IsRegisteredWrapper();
 		GetRegisteredDaysWrapper();
-	  }, []);
+	}, []);
 
 	// Lunch Recurring 
 	const handleCheckboxChange = (dayName: keyof ILunchRecurringItem) => {
-		const updatedCheckedBoxes = {...registeredDays};
+		const updatedCheckedBoxes = { ...registeredDays };
 		updatedCheckedBoxes[dayName] = !updatedCheckedBoxes[dayName];
 		setRegisteredDays(updatedCheckedBoxes);
 	};
@@ -73,15 +70,13 @@ function Lunch() {
 
 	// Lunch Today
 	const registerForToday = async () => {
-		if(!isPastNoon())
-		{
+		if (!isPastNoon()) {
 			setIsRegisteredToday(true);
 			const response = await RegisterLunchToday(officeName);
 			// const response = await CreateEvent("grzegorz.malisz@weareida.digital", "lunch event", new Date().toISOString(), new Date().toISOString());
 			// setResponse(await SendEmail(RegisterForTodayMail(officeName), "office@ida-mediafoundry.nl"));
 			setResponseToday(response);
-			if (!response.success)
-			{
+			if (!response.success) {
 				setIsRegisteredToday(false);
 			}
 		}

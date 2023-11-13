@@ -7,12 +7,14 @@ export interface IActionResult<T> {
 async function InspectResponseAsync<T>(
 	res: Response
 ): Promise<IActionResult<T>> {
-	let payload = undefined
-	try{
+	let payload = undefined;
+	try {
 		payload = await res.json();
-	}
-	catch(error){
-		console.error("Error while parsing response in InspectResponseAsync function: \n", error);
+	} catch (error) {
+		console.error(
+			"Error while parsing response in InspectResponseAsync function: \n",
+			error
+		);
 	}
 
 	if (res.ok) {
@@ -33,6 +35,16 @@ async function InspectResponseAsync<T>(
 }
 
 function InspectResponseSync<T>(res: any): IActionResult<T> {
+	let payload = undefined;
+	try {
+		payload = res.json();
+	} catch (error) {
+		console.error(
+			"Error while parsing response in InspectResponseAsync function: \n",
+			error
+		);
+	}
+
 	if (res.ok) {
 		// Handle successful response (status code 200-299)
 		return {

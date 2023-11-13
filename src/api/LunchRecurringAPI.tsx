@@ -17,26 +17,14 @@ async function GetRegisteredDays(): Promise<IActionResult<ILunchRecurringItem>> 
 				credentials: "include", // Include credentials (cookies) in the request
 			}
 		);
-		const resData = await InspectResponseAsync<ILunchRecurringItem>(res);
-		let resDataConverted: IActionResult<ILunchRecurringItem> = {
-			success: resData.success,
-			status: resData.status,
-			payload: undefined,
-		};
-		if (resData.payload) {
-			resDataConverted = {
-				success: resData.success,
-				status: resData.status,
-				payload: {
-					monday: resData.payload.monday,
-					tuesday: resData.payload.tuesday,
-					wednesday: resData.payload.wednesday,
-					thursday: resData.payload.thursday,
-					friday: resData.payload.friday,
-				},
-			};
-		}
-		return resDataConverted;
+		// const resData = await InspectResponseAsync<ILunchRecurringItem>(res);
+		// const resDataConverted: IActionResult<ILunchRecurringItem> = {
+		// 	success: resData.success,
+		// 	status: resData.status,
+		// 	payload: resData.payload ? resData.payload as ILunchRecurringItem : undefined,
+		// };
+		// return resDataConverted;
+		return InspectResponseAsync<ILunchRecurringItem>(res);
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, status: "Request could not be send." };
@@ -56,8 +44,7 @@ async function PutLunchRecurringItem(lunchRecurringItem: ILunchRecurringItem): P
 				body: JSON.stringify(lunchRecurringItem),
 			}
 		);
-		const resData = await InspectResponseAsync<undefined>(res);
-		return resData;
+		return InspectResponseAsync(res);
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, status: "Request could not be send." };
