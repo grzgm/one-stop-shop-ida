@@ -22,6 +22,7 @@ import Scheduling from "../components/pages/employee-portal/Scheduling";
 import AppOverlay from "../AppOverlay";
 import MicrosoftAuth from "../components/pages/MicrosoftAuth";
 import SlackAuth from "../components/pages/SlackAuth";
+import Push from "../components/pages/push";
 
 function Router(currentOfficeName: string) {
 
@@ -55,6 +56,7 @@ function Router(currentOfficeName: string) {
         <Route path="/settings" element={<Settings />} />
         <Route path="/microsoft-auth" element={<MicrosoftAuth />} />
         <Route path="/slack-auth" element={<SlackAuth />} />
+        <Route path="/push" element={<Push />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </>

@@ -12,6 +12,10 @@ export default defineConfig({
     injectRegister: 'auto',
     devOptions: {
       enabled: true
-    }
+    },
+
+    srcDir: './public',
+      filename: 'service-worker.js',
+      strategies: 'injectManifest',
   })],
 })
