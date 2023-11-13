@@ -13,6 +13,8 @@ public partial class DatabaseService : DbContext
     public DbSet<LunchRecurringItem> LunchRecurring { get; set; } = null!;
     public DbSet<LunchTodayItem> LunchToday { get; set; } = null!;
 
+    public DbSet<PushSubscription> PushSubscription { get; set; } = null!;
+
     private void IsDbSetNull(string dbSetName)
     {
         var property = GetType().GetProperty(dbSetName);
