@@ -1,13 +1,25 @@
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Button from "../Buttons";
 import { BodyNormal, BodySmall, HeadingLarge } from "../text-wrapers/TextWrapers";
 import { InspectResponseSync } from '../../api/Response';
-import { SendMessage, SetStatus } from '../../api/SlackAPI';
+import { IsAuth, SendMessage, SetStatus } from '../../api/SlackAPI';
+import { useEffect } from 'react';
 
 function SlackAuth() {
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		const IsAuthWrapper = async () => {
+			if ((await IsAuth()).payload) {
+				navigate("/")
+			}
+		};
+		IsAuthWrapper();
+	}, []);
+
 	// Get the search parameters from the URL
 	const [searchParams] = useSearchParams();
-  
+
 	// Access specific query parameters
 	const queryPreviousLocation = searchParams.get('previousLocation');
 	const previousLocation = queryPreviousLocation ? queryPreviousLocation : "/slack-auth";
@@ -15,7 +27,7 @@ function SlackAuth() {
 	const queryServerResponse = searchParams.get('serverResponse');
 	console.log("queryServerResponse: ", queryServerResponse)
 	const serverResponse = queryServerResponse ? JSON.parse(queryServerResponse) : queryServerResponse;
-	
+
 	return (
 		<div className="content">
 			<div className="description">
@@ -24,12 +36,13 @@ function SlackAuth() {
 				<BodyNormal>Get access to all the benefits of app!</BodyNormal>
 			</div>
 			<main className="slack-auth-main">
-				{serverResponse 
-				? <BodySmall additionalClasses={[InspectResponseSync(serverResponse).success ? "font-colour--success" : "font-colour--fail"]}>{`${InspectResponseSync(serverResponse).status} Try again later.`}</BodySmall>
-				: <Button child="Log in" onClick={() => window.location.href = `http://localhost:3002/slack/auth?route=${encodeURI(previousLocation)}`} />}
+				{serverResponse &&
+					<BodySmall additionalClasses={[InspectResponseSync(serverResponse).success ? "font-colour--success" : "font-colour--fail"]}>{InspectResponseSync(serverResponse).status}</BodySmall>}
+				<Button child="Log in" onClick={() => window.location.href = `http://localhost:3002/slack/auth?route=${encodeURI(previousLocation)}`} />
 			</main>
 			<Button child="send message" onClick={() => SendMessage("new message", "D05QWNGJMAR")} />
 			<Button child="set status" onClick={() => SetStatus("ReAcT ApP", ":v:")} />
+			<Button child="is auth" onClick={() => console.log(IsAuth())} />
 		</div>
 	);
 }
