@@ -15,9 +15,9 @@ namespace OneStopShopIdaBackend.Controllers
                     return StatusCode((int)response.StatusCode);
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
-                _logger.LogError($"Error calling external API: {ex.Message}");
+                _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
                 return StatusCode(500, $"Internal Server Error \n {ex.Message}");
             }
         }
@@ -33,9 +33,9 @@ namespace OneStopShopIdaBackend.Controllers
                     return StatusCode((int)response.StatusCode);
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
-                _logger.LogError($"Error calling external API: {ex.Message}");
+                _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
                 return StatusCode(500, $"Internal Server Error \n {ex.Message}");
             }
         }

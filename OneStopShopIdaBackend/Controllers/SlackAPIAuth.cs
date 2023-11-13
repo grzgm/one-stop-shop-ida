@@ -15,7 +15,12 @@ namespace OneStopShopIdaBackend.Controllers
             }
             catch (HttpRequestException ex)
             {
-                _logger.LogError($"Error calling external API: {ex.Message}");
+                _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
+                return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{this.GetType().Name}\nError: {ex.Message}");
                 return StatusCode(500, $"Internal Server Error \n {ex.Message}");
             }
         }
@@ -36,12 +41,12 @@ namespace OneStopShopIdaBackend.Controllers
             }
             catch (HttpRequestException ex)
             {
-                _logger.LogError($"Error calling external API: {ex.Message}");
+                _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
                 return Redirect(FrontendUri + $"/slack-auth?serverResponse={JsonSerializer.Serialize(StatusCode(500, $"Internal Server Error \n {ex.Message}"))}");
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error calling external API: {ex.Message}");
+                _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
                 return Redirect(FrontendUri + $"/slack-auth?serverResponse={JsonSerializer.Serialize(StatusCode(500, $"Internal Server Error \n {ex.Message}"))}");
             }
         }

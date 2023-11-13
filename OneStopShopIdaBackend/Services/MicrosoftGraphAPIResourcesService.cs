@@ -42,14 +42,9 @@ public partial class MicrosoftGraphAPIService
                 await _httpClient.PostAsync("https://graph.microsoft.com/v1.0/me/sendMail", content);
             return response;
         }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError($"Error calling external API: {ex.Message}");
-            throw;
-        }
         catch (Exception ex)
         {
-            _logger.LogError($"Error calling external API: {ex.Message}");
+            _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
             throw;
         }
     }
@@ -89,14 +84,9 @@ public partial class MicrosoftGraphAPIService
                 await _httpClient.PostAsync("https://graph.microsoft.com/v1.0/me/sendMail", content);
             return response;
         }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError($"Error calling external API: {ex.Message}");
-            throw;
-        }
         catch (Exception ex)
         {
-            _logger.LogError($"Error calling external API: {ex.Message}");
+            _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
             throw;
         }
     }
@@ -148,14 +138,9 @@ public partial class MicrosoftGraphAPIService
                 await _httpClient.PostAsync("https://graph.microsoft.com/v1.0/me/events", content);
             return response;
         }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError($"Error calling external API: {ex.Message}");
-            throw;
-        }
         catch (Exception ex)
         {
-            _logger.LogError($"Error calling external API: {ex.Message}");
+            _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
             throw;
         }
     }
@@ -179,14 +164,9 @@ public partial class MicrosoftGraphAPIService
 
             return user;
         }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError($"Error calling external API: {ex.Message}");
-            throw;
-        }
         catch (Exception ex)
         {
-            _logger.LogError($"Error calling external API: {ex.Message}");
+            _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
             throw;
         }
     }

@@ -30,14 +30,9 @@ public partial class SlackAPIServices
 
             return slackAccessToken;
         }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError($"Error calling external API: {ex.Message}");
-            throw;
-        }
         catch (Exception ex)
         {
-            _logger.LogError($"Error calling external API: {ex.Message}");
+            _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
             throw;
         }
     }
