@@ -35,6 +35,17 @@ public class LunchRecurringItem
 
 public class LunchRecurringItemFrontend
 {
+    public LunchRecurringItemFrontend()
+    {
+    }
+    public LunchRecurringItemFrontend(LunchRecurringItem lunchRecurringItemFrontend)
+    {
+        this.Monday = lunchRecurringItemFrontend.Monday;
+        this.Tuesday = lunchRecurringItemFrontend.Tuesday;
+        this.Wednesday = lunchRecurringItemFrontend.Wednesday;
+        this.Thursday = lunchRecurringItemFrontend.Thursday;
+        this.Friday = lunchRecurringItemFrontend.Friday;
+    }
     public bool Monday { get; set; }
     public bool Tuesday { get; set; }
     public bool Wednesday { get; set; }

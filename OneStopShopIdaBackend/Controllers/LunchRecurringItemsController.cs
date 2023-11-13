@@ -19,11 +19,11 @@ public class LunchRecurringItemsController : ControllerBase
     }
 
     [HttpGet("get-registered-days")]
-    public async Task<ActionResult<LunchRecurringItem>> GetRegisteredDays()
+    public async Task<ActionResult<LunchRecurringItemFrontend>> GetRegisteredDays()
     {
         try
         {
-            return await _databaseService.GetRegisteredDays(HttpContext.Session.GetString("microsoftId"));
+            return new LunchRecurringItemFrontend(await _databaseService.GetRegisteredDays(HttpContext.Session.GetString("microsoftId")));
         }
         catch (InvalidOperationException ex)
         {
