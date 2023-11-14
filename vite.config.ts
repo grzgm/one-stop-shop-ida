@@ -9,13 +9,9 @@ export default defineConfig({
   plugins: [react(), VitePWA({
     manifest,
     registerType: 'autoUpdate',
-    injectRegister: 'auto',
+    injectRegister: 'script',
     devOptions: {
       enabled: true
     },
-
-    srcDir: './public',
-      filename: 'service-worker.js',
-      strategies: 'injectManifest',
   })],
 })

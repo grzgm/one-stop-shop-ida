@@ -23,7 +23,7 @@ function Push() {
 	const [notifyMeButton, setnotifyMeButton] = useState<boolean>(false)
 	const [notifyAllButton, setnotifyAllButton] = useState<boolean>(false)
 
-	const VAPID_PUBLIC_KEY = 'VAPID_PUBLIC_KEY_VALUE_HERE';
+	const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY ? import.meta.env.VITE_VAPID_PUBLIC_KEY : "";
 
 	useEffect(() => {
 		// TODO add startup logic here
@@ -69,7 +69,9 @@ function Push() {
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify(subscription)
+			body: JSON.stringify({
+				subscription: subscription
+			})
 		});
 
 	}
@@ -82,7 +84,9 @@ function Push() {
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({ endpoint: subscription!.endpoint })
+			body: JSON.stringify({
+				subscription: subscription
+			})
 		});
 		const unsubscribed = await subscription!.unsubscribe();
 		if (unsubscribed) {
@@ -97,12 +101,15 @@ function Push() {
 	const NotifyMeButtonHandler = async () => {
 		const registration = await navigator.serviceWorker.getRegistration();
 		const subscription = await registration!.pushManager.getSubscription();
-		fetch('http://localhost:3002/push/send/notify-me', {
+		fetch('http://localhost:3002/push/send/5e430c04-3186-4560-bdb2-6ecf691047a3', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({ endpoint: subscription!.endpoint })
+			body: JSON.stringify({
+				title: "title",
+				body: "message",
+			})
 		});
 	}
 
@@ -121,8 +128,8 @@ function Push() {
 			</div>
 			<main className="slack-auth-main">
 			</main>
-			<Button child="subscribe" onClick={subscribeButtonHandler} disabled={unsubscribeButton} />
-			<Button child="unsubscribe" onClick={unsubscribeButtonHandler} disabled={subscribeButton} />
+			<Button child="subscribe" onClick={subscribeButtonHandler} disabled={subscribeButton} />
+			<Button child="unsubscribe" onClick={unsubscribeButtonHandler} disabled={unsubscribeButton} />
 			<Button child="notify me" onClick={NotifyMeButtonHandler} disabled={notifyMeButton} />
 			<Button child="notify all" onClick={NotifyAllButtonHandler} disabled={notifyAllButton} />
 		</div>
