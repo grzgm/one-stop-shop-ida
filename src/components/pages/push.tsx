@@ -28,7 +28,7 @@ function Push() {
 	useEffect(() => {
 		// TODO add startup logic here
 		if ('serviceWorker' in navigator && 'PushManager' in window) {
-			navigator.serviceWorker.register('./service-worker.js').then(serviceWorkerRegistration => {
+			navigator.serviceWorker.register('/sw-push.js', { scope: '/push' }).then(serviceWorkerRegistration => {
 				console.info('Service worker was registered.');
 				console.info({ serviceWorkerRegistration });
 			}).catch(error => {

@@ -1,9 +1,3 @@
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw-push.js', { scope: '/' })
-  })
-}
-
 self.addEventListener("install", event => {
   console.log("Service worker installed");
 });
