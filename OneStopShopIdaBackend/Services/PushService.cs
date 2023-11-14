@@ -12,14 +12,12 @@ using PushSubscription = OneStopShopIdaBackend.Models.PushSubscription;
 
 namespace OneStopShopIdaBackend.Services;
 
-/// <inheritdoc />
 public class PushService : IPushService
 {
     private readonly WebPushClient _client;
     private readonly DatabaseService _context;
     private readonly VapidDetails _vapidDetails;
 
-    /// <inheritdoc />
     public PushService(DatabaseService context, string vapidSubject, string vapidPublicKey, string vapidPrivateKey)
     {
         _context = context;
@@ -30,7 +28,6 @@ public class PushService : IPushService
         _vapidDetails = new VapidDetails(vapidSubject, vapidPublicKey, vapidPrivateKey);
     }
 
-    /// <inheritdoc />
     public PushService(DatabaseService context, IConfiguration configuration)
     {
         _context = context;
@@ -45,7 +42,6 @@ public class PushService : IPushService
         _vapidDetails = new VapidDetails(vapidSubject, vapidPublicKey, vapidPrivateKey);
     }
 
-    /// <inheritdoc />
     public void CheckOrGenerateVapidDetails(string vapidSubject, string vapidPublicKey, string vapidPrivateKey)
     {
         if (string.IsNullOrEmpty(vapidSubject) ||
@@ -63,10 +59,8 @@ public class PushService : IPushService
         }
     }
 
-    /// <inheritdoc />
     public string GetVapidPublicKey() => _vapidDetails.PublicKey;
 
-    /// <inheritdoc />
     public async Task<PushSubscription> Subscribe(PushSubscription subscription)
     {
         if (await _context.PushSubscription.AnyAsync(s => s.P256Dh == subscription.P256Dh))
@@ -86,7 +80,6 @@ public class PushService : IPushService
         return subscription;
     }
 
-    /// <inheritdoc />
     public async Task Unsubscribe(PushSubscription subscription)
     {
         if (!await _context.PushSubscription.AnyAsync(s => s.P256Dh == subscription.P256Dh)) return;
@@ -95,13 +88,13 @@ public class PushService : IPushService
         await _context.SaveChangesAsync();
     }
 
-    /// <inheritdoc />
     public async Task Send(string userId, Notification notification)
     {
         foreach (var subscription in await GetUserSubscriptions(userId))
             try
             {
-                _client.SendNotification(subscription.ToWebPushSubscription(), JsonConvert.SerializeObject(notification), _vapidDetails);
+                _client.SendNotification(subscription.ToWebPushSubscription(),
+                    JsonConvert.SerializeObject(notification), _vapidDetails);
             }
             catch (WebPushException e)
             {
@@ -117,17 +110,11 @@ public class PushService : IPushService
             }
     }
 
-    /// <inheritdoc />
     public async Task Send(string userId, string text)
     {
         await Send(userId, new Notification(text));
     }
 
-    /// <summary>
-    /// Loads a list of user subscriptions from the database
-    /// </summary>
-    /// <param name="userId">user id</param>
-    /// <returns>List of subscriptions</returns>
     private async Task<List<PushSubscription>> GetUserSubscriptions(string userId) =>
         await _context.PushSubscription.Where(s => s.MicrosoftId == userId).ToListAsync();
 }

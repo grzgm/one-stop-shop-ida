@@ -1,23 +1,24 @@
 ﻿using Newtonsoft.Json;
 
 namespace OneStopShopIdaBackend.Models;
+
 public class Notification
 {
-    public Notification() { }
+    public Notification()
+    {
+    }
 
     public Notification(string text)
     {
         Body = text;
     }
 
-    [JsonProperty("title")]
-    public string Title { get; set; } = "Push Demo";
+    [JsonProperty("title")] public string Title { get; set; } = "Push Demo";
 
     // [JsonProperty("lang")]
     // public string Lang { get; set; } = "en";
 
-    [JsonProperty("body")]
-    public string Body { get; set; }
+    [JsonProperty("body")] public string Body { get; set; }
     //
     // [JsonProperty("tag")]
     // public string Tag { get; set; }
@@ -41,17 +42,11 @@ public class Notification
     // public List<NotificationAction> Actions { get; set; } = new List<NotificationAction>();
 }
 
-/// <summary>
-///     <see href="https://notifications.spec.whatwg.org/#dictdef-notificationaction">Notification API Standard</see>
-/// </summary>
 public class NotificationAction
 {
+    [JsonProperty("action")] public string Action { get; set; }
 
-    [JsonProperty("action")]
-    public string Action { get; set; }
-
-    [JsonProperty("title")]
-    public string Title { get; set; }
+    [JsonProperty("title")] public string Title { get; set; }
 }
 
 public class NotificationTag
