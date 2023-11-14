@@ -55,8 +55,8 @@ public class PushService : IPushService
             var vapidKeys = VapidHelper.GenerateVapidKeys();
 
             // Prints 2 URL Safe Base64 Encoded Strings
-            Debug.WriteLine($"Public {vapidKeys.PublicKey}");
-            Debug.WriteLine($"Private {vapidKeys.PrivateKey}");
+            Console.WriteLine($"Public {vapidKeys.PublicKey}");
+            Console.WriteLine($"Private {vapidKeys.PrivateKey}");
 
             throw new Exception(
                 "You must set the Vapid:Subject, Vapid:PublicKey and Vapid:PrivateKey application settings or pass them to the service in the constructor. You can use the ones just printed to the debug console.");
@@ -73,7 +73,15 @@ public class PushService : IPushService
             return await _context.PushSubscription.FindAsync(subscription.P256Dh);
 
         await _context.PushSubscription.AddAsync(subscription);
-        await _context.SaveChangesAsync();
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("---------------------------------");
+            Console.WriteLine(ex.Message);
+        }
 
         return subscription;
     }
@@ -121,5 +129,5 @@ public class PushService : IPushService
     /// <param name="userId">user id</param>
     /// <returns>List of subscriptions</returns>
     private async Task<List<PushSubscription>> GetUserSubscriptions(string userId) =>
-        await _context.PushSubscription.Where(s => s.UserId == userId).ToListAsync();
+        await _context.PushSubscription.Where(s => s.MicrosoftId == userId).ToListAsync();
 }

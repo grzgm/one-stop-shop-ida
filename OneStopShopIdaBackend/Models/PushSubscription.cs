@@ -8,9 +8,9 @@ public class PushSubscription
     public PushSubscription() { }
 
     /// <inheritdoc />
-    public PushSubscription(string userId, WebPush.PushSubscription subscription)
+    public PushSubscription(string microsoftId, WebPush.PushSubscription subscription)
     {
-        UserId = userId;
+        MicrosoftId = microsoftId;
         Endpoint = subscription.Endpoint;
         ExpirationTime = null;
         P256Dh = subscription.P256DH;
@@ -21,8 +21,8 @@ public class PushSubscription
     /// User id associated with the push subscription.
     /// </summary>
     [Required]
-    [ForeignKey("User")]
-    public string UserId { get; set; }
+    [ForeignKey(nameof(UserItem))]
+    public string MicrosoftId { get; set; }
 
     /// <summary>
     /// The endpoint associated with the push subscription.

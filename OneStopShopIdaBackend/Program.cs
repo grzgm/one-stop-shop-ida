@@ -19,6 +19,9 @@ builder.Services.AddScoped<MicrosoftGraphAPIService>();
 // Add the SlackAPIServices as a Scoped service
 builder.Services.AddScoped<SlackAPIServices>();
 
+// Add the PushService as a Scoped service
+builder.Services.AddScoped<IPushService, PushService>();
+
 // Add the Database connection as a Scoped service
 builder.Services.AddDbContext<DatabaseService>(opt =>
     opt.UseMySQL(builder.Configuration["ConnectionStrings:MySqlConnection"]));

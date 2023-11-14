@@ -45,7 +45,8 @@ public class PushController : ControllerBase
     {
         var subscription = new PushSubscription
         {
-            UserId = Guid.NewGuid().ToString(), // You'd use your existing user id here
+            // MicrosoftId = Guid.NewGuid().ToString(), // You'd use your existing user id here
+            MicrosoftId = "5e430c04-3186-4560-bdb2-6ecf691047a3", // You'd use your existing user id here
             Endpoint = model.Subscription.Endpoint,
             ExpirationTime = model.Subscription.ExpirationTime,
             Auth = model.Subscription.Keys.Auth,
@@ -88,7 +89,7 @@ public class PushController : ControllerBase
     /// <response code="400">BadRequest if subscription is null or invalid.</response>
     /// <response code="401">Unauthorized</response>
     [HttpPost("send/{userId}")]
-    public async Task<ActionResult<AcceptedResult>> Send([FromRoute] string userId, [FromBody] Notification notification, [FromQuery] int? delay)
+    public async Task<IActionResult> Send([FromRoute] string userId, [FromBody] Notification notification, [FromQuery] int? delay)
     {
         if (!_env.IsDevelopment()) return Forbid();
 
@@ -111,7 +112,7 @@ public class PushSubscriptionViewModel
     /// <summary>
     /// Other attributes, like device id for example.
     /// </summary>
-    public string DeviceId { get; set; }
+    // public string DeviceId { get; set; }
 }
 
 /// <summary>
