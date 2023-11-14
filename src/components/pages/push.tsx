@@ -69,9 +69,7 @@ function Push() {
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({
-				subscription: subscription
-			})
+			body: JSON.stringify(subscription)
 		});
 
 	}
@@ -84,9 +82,7 @@ function Push() {
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({
-				subscription: subscription
-			})
+			body: JSON.stringify(subscription)
 		});
 		const unsubscribed = await subscription!.unsubscribe();
 		if (unsubscribed) {
