@@ -35,3 +35,22 @@ public class PushSubscription
         return new WebPush.PushSubscription(Endpoint, P256Dh, Auth);
     }
 }
+
+public class PushSubscriptionFrontend
+{
+    public string Endpoint { get; set; }
+
+    public double? ExpirationTime { get; set; }
+
+    public Keys Keys { get; set; }
+
+    public WebPush.PushSubscription ToWebPushSubscription() =>
+        new WebPush.PushSubscription(Endpoint, Keys.P256Dh, Keys.Auth);
+}
+
+
+public class Keys
+{
+    public string P256Dh { get; set; }
+    public string Auth { get; set; }
+}

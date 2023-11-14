@@ -20,7 +20,7 @@ builder.Services.AddScoped<MicrosoftGraphAPIService>();
 builder.Services.AddScoped<SlackAPIServices>();
 
 // Add the PushService as a Scoped service
-builder.Services.AddScoped<IPushService, PushService>();
+builder.Services.AddScoped<PushService>();
 
 // Add the Database connection as a Scoped service
 builder.Services.AddDbContext<DatabaseService>(opt =>

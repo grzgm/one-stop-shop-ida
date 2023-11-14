@@ -15,31 +15,23 @@ public class Notification
 
     [JsonProperty("title")] public string Title { get; set; } = "Push Demo";
 
-    // [JsonProperty("lang")]
-    // public string Lang { get; set; } = "en";
+    [JsonProperty("lang")] public string? Lang { get; set; } = "en";
 
     [JsonProperty("body")] public string Body { get; set; }
-    //
-    // [JsonProperty("tag")]
-    // public string Tag { get; set; }
-    //
-    // [JsonProperty("image")]
-    // public string Image { get; set; }
-    //
-    // [JsonProperty("icon")]
-    // public string Icon { get; set; }
-    //
-    // [JsonProperty("badge")]
-    // public string Badge { get; set; }
-    //
-    // [JsonProperty("timestamp")]
-    // public DateTime Timestamp { get; set; } = DateTime.Now;
-    //
-    // [JsonProperty("requireInteraction")]
-    // public bool RequireInteraction { get; set; } = false;
-    //
-    // [JsonProperty("actions")]
-    // public List<NotificationAction> Actions { get; set; } = new List<NotificationAction>();
+
+    [JsonProperty("tag")] public string? Tag { get; set; }
+
+    [JsonProperty("image")] public string? Image { get; set; }
+
+    [JsonProperty("icon")] public string? Icon { get; set; }
+
+    [JsonProperty("badge")] public string? Badge { get; set; }
+
+    [JsonProperty("timestamp")] public DateTime? Timestamp { get; set; } = DateTime.Now;
+
+    [JsonProperty("requireInteraction")] public bool? RequireInteraction { get; set; } = false;
+
+    [JsonProperty("actions")] public List<NotificationAction>? Actions { get; set; } = new List<NotificationAction>();
 }
 
 public class NotificationAction

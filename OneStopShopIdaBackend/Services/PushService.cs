@@ -12,7 +12,7 @@ using PushSubscription = OneStopShopIdaBackend.Models.PushSubscription;
 
 namespace OneStopShopIdaBackend.Services;
 
-public class PushService : IPushService
+public class PushService
 {
     private readonly WebPushClient _client;
     private readonly DatabaseService _context;
