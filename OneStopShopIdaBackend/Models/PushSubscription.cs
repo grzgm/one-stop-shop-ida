@@ -18,6 +18,8 @@ public class PushSubscription
         Auth = subscription.Auth;
     }
 
+    [Required] [Key] public string P256Dh { get; set; }
+
     [Required]
     [ForeignKey(nameof(UserItem))]
     public string MicrosoftId { get; set; }
@@ -26,7 +28,6 @@ public class PushSubscription
 
     public double? ExpirationTime { get; set; }
 
-    [Required] [Key] public string P256Dh { get; set; }
 
     [Required] public string Auth { get; set; }
 
@@ -47,7 +48,6 @@ public class PushSubscriptionFrontend
     public WebPush.PushSubscription ToWebPushSubscription() =>
         new WebPush.PushSubscription(Endpoint, Keys.P256Dh, Keys.Auth);
 }
-
 
 public class Keys
 {

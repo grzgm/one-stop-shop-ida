@@ -10,18 +10,18 @@ namespace OneStopShopIdaBackend.Controllers;
 public class PushController : ControllerBase
 {
     private readonly IHostingEnvironment _env;
-    private readonly PushService _pushService;
+    private readonly DatabaseService _databaseService;
 
-    public PushController(IHostingEnvironment hostingEnvironment, PushService pushService)
+    public PushController(IHostingEnvironment hostingEnvironment, DatabaseService databaseService)
     {
         _env = hostingEnvironment;
-        _pushService = pushService;
+        _databaseService = databaseService;
     }
 
     [HttpGet, Route("vapidpublickey")]
     public ActionResult<string> GetVapidPublicKey()
     {
-        return Ok(_pushService.GetVapidPublicKey());
+        return Ok(_databaseService.GetVapidPublicKey());
     }
 
     [HttpPost("subscribe")]
@@ -38,7 +38,7 @@ public class PushController : ControllerBase
             P256Dh = model.Keys.P256Dh
         };
 
-        return await _pushService.Subscribe(subscription);
+        return await _databaseService.Subscribe(subscription);
     }
 
     [HttpPost("unsubscribe")]
@@ -52,7 +52,7 @@ public class PushController : ControllerBase
             P256Dh = model.Keys.P256Dh
         };
 
-        await _pushService.Unsubscribe(subscription);
+        await _databaseService.Unsubscribe(subscription);
 
         return subscription;
     }
@@ -65,7 +65,7 @@ public class PushController : ControllerBase
 
         if (delay != null) Thread.Sleep((int)delay);
 
-        await _pushService.Send(userId, notification);
+        await _databaseService.Send(userId, notification);
 
         return Accepted();
     }
