@@ -9,11 +9,13 @@ namespace OneStopShopIdaBackend.Controllers;
 [ApiController]
 public class PushController : ControllerBase
 {
+    private readonly ILogger<PushController> _logger;
     private readonly IHostingEnvironment _env;
     private readonly DatabaseService _databaseService;
 
-    public PushController(IHostingEnvironment hostingEnvironment, DatabaseService databaseService)
+    public PushController(ILogger<PushController> logger, IHostingEnvironment hostingEnvironment, DatabaseService databaseService)
     {
+        _logger = logger;
         _env = hostingEnvironment;
         _databaseService = databaseService;
     }
@@ -22,6 +24,30 @@ public class PushController : ControllerBase
     public ActionResult<string> GetVapidPublicKey()
     {
         return Ok(_databaseService.GetVapidPublicKey());
+    }
+
+    [HttpGet("is-subscribed")]
+    public async Task<ActionResult<bool>> GetIsSubscribe()
+    {
+        try
+        {
+            return await _databaseService.IsSubscribe(HttpContext.Session.GetString("microsoftId"));
+        }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return Conflict();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            _logger.LogError($"Error calling external API: {ex.Message}");
+            return NotFound();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error: {ex.Message}");
+            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+        }
     }
 
     [HttpPost("subscribe")]

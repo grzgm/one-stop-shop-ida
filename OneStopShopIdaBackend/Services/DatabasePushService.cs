@@ -10,6 +10,25 @@ public partial class DatabaseService
 {
     public string GetVapidPublicKey() => _vapidDetails.PublicKey;
 
+    public async Task<bool> IsSubscribe(string microsoftId)
+    {
+
+        try
+        {
+            var subscription = await GetUserSubscription(microsoftId);
+            if (subscription == null)
+            {
+                return false;
+            }
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("---------------------------------");
+            Console.WriteLine(ex.Message);
+            throw;
+        }
+    }
     public async Task<PushSubscription> Subscribe(PushSubscription subscription)
     {
         if (await PushSubscription.AnyAsync(s => s.P256Dh == subscription.P256Dh))
