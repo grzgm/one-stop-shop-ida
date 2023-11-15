@@ -9,6 +9,7 @@ import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
 import { IActionResult } from "../../../api/Response";
 import { IsRegistered, RegisterLunchToday } from "../../../api/LunchTodayAPI";
 import { GetRegisteredDays, ILunchRecurringItem, PutLunchRecurringItem, RegisterLunchRecurring } from "../../../api/LunchRecurringAPI";
+import { PostSubscribe } from "../../../api/PushAPI";
 
 async function LunchLoader(officeName: string) {
 	const currentOfficeInformationData = officeInformationData[officeName]
@@ -26,8 +27,10 @@ async function LunchLoader(officeName: string) {
 function Lunch() {
 	const officeName = useContext(CurrentOfficeContext).currentOffice;
 	const [responseToday, setResponseToday] = useState<IActionResult<null> | null>(null)
-	const [responseRecurring, setResponseRecurring] = useState<IActionResult<undefined> | undefined>(undefined)
+	const [responseRecurringDayChange, setResponseRecurringDayChange] = useState<IActionResult<undefined> | undefined>(undefined)
+	const [responseRecurringRegister, setResponseRecurringRegister] = useState<IActionResult<undefined> | undefined>(undefined)
 	const [isRegisteredToday, setIsRegisteredToday] = useState<boolean>(true)
+	const [isPushEnabled, setIsPushEnabled] = useState<boolean>(false)
 	const [registeredDays, setRegisteredDays] = useState<ILunchRecurringItem>({
 		monday: false,
 		tuesday: false,
@@ -38,6 +41,25 @@ function Lunch() {
 	const weekDaysNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 
 	useEffect(() => {
+		if ("serviceWorker" in navigator && "PushManager" in window) {
+			navigator.serviceWorker
+				.register("/sw-push.js", { scope: "/office-details/lunch" })
+				.then((serviceWorkerRegistration) => {
+					console.info("Service worker was registered.");
+					console.info({ serviceWorkerRegistration });
+				})
+				.catch((error) => {
+					console.error(
+						"An error occurred while registering the service worker."
+					);
+					console.error(error);
+				});
+		} else {
+			console.error(
+				"Browser does not support service workers or push messages."
+			);
+		}
+
 		const IsRegisteredWrapper = async () => {
 			const isRegisteredRes = await IsRegistered();
 			if (isRegisteredRes.payload == undefined) {
@@ -53,21 +75,28 @@ function Lunch() {
 				setRegisteredDays(registeredDaysRes.payload);
 			}
 		}
+		const PostSubscribeWrapper = async () => {
+			const subscribeRes = await PostSubscribe();
+			if (subscribeRes.success !== undefined) {
+				setIsPushEnabled(subscribeRes.success);
+			}
+		}
 		IsRegisteredWrapper();
 		GetRegisteredDaysWrapper();
+		PostSubscribeWrapper();
 	}, []);
 
 	// Lunch Recurring 
-	const handleCheckboxChange = async (dayName: keyof ILunchRecurringItem) => {
+	const handleDayChange = async (dayName: keyof ILunchRecurringItem) => {
 		const updatedCheckedBoxes = { ...registeredDays };
 		updatedCheckedBoxes[dayName] = !updatedCheckedBoxes[dayName];
 		setRegisteredDays(updatedCheckedBoxes);
 		const response = await PutLunchRecurringItem(updatedCheckedBoxes);
-		setResponseRecurring(response);
+		setResponseRecurringDayChange(response);
 	};
-	const saveLunchDays = async () => {
+	const registerLunchDays = async () => {
 		const response = await RegisterLunchRecurring(officeName);
-		setResponseRecurring(response);
+		setResponseRecurringRegister(response);
 	};
 
 	// Lunch Today
@@ -95,13 +124,14 @@ function Lunch() {
 					<HeadingSmall>Register recurring</HeadingSmall>
 					<BodySmall>Information will be sent</BodySmall>
 					<BodySmall>before 12:00 on the mentioned day</BodySmall>
+					{!isPushEnabled && <BodySmall additionalClasses={["font-colour--fail"]}>For full functionality enable Push Notifications</BodySmall>}
 					<form className="lunch-main__form body--normal">
 						{Object.keys(registeredDays).map((dayName, index) => (
 							<div className="lunch-main__form__checkboxes" key={dayName}>
 								<input
 									type="checkbox"
 									checked={registeredDays[dayName as keyof ILunchRecurringItem]}
-									onChange={() => handleCheckboxChange(dayName as keyof ILunchRecurringItem)}
+									onChange={() => handleDayChange(dayName as keyof ILunchRecurringItem)}
 									id={dayName}
 								/>
 								<label key={dayName} htmlFor={dayName}>
@@ -110,8 +140,9 @@ function Lunch() {
 							</div>
 						))}
 					</form>
-					{responseRecurring && <BodySmall additionalClasses={[responseRecurring.success ? "font-colour--success" : "font-colour--fail"]}>{responseRecurring.status}</BodySmall>}
-					<Button child="Save" onClick={saveLunchDays} />
+					{responseRecurringDayChange && <BodySmall additionalClasses={[responseRecurringDayChange.success ? "font-colour--success" : "font-colour--fail"]}>{responseRecurringDayChange.status}</BodySmall>}
+					<Button child="Register" onClick={registerLunchDays} />
+					{responseRecurringRegister && <BodySmall additionalClasses={[responseRecurringRegister.success ? "font-colour--success" : "font-colour--fail"]}>{responseRecurringRegister.status}</BodySmall>}
 				</div>
 				<div className="lunch-main__today">
 					<HeadingSmall>Register for today</HeadingSmall>

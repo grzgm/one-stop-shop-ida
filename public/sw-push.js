@@ -28,5 +28,5 @@ self.addEventListener("push", (event) => {
 self.addEventListener("notificationclick", (event) => {
   // TODO
   event.notification.close();
-  event.waitUntil(self.clients.openWindow("https://web.dev"));
+  event.waitUntil(self.clients.openWindow("http://localhost:5173/office-details/lunch"));
 });
