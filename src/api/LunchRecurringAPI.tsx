@@ -51,4 +51,20 @@ async function PutLunchRecurringItem(lunchRecurringItem: ILunchRecurringItem): P
 	}
 }
 
-export { GetRegisteredDays, PutLunchRecurringItem };
+async function RegisterLunchRecurring(officeName: string): Promise<IActionResult<undefined>> {
+	try {
+		const res = await fetch(
+			`http://localhost:3002/lunch/recurring/register-for-lunch-recurring?officeName=${officeName}`,
+			{
+				method: "PUT",
+				credentials: "include", // Include credentials (cookies) in the request
+			}
+		);
+		return InspectResponseAsync(res);
+	} catch (error) {
+		console.error("Error:", error);
+		return { success: false, status: "Request could not be send." };
+	}
+}
+
+export { GetRegisteredDays, PutLunchRecurringItem, RegisterLunchRecurring };

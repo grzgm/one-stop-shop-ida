@@ -8,7 +8,7 @@ import { IsAuth } from "../../../api/MicrosoftGraphAPI";
 import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
 import { IActionResult } from "../../../api/Response";
 import { IsRegistered, RegisterLunchToday } from "../../../api/LunchTodayAPI";
-import { GetRegisteredDays, ILunchRecurringItem, PutLunchRecurringItem } from "../../../api/LunchRecurringAPI";
+import { GetRegisteredDays, ILunchRecurringItem, PutLunchRecurringItem, RegisterLunchRecurring } from "../../../api/LunchRecurringAPI";
 
 async function LunchLoader(officeName: string) {
 	const currentOfficeInformationData = officeInformationData[officeName]
@@ -58,13 +58,15 @@ function Lunch() {
 	}, []);
 
 	// Lunch Recurring 
-	const handleCheckboxChange = (dayName: keyof ILunchRecurringItem) => {
+	const handleCheckboxChange = async (dayName: keyof ILunchRecurringItem) => {
 		const updatedCheckedBoxes = { ...registeredDays };
 		updatedCheckedBoxes[dayName] = !updatedCheckedBoxes[dayName];
 		setRegisteredDays(updatedCheckedBoxes);
+		const response = await PutLunchRecurringItem(updatedCheckedBoxes);
+		setResponseRecurring(response);
 	};
 	const saveLunchDays = async () => {
-		const response = await PutLunchRecurringItem(registeredDays);
+		const response = await RegisterLunchRecurring(officeName);
 		setResponseRecurring(response);
 	};
 
