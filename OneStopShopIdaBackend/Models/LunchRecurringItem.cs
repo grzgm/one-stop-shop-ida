@@ -31,6 +31,19 @@ public class LunchRecurringItem
     public bool Thursday { get; set; }
     [Required]
     public bool Friday { get; set; }
+
+    public override string ToString()
+    {
+        var selectedDays = new List<string>();
+
+        if (Monday) selectedDays.Add("Monday");
+        if (Tuesday) selectedDays.Add("Tuesday");
+        if (Wednesday) selectedDays.Add("Wednesday");
+        if (Thursday) selectedDays.Add("Thursday");
+        if (Friday) selectedDays.Add("Friday");
+
+        return string.Join(", ", selectedDays);
+    }
 }
 
 public class LunchRecurringItemFrontend

@@ -42,6 +42,7 @@ public partial class MicrosoftGraphAPIController : ControllerBase
                 await _databaseService.PostUserItem(user);
                 await _databaseService.PostLunchTodayItem(user.MicrosoftId);
                 await _databaseService.PostLunchRecurringItem(user.MicrosoftId);
+                await _databaseService.PostLunchRecurringRegistrationItem(user.MicrosoftId);
             }
 
             // Store Access Token, Refresh Token, Microsoft Id in the session

@@ -91,6 +91,48 @@ public partial class MicrosoftGraphAPIService
         }
     }
 
+    public async Task<HttpResponseMessage> RegisterLunchRecurring(string accessToken, string message)
+    {
+        try
+        {
+            // Create E-mail
+            Email email = new()
+            {
+                Body = new Body
+                {
+                    Content = message,
+                    ContentType = "Text",
+                },
+                Subject = "Lunch Recurring",
+                ToRecipients = new List<Recipient>
+                {
+                    new Recipient
+                    {
+                        EmailAddress = new EmailAddress
+                        {
+                            Address = LunchEmailAddress,
+                        }
+                    }
+                }
+            };
+
+            var data = JsonSerializer.Serialize(new { message = email });
+
+            var content = new StringContent(data, Encoding.UTF8, "application/json");
+            // Add the Authorization header to the request
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            HttpResponseMessage response =
+                await _httpClient.PostAsync("https://graph.microsoft.com/v1.0/me/sendMail", content);
+            return response;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
+            throw;
+        }
+    }
+
     public async Task<HttpResponseMessage> CreateEvent(string accessToken, string address, string title,
         string startDate, string endDate, string description)
     {
