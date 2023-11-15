@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using OneStopShopIdaBackend.Models;
 using OneStopShopIdaBackend.Services;
 
@@ -115,7 +114,7 @@ public class LunchRecurringItemsController : ControllerBase
 
             await _microsoftGraphApiService.RegisterLunchRecurring(accessToken, RegisterRecurringMessage(officeName, $"{user.FirstName} {user.Surname}", lunchRecurringItem));
 
-            LunchRecurringRegistrationItem lunchRecurringRegistrationItem = new() { MicrosoftId = microsoftId, IsRegistered = true };
+            LunchRecurringRegistrationItem lunchRecurringRegistrationItem = new() { MicrosoftId = microsoftId, LastRegistered = DateTime.Now };
             await _databaseService.PutLunchRecurringRegistrationItem(lunchRecurringRegistrationItem);
             return NoContent();
         }

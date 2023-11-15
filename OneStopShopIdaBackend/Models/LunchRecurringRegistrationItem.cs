@@ -11,6 +11,6 @@ namespace OneStopShopIdaBackend.Models
         [Required]
         public string MicrosoftId { get; set; }
         [Required]
-        public bool IsRegistered { get; set; }
+        public DateTime LastRegistered { get; set; }
     }
 }

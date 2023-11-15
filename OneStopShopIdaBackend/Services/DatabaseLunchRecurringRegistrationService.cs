@@ -5,7 +5,7 @@ namespace OneStopShopIdaBackend.Services;
 
 public partial class DatabaseService
 {
-    public async Task<bool> GetLunchRecurringRegistrationIsRegistered(string microsoftId)
+    public async Task<DateTime> GetLunchRecurringRegistrationLastRegistered(string microsoftId)
     {
         IsDbSetNull("LunchRecurringRegistration");
 
@@ -16,7 +16,7 @@ public partial class DatabaseService
             throw new KeyNotFoundException();
         }
 
-        return lunchRecurringRegistrationItem.IsRegistered;
+        return lunchRecurringRegistrationItem.LastRegistered;
     }
 
     public async Task PutLunchRecurringRegistrationItem(LunchRecurringRegistrationItem lunchRecurringRegistrationItem)
@@ -39,7 +39,7 @@ public partial class DatabaseService
 
         LunchRecurringRegistrationItem lunchRecurringRegistrationItem = new();
         lunchRecurringRegistrationItem.MicrosoftId = microsoftId;
-        lunchRecurringRegistrationItem.IsRegistered = false;
+        lunchRecurringRegistrationItem.LastRegistered = DateTime.Now;
 
         LunchRecurringRegistration.Add(lunchRecurringRegistrationItem);
         try
@@ -59,7 +59,7 @@ public partial class DatabaseService
         }
     }
 
-    public async Task UpdateAllLunchRecurringRegistrationItems(bool isRegistered)
+    public async Task UpdateAllLunchRecurringRegistrationItems(DateTime lastRegistered)
     {
         IsDbSetNull("LunchRecurringRegistration");
 
@@ -67,7 +67,7 @@ public partial class DatabaseService
 
         foreach (var lunchRecurringRegistrationItem in lunchRecurringRegistrationItems)
         {
-            lunchRecurringRegistrationItem.IsRegistered = isRegistered;
+            lunchRecurringRegistrationItem.LastRegistered = lastRegistered;
             Entry(lunchRecurringRegistrationItem).State = EntityState.Modified;
         }
 
