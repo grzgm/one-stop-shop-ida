@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OneStopShopIdaBackend.Controllers;
 using OneStopShopIdaBackend.Models;
 using WebPush;
 using PushSubscription = OneStopShopIdaBackend.Models.PushSubscription;
@@ -7,9 +8,11 @@ namespace OneStopShopIdaBackend.Services;
 
 public partial class DatabaseService : DbContext
 {
+    private readonly ILogger<DatabaseService> _logger;
     private readonly VapidDetails _vapidDetails;
-    public DatabaseService(DbContextOptions<DatabaseService> options, IConfiguration configuration) : base(options)
+    public DatabaseService(ILogger<DatabaseService> logger, DbContextOptions<DatabaseService> options, IConfiguration configuration) : base(options)
     {
+        _logger = logger;
         var vapidSubject = configuration.GetValue<string>("Vapid:Subject");
         var vapidPublicKey = configuration.GetValue<string>("Vapid:PublicKey");
         var vapidPrivateKey = configuration.GetValue<string>("Vapid:PrivateKey");
@@ -17,6 +20,14 @@ public partial class DatabaseService : DbContext
         CheckOrGenerateVapidDetails(vapidSubject, vapidPublicKey, vapidPrivateKey);
 
         _vapidDetails = new VapidDetails(vapidSubject, vapidPublicKey, vapidPrivateKey);
+    }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<PushSubscription>()
+            .HasIndex(p => p.MicrosoftId)
+            .IsUnique();
+
+        base.OnModelCreating(modelBuilder);
     }
 
     public DbSet<UserItem> Users { get; set; } = null!;

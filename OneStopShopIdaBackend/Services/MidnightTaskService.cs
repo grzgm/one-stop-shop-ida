@@ -1,10 +1,4 @@
-﻿using Microsoft.Extensions.Hosting;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using OneStopShopIdaBackend.Controllers;
-
-namespace OneStopShopIdaBackend.Services;
+﻿namespace OneStopShopIdaBackend.Services;
 
 public class MidnightTaskService : IHostedService, IDisposable
 {

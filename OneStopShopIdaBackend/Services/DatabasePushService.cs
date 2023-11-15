@@ -9,7 +9,7 @@ namespace OneStopShopIdaBackend.Services;
 public partial class DatabaseService
 {
     public string GetVapidPublicKey() => _vapidDetails.PublicKey;
-    
+
     public async Task<PushSubscription> Subscribe(PushSubscription subscription)
     {
         if (await PushSubscription.AnyAsync(s => s.P256Dh == subscription.P256Dh))
@@ -37,10 +37,10 @@ public partial class DatabaseService
         await SaveChangesAsync();
     }
 
-    public async Task Send(string userId, Notification notification)
+    public async Task Send(string microsoftId, Notification notification)
     {
         WebPushClient webPushClient = new();
-        foreach (var subscription in await GetUserSubscriptions(userId))
+        foreach (var subscription in await GetUserSubscriptions(microsoftId))
             try
             {
                 webPushClient.SendNotification(subscription.ToWebPushSubscription(),
@@ -60,11 +60,53 @@ public partial class DatabaseService
             }
     }
 
-    public async Task Send(string userId, string text)
+    public async Task SendLunchRecurring()
     {
-        await Send(userId, new Notification(text));
+        WebPushClient webPushClient = new();
+        Notification notification = new()
+        {
+            Title = "iDA Lunch Reminder",
+            Body = "Open the App and register for lunch in next week!"
+        };
+        foreach (var user in await Users.ToListAsync())
+        {
+            try
+            {
+                var subscription = await GetUserSubscription(user.MicrosoftId);
+                if (subscription != null)
+                {
+                    webPushClient.SendNotification(subscription.ToWebPushSubscription(),
+                        JsonConvert.SerializeObject(notification), _vapidDetails);
+                }
+            }
+            catch (WebPushException ex)
+            {
+                if (ex.Message == "Subscription no longer valid")
+                {
+                    var subscription = await GetUserSubscription(user.MicrosoftId);
+                    PushSubscription.Remove(subscription);
+                    await SaveChangesAsync();
+                }
+                else
+                {
+                    // Track exception with eg. AppInsights
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
+            }
+        }
     }
 
-    private async Task<List<PushSubscription>> GetUserSubscriptions(string userId) =>
-        await PushSubscription.Where(s => s.MicrosoftId == userId).ToListAsync();
+    public async Task Send(string microsoftId, string text)
+    {
+        await Send(microsoftId, new Notification(text));
+    }
+
+    private async Task<List<PushSubscription>> GetUserSubscriptions(string microsoftId) =>
+        await PushSubscription.Where(s => s.MicrosoftId == microsoftId).ToListAsync();
+
+    private async Task<PushSubscription?> GetUserSubscription(string microsoftId) =>
+        await PushSubscription.Where(s => s.MicrosoftId == microsoftId).FirstOrDefaultAsync();
 }

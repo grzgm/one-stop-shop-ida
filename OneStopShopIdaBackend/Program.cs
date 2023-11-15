@@ -26,6 +26,9 @@ builder.Services.AddDbContext<DatabaseService>(opt =>
 // Add the DailyTaskService as a Singleton service
 builder.Services.AddSingleton<IHostedService, MidnightTaskService>();
 
+// Add the WeeklyTaskService as a Singleton service
+builder.Services.AddSingleton<IHostedService, WeeklyTaskService>();
+
 // Register HttpClient as a singleton service
 builder.Services.AddHttpClient();
 
