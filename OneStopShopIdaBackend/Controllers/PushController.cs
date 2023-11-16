@@ -53,18 +53,20 @@ public class PushController : ControllerBase
     [HttpPost("subscribe")]
     public async Task<ActionResult<PushSubscription>> Subscribe([FromBody] PushSubscriptionFrontend model)
     {
+        string microsoftId = "5e430c04-3186-4560-bdb2-6ecf691047a3";
+
         var subscription = new PushSubscription
         {
-            // MicrosoftId = Guid.NewGuid().ToString(), // You'd use your existing user id here
-            // MicrosoftId = HttpContext.Session.GetString("microsoftId"), // You'd use your existing user id here
-            MicrosoftId = "5e430c04-3186-4560-bdb2-6ecf691047a3", // You'd use your existing user id here
+            // MicrosoftId = Guid.NewGuid().ToString(),
+             MicrosoftId = microsoftId,
+            //MicrosoftId = "5e430c04-3186-4560-bdb2-6ecf691047a3",
             Endpoint = model.Endpoint,
             ExpirationTime = model.ExpirationTime,
             Auth = model.Keys.Auth,
             P256Dh = model.Keys.P256Dh
         };
 
-        return await _databaseService.Subscribe(subscription);
+        return await _databaseService.Subscribe(subscription, microsoftId);
     }
 
     [HttpPost("unsubscribe")]

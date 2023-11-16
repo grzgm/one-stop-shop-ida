@@ -28,10 +28,16 @@ public partial class DatabaseService
             throw;
         }
     }
-    public async Task<PushSubscription> Subscribe(PushSubscription subscription)
+    public async Task<PushSubscription> Subscribe(PushSubscription subscription, string microsoftId)
     {
         if (await PushSubscription.AnyAsync(s => s.P256Dh == subscription.P256Dh))
             return await PushSubscription.FindAsync(subscription.P256Dh);
+
+        var existingSubscription = await GetUserSubscription(microsoftId);
+        if (existingSubscription != null)
+        {
+            PushSubscription.Remove(existingSubscription);
+        }
 
         await PushSubscription.AddAsync(subscription);
         try
