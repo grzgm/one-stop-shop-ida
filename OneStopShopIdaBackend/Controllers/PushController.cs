@@ -57,9 +57,7 @@ public class PushController : ControllerBase
 
         var subscription = new PushSubscription
         {
-            // MicrosoftId = Guid.NewGuid().ToString(),
-             MicrosoftId = microsoftId,
-            //MicrosoftId = "5e430c04-3186-4560-bdb2-6ecf691047a3",
+            MicrosoftId = microsoftId,
             Endpoint = model.Endpoint,
             ExpirationTime = model.ExpirationTime,
             Auth = model.Keys.Auth,
