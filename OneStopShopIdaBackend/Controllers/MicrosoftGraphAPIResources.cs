@@ -84,24 +84,24 @@ public partial class MicrosoftGraphAPIController : ControllerBase
         }
     }
 
-    [HttpGet("resources/me")]
-    public async Task<UserItem> GetMe(string accessToken)
-    {
-        try
-        {
-            UserItem user = await _microsoftGraphApiService.GetMe(accessToken);
+    //[HttpGet("resources/me")]
+    //public async Task<UserItem> GetMe(string accessToken)
+    //{
+    //    try
+    //    {
+    //        UserItem user = await _microsoftGraphApiService.GetMe(accessToken);
 
-            return user;
-        }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
-            throw;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"{this.GetType().Name}\nError: {ex.Message}");
-            throw;
-        }
-    }
+    //        return user;
+    //    }
+    //    catch (HttpRequestException ex)
+    //    {
+    //        _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
+    //        throw;
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        _logger.LogError($"{this.GetType().Name}\nError: {ex.Message}");
+    //        throw;
+    //    }
+    //}
 }

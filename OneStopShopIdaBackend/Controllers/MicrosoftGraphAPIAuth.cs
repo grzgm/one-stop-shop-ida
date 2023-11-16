@@ -35,7 +35,7 @@ public partial class MicrosoftGraphAPIController : ControllerBase
             // Access the access_token property
             (string accessToken, string refreshToken) = await _microsoftGraphApiService.CallAuthCallback(code, state);
 
-            UserItem user = await GetMe(accessToken);
+            UserItem user = await _microsoftGraphApiService.GetMe(accessToken);
 
             if (!_databaseService.UserItemExists(user.MicrosoftId))
             {
