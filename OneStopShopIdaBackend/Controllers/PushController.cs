@@ -53,7 +53,7 @@ public class PushController : ControllerBase
     [HttpPost("subscribe")]
     public async Task<ActionResult<PushSubscription>> Subscribe([FromBody] PushSubscriptionFrontend model)
     {
-        string microsoftId = "5e430c04-3186-4560-bdb2-6ecf691047a3";
+        string microsoftId = HttpContext.Session.GetString("microsoftId");
 
         var subscription = new PushSubscription
         {
