@@ -9,20 +9,21 @@ namespace OneStopShopIdaBackend.Controllers;
 public class LunchRecurringItemsController : ControllerBase
 {
     private readonly ILogger<LunchRecurringItemsController> _logger;
-    private readonly DatabaseService _databaseService;
-    private readonly MicrosoftGraphApiService _microsoftGraphApiService;
-    private static string RegisterRecurringMessage(string officeName, string name, LunchRecurringItem lunchRecurringItem) =>
-    "Hi,\n" +
-    $"I would like to register for lunch at {officeName} Office on {lunchRecurringItem}.\n" +
-    "Kind Regards,\n" +
-    $"{name}";
+    private readonly IDatabaseService _databaseService;
+    private readonly IMicrosoftGraphApiService _microsoftGraphApiService;
 
-    public LunchRecurringItemsController(ILogger<LunchRecurringItemsController> logger, DatabaseService databaseService, MicrosoftGraphApiService microsoftGraphApiService)
+    public LunchRecurringItemsController(ILogger<LunchRecurringItemsController> logger, IDatabaseService databaseService, IMicrosoftGraphApiService microsoftGraphApiService)
     {
         _logger = logger;
         _databaseService = databaseService;
         _microsoftGraphApiService = microsoftGraphApiService;
     }
+
+    private static string RegisterRecurringMessage(string officeName, string name, LunchRecurringItem lunchRecurringItem) =>
+    "Hi,\n" +
+    $"I would like to register for lunch at {officeName} Office on {lunchRecurringItem}.\n" +
+    "Kind Regards,\n" +
+    $"{name}";
 
     [HttpGet("get-registered-days")]
     public async Task<ActionResult<LunchRecurringItemFrontend>> GetRegisteredDays()

@@ -8,13 +8,13 @@ namespace OneStopShopIdaBackend.Controllers;
 public partial class MicrosoftGraphApiController : ControllerBase
 {
     private readonly ILogger<MicrosoftGraphApiController> _logger;
-    private readonly MicrosoftGraphApiService _microsoftGraphApiService;
-    private readonly DatabaseService _databaseService;
+    private readonly IMicrosoftGraphApiService _microsoftGraphApiService;
+    private readonly IDatabaseService _databaseService;
 
     private const string FrontendUri = "http://localhost:5173";
 
     public MicrosoftGraphApiController(ILogger<MicrosoftGraphApiController> logger,
-        MicrosoftGraphApiService microsoftGraphApiService, DatabaseService databaseService)
+        IMicrosoftGraphApiService microsoftGraphApiService, IDatabaseService databaseService)
     {
         _logger = logger;
         _microsoftGraphApiService = microsoftGraphApiService;

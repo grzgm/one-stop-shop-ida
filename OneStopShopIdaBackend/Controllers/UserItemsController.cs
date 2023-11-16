@@ -10,9 +10,9 @@
 //public class UserItemsController : ControllerBase
 //{
 //    private readonly ILogger<UserItemsController> _logger;
-//    private readonly DatabaseService _databaseService;
+//    private readonly IDatabaseService _databaseService;
 
-//    public UserItemsController(ILogger<UserItemsController> logger, DatabaseService databaseService)
+//    public UserItemsController(ILogger<UserItemsController> logger, IDatabaseService databaseService)
 //    {
 //        _logger = logger;
 //        _databaseService = databaseService;
@@ -65,7 +65,7 @@
 //            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
 //        }
 //    }
-    
+
 //    [HttpGet("user-exists")]
 //    public async Task<bool> GetIsUserInDatabase(string microsoftId)
 //    {

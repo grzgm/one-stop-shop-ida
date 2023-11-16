@@ -6,7 +6,7 @@ using PushSubscription = OneStopShopIdaBackend.Models.PushSubscription;
 
 namespace OneStopShopIdaBackend.Services;
 
-public partial class DatabaseService : DbContext
+public partial class DatabaseService : DbContext, IDatabaseService
 {
     private readonly ILogger<DatabaseService> _logger;
     private readonly VapidDetails _vapidDetails;

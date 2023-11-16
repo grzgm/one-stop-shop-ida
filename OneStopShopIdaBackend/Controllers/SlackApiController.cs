@@ -8,11 +8,11 @@ namespace OneStopShopIdaBackend.Controllers
     public partial class SlackApiController : ControllerBase
     {
         private readonly ILogger<SlackApiController> _logger;
-        private readonly SlackApiServices _slackApiServices;
+        private readonly ISlackApiServices _slackApiServices;
 
         private const string FrontendUri = "http://localhost:5173";
 
-        public SlackApiController(ILogger<SlackApiController> logger, SlackApiServices slackApiServices)
+        public SlackApiController(ILogger<SlackApiController> logger, ISlackApiServices slackApiServices)
         {
             _logger = logger;
             _slackApiServices = slackApiServices;

@@ -1,7 +1,7 @@
 ﻿using OneStopShopIdaBackend.Controllers;
 
 namespace OneStopShopIdaBackend.Services;
-public partial class SlackApiServices
+public partial class SlackApiServices : ISlackApiServices
 {
     private readonly ILogger<SlackApiController> _logger;
     private readonly HttpClient _httpClient;

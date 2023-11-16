@@ -11,21 +11,20 @@ public class LunchTodayItemsController : ControllerBase
 {
     private readonly ILogger<LunchTodayItemsController> _logger;
     private readonly MicrosoftGraphApiService _microsoftGraphApiService;
-    private readonly DatabaseService _databaseService;
-
-    private static string RegisterTodayMessage(string officeName, string name) =>
-        "Hi,\n" +
-        $"I would like to register for today's lunch at {officeName} Office.\n" +
-        "Kind Regards,\n" +
-        $"{name}";
+    private readonly IDatabaseService _databaseService;
 
     public LunchTodayItemsController(ILogger<LunchTodayItemsController> logger,
-        MicrosoftGraphApiService microsoftGraphApiService, DatabaseService databaseService)
+        MicrosoftGraphApiService microsoftGraphApiService, IDatabaseService databaseService)
     {
         _logger = logger;
         _databaseService = databaseService;
         _microsoftGraphApiService = microsoftGraphApiService;
     }
+    private static string RegisterTodayMessage(string officeName, string name) =>
+        "Hi,\n" +
+        $"I would like to register for today's lunch at {officeName} Office.\n" +
+        "Kind Regards,\n" +
+        $"{name}";
 
     [HttpGet("is-registered")]
     public async Task<ActionResult<bool>> GetLunchTodayIsRegistered()

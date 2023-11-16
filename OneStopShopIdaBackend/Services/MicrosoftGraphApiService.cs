@@ -1,6 +1,6 @@
 ﻿namespace OneStopShopIdaBackend.Services;
 
-public partial class MicrosoftGraphApiService
+public partial class MicrosoftGraphApiService : IMicrosoftGraphApiService
 {
     private readonly ILogger<MicrosoftGraphApiService> _logger;
     private readonly HttpClient _httpClient;

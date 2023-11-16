@@ -11,9 +11,9 @@ public class PushController : ControllerBase
 {
     private readonly ILogger<PushController> _logger;
     private readonly IHostingEnvironment _env;
-    private readonly DatabaseService _databaseService;
+    private readonly IDatabaseService _databaseService;
 
-    public PushController(ILogger<PushController> logger, IHostingEnvironment hostingEnvironment, DatabaseService databaseService)
+    public PushController(ILogger<PushController> logger, IHostingEnvironment hostingEnvironment, IDatabaseService databaseService)
     {
         _logger = logger;
         _env = hostingEnvironment;

@@ -14,13 +14,13 @@ builder.Services.AddControllers();
 builder.Services.AddSingleton<CodeChallengeGeneratorService>();
 
 // Add the MicrosoftGraphApiService as a Scoped service
-builder.Services.AddScoped<MicrosoftGraphApiService>();
+builder.Services.AddScoped<IMicrosoftGraphApiService, MicrosoftGraphApiService>();
 
 // Add the SlackApiServices as a Scoped service
-builder.Services.AddScoped<SlackApiServices>();
+builder.Services.AddScoped<ISlackApiServices, SlackApiServices>();
 
 // Add the Database connection as a Scoped service
-builder.Services.AddDbContext<DatabaseService>(opt =>
+builder.Services.AddDbContext<IDatabaseService, DatabaseService>(opt =>
     opt.UseMySQL(builder.Configuration["ConnectionStrings:MySqlConnection"]));
 
 // Add the DailyTaskService as a Singleton service
