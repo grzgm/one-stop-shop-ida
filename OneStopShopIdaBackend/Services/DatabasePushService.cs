@@ -24,7 +24,6 @@ public partial class DatabaseService
         }
         catch (Exception ex)
         {
-            Console.WriteLine("---------------------------------");
             Console.WriteLine(ex.Message);
             throw;
         }
@@ -41,7 +40,6 @@ public partial class DatabaseService
         }
         catch (Exception ex)
         {
-            Console.WriteLine("---------------------------------");
             Console.WriteLine(ex.Message);
         }
 
@@ -56,43 +54,42 @@ public partial class DatabaseService
         await SaveChangesAsync();
     }
 
-    public async Task Send(string microsoftId, Notification notification)
-    {
-        WebPushClient webPushClient = new();
-        foreach (var subscription in await GetUserSubscriptions(microsoftId))
-            try
-            {
-                webPushClient.SendNotification(subscription.ToWebPushSubscription(),
-                    JsonConvert.SerializeObject(notification), _vapidDetails);
-            }
-            catch (WebPushException e)
-            {
-                if (e.Message == "Subscription no longer valid")
-                {
-                    PushSubscription.Remove(subscription);
-                    await SaveChangesAsync();
-                }
-                else
-                {
-                    // Track exception with eg. AppInsights
-                }
-            }
-    }
+    //public async Task Send(string microsoftId, Notification notification)
+    //{
+    //    WebPushClient webPushClient = new();
+    //    foreach (var subscription in await GetUserSubscriptions(microsoftId))
+    //        try
+    //        {
+    //            webPushClient.SendNotification(subscription.ToWebPushSubscription(),
+    //                JsonConvert.SerializeObject(notification), _vapidDetails);
+    //        }
+    //        catch (WebPushException e)
+    //        {
+    //            if (e.Message == "Subscription no longer valid")
+    //            {
+    //                PushSubscription.Remove(subscription);
+    //                await SaveChangesAsync();
+    //            }
+    //            else
+    //            {
+    //                // Track exception with eg. AppInsights
+    //            }
+    //        }
+    //}
 
-    public async Task SendLunchRecurring()
+    //public async Task Send(string microsoftId, string text)
+    //{
+    //    await Send(microsoftId, new Notification(text));
+    //}
+
+    public async Task SendNotificationsToUsers(Notification notification, List<UserItem> userItems)
     {
         WebPushClient webPushClient = new();
-        Notification notification = new()
-        {
-            Title = "iDA Lunch Reminder",
-            Body = "Open the App and register for lunch in next week!",
-            Actions = new List<NotificationAction>() { new NotificationAction() { Action = "register", Title = "register" } }
-        };
-        foreach (var user in await Users.ToListAsync())
+        foreach (var userItem in userItems)
         {
             try
             {
-                var subscription = await GetUserSubscription(user.MicrosoftId);
+                var subscription = await GetUserSubscription(userItem.MicrosoftId);
                 if (subscription != null)
                 {
                     webPushClient.SendNotification(subscription.ToWebPushSubscription(),
@@ -103,13 +100,9 @@ public partial class DatabaseService
             {
                 if (ex.Message == "Subscription no longer valid")
                 {
-                    var subscription = await GetUserSubscription(user.MicrosoftId);
+                    var subscription = await GetUserSubscription(userItem.MicrosoftId);
                     PushSubscription.Remove(subscription);
                     await SaveChangesAsync();
-                }
-                else
-                {
-                    // Track exception with eg. AppInsights
                 }
             }
             catch (Exception ex)
@@ -117,11 +110,6 @@ public partial class DatabaseService
                 _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
             }
         }
-    }
-
-    public async Task Send(string microsoftId, string text)
-    {
-        await Send(microsoftId, new Notification(text));
     }
 
     private async Task<List<PushSubscription>> GetUserSubscriptions(string microsoftId) =>

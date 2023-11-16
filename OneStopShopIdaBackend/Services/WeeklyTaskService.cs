@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OneStopShopIdaBackend.Models;
+using System;
 
 namespace OneStopShopIdaBackend.Services;
 
@@ -29,12 +30,19 @@ public class WeeklyTaskService : IHostedService, IDisposable
 
     private async void DoWork(object state)
     {
+        Notification notification = new()
+        {
+            Title = "iDA Lunch Reminder",
+            Body = "Open the App and register for lunch in next week!",
+            Actions = new List<NotificationAction>() { new NotificationAction() { Action = "register", Title = "register" } }
+        };
+
         using (var scope = _serviceProvider.CreateScope())
         {
-            var scopedProcessingService = scope.ServiceProvider.GetRequiredService<DatabaseService>();
-            await scopedProcessingService.SendLunchRecurring();
+            var _databaseService = scope.ServiceProvider.GetRequiredService<DatabaseService>();
+            List<UserItem> userItems = (await _databaseService.GetUserItems()).ToList();
+            await _databaseService.SendNotificationsToUsers(notification, userItems);
         }
-        Console.WriteLine("--------------------------------------------");
     }
 
     public Task StopAsync(CancellationToken cancellationToken)

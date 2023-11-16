@@ -20,11 +20,11 @@ public class PushController : ControllerBase
         _databaseService = databaseService;
     }
 
-    [HttpGet, Route("vapidpublickey")]
-    public ActionResult<string> GetVapidPublicKey()
-    {
-        return Ok(_databaseService.GetVapidPublicKey());
-    }
+    //[HttpGet, Route("vapidpublickey")]
+    //public ActionResult<string> GetVapidPublicKey()
+    //{
+    //    return Ok(_databaseService.GetVapidPublicKey());
+    //}
 
     [HttpGet("is-subscribed")]
     public async Task<ActionResult<bool>> GetIsSubscribe()
@@ -83,16 +83,16 @@ public class PushController : ControllerBase
         return subscription;
     }
 
-    [HttpPost("send/{userId}")]
-    public async Task<IActionResult> Send([FromRoute] string userId, [FromBody] Notification notification,
-        [FromQuery] int? delay)
-    {
-        if (!_env.IsDevelopment()) return Forbid();
+    //[HttpPost("send/{userId}")]
+    //public async Task<IActionResult> Send([FromRoute] string userId, [FromBody] Notification notification,
+    //    [FromQuery] int? delay)
+    //{
+    //    if (!_env.IsDevelopment()) return Forbid();
 
-        if (delay != null) Thread.Sleep((int)delay);
+    //    if (delay != null) Thread.Sleep((int)delay);
 
-        await _databaseService.Send(userId, notification);
+    //    await _databaseService.Send(userId, notification);
 
-        return Accepted();
-    }
+    //    return Accepted();
+    //}
 }
