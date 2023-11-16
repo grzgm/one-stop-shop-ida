@@ -127,5 +127,5 @@ public partial class DatabaseService
         await PushSubscription.Where(s => s.MicrosoftId == microsoftId).ToListAsync();
 
     private async Task<PushSubscription?> GetUserSubscription(string microsoftId) =>
-        await PushSubscription.Where(s => s.MicrosoftId == microsoftId).FirstOrDefaultAsync();
+        await PushSubscription.FirstOrDefaultAsync(s => s.MicrosoftId == microsoftId);
 }

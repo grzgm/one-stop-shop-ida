@@ -49,7 +49,7 @@ public class WeeklyTaskService : IHostedService, IDisposable
     private static DateTime GetNextFriday()
     {
         var day = DayOfWeek.Friday;
-         var date = DateTime.Now;
+        var date = DateTime.Now;
         // The (... + 7) % 7 ensures we end up with a value in the range [0, 6]
         int daysToAdd = ((int)day - (int)date.DayOfWeek + 7) % 7;
 

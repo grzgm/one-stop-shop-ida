@@ -13,7 +13,7 @@ public class LunchTodayItemsController : ControllerBase
     private readonly MicrosoftGraphAPIService _microsoftGraphApiService;
     private readonly DatabaseService _databaseService;
 
-    private static string RegisterTodayMessage (string officeName, string name) =>
+    private static string RegisterTodayMessage(string officeName, string name) =>
         "Hi,\n" +
         $"I would like to register for today's lunch at {officeName} Office.\n" +
         "Kind Regards,\n" +
@@ -59,7 +59,7 @@ public class LunchTodayItemsController : ControllerBase
             var user = await _microsoftGraphApiService.GetMe(HttpContext.Session.GetString("accessToken"));
             var response = await
                 _microsoftGraphApiService.RegisterLunchToday(HttpContext.Session.GetString("accessToken"),
-                    HttpContext.Session.GetString("microsoftId"), RegisterTodayMessage(officeName,  $"{user.FirstName} {user.Surname}"));
+                    HttpContext.Session.GetString("microsoftId"), RegisterTodayMessage(officeName, $"{user.FirstName} {user.Surname}"));
 
             if (response.IsSuccessStatusCode)
             {
