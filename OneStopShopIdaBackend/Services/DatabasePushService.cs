@@ -85,7 +85,8 @@ public partial class DatabaseService
         Notification notification = new()
         {
             Title = "iDA Lunch Reminder",
-            Body = "Open the App and register for lunch in next week!"
+            Body = "Open the App and register for lunch in next week!",
+            Actions = new List<NotificationAction>() { new NotificationAction() { Action = "register", Title = "register" } }
         };
         foreach (var user in await Users.ToListAsync())
         {
