@@ -10,7 +10,7 @@ namespace OneStopShopIdaBackend.Controllers;
 public class LunchTodayItemsController : ControllerBase
 {
     private readonly ILogger<LunchTodayItemsController> _logger;
-    private readonly MicrosoftGraphAPIService _microsoftGraphApiService;
+    private readonly MicrosoftGraphApiService _microsoftGraphApiService;
     private readonly DatabaseService _databaseService;
 
     private static string RegisterTodayMessage(string officeName, string name) =>
@@ -20,7 +20,7 @@ public class LunchTodayItemsController : ControllerBase
         $"{name}";
 
     public LunchTodayItemsController(ILogger<LunchTodayItemsController> logger,
-        MicrosoftGraphAPIService microsoftGraphApiService, DatabaseService databaseService)
+        MicrosoftGraphApiService microsoftGraphApiService, DatabaseService databaseService)
     {
         _logger = logger;
         _databaseService = databaseService;

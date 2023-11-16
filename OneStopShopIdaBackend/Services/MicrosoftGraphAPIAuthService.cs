@@ -2,7 +2,7 @@
 
 namespace OneStopShopIdaBackend.Services;
 
-public partial class MicrosoftGraphAPIService
+public partial class MicrosoftGraphApiService
 {
     // OAuth Step 1: Redirect users to microsoft's authorization URL
     public string GenerateMicrosoftGraphAPIAuthUrl(string route)

@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace OneStopShopIdaBackend.Services;
 
-public partial class MicrosoftGraphAPIService
+public partial class MicrosoftGraphApiService
 {
     public async Task<HttpResponseMessage> SendEmail(string accessToken, string message, string address)
     {

@@ -1,8 +1,8 @@
 ﻿namespace OneStopShopIdaBackend.Services;
 
-public partial class MicrosoftGraphAPIService
+public partial class MicrosoftGraphApiService
 {
-    private readonly ILogger<MicrosoftGraphAPIService> _logger;
+    private readonly ILogger<MicrosoftGraphApiService> _logger;
     private readonly HttpClient _httpClient;
     private readonly CodeChallengeGeneratorService _codeChallengeGeneratorService;
 
@@ -14,7 +14,7 @@ public partial class MicrosoftGraphAPIService
 
     private const string RedirectUri = "http://localhost:3002/microsoft/auth/callback";
 
-    public MicrosoftGraphAPIService(ILogger<MicrosoftGraphAPIService> logger, HttpClient httpClient,
+    public MicrosoftGraphApiService(ILogger<MicrosoftGraphApiService> logger, HttpClient httpClient,
         CodeChallengeGeneratorService codeChallengeGeneratorService)
     {
         _logger = logger;

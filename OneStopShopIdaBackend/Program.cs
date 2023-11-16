@@ -13,11 +13,11 @@ builder.Services.AddControllers();
 // Add the CodeChallengeGeneratorService as a singleton service
 builder.Services.AddSingleton<CodeChallengeGeneratorService>();
 
-// Add the MicrosoftGraphAPIService as a Scoped service
-builder.Services.AddScoped<MicrosoftGraphAPIService>();
+// Add the MicrosoftGraphApiService as a Scoped service
+builder.Services.AddScoped<MicrosoftGraphApiService>();
 
-// Add the SlackAPIServices as a Scoped service
-builder.Services.AddScoped<SlackAPIServices>();
+// Add the SlackApiServices as a Scoped service
+builder.Services.AddScoped<SlackApiServices>();
 
 // Add the Database connection as a Scoped service
 builder.Services.AddDbContext<DatabaseService>(opt =>

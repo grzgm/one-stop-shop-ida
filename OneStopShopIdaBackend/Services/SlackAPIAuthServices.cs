@@ -1,5 +1,5 @@
 ﻿namespace OneStopShopIdaBackend.Services;
-public partial class SlackAPIServices
+public partial class SlackApiServices
 {
     public string GenerateSlackAPIAuthUrl(string route)
     {

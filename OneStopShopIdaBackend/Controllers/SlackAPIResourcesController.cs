@@ -2,7 +2,7 @@
 
 namespace OneStopShopIdaBackend.Controllers
 {
-    public partial class SlackAPIController : ControllerBase
+    public partial class SlackApiController : ControllerBase
     {
         // OAuth Step 1: Redirect users to Slack's authorization URL
         [HttpPost("send-message")]
@@ -10,7 +10,7 @@ namespace OneStopShopIdaBackend.Controllers
         {
             try
             {
-                using (var response = await _slackAPIServices.SendMessage(HttpContext.Session.GetString("slackAccessToken"), message, channel))
+                using (var response = await _slackApiServices.SendMessage(HttpContext.Session.GetString("slackAccessToken"), message, channel))
                 {
                     return StatusCode((int)response.StatusCode);
                 }
@@ -28,7 +28,7 @@ namespace OneStopShopIdaBackend.Controllers
         {
             try
             {
-                using (var response = await _slackAPIServices.SetStatus(HttpContext.Session.GetString("slackAccessToken"), text, emoji, expiration))
+                using (var response = await _slackApiServices.SetStatus(HttpContext.Session.GetString("slackAccessToken"), text, emoji, expiration))
                 {
                     return StatusCode((int)response.StatusCode);
                 }

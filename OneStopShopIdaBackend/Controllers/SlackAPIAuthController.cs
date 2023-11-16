@@ -2,7 +2,7 @@
 using System.Text.Json;
 
 namespace OneStopShopIdaBackend.Controllers;
-public partial class SlackAPIController : ControllerBase
+public partial class SlackApiController : ControllerBase
 {
     // OAuth Step 1: Redirect users to Slack's authorization URL
     [HttpGet("auth")]
@@ -10,7 +10,7 @@ public partial class SlackAPIController : ControllerBase
     {
         try
         {
-            return Redirect(_slackAPIServices.GenerateSlackAPIAuthUrl(route));
+            return Redirect(_slackApiServices.GenerateSlackAPIAuthUrl(route));
         }
         catch (HttpRequestException ex)
         {
@@ -31,7 +31,7 @@ public partial class SlackAPIController : ControllerBase
         try
         {
             // Access the access_token property
-            string slackAccessToken = await _slackAPIServices.CallAuthCallback(code, state);
+            string slackAccessToken = await _slackApiServices.CallAuthCallback(code, state);
 
             // Store accessToken and refreshToken in the session
             HttpContext.Session.SetString("slackAccessToken", slackAccessToken);

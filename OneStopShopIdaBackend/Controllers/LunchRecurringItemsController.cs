@@ -10,14 +10,14 @@ public class LunchRecurringItemsController : ControllerBase
 {
     private readonly ILogger<LunchRecurringItemsController> _logger;
     private readonly DatabaseService _databaseService;
-    private readonly MicrosoftGraphAPIService _microsoftGraphApiService;
+    private readonly MicrosoftGraphApiService _microsoftGraphApiService;
     private static string RegisterRecurringMessage(string officeName, string name, LunchRecurringItem lunchRecurringItem) =>
     "Hi,\n" +
     $"I would like to register for lunch at {officeName} Office on {lunchRecurringItem}.\n" +
     "Kind Regards,\n" +
     $"{name}";
 
-    public LunchRecurringItemsController(ILogger<LunchRecurringItemsController> logger, DatabaseService databaseService, MicrosoftGraphAPIService microsoftGraphApiService)
+    public LunchRecurringItemsController(ILogger<LunchRecurringItemsController> logger, DatabaseService databaseService, MicrosoftGraphApiService microsoftGraphApiService)
     {
         _logger = logger;
         _databaseService = databaseService;

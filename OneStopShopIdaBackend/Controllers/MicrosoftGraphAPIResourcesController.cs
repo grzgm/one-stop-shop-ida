@@ -3,7 +3,7 @@ using OneStopShopIdaBackend.Models;
 
 namespace OneStopShopIdaBackend.Controllers;
 
-public partial class MicrosoftGraphAPIController : ControllerBase
+public partial class MicrosoftGraphApiController : ControllerBase
 {
     [HttpPost("resources/send-email")]
     public async Task<IActionResult> PostSendEmail([FromQuery] string message, [FromQuery] string address)

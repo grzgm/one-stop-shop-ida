@@ -2,7 +2,7 @@
 using System.Text.Json;
 
 namespace OneStopShopIdaBackend.Services;
-public partial class SlackAPIServices
+public partial class SlackApiServices
 {
     public async Task<HttpResponseMessage> SendMessage(string slackAccessToken, string message, string channel)
     {

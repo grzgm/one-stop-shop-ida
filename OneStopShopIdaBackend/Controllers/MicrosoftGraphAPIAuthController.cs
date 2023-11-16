@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace OneStopShopIdaBackend.Controllers;
 
-public partial class MicrosoftGraphAPIController : ControllerBase
+public partial class MicrosoftGraphApiController : ControllerBase
 {
     // OAuth Step 1: Redirect users to microsoft's authorization URL
     [HttpGet("auth")]
