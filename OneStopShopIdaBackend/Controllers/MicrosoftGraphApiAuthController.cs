@@ -40,15 +40,38 @@ public partial class MicrosoftGraphApiController : ControllerBase
             if (!_databaseService.UserItemExists(user.MicrosoftId))
             {
                 await _databaseService.PostUserItem(user);
-                await _databaseService.PostLunchTodayItem(user.MicrosoftId);
-                await _databaseService.PostLunchRecurringItem(user.MicrosoftId);
-                await _databaseService.PostLunchRecurringRegistrationItem(user.MicrosoftId);
+
+                LunchTodayItem lunchTodayItem = new LunchTodayItem()
+                {
+                    MicrosoftId = user.MicrosoftId,
+                    IsRegistered = false
+                };
+                await _databaseService.PostLunchTodayItem(lunchTodayItem);
+
+                LunchRecurringItem lunchRecurringItem = new()
+                {
+                    MicrosoftId = user.MicrosoftId,
+                    Monday = false,
+                    Tuesday = false,
+                    Wednesday = false,
+                    Thursday = false,
+                    Friday = false,
+                };
+                await _databaseService.PostLunchRecurringItem(lunchRecurringItem);
+
+                LunchRecurringRegistrationItem lunchRecurringRegistrationItem = new()
+                {
+                    MicrosoftId = user.MicrosoftId,
+                    LastRegistered = DateTime.Now
+                };
+                await _databaseService.PostLunchRecurringRegistrationItem(lunchRecurringRegistrationItem);
             }
 
             // Store Access Token, Refresh Token, Microsoft Id in the session
             HttpContext.Session.SetString("accessToken", accessToken);
             HttpContext.Session.SetString("refreshToken", refreshToken);
             HttpContext.Session.SetString("microsoftId", user.MicrosoftId);
+            var test = HttpContext.Session.GetString("microsoftId");
 
             return Redirect(FrontendUri + state);
         }

@@ -33,13 +33,9 @@ public partial class DatabaseService
         await SaveChangesAsync();
     }
 
-    public async Task PostLunchTodayItem(string microsoftId)
+    public async Task PostLunchTodayItem(LunchTodayItem lunchTodayItem)
     {
         IsDbSetNull("LunchToday");
-
-        LunchTodayItem lunchTodayItem = new();
-        lunchTodayItem.MicrosoftId = microsoftId;
-        lunchTodayItem.IsRegistered = false;
 
         LunchToday.Add(lunchTodayItem);
         try

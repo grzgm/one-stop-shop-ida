@@ -20,9 +20,9 @@ namespace OneStopShopIdaBackend.Services
         Task<IEnumerable<UserItem>> GetUserItems();
         string GetVapidPublicKey();
         Task<bool> IsSubscribe(string microsoftId);
-        Task PostLunchRecurringItem(string microsoftId);
-        Task PostLunchRecurringRegistrationItem(string microsoftId);
-        Task PostLunchTodayItem(string microsoftId);
+        Task PostLunchRecurringItem(LunchRecurringItem lunchRecurringItem);
+        Task PostLunchRecurringRegistrationItem(LunchRecurringRegistrationItem lunchRecurringRegistrationItem);
+        Task PostLunchTodayItem(LunchTodayItem lunchTodayItem);
         Task PostUserItem(UserItem userItem);
         Task PutLunchRecurringItem(LunchRecurringItem lunchRecurringItem);
         Task PutLunchRecurringRegistrationItem(LunchRecurringRegistrationItem lunchRecurringRegistrationItem);

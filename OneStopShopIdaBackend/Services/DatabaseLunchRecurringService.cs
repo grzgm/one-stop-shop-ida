@@ -33,19 +33,9 @@ public partial class DatabaseService
         await SaveChangesAsync();
     }
 
-    public async Task PostLunchRecurringItem(string microsoftId)
+    public async Task PostLunchRecurringItem(LunchRecurringItem lunchRecurringItem)
     {
         IsDbSetNull("LunchRecurring");
-
-        LunchRecurringItem lunchRecurringItem = new()
-        {
-            MicrosoftId = microsoftId,
-            Monday = false,
-            Tuesday = false,
-            Wednesday = false,
-            Thursday = false,
-            Friday = false,
-        };
 
         LunchRecurring.Add(lunchRecurringItem);
         try

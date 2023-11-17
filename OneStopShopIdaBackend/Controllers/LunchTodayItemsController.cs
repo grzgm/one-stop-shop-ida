@@ -95,7 +95,12 @@ public class LunchTodayItemsController : ControllerBase
     {
         try
         {
-            await _databaseService.PostLunchTodayItem(microsoftId);
+            LunchTodayItem lunchTodayItem = new LunchTodayItem()
+            {
+                MicrosoftId = microsoftId,
+                IsRegistered = false
+            };
+            await _databaseService.PostLunchTodayItem(lunchTodayItem);
             return NoContent();
         }
         catch (InvalidOperationException ex)

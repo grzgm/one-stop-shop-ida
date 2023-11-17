@@ -33,13 +33,9 @@ public partial class DatabaseService
         await SaveChangesAsync();
     }
 
-    public async Task PostLunchRecurringRegistrationItem(string microsoftId)
+    public async Task PostLunchRecurringRegistrationItem(LunchRecurringRegistrationItem lunchRecurringRegistrationItem)
     {
         IsDbSetNull("LunchRecurringRegistration");
-
-        LunchRecurringRegistrationItem lunchRecurringRegistrationItem = new();
-        lunchRecurringRegistrationItem.MicrosoftId = microsoftId;
-        lunchRecurringRegistrationItem.LastRegistered = DateTime.Now;
 
         LunchRecurringRegistration.Add(lunchRecurringRegistrationItem);
         try
