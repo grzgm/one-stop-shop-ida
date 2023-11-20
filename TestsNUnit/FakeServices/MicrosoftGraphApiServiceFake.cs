@@ -14,9 +14,9 @@ public class MicrosoftGraphApiServiceFake : IMicrosoftGraphApiService
         return ("testAccessToken", "testRefreshToken");
     }
 
-    public Task<(string, string)> CallAuthRefresh(string refreshToken)
+    public async Task<(string, string)> CallAuthRefresh(string refreshToken)
     {
-        throw new NotImplementedException();
+        return ("testAccessToken", "testRefreshToken");
     }
 
     public Task<HttpResponseMessage> CreateEvent(string accessToken, string address, string title, string startDate, string endDate, string description)

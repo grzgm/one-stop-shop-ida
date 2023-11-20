@@ -118,7 +118,7 @@ public partial class MicrosoftGraphApiController : ControllerBase
 
     // GET: api/TodoItems
     [HttpGet("auth/check-token")]
-    public async Task<ActionResult<Boolean>> GetCheckToken()
+    public async Task<ActionResult<bool>> GetCheckToken()
     {
         // Check if the accessToken and refreshToken are stored in session
         string accessToken = HttpContext.Session.GetString("accessToken");
