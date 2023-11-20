@@ -22,8 +22,8 @@ public class WeeklyTaskService : IHostedService, IDisposable
         var timeUntilNextFriday = GetNextFriday() - now;
 
         // Schedule the timer to run every week (7 days)
-        _timer = new Timer(DoWork, null, timeUntilNextFriday, TimeSpan.FromDays(7));
-        //_timer = new Timer(DoWork, null, TimeSpan.FromSeconds(7), TimeSpan.FromSeconds(7));
+        // _timer = new Timer(DoWork, null, timeUntilNextFriday, TimeSpan.FromDays(7));
+        _timer = new Timer(DoWork, null, TimeSpan.FromSeconds(7), TimeSpan.FromSeconds(7));
 
         return Task.CompletedTask;
     }

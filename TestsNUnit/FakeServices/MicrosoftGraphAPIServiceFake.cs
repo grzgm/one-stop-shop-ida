@@ -11,7 +11,7 @@ public class MicrosoftGraphApiServiceFake : IMicrosoftGraphApiService
 
     public async Task<(string, string)> CallAuthCallback(string code, string state)
     {
-        return ("test", "test");
+        return ("testAccessToken", "testRefreshToken");
     }
 
     public Task<(string, string)> CallAuthRefresh(string refreshToken)
@@ -31,7 +31,7 @@ public class MicrosoftGraphApiServiceFake : IMicrosoftGraphApiService
 
     public async Task<UserItem> GetMe(string accessToken)
     {
-        return new UserItem() { MicrosoftId = "test", FirstName = "test", Surname = "test", Email = "test" };
+        return ModelsObjectsFake.testUserItem;
     }
 
     public Task<HttpResponseMessage> RegisterLunchRecurring(string accessToken, string message)

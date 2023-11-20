@@ -8,19 +8,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace TestsNUnit.FakeServices;
-internal class DatabaseServiceFake : IDatabaseService
+internal class DatabaseServiceFake : DbContext, IDatabaseService
 {
-    public DatabaseServiceFake()
+    public DatabaseServiceFake(DbContextOptions<DatabaseServiceFake> options): base(options)
     {
     }
 
-    public DbSet<LunchRecurringItem> LunchRecurring { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    public DbSet<LunchRecurringRegistrationItem> LunchRecurringRegistration { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    public DbSet<LunchTodayItem> LunchToday { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    public DbSet<PushSubscription> PushSubscription { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    public DbSet<UserItem> Users { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    public DbSet<LunchRecurringItem> LunchRecurring { get; set; }
+    public DbSet<LunchRecurringRegistrationItem> LunchRecurringRegistration { get; set; }
+    public DbSet<LunchTodayItem> LunchToday { get; set; }
+    public DbSet<PushSubscription> PushSubscription { get; set; }
+    public DbSet<UserItem> Users { get; set; }
 
     public void CheckOrGenerateVapidDetails(string vapidSubject, string vapidPublicKey, string vapidPrivateKey)
     {
@@ -42,14 +43,16 @@ internal class DatabaseServiceFake : IDatabaseService
         throw new NotImplementedException();
     }
 
-    public Task<LunchRecurringItem> GetRegisteredDays(string microsoftId)
+    public async Task<LunchRecurringItem> GetRegisteredDays(string microsoftId)
     {
-        throw new NotImplementedException();
+        LunchRecurringItem lunchRecurringItem = await LunchRecurring.FindAsync(microsoftId);
+        return lunchRecurringItem;
     }
 
-    public Task<UserItem> GetUserItem(string microsoftId)
+    public async Task<UserItem> GetUserItem(string microsoftId)
     {
-        throw new NotImplementedException();
+        UserItem userItem = await Users.FindAsync(microsoftId);
+        return userItem;
     }
 
     public Task<IEnumerable<UserItem>> GetUserItems()
@@ -67,24 +70,32 @@ internal class DatabaseServiceFake : IDatabaseService
         throw new NotImplementedException();
     }
 
-    public Task PostLunchRecurringItem(string microsoftId)
+    public Task PostLunchRecurringItem(LunchRecurringItem lunchRecurringItem)
     {
-        throw new NotImplementedException();
+        LunchRecurring.Add(lunchRecurringItem);
+        SaveChanges();
+        return Task.CompletedTask;
     }
 
-    public Task PostLunchRecurringRegistrationItem(string microsoftId)
+    public Task PostLunchRecurringRegistrationItem(LunchRecurringRegistrationItem lunchRecurringRegistrationItem)
     {
-        throw new NotImplementedException();
+        LunchRecurringRegistration.Add(lunchRecurringRegistrationItem);
+        SaveChanges();
+        return Task.CompletedTask;
     }
 
-    public Task PostLunchTodayItem(string microsoftId)
+    public Task PostLunchTodayItem(LunchTodayItem lunchTodayItem)
     {
-        throw new NotImplementedException();
+        LunchToday.Add(lunchTodayItem);
+        SaveChanges();
+        return Task.CompletedTask;
     }
 
     public Task PostUserItem(UserItem userItem)
     {
-        throw new NotImplementedException();
+        Users.Add(userItem);
+        SaveChanges();
+        return Task.CompletedTask;
     }
 
     public Task PutLunchRecurringItem(LunchRecurringItem lunchRecurringItem)
@@ -134,6 +145,6 @@ internal class DatabaseServiceFake : IDatabaseService
 
     public bool UserItemExists(string microsoftId)
     {
-        throw new NotImplementedException();
+        return (Users?.Any(e => e.MicrosoftId == microsoftId)).GetValueOrDefault();
     }
 }

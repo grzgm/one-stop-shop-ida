@@ -71,7 +71,6 @@ public partial class MicrosoftGraphApiController : ControllerBase
             HttpContext.Session.SetString("accessToken", accessToken);
             HttpContext.Session.SetString("refreshToken", refreshToken);
             HttpContext.Session.SetString("microsoftId", user.MicrosoftId);
-            var test = HttpContext.Session.GetString("microsoftId");
 
             return Redirect(FrontendUri + state);
         }
