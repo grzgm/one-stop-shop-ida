@@ -87,6 +87,11 @@ public partial class MicrosoftGraphApiService
             HttpResponseMessage response =
                 await _httpClient.PostAsync("https://login.microsoftonline.com/organizations/oauth2/v2.0/token",
                     content);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException();
+            }
+            
             string responseData = await response.Content.ReadAsStringAsync();
             dynamic responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject(responseData);
 

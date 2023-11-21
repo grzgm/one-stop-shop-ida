@@ -196,6 +196,10 @@ public partial class MicrosoftGraphApiService
             // Add the Authorization header to the request
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             HttpResponseMessage response = await _httpClient.GetAsync("https://graph.microsoft.com/v1.0/me");
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException();
+            }
             string responseData = await response.Content.ReadAsStringAsync();
             dynamic responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject(responseData);
 
