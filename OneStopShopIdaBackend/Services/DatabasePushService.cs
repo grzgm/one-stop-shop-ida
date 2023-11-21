@@ -98,7 +98,7 @@ public partial class DatabaseService
                 var subscription = await GetUserSubscription(userItem.MicrosoftId);
                 if (subscription != null)
                 {
-                    webPushClient.SendNotification(subscription.ToWebPushSubscription(),
+                    await webPushClient.SendNotificationAsync(subscription.ToWebPushSubscription(),
                         JsonConvert.SerializeObject(notification), _vapidDetails);
                 }
             }
