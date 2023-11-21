@@ -3,7 +3,7 @@ import { IActionResult, InspectResponseAsync } from "./Response";
 async function IsAuth(): Promise<IActionResult<boolean>> {
 	try {
 		const res = await fetch(
-			`http://localhost:3002/microsoft/auth/check-token`,
+			`http://localhost:3002/microsoft/auth/is-auth`,
 			{
 				method: "GET",
 				credentials: "include", // Include credentials (cookies) in the request

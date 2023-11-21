@@ -14,7 +14,7 @@ import { PostSubscribe } from "../../../api/PushAPI";
 async function LunchLoader(officeName: string) {
 	const currentOfficeInformationData = officeInformationData[officeName]
 	if (currentOfficeInformationData.canRegisterLunch == true) {
-		if ((await IsAuth()).payload == true) {
+		if ((await IsAuth()).payload) {
 			return null
 		}
 		else {
