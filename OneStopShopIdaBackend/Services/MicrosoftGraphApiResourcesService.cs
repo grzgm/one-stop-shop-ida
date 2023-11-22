@@ -40,7 +40,14 @@ public partial class MicrosoftGraphApiService
 
             HttpResponseMessage response =
                 await _httpClient.PostAsync("https://graph.microsoft.com/v1.0/me/sendMail", content);
+            response.EnsureSuccessStatusCode();
+
             return response;
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
+            throw;
         }
         catch (Exception ex)
         {
@@ -82,7 +89,14 @@ public partial class MicrosoftGraphApiService
 
             HttpResponseMessage response =
                 await _httpClient.PostAsync("https://graph.microsoft.com/v1.0/me/sendMail", content);
+            response.EnsureSuccessStatusCode();
+
             return response;
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
+            throw;
         }
         catch (Exception ex)
         {
@@ -124,7 +138,14 @@ public partial class MicrosoftGraphApiService
 
             HttpResponseMessage response =
                 await _httpClient.PostAsync("https://graph.microsoft.com/v1.0/me/sendMail", content);
+            response.EnsureSuccessStatusCode();
+
             return response;
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
+            throw;
         }
         catch (Exception ex)
         {
@@ -178,7 +199,14 @@ public partial class MicrosoftGraphApiService
 
             HttpResponseMessage response =
                 await _httpClient.PostAsync("https://graph.microsoft.com/v1.0/me/events", content);
+            response.EnsureSuccessStatusCode();
+
             return response;
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
+            throw;
         }
         catch (Exception ex)
         {
@@ -196,10 +224,8 @@ public partial class MicrosoftGraphApiService
             // Add the Authorization header to the request
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             HttpResponseMessage response = await _httpClient.GetAsync("https://graph.microsoft.com/v1.0/me");
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new HttpRequestException();
-            }
+            response.EnsureSuccessStatusCode();
+
             string responseData = await response.Content.ReadAsStringAsync();
             dynamic responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject(responseData);
 
@@ -209,6 +235,11 @@ public partial class MicrosoftGraphApiService
             user.Email = responseObject.mail;
 
             return user;
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
+            throw;
         }
         catch (Exception ex)
         {

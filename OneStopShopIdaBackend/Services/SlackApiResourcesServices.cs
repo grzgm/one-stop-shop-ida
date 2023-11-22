@@ -30,7 +30,7 @@ public partial class SlackApiServices
                 }
             };
 
-            using (var response = await _httpClient.SendAsync(request))
+            using (HttpResponseMessage response = await _httpClient.SendAsync(request))
             {
                 response.EnsureSuccessStatusCode();
                 var body = await response.Content.ReadAsStringAsync();
@@ -73,7 +73,7 @@ public partial class SlackApiServices
                 }
             };
 
-            using (var response = await _httpClient.SendAsync(request))
+            using (HttpResponseMessage response = await _httpClient.SendAsync(request))
             {
                 response.EnsureSuccessStatusCode();
                 var body = await response.Content.ReadAsStringAsync();

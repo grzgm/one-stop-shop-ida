@@ -10,7 +10,7 @@ public partial class MicrosoftGraphApiController : ControllerBase
     {
         try
         {
-            var response = await
+            HttpResponseMessage response = await
                 _microsoftGraphApiService.SendEmail(HttpContext.Session.GetString("accessToken"), message, address);
             return StatusCode((int)response.StatusCode);
         }
@@ -33,7 +33,7 @@ public partial class MicrosoftGraphApiController : ControllerBase
     //    {
     //        string accessToken = HttpContext.Session.GetString("accessToken");
     //        string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
-    //        var response = await
+    //        HttpResponseMessage response = await
     //            _microsoftGraphApiService.RegisterLunchToday(accessToken,
     //                microsoftId, message);
 
@@ -68,7 +68,7 @@ public partial class MicrosoftGraphApiController : ControllerBase
     {
         try
         {
-            var response = await
+            HttpResponseMessage response = await
                 _microsoftGraphApiService.CreateEvent(HttpContext.Session.GetString("accessToken"), address, title,
                     startDate, endDate, description);
 

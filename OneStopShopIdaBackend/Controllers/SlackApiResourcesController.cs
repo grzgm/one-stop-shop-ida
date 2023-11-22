@@ -10,7 +10,7 @@ namespace OneStopShopIdaBackend.Controllers
         {
             try
             {
-                using (var response = await _slackApiServices.SendMessage(HttpContext.Session.GetString("slackAccessToken"), message, channel))
+                using (HttpResponseMessage response = await _slackApiServices.SendMessage(HttpContext.Session.GetString("slackAccessToken"), message, channel))
                 {
                     return StatusCode((int)response.StatusCode);
                 }
@@ -28,7 +28,7 @@ namespace OneStopShopIdaBackend.Controllers
         {
             try
             {
-                using (var response = await _slackApiServices.SetStatus(HttpContext.Session.GetString("slackAccessToken"), text, emoji, expiration))
+                using (HttpResponseMessage response = await _slackApiServices.SetStatus(HttpContext.Session.GetString("slackAccessToken"), text, emoji, expiration))
                 {
                     return StatusCode((int)response.StatusCode);
                 }

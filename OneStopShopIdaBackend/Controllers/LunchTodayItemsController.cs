@@ -62,19 +62,19 @@ public class LunchTodayItemsController : ControllerBase
             string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
 
             var user = await _microsoftGraphApiService.GetMe(accessToken);
-            var response = await
+            HttpResponseMessage response = await
                 _microsoftGraphApiService.RegisterLunchToday(accessToken,
                     microsoftId, RegisterTodayMessage(officeName, $"{user.FirstName} {user.Surname}"));
 
             if (response.IsSuccessStatusCode)
             {
-                LunchTodayItem lunchTodayItem = new()
-                {
-                    MicrosoftId = microsoftId,
-                    IsRegistered = true,
-                };
+            LunchTodayItem lunchTodayItem = new()
+            {
+                MicrosoftId = microsoftId,
+                IsRegistered = true,
+            };
 
-                await _databaseService.PutLunchTodayRegister(lunchTodayItem);
+            await _databaseService.PutLunchTodayRegister(lunchTodayItem);
             }
 
             return StatusCode((int)response.StatusCode);

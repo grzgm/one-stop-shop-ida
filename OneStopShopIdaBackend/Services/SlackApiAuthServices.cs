@@ -19,7 +19,7 @@ public partial class SlackApiServices
                     { "client_secret", SlackClientSecret }
             });
 
-            var response = await _httpClient.PostAsync("https://slack.com/api/oauth.v2.access", formData);
+            HttpResponseMessage response = await _httpClient.PostAsync("https://slack.com/api/oauth.v2.access", formData);
             response.EnsureSuccessStatusCode();
 
             var responseData = await response.Content.ReadAsStringAsync();

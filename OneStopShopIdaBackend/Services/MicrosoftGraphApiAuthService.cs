@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace OneStopShopIdaBackend.Services;
+﻿namespace OneStopShopIdaBackend.Services;
 
 public partial class MicrosoftGraphApiService
 {
@@ -44,6 +42,8 @@ public partial class MicrosoftGraphApiService
             HttpResponseMessage response =
                 await _httpClient.PostAsync("https://login.microsoftonline.com/organizations/oauth2/v2.0/token",
                     content);
+            response.EnsureSuccessStatusCode();
+
             string responseData = await response.Content.ReadAsStringAsync();
             dynamic responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject(responseData);
 
@@ -65,7 +65,6 @@ public partial class MicrosoftGraphApiService
         }
     }
 
-    [HttpPut("auth/refresh")]
     public async Task<(string, string)> CallAuthRefresh(string refreshToken)
     {
         try
@@ -87,11 +86,8 @@ public partial class MicrosoftGraphApiService
             HttpResponseMessage response =
                 await _httpClient.PostAsync("https://login.microsoftonline.com/organizations/oauth2/v2.0/token",
                     content);
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new HttpRequestException();
-            }
-            
+            response.EnsureSuccessStatusCode();
+
             string responseData = await response.Content.ReadAsStringAsync();
             dynamic responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject(responseData);
 
