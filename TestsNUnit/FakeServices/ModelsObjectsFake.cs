@@ -4,6 +4,9 @@ namespace TestsNUnit.FakeServices;
 
 public static class ModelsObjectsFake
 {
+    public static string testAccessToken = "testAccessToken";
+    public static string testRefreshToken = "testRefreshToken";
+
     public static UserItem testUserItem = new()
         { MicrosoftId = "testMicrosoftId", FirstName = "testFirstName", Surname = "testSurname", Email = "testEmail" };
 

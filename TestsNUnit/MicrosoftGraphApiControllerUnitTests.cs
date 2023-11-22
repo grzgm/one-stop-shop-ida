@@ -53,7 +53,7 @@ internal class MicrosoftGraphApiControllerUnitTests
         response = await _microsoftGraphApiController.GetAuthCallback("testCode", "testState");
 
         // Assert
-        Assert.AreEqual(ModelsObjectsFake.testUserItem.MicrosoftId, _microsoftGraphApiController.HttpContext.Session.GetString("microsoftId"));
+        Assert.AreEqual(ModelsObjectsFake.testAccessToken, _microsoftGraphApiController.HttpContext.Session.GetString("accessToken"));
     }
 
     [Test]
@@ -89,7 +89,6 @@ internal class MicrosoftGraphApiControllerUnitTests
         var httpContext = HttpContextFake.GetHttpContextFake();
         httpContext.Session.SetString("accessToken", "oldAccessToken");
         httpContext.Session.SetString("refreshToken", "oldRefreshToken");
-        httpContext.Session.SetString("microsoftId", "oldMicrosoftId");
         _microsoftGraphApiController.ControllerContext = new ControllerContext() { HttpContext = httpContext };
         // Controller Response
         IActionResult response;
@@ -100,7 +99,6 @@ internal class MicrosoftGraphApiControllerUnitTests
         // Assert
         Assert.AreNotEqual("oldAccessToken", _microsoftGraphApiController.HttpContext.Session.GetString("accessToken"));
         Assert.AreNotEqual("oldRefreshToken", _microsoftGraphApiController.HttpContext.Session.GetString("refreshToken"));
-        Assert.AreNotEqual("oldMicrosoftId", _microsoftGraphApiController.HttpContext.Session.GetString("microsoftId"));
     }
 
 
@@ -113,7 +111,6 @@ internal class MicrosoftGraphApiControllerUnitTests
         var httpContext = HttpContextFake.GetHttpContextFake();
         httpContext.Session.SetString("accessToken", "oldAccessToken");
         httpContext.Session.SetString("refreshToken", "oldRefreshToken");
-        httpContext.Session.SetString("microsoftId", "oldMicrosoftId");
         _microsoftGraphApiController.ControllerContext = new ControllerContext() { HttpContext = httpContext };
         // Controller Response
         IActionResult response;
@@ -134,7 +131,6 @@ internal class MicrosoftGraphApiControllerUnitTests
         var httpContext = HttpContextFake.GetHttpContextFake();
         httpContext.Session.SetString("accessToken", "oldAccessToken");
         httpContext.Session.SetString("refreshToken", "oldRefreshToken");
-        httpContext.Session.SetString("microsoftId", "oldMicrosoftId");
         _microsoftGraphApiController.ControllerContext = new ControllerContext() { HttpContext = httpContext };
         // Controller Response
         ActionResult<bool> response;

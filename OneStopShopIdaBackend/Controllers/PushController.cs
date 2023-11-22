@@ -12,12 +12,14 @@ public class PushController : ControllerBase
     private readonly ILogger<PushController> _logger;
     private readonly IHostingEnvironment _env;
     private readonly IDatabaseService _databaseService;
+    private readonly IMicrosoftGraphApiService _microsoftGraphApiService;
 
-    public PushController(ILogger<PushController> logger, IHostingEnvironment hostingEnvironment, IDatabaseService databaseService)
+    public PushController(ILogger<PushController> logger, IHostingEnvironment hostingEnvironment, IDatabaseService databaseService, IMicrosoftGraphApiService microsoftGraphApiService)
     {
         _logger = logger;
         _env = hostingEnvironment;
         _databaseService = databaseService;
+        _microsoftGraphApiService = microsoftGraphApiService;
     }
 
     //[HttpGet, Route("vapidpublickey")]
@@ -31,7 +33,10 @@ public class PushController : ControllerBase
     {
         try
         {
-            return await _databaseService.IsSubscribe(HttpContext.Session.GetString("microsoftId"));
+            string accessToken = HttpContext.Session.GetString("accessToken");
+            string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
+
+            return await _databaseService.IsSubscribe(microsoftId);
         }
         catch (InvalidOperationException ex)
         {
@@ -53,7 +58,8 @@ public class PushController : ControllerBase
     [HttpPost("subscribe")]
     public async Task<ActionResult<PushSubscription>> Subscribe([FromBody] PushSubscriptionFrontend model)
     {
-        string microsoftId = HttpContext.Session.GetString("microsoftId");
+        string accessToken = HttpContext.Session.GetString("accessToken");
+        string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
 
         var subscription = new PushSubscription
         {

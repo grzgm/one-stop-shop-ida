@@ -31,15 +31,17 @@ public partial class MicrosoftGraphApiController : ControllerBase
     //{
     //    try
     //    {
+    //        string accessToken = HttpContext.Session.GetString("accessToken");
+    //        string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
     //        var response = await
-    //            _microsoftGraphApiService.RegisterLunchToday(HttpContext.Session.GetString("accessToken"),
-    //                HttpContext.Session.GetString("microsoftId"), message);
+    //            _microsoftGraphApiService.RegisterLunchToday(accessToken,
+    //                microsoftId, message);
 
     //        if (response.IsSuccessStatusCode)
     //        {
     //            LunchTodayItem lunchTodayItem = new()
     //            {
-    //                MicrosoftId = HttpContext.Session.GetString("microsoftId"),
+    //                MicrosoftId = microsoftId,
     //                IsRegistered = true,
     //            };
 

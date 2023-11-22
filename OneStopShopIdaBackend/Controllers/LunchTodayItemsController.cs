@@ -31,7 +31,10 @@ public class LunchTodayItemsController : ControllerBase
     {
         try
         {
-            return await _databaseService.GetLunchTodayIsRegistered(HttpContext.Session.GetString("microsoftId"));
+            string accessToken = HttpContext.Session.GetString("accessToken");
+            string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
+
+            return await _databaseService.GetLunchTodayIsRegistered(microsoftId);
         }
         catch (InvalidOperationException ex)
         {
@@ -55,16 +58,19 @@ public class LunchTodayItemsController : ControllerBase
     {
         try
         {
-            var user = await _microsoftGraphApiService.GetMe(HttpContext.Session.GetString("accessToken"));
+            string accessToken = HttpContext.Session.GetString("accessToken");
+            string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
+
+            var user = await _microsoftGraphApiService.GetMe(accessToken);
             var response = await
-                _microsoftGraphApiService.RegisterLunchToday(HttpContext.Session.GetString("accessToken"),
-                    HttpContext.Session.GetString("microsoftId"), RegisterTodayMessage(officeName, $"{user.FirstName} {user.Surname}"));
+                _microsoftGraphApiService.RegisterLunchToday(accessToken,
+                    microsoftId, RegisterTodayMessage(officeName, $"{user.FirstName} {user.Surname}"));
 
             if (response.IsSuccessStatusCode)
             {
                 LunchTodayItem lunchTodayItem = new()
                 {
-                    MicrosoftId = HttpContext.Session.GetString("microsoftId"),
+                    MicrosoftId = microsoftId,
                     IsRegistered = true,
                 };
 

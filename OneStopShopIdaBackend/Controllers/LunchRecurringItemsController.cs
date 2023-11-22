@@ -30,7 +30,9 @@ public class LunchRecurringItemsController : ControllerBase
     {
         try
         {
-            return new LunchRecurringItemFrontend(await _databaseService.GetRegisteredDays(HttpContext.Session.GetString("microsoftId")));
+            string accessToken = HttpContext.Session.GetString("accessToken");
+            string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
+            return new LunchRecurringItemFrontend(await _databaseService.GetRegisteredDays(microsoftId));
         }
         catch (InvalidOperationException ex)
         {
@@ -54,8 +56,11 @@ public class LunchRecurringItemsController : ControllerBase
     {
         try
         {
+            string accessToken = HttpContext.Session.GetString("accessToken");
+            string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
+
             LunchRecurringItem lunchRecurringItem =
-                new(HttpContext.Session.GetString("microsoftId"), lunchRecurringItemFrontend);
+                new(microsoftId, lunchRecurringItemFrontend);
             await _databaseService.PutLunchRecurringItem(lunchRecurringItem);
             return NoContent();
         }
@@ -81,7 +86,10 @@ public class LunchRecurringItemsController : ControllerBase
     //{
     //    try
     //    {
-    //        await _databaseService.PostLunchRecurringItem(HttpContext.Session.GetString("microsoftId"));
+    //        string accessToken = HttpContext.Session.GetString("accessToken");
+    //        string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
+    //
+    //        await _databaseService.PostLunchRecurringItem(microsoftId);
     //        return NoContent();
     //    }
     //    catch (InvalidOperationException ex)
@@ -106,8 +114,8 @@ public class LunchRecurringItemsController : ControllerBase
     {
         try
         {
-            var microsoftId = HttpContext.Session.GetString("microsoftId");
-            var accessToken = HttpContext.Session.GetString("accessToken");
+            string accessToken = HttpContext.Session.GetString("accessToken");
+            string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
 
             var user = await _microsoftGraphApiService.GetMe(accessToken);
 
