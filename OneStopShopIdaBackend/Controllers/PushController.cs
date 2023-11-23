@@ -51,7 +51,7 @@ public class PushController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError($"Error: {ex.Message}");
-            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+            return StatusCode(500);
         }
     }
 

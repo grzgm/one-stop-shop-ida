@@ -15,10 +15,15 @@ namespace OneStopShopIdaBackend.Controllers
                     return StatusCode((int)response.StatusCode);
                 }
             }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
+                return StatusCode((int)ex.StatusCode);
+            }
             catch (Exception ex)
             {
                 _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
-                return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+                return StatusCode(500);
             }
         }
 
@@ -33,10 +38,15 @@ namespace OneStopShopIdaBackend.Controllers
                     return StatusCode((int)response.StatusCode);
                 }
             }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
+                return StatusCode((int)ex.StatusCode);
+            }
             catch (Exception ex)
             {
                 _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
-                return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+                return StatusCode(500);
             }
         }
     }

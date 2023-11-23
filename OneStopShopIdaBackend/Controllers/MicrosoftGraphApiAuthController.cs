@@ -16,13 +16,13 @@ public partial class MicrosoftGraphApiController : ControllerBase
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
-            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.Message}");
+            return StatusCode(500);
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{this.GetType().Name}\nError: {ex.Message}");
-            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+            _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
+            return StatusCode(500);
         }
     }
 
@@ -76,15 +76,15 @@ public partial class MicrosoftGraphApiController : ControllerBase
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
+            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.Message}");
             return Redirect(FrontendUri +
-                            $"/microsoft-auth?serverResponse={JsonSerializer.Serialize(StatusCode(500, $"Internal Server Error \n {ex.Message}"))}");
+                            $"/microsoft-auth?serverResponse={JsonSerializer.Serialize(StatusCode(500))}");
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{this.GetType().Name}\nError: {ex.Message}");
+            _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
             return Redirect(FrontendUri +
-                            $"/microsoft-auth?serverResponse={JsonSerializer.Serialize(StatusCode(500, $"Internal Server Error \n {ex.Message}"))}");
+                            $"/microsoft-auth?serverResponse={JsonSerializer.Serialize(StatusCode(500))}");
         }
     }
 
@@ -106,13 +106,13 @@ public partial class MicrosoftGraphApiController : ControllerBase
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
-            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.Message}");
+            return StatusCode(500);
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{this.GetType().Name}\nError: {ex.Message}");
-            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+            _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
+            return StatusCode(500);
         }
     }
 
@@ -132,7 +132,7 @@ public partial class MicrosoftGraphApiController : ControllerBase
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{this.GetType().Name}\nError: {ex.Message}");
+                _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
             }
 
             // Can User refresh the Access Token?
@@ -145,19 +145,19 @@ public partial class MicrosoftGraphApiController : ControllerBase
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{this.GetType().Name}\nError: {ex.Message}");
+                _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
                 return false;
             }
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
-            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.Message}");
+            return StatusCode(500);
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{this.GetType().Name}\nError: {ex.Message}");
-            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+            _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
+            return StatusCode(500);
         }
     }
 

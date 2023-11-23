@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using OneStopShopIdaBackend.Models;
 
 namespace OneStopShopIdaBackend.Controllers;
@@ -16,13 +17,13 @@ public partial class MicrosoftGraphApiController : ControllerBase
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
-            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
+            return StatusCode((int)ex.StatusCode);
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{this.GetType().Name}\nError: {ex.Message}");
-            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+            _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
+            return StatusCode(500);
         }
     }
 
@@ -52,13 +53,13 @@ public partial class MicrosoftGraphApiController : ControllerBase
     //    }
     //    catch (HttpRequestException ex)
     //    {
-    //        _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
-    //        return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+    //        _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
+    //        return StatusCode((int)ex.StatusCode);
     //    }
     //    catch (Exception ex)
     //    {
-    //        _logger.LogError($"{this.GetType().Name}\nError: {ex.Message}");
-    //        return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+    //        _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
+    //        return StatusCode(500);
     //    }
     //}
 
@@ -76,13 +77,13 @@ public partial class MicrosoftGraphApiController : ControllerBase
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
-            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
+            return StatusCode((int)ex.StatusCode);
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{this.GetType().Name}\nError: {ex.Message}");
-            return StatusCode(500, $"Internal Server Error \n {ex.Message}");
+            _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
+            return StatusCode(500);
         }
     }
 
@@ -97,12 +98,12 @@ public partial class MicrosoftGraphApiController : ControllerBase
     //    }
     //    catch (HttpRequestException ex)
     //    {
-    //        _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
+    //        _logger.LogError($"{GetType().Name}\nError calling external API: {ex.Message}");
     //        throw;
     //    }
     //    catch (Exception ex)
     //    {
-    //        _logger.LogError($"{this.GetType().Name}\nError: {ex.Message}");
+    //        _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
     //        throw;
     //    }
     //}
