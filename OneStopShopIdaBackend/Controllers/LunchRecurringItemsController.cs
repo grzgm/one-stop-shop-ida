@@ -34,6 +34,11 @@ public class LunchRecurringItemsController : ControllerBase
             string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
             return new LunchRecurringItemFrontend(await _databaseService.GetRegisteredDays(microsoftId));
         }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
+            return StatusCode((int)ex.StatusCode);
+        }
         catch (InvalidOperationException ex)
         {
             _logger.LogError($"Error calling external API: {ex.Message}");
@@ -64,6 +69,11 @@ public class LunchRecurringItemsController : ControllerBase
             await _databaseService.PutLunchRecurringItem(lunchRecurringItem);
             return NoContent();
         }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
+            return StatusCode((int)ex.StatusCode);
+        }
         catch (InvalidOperationException ex)
         {
             _logger.LogError($"Error calling external API: {ex.Message}");
@@ -91,6 +101,11 @@ public class LunchRecurringItemsController : ControllerBase
     //
     //        await _databaseService.PostLunchRecurringItem(microsoftId);
     //        return NoContent();
+    //    }
+    //    catch (HttpRequestException ex)
+    //    {
+    //        _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
+    //        return StatusCode((int)ex.StatusCode);
     //    }
     //    catch (InvalidOperationException ex)
     //    {
@@ -126,6 +141,11 @@ public class LunchRecurringItemsController : ControllerBase
             LunchRecurringRegistrationItem lunchRecurringRegistrationItem = new() { MicrosoftId = microsoftId, LastRegistered = DateTime.Now };
             await _databaseService.PutLunchRecurringRegistrationItem(lunchRecurringRegistrationItem);
             return NoContent();
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
+            return StatusCode((int)ex.StatusCode);
         }
         catch (InvalidOperationException ex)
         {

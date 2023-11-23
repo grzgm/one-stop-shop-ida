@@ -16,8 +16,8 @@ public partial class MicrosoftGraphApiController : ControllerBase
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.Message}");
-            return StatusCode(500);
+            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
+            return StatusCode((int)ex.StatusCode);
         }
         catch (Exception ex)
         {
@@ -106,8 +106,8 @@ public partial class MicrosoftGraphApiController : ControllerBase
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.Message}");
-            return StatusCode(500);
+            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
+            return StatusCode((int)ex.StatusCode);
         }
         catch (Exception ex)
         {
@@ -151,8 +151,8 @@ public partial class MicrosoftGraphApiController : ControllerBase
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.Message}");
-            return StatusCode(500);
+            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
+            return StatusCode((int)ex.StatusCode);
         }
         catch (Exception ex)
         {

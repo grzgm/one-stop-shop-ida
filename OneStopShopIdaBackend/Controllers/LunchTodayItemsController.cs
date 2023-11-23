@@ -36,6 +36,11 @@ public class LunchTodayItemsController : ControllerBase
 
             return await _databaseService.GetLunchTodayIsRegistered(microsoftId);
         }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
+            return StatusCode((int)ex.StatusCode);
+        }
         catch (InvalidOperationException ex)
         {
             _logger.LogError($"Error calling external API: {ex.Message}");
@@ -79,6 +84,11 @@ public class LunchTodayItemsController : ControllerBase
 
             return StatusCode((int)response.StatusCode);
         }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
+            return StatusCode((int)ex.StatusCode);
+        }
         catch (InvalidOperationException ex)
         {
             _logger.LogError($"Error calling external API: {ex.Message}");
@@ -109,6 +119,11 @@ public class LunchTodayItemsController : ControllerBase
             await _databaseService.PostLunchTodayItem(lunchTodayItem);
             return NoContent();
         }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
+            return StatusCode((int)ex.StatusCode);
+        }
         catch (InvalidOperationException ex)
         {
             _logger.LogError($"Error calling external API: {ex.Message}");
@@ -133,6 +148,11 @@ public class LunchTodayItemsController : ControllerBase
     //    {
     //        await _databaseService.UpdateAllLunchTodayItems(isRegistered);
     //        return NoContent();
+    //    }
+    //    catch (HttpRequestException ex)
+    //    {
+    //        _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
+    //        return StatusCode((int)ex.StatusCode);
     //    }
     //    catch (InvalidOperationException ex)
     //    {
