@@ -81,6 +81,7 @@ function Lunch() {
 				setIsPushEnabled(subscribeRes.success);
 			}
 		}
+
 		IsRegisteredWrapper();
 		GetRegisteredDaysWrapper();
 		PostSubscribeWrapper();
@@ -140,15 +141,15 @@ function Lunch() {
 							</div>
 						))}
 					</form>
-					{responseRecurringDayChange && <BodySmall additionalClasses={[responseRecurringDayChange.success ? "font-colour--success" : "font-colour--fail"]}>{responseRecurringDayChange.status}</BodySmall>}
+					{responseRecurringDayChange && <BodySmall additionalClasses={[responseRecurringDayChange.success ? "font-colour--success" : "font-colour--fail"]}>{responseRecurringDayChange.statusText}</BodySmall>}
 					<Button child="Register" onClick={registerLunchDays} />
-					{responseRecurringRegister && <BodySmall additionalClasses={[responseRecurringRegister.success ? "font-colour--success" : "font-colour--fail"]}>{responseRecurringRegister.status}</BodySmall>}
+					{responseRecurringRegister && <BodySmall additionalClasses={[responseRecurringRegister.success ? "font-colour--success" : "font-colour--fail"]}>{responseRecurringRegister.statusText}</BodySmall>}
 				</div>
 				<div className="lunch-main__today">
 					<HeadingSmall>Register for today</HeadingSmall>
 					<BodySmall>Only for today</BodySmall>
 					<BodySmall>before 12:00</BodySmall>
-					{responseToday && <BodySmall additionalClasses={[responseToday.success ? "font-colour--success" : "font-colour--fail"]}>{responseToday.status}</BodySmall>}
+					{responseToday && <BodySmall additionalClasses={[responseToday.success ? "font-colour--success" : "font-colour--fail"]}>{responseToday.statusText}</BodySmall>}
 					<form>
 						<Button child="Register" disabled={isPastNoon() || isRegisteredToday} onClick={() => registerForToday()} />
 					</form>

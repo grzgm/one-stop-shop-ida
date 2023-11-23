@@ -27,7 +27,7 @@ async function GetRegisteredDays(): Promise<IActionResult<ILunchRecurringItem>> 
 		return InspectResponseAsync<ILunchRecurringItem>(res);
 	} catch (error) {
 		console.error("Error:", error);
-		return { success: false, status: "Request could not be send." };
+		return { success: false, statusText: "Request could not be send." };
 	}
 }
 
@@ -47,7 +47,7 @@ async function PutLunchRecurringItem(lunchRecurringItem: ILunchRecurringItem): P
 		return InspectResponseAsync(res);
 	} catch (error) {
 		console.error("Error:", error);
-		return { success: false, status: "Request could not be send." };
+		return { success: false, statusText: "Request could not be send." };
 	}
 }
 
@@ -63,7 +63,7 @@ async function RegisterLunchRecurring(officeName: string): Promise<IActionResult
 		return InspectResponseAsync(res);
 	} catch (error) {
 		console.error("Error:", error);
-		return { success: false, status: "Request could not be send." };
+		return { success: false, statusText: "Request could not be send." };
 	}
 }
 

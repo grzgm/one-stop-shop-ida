@@ -37,7 +37,7 @@ function SlackAuth() {
 			</div>
 			<main className="slack-auth-main">
 				{serverResponse &&
-					<BodySmall additionalClasses={[InspectResponseSync(serverResponse).success ? "font-colour--success" : "font-colour--fail"]}>{InspectResponseSync(serverResponse).status}</BodySmall>}
+					<BodySmall additionalClasses={[InspectResponseSync(serverResponse).success ? "font-colour--success" : "font-colour--fail"]}>{InspectResponseSync(serverResponse).statusText}</BodySmall>}
 				<Button child="Log in" onClick={() => window.location.href = `http://localhost:3002/slack/auth?route=${encodeURI(previousLocation)}`} />
 			</main>
 			<Button child="send message" onClick={() => SendMessage("new message", "D05QWNGJMAR")} />

@@ -39,7 +39,7 @@ function MicrosoftAuth() {
 			</div>
 			<main className="microsoft-auth-main">
 				{serverResponse &&
-					<BodySmall additionalClasses={[InspectResponseSync(serverResponse).success ? "font-colour--success" : "font-colour--fail"]}>{InspectResponseSync(serverResponse).status}</BodySmall>}
+					<BodySmall additionalClasses={[InspectResponseSync(serverResponse).success ? "font-colour--success" : "font-colour--fail"]}>{InspectResponseSync(serverResponse).statusText}</BodySmall>}
 				<Button child="Log in" onClick={() => window.location.href = `http://localhost:3002/microsoft/auth?route=${encodeURI(previousLocation)}`} />
 			</main>
 		</div>

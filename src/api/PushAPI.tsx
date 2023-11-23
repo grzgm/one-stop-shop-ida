@@ -4,7 +4,7 @@ async function PostSubscribe(): Promise<IActionResult<boolean>> {
 	const result = await Notification.requestPermission();
 	if (result === "denied") {
 		console.error("The user explicitly denied the permission request.");
-		return { success: false, status: "The user explicitly denied the permission request." }
+		return { success: false, statusText: "The user explicitly denied the permission request." }
 	}
 	if (result === "granted") {
 		console.info("The user accepted the permission request.");
@@ -16,7 +16,7 @@ async function PostSubscribe(): Promise<IActionResult<boolean>> {
 		if ( isSubscribed.payload && isSubscribed.payload == true)
 		{
 			console.info("User is already subscribed.");
-			return { success: true, status: "User is already subscribed." }
+			return { success: true, statusText: "User is already subscribed." }
 		}
 		console.info("User was not in database.");
 	}
@@ -36,11 +36,11 @@ async function PostSubscribe(): Promise<IActionResult<boolean>> {
 			body: JSON.stringify(subscription),
 		});
 		console.info("User has been subscribed.");
-		return { success: true, status: "User has been subscribed." }
+		return { success: true, statusText: "User has been subscribed." }
 	}
 	catch (error) {
 		console.error("Error:", error);
-		return { success: false, status: "Failed to connect to server." }
+		return { success: false, statusText: "Failed to connect to server." }
 	}
 }
 
@@ -54,7 +54,7 @@ async function GetIsSubscribed(): Promise<IActionResult<boolean>> {
 	}
 	catch (error) {
 		console.error("Error:", error);
-		return { success: false, status: "Failed to connect to server." }
+		return { success: false, statusText: "Failed to connect to server." }
 	}
 }
 

@@ -12,7 +12,7 @@ async function IsRegistered(): Promise<IActionResult<boolean>> {
 		return InspectResponseAsync(res);
 	} catch (error) {
 		console.error("Error:", error);
-		return { success: false, status: "Request could not be send." };
+		return { success: false, statusText: "Request could not be send." };
 	}
 }
 
@@ -28,7 +28,7 @@ async function RegisterLunchToday(officeName: string): Promise<IActionResult<nul
 		return InspectResponseAsync(res);
 	} catch (error) {
 		console.error("Error:", error);
-		return { success: false, status: "Request could not be send." };
+		return { success: false, statusText: "Request could not be send." };
 	}
 }
 

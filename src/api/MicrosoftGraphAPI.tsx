@@ -12,7 +12,7 @@ async function IsAuth(): Promise<IActionResult<boolean>> {
 		return InspectResponseAsync(res);
 	} catch (error) {
 		console.error("Error:", error);
-		return { success: false, status: "Request could not be send." };
+		return { success: false, statusText: "Request could not be send." };
 	}
 }
 
@@ -28,7 +28,7 @@ async function SendEmail(message: string, address: string): Promise<IActionResul
 		return InspectResponseAsync(res);
 	} catch (error) {
 		console.error("Error:", error);
-		return { success: false, status: "Request could not be send." };
+		return { success: false, statusText: "Request could not be send." };
 	}
 }
 
@@ -44,7 +44,7 @@ async function CreateEvent(address: string, title: string, startDate: string, en
 		return InspectResponseAsync(res);
 	} catch (error) {
 		console.error("Error:", error);
-		return { success: false, status: "Request could not be send." };
+		return { success: false, statusText: "Request could not be send." };
 	}
 }
 
