@@ -9,20 +9,7 @@ public partial class SlackApiController : ControllerBase
     [HttpGet("auth")]
     public async Task<IActionResult> GetAuth([FromQuery] string route)
     {
-        try
-        {
-            return Redirect(_slackApiServices.GenerateSlackAPIAuthUrl(route));
-        }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
-            return StatusCode((int)ex.StatusCode);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"{this.GetType().Name}\nError: {ex.Message}");
-            return StatusCode(500);
-        }
+        return Redirect(_slackApiServices.GenerateSlackAPIAuthUrl(route));
     }
 
     // OAuth Step 2: Handle the OAuth callback

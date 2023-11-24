@@ -9,29 +9,14 @@ public partial class MicrosoftGraphApiController : ControllerBase
     [HttpPost("resources/send-email")]
     public async Task<IActionResult> PostSendEmail([FromQuery] string message, [FromQuery] string address)
     {
-        try
-        {
-            HttpResponseMessage response = await
-                _microsoftGraphApiService.SendEmail(HttpContext.Session.GetString("accessToken"), message, address);
-            return StatusCode((int)response.StatusCode);
-        }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
-            return StatusCode((int)ex.StatusCode);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
-            return StatusCode(500);
-        }
+        HttpResponseMessage response = await
+            _microsoftGraphApiService.SendEmail(HttpContext.Session.GetString("accessToken"), message, address);
+        return StatusCode((int)response.StatusCode);
     }
 
     //[HttpPost("resources/register-lunch-today")]
     //public async Task<IActionResult> PostRegisterLunchToday([FromQuery] string message)
     //{
-    //    try
-    //    {
     //        string accessToken = HttpContext.Session.GetString("accessToken");
     //        string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
     //        HttpResponseMessage response = await
@@ -50,61 +35,24 @@ public partial class MicrosoftGraphApiController : ControllerBase
     //        }
 
     //        return StatusCode((int)response.StatusCode);
-    //    }
-    //    catch (HttpRequestException ex)
-    //    {
-    //        _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
-    //        return StatusCode((int)ex.StatusCode);
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
-    //        return StatusCode(500);
-    //    }
     //}
 
     [HttpPost("resources/create-event")]
     public async Task<IActionResult> PostCreateEvent([FromQuery] string address, [FromQuery] string title,
         [FromQuery] string startDate, [FromQuery] string endDate, [FromQuery] string description)
     {
-        try
-        {
-            HttpResponseMessage response = await
-                _microsoftGraphApiService.CreateEvent(HttpContext.Session.GetString("accessToken"), address, title,
-                    startDate, endDate, description);
+        HttpResponseMessage response = await
+            _microsoftGraphApiService.CreateEvent(HttpContext.Session.GetString("accessToken"), address, title,
+                startDate, endDate, description);
 
-            return StatusCode((int)response.StatusCode);
-        }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
-            return StatusCode((int)ex.StatusCode);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
-            return StatusCode(500);
-        }
+        return StatusCode((int)response.StatusCode);
     }
 
     //[HttpGet("resources/me")]
     //public async Task<UserItem> GetMe(string accessToken)
     //{
-    //    try
-    //    {
     //        UserItem user = await _microsoftGraphApiService.GetMe(accessToken);
-
+    //
     //        return user;
-    //    }
-    //    catch (HttpRequestException ex)
-    //    {
-    //        _logger.LogError($"{GetType().Name}\nError calling external API: {ex.Message}");
-    //        throw;
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
-    //        throw;
-    //    }
     //}
 }

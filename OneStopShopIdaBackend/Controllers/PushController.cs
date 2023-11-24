@@ -32,113 +32,44 @@ public class PushController : ControllerBase
     [HttpGet("is-subscribed")]
     public async Task<ActionResult<bool>> GetIsSubscribe()
     {
-        try
-        {
-            string accessToken = HttpContext.Session.GetString("accessToken");
-            string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
+        string accessToken = HttpContext.Session.GetString("accessToken");
+        string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
 
-            return await _databaseService.IsSubscribe(microsoftId);
-        }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
-            return StatusCode((int)ex.StatusCode);
-        }
-        catch (InvalidOperationException ex)
-        {
-            _logger.LogError($"Error calling external API: {ex.Message}");
-            return Conflict();
-        }
-        catch (KeyNotFoundException ex)
-        {
-            _logger.LogError($"Error calling external API: {ex.Message}");
-            return NotFound();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error: {ex.Message}");
-            return StatusCode(500);
-        }
+        return await _databaseService.IsSubscribe(microsoftId);
     }
 
     [HttpPost("subscribe")]
     public async Task<ActionResult<PushSubscription>> Subscribe([FromBody] PushSubscriptionFrontend model)
     {
-        try
-        {
-            string accessToken = HttpContext.Session.GetString("accessToken");
-            string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
+        string accessToken = HttpContext.Session.GetString("accessToken");
+        string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
 
-            var subscription = new PushSubscription
-            {
-                MicrosoftId = microsoftId,
-                Endpoint = model.Endpoint,
-                ExpirationTime = model.ExpirationTime,
-                Auth = model.Keys.Auth,
-                P256Dh = model.Keys.P256Dh
-            };
+        var subscription = new PushSubscription
+        {
+            MicrosoftId = microsoftId,
+            Endpoint = model.Endpoint,
+            ExpirationTime = model.ExpirationTime,
+            Auth = model.Keys.Auth,
+            P256Dh = model.Keys.P256Dh
+        };
 
-            return await _databaseService.Subscribe(subscription, microsoftId);
-        }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
-            return StatusCode((int)ex.StatusCode);
-        }
-        catch (InvalidOperationException ex)
-        {
-            _logger.LogError($"Error calling external API: {ex.Message}");
-            return Conflict();
-        }
-        catch (KeyNotFoundException ex)
-        {
-            _logger.LogError($"Error calling external API: {ex.Message}");
-            return NotFound();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error: {ex.Message}");
-            return StatusCode(500);
-        }
+        return await _databaseService.Subscribe(subscription, microsoftId);
     }
 
     [HttpPost("unsubscribe")]
     public async Task<ActionResult<PushSubscription>> Unsubscribe([FromBody] PushSubscriptionFrontend model)
     {
-        try
+        var subscription = new PushSubscription
         {
-            var subscription = new PushSubscription
-            {
-                Endpoint = model.Endpoint,
-                ExpirationTime = model.ExpirationTime,
-                Auth = model.Keys.Auth,
-                P256Dh = model.Keys.P256Dh
-            };
+            Endpoint = model.Endpoint,
+            ExpirationTime = model.ExpirationTime,
+            Auth = model.Keys.Auth,
+            P256Dh = model.Keys.P256Dh
+        };
 
-            await _databaseService.Unsubscribe(subscription);
+        await _databaseService.Unsubscribe(subscription);
 
-            return subscription;
-        }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
-            return StatusCode((int)ex.StatusCode);
-        }
-        catch (InvalidOperationException ex)
-        {
-            _logger.LogError($"Error calling external API: {ex.Message}");
-            return Conflict();
-        }
-        catch (KeyNotFoundException ex)
-        {
-            _logger.LogError($"Error calling external API: {ex.Message}");
-            return NotFound();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error: {ex.Message}");
-            return StatusCode(500);
-        }
+        return subscription;
     }
 
     //[HttpPost("send/{userId}")]

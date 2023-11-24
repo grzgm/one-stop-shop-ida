@@ -10,20 +10,7 @@ public partial class MicrosoftGraphApiController : ControllerBase
     [HttpGet("auth")]
     public async Task<IActionResult> GetAuth([FromQuery] string route)
     {
-        try
-        {
-            return Redirect(_microsoftGraphApiService.GenerateMicrosoftGraphAPIAuthUrl(route));
-        }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
-            return StatusCode((int)ex.StatusCode);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
-            return StatusCode(500);
-        }
+        return Redirect(_microsoftGraphApiService.GenerateMicrosoftGraphAPIAuthUrl(route));
     }
 
     // OAuth Step 2: Handle the OAuth callback
@@ -92,72 +79,46 @@ public partial class MicrosoftGraphApiController : ControllerBase
     [HttpGet("auth/refresh")]
     public async Task<IActionResult> GetAuthRefresh()
     {
-        try
-        {
-            // Access the access_token property
-            (string accessToken, string refreshToken) =
-                await _microsoftGraphApiService.CallAuthRefresh(HttpContext.Session.GetString("refreshToken"));
+        // Access the access_token property
+        (string accessToken, string refreshToken) =
+            await _microsoftGraphApiService.CallAuthRefresh(HttpContext.Session.GetString("refreshToken"));
 
-            // Store accessToken and refreshToken in the session
-            HttpContext.Session.SetString("accessToken", accessToken);
-            HttpContext.Session.SetString("refreshToken", refreshToken);
+        // Store accessToken and refreshToken in the session
+        HttpContext.Session.SetString("accessToken", accessToken);
+        HttpContext.Session.SetString("refreshToken", refreshToken);
 
-            return NoContent();
-        }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
-            return StatusCode((int)ex.StatusCode);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
-            return StatusCode(500);
-        }
+        return NoContent();
     }
 
     [HttpGet("auth/is-auth")]
     public async Task<ActionResult<bool>> GetIsAuth()
     {
+        string accessToken = HttpContext.Session.GetString("accessToken");
+        string refreshToken = HttpContext.Session.GetString("refreshToken");
+
+        // Is User already authenticated?
         try
         {
-            string accessToken = HttpContext.Session.GetString("accessToken");
-            string refreshToken = HttpContext.Session.GetString("refreshToken");
-
-            // Is User already authenticated?
-            try
-            {
-                await _microsoftGraphApiService.GetMe(accessToken);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
-            }
-
-            // Can User refresh the Access Token?
-            try
-            {
-                (accessToken, refreshToken) = await _microsoftGraphApiService.CallAuthRefresh(refreshToken);
-                HttpContext.Session.SetString("accessToken", accessToken);
-                HttpContext.Session.SetString("refreshToken", refreshToken);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
-                return false;
-            }
-        }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
-            return StatusCode((int)ex.StatusCode);
+            await _microsoftGraphApiService.GetMe(accessToken);
+            return true;
         }
         catch (Exception ex)
         {
             _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
-            return StatusCode(500);
+        }
+
+        // Can User refresh the Access Token?
+        try
+        {
+            (accessToken, refreshToken) = await _microsoftGraphApiService.CallAuthRefresh(refreshToken);
+            HttpContext.Session.SetString("accessToken", accessToken);
+            HttpContext.Session.SetString("refreshToken", refreshToken);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
+            return false;
         }
     }
 

@@ -29,50 +29,25 @@ public class LunchTodayItemsController : ControllerBase
     [HttpGet("is-registered")]
     public async Task<ActionResult<bool>> GetLunchTodayIsRegistered()
     {
-        try
-        {
-            string accessToken = HttpContext.Session.GetString("accessToken");
-            string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
+        string accessToken = HttpContext.Session.GetString("accessToken");
+        string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
 
-            return await _databaseService.GetLunchTodayIsRegistered(microsoftId);
-        }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
-            return StatusCode((int)ex.StatusCode);
-        }
-        catch (InvalidOperationException ex)
-        {
-            _logger.LogError($"Error calling external API: {ex.Message}");
-            return Conflict();
-        }
-        catch (KeyNotFoundException ex)
-        {
-            _logger.LogError($"Error calling external API: {ex.Message}");
-            return NotFound();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error: {ex.Message}");
-            return StatusCode(500);
-        }
+        return await _databaseService.GetLunchTodayIsRegistered(microsoftId);
     }
 
     [HttpPut("register-lunch-today")]
     public async Task<IActionResult> PutLunchTodayRegister([FromQuery] string officeName)
     {
-        try
+        string accessToken = HttpContext.Session.GetString("accessToken");
+        string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
+
+        var user = await _microsoftGraphApiService.GetMe(accessToken);
+        HttpResponseMessage response = await
+            _microsoftGraphApiService.RegisterLunchToday(accessToken,
+                microsoftId, RegisterTodayMessage(officeName, $"{user.FirstName} {user.Surname}"));
+
+        if (response.IsSuccessStatusCode)
         {
-            string accessToken = HttpContext.Session.GetString("accessToken");
-            string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
-
-            var user = await _microsoftGraphApiService.GetMe(accessToken);
-            HttpResponseMessage response = await
-                _microsoftGraphApiService.RegisterLunchToday(accessToken,
-                    microsoftId, RegisterTodayMessage(officeName, $"{user.FirstName} {user.Surname}"));
-
-            if (response.IsSuccessStatusCode)
-            {
             LunchTodayItem lunchTodayItem = new()
             {
                 MicrosoftId = microsoftId,
@@ -80,94 +55,27 @@ public class LunchTodayItemsController : ControllerBase
             };
 
             await _databaseService.PutLunchTodayRegister(lunchTodayItem);
-            }
+        }
 
-            return StatusCode((int)response.StatusCode);
-        }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
-            return StatusCode((int)ex.StatusCode);
-        }
-        catch (InvalidOperationException ex)
-        {
-            _logger.LogError($"Error calling external API: {ex.Message}");
-            return Conflict();
-        }
-        catch (KeyNotFoundException ex)
-        {
-            _logger.LogError($"Error calling external API: {ex.Message}");
-            return NotFound();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error: {ex.Message}");
-            return StatusCode(500);
-        }
+        return StatusCode((int)response.StatusCode);
     }
 
     [HttpPost("create-is-registered/{microsoftId}")]
     public async Task<IActionResult> PostLunchTodayItem(string microsoftId)
     {
-        try
+        LunchTodayItem lunchTodayItem = new LunchTodayItem()
         {
-            LunchTodayItem lunchTodayItem = new LunchTodayItem()
-            {
-                MicrosoftId = microsoftId,
-                IsRegistered = false
-            };
-            await _databaseService.PostLunchTodayItem(lunchTodayItem);
-            return NoContent();
-        }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
-            return StatusCode((int)ex.StatusCode);
-        }
-        catch (InvalidOperationException ex)
-        {
-            _logger.LogError($"Error calling external API: {ex.Message}");
-            return Conflict();
-        }
-        catch (KeyNotFoundException ex)
-        {
-            _logger.LogError($"Error calling external API: {ex.Message}");
-            return NotFound();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error: {ex.Message}");
-            return StatusCode(500);
-        }
+            MicrosoftId = microsoftId,
+            IsRegistered = false
+        };
+        await _databaseService.PostLunchTodayItem(lunchTodayItem);
+        return NoContent();
     }
 
     //[ApiExplorerSettings(IgnoreApi = true)]
     //public async Task<IActionResult> UpdateAllLunchTodayItems(bool isRegistered)
     //{
-    //    try
-    //    {
     //        await _databaseService.UpdateAllLunchTodayItems(isRegistered);
     //        return NoContent();
-    //    }
-    //    catch (HttpRequestException ex)
-    //    {
-    //        _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
-    //        return StatusCode((int)ex.StatusCode);
-    //    }
-    //    catch (InvalidOperationException ex)
-    //    {
-    //        _logger.LogError($"Error calling external API: {ex.Message}");
-    //        return Conflict();
-    //    }
-    //    catch (KeyNotFoundException ex)
-    //    {
-    //        _logger.LogError($"Error calling external API: {ex.Message}");
-    //        return NotFound();
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        _logger.LogError($"Error: {ex.Message}");
-    //        return StatusCode(500);
-    //    }
     //}
 }

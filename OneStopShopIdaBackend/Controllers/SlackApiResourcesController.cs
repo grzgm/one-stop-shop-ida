@@ -8,22 +8,9 @@ namespace OneStopShopIdaBackend.Controllers
         [HttpPost("send-message")]
         public async Task<IActionResult> PostSendMessage([FromQuery] string message, [FromQuery] string channel)
         {
-            try
+            using (HttpResponseMessage response = await _slackApiServices.SendMessage(HttpContext.Session.GetString("slackAccessToken"), message, channel))
             {
-                using (HttpResponseMessage response = await _slackApiServices.SendMessage(HttpContext.Session.GetString("slackAccessToken"), message, channel))
-                {
-                    return StatusCode((int)response.StatusCode);
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
-                return StatusCode((int)ex.StatusCode);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
-                return StatusCode(500);
+                return StatusCode((int)response.StatusCode);
             }
         }
 
@@ -31,22 +18,9 @@ namespace OneStopShopIdaBackend.Controllers
         [HttpPut("set-status")]
         public async Task<IActionResult> PutSetStatus([FromQuery] string text = "", [FromQuery] string emoji = "", [FromQuery] string expiration = "0")
         {
-            try
+            using (HttpResponseMessage response = await _slackApiServices.SetStatus(HttpContext.Session.GetString("slackAccessToken"), text, emoji, expiration))
             {
-                using (HttpResponseMessage response = await _slackApiServices.SetStatus(HttpContext.Session.GetString("slackAccessToken"), text, emoji, expiration))
-                {
-                    return StatusCode((int)response.StatusCode);
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
-                return StatusCode((int)ex.StatusCode);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
-                return StatusCode(500);
+                return StatusCode((int)response.StatusCode);
             }
         }
     }
