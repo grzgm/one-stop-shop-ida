@@ -1,27 +1,27 @@
 export interface IActionResult<T> {
 	success: boolean;
-	status: string;
+	statusText: string;
 	payload?: T;
 }
 
 async function InspectResponseAsync<T>(
 	res: Response
 ): Promise<IActionResult<T>> {
-	let payload = undefined;
-	try {
-		payload = await res.json();
-	} catch (error) {
-		console.error(
-			"Error while parsing response in InspectResponseAsync function: \n",
-			error
-		);
-	}
-
+	// Handle successful response (status code 200-299)
 	if (res.ok) {
-		// Handle successful response (status code 200-299)
+		let payload = undefined;
+		// Try to access payload
+		try {
+			payload = await res.json();
+		} catch (error) {
+			console.error(
+				"Error while parsing response in InspectResponseAsync function: \n",
+				error
+			);
+		}
 		return {
 			success: true,
-			status: "Request has been sent correctly.",
+			statusText: "Request has been sent correctly.",
 			payload: payload,
 		};
 	}
@@ -29,8 +29,7 @@ async function InspectResponseAsync<T>(
 	console.error("HTTP error! status: ", res.status);
 	return {
 		success: false,
-		status: "Request could not be send.",
-		payload: payload,
+		statusText: res.statusText,
 	};
 }
 
@@ -49,13 +48,16 @@ function InspectResponseSync<T>(res: any): IActionResult<T> {
 		// Handle successful response (status code 200-299)
 		return {
 			success: true,
-			status: "Request has been sent correctly.",
-			payload: res,
+			statusText: "Request has been sent correctly.",
+			payload: payload,
 		};
 	}
 	// Handle non-successful response (status code outside 200-299)
 	console.error("HTTP error! status: ", res.status);
-	return { success: false, status: "Request could not be send.", payload: res };
+	return {
+		success: false,
+		statusText: res.statusText,
+	};
 }
 
 export { InspectResponseAsync, InspectResponseSync };

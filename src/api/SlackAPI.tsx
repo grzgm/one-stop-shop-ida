@@ -12,7 +12,7 @@ async function IsAuth(): Promise<IActionResult<boolean>> {
 		return InspectResponseAsync(res);
 	} catch (error) {
 		console.error("Error:", error);
-		return { success: false, status: "Request could not be send." };
+		return { success: false, statusText: "Request could not be send." };
 	}
 }
 
@@ -28,7 +28,7 @@ async function SendMessage(message: string, channel: string): Promise<IActionRes
 		return InspectResponseAsync(res);
 	} catch (error) {
 		console.error("Error:", error);
-		return { success: false, status: "Request could not be send." };
+		return { success: false, statusText: "Request could not be send." };
 	}
 }
 
@@ -44,7 +44,7 @@ async function SetStatus(text?: string, emoji?: string, expiration?: string): Pr
 		return InspectResponseAsync(res);
 	} catch (error) {
 		console.error("Error:", error);
-		return { success: false, status: "Request could not be send." };
+		return { success: false, statusText: "Request could not be send." };
 	}
 }
 
