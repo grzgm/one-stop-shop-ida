@@ -12,21 +12,12 @@ public partial class DatabaseService
 
     public async Task<bool> IsSubscribe(string microsoftId)
     {
-
-        try
+        var subscription = await GetUserSubscription(microsoftId);
+        if (subscription == null)
         {
-            var subscription = await GetUserSubscription(microsoftId);
-            if (subscription == null)
-            {
-                return false;
-            }
-            return true;
+            return false;
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-            throw;
-        }
+        return true;
     }
     public async Task<PushSubscription> Subscribe(PushSubscription subscription, string microsoftId)
     {
@@ -40,14 +31,8 @@ public partial class DatabaseService
         }
 
         await PushSubscription.AddAsync(subscription);
-        try
-        {
-            await SaveChangesAsync();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
+
+        await SaveChangesAsync();
 
         return subscription;
     }

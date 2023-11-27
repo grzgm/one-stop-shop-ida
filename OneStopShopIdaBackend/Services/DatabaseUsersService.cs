@@ -45,21 +45,7 @@ public partial class DatabaseService
         IsDbSetNull("Users");
 
         Users.Add(userItem);
-        try
-        {
-            await SaveChangesAsync();
-        }
-        catch (DbUpdateException)
-        {
-            if (UserItemExists(userItem.MicrosoftId))
-            {
-                throw new DbUpdateException("Item with that Id already exists");
-            }
-            else
-            {
-                throw;
-            }
-        }
+        await SaveChangesAsync();
     }
 
     public async Task DeleteUserItem(string microsoftId)

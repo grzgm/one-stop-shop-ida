@@ -38,21 +38,8 @@ public partial class DatabaseService
         IsDbSetNull("LunchRecurringRegistration");
 
         LunchRecurringRegistration.Add(lunchRecurringRegistrationItem);
-        try
-        {
-            await SaveChangesAsync();
-        }
-        catch (DbUpdateException)
-        {
-            if (LunchRecurringRegistrationItemExists(lunchRecurringRegistrationItem.MicrosoftId))
-            {
-                throw new DbUpdateException("Item with that Id already exists");
-            }
-            else
-            {
-                throw;
-            }
-        }
+
+        await SaveChangesAsync();
     }
 
     public async Task UpdateAllLunchRecurringRegistrationItems(DateTime lastRegistered)
@@ -67,14 +54,7 @@ public partial class DatabaseService
             Entry(lunchRecurringRegistrationItem).State = EntityState.Modified;
         }
 
-        try
-        {
-            await SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            throw;
-        }
+        await SaveChangesAsync();
     }
 
     private bool LunchRecurringRegistrationItemExists(string microsoftId)

@@ -38,21 +38,8 @@ public partial class DatabaseService
         IsDbSetNull("LunchToday");
 
         LunchToday.Add(lunchTodayItem);
-        try
-        {
-            await SaveChangesAsync();
-        }
-        catch (DbUpdateException)
-        {
-            if (LunchTodayItemExists(lunchTodayItem.MicrosoftId))
-            {
-                throw new DbUpdateException("Item with that Id already exists");
-            }
-            else
-            {
-                throw;
-            }
-        }
+
+        await SaveChangesAsync();
     }
 
     public async Task UpdateAllLunchTodayItems(bool isRegistered)
@@ -67,14 +54,7 @@ public partial class DatabaseService
             Entry(lunchTodayItem).State = EntityState.Modified;
         }
 
-        try
-        {
-            await SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            throw;
-        }
+        await SaveChangesAsync();
     }
 
     private bool LunchTodayItemExists(string microsoftId)

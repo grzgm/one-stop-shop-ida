@@ -38,21 +38,8 @@ public partial class DatabaseService
         IsDbSetNull("LunchRecurring");
 
         LunchRecurring.Add(lunchRecurringItem);
-        try
-        {
-            await SaveChangesAsync();
-        }
-        catch (DbUpdateException)
-        {
-            if (LunchRecurringItemExists(lunchRecurringItem.MicrosoftId))
-            {
-                throw new DbUpdateException("Item with that Id already exists");
-            }
-            else
-            {
-                throw;
-            }
-        }
+
+        await SaveChangesAsync();
     }
 
     private bool LunchRecurringItemExists(string microsoftId)

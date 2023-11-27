@@ -22,47 +22,34 @@ public partial class MicrosoftGraphApiService
     // OAuth Step 2: Handle the OAuth callback
     public async Task<(string, string)> CallAuthCallback(string code, string state)
     {
-        try
+        var data = new Dictionary<string, string>
         {
-            var data = new Dictionary<string, string>
-            {
-                { "client_id", MicrosoftClientId },
-                { "scope", Scopes },
-                { "code", code },
-                { "redirect_uri", RedirectUri },
-                { "grant_type", "authorization_code" },
-                { "code_verifier", _codeChallengeGeneratorService.CodeVerifier }
-            };
+            { "client_id", MicrosoftClientId },
+            { "scope", Scopes },
+            { "code", code },
+            { "redirect_uri", RedirectUri },
+            { "grant_type", "authorization_code" },
+            { "code_verifier", _codeChallengeGeneratorService.CodeVerifier }
+        };
 
-            var content = new FormUrlEncodedContent(data);
-            content.Headers.Clear();
-            content.Headers.Add("content-type", "application/x-www-form-urlencoded");
-            content.Headers.Add("Origin", "http://localhost");
+        var content = new FormUrlEncodedContent(data);
+        content.Headers.Clear();
+        content.Headers.Add("content-type", "application/x-www-form-urlencoded");
+        content.Headers.Add("Origin", "http://localhost");
 
-            HttpResponseMessage response =
-                await _httpClient.PostAsync("https://login.microsoftonline.com/organizations/oauth2/v2.0/token",
-                    content);
-            response.EnsureSuccessStatusCode();
+        HttpResponseMessage response =
+            await _httpClient.PostAsync("https://login.microsoftonline.com/organizations/oauth2/v2.0/token",
+                content);
+        response.EnsureSuccessStatusCode();
 
-            string responseData = await response.Content.ReadAsStringAsync();
-            dynamic responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject(responseData);
+        string responseData = await response.Content.ReadAsStringAsync();
+        dynamic responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject(responseData);
 
-            // Access the access_token property
-            string accessToken = responseObject.access_token;
-            string refreshToken = responseObject.refresh_token;
+        // Access the access_token property
+        string accessToken = responseObject.access_token;
+        string refreshToken = responseObject.refresh_token;
 
-            return (accessToken, refreshToken);
-        }
-        catch (HttpRequestException ex)
-        {
-            _logger.LogError($"Error calling Microsoft Token API: {ex.Message}");
-            throw;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error calling Microsoft Token API: {ex.Message}");
-            throw;
-        }
+        return (accessToken, refreshToken);
     }
 
     public async Task<(string, string)> CallAuthRefresh(string refreshToken)
