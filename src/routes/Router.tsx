@@ -23,6 +23,7 @@ import AppOverlay from "../AppOverlay";
 import MicrosoftAuth from "../components/pages/MicrosoftAuth";
 import SlackAuth from "../components/pages/SlackAuth";
 import Push from "../components/pages/push";
+import PopupLogin from "../components/pages/PopupLogin";
 
 function Router(currentOfficeName: string) {
 
@@ -56,6 +57,7 @@ function Router(currentOfficeName: string) {
         <Route path="/settings" element={<Settings />} />
         <Route path="/microsoft-auth" element={<MicrosoftAuth />} />
         <Route path="/slack-auth" element={<SlackAuth />} />
+        <Route path="/popup-login" element={<PopupLogin />} />
         <Route path="/push" element={<Push />} />
         <Route path="*" element={<NotFound />} />
       </Route>
