@@ -59,19 +59,19 @@ public partial class MicrosoftGraphApiController : ControllerBase
             HttpContext.Session.SetString("refreshToken", refreshToken);
             HttpContext.Session.SetString("microsoftId", user.MicrosoftId);
 
-            return Redirect(FrontendUri + state);
+            return Redirect(FrontendUri + $"/popup-login?serverResponse={JsonSerializer.Serialize(StatusCode(200))}");
         }
         catch (HttpRequestException ex)
         {
             _logger.LogError($"{GetType().Name}\nError calling external API: {ex.Message}");
             return Redirect(FrontendUri +
-                            $"/microsoft-auth?serverResponse={JsonSerializer.Serialize(StatusCode(500))}");
+                            $"/popup-login?serverResponse={JsonSerializer.Serialize(StatusCode(500))}");
         }
         catch (Exception ex)
         {
             _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
             return Redirect(FrontendUri +
-                            $"/microsoft-auth?serverResponse={JsonSerializer.Serialize(StatusCode(500))}");
+                            $"/popup-login?serverResponse={JsonSerializer.Serialize(StatusCode(500))}");
         }
     }
 
