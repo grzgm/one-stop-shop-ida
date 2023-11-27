@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
 interface TextProps {
-    children: string;
+    children: string|string[];
     additionalClasses?: string[];
   }
 
