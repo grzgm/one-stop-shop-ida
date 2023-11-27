@@ -50,7 +50,7 @@ function PopupLogin() {
             </div>
             <main className="microsoft-auth-main">
                 {serverResponse &&
-                    <BodySmall additionalClasses={[InspectResponseSync(serverResponse).success ? "font-colour--success" : "font-colour--fail"]}>{InspectResponseSync(serverResponse).status}</BodySmall>}
+                    <BodySmall additionalClasses={[InspectResponseSync(serverResponse).success ? "font-colour--success" : "font-colour--fail"]}>{InspectResponseSync(serverResponse).statusText}</BodySmall>}
             </main>
         </div>
     );
