@@ -20,7 +20,7 @@ public partial class MicrosoftGraphApiService
     }
 
     // OAuth Step 2: Handle the OAuth callback
-    public async Task<(string, string)> CallAuthCallback(string code, string state)
+    public async Task<(string, string)> CallAuthCallback(string code)
     {
         var data = new Dictionary<string, string>
         {

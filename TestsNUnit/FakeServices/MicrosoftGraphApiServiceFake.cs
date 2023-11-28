@@ -9,7 +9,7 @@ public class MicrosoftGraphApiServiceFake : IMicrosoftGraphApiService
     {
     }
 
-    public async Task<(string, string)> CallAuthCallback(string code, string state)
+    public async Task<(string, string)> CallAuthCallback(string code)
     {
         return ("testAccessToken", "testRefreshToken");
     }

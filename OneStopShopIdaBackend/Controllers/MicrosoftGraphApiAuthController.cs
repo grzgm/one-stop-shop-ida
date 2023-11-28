@@ -15,12 +15,12 @@ public partial class MicrosoftGraphApiController : ControllerBase
 
     // OAuth Step 2: Handle the OAuth callback
     [HttpGet("auth/callback")]
-    public async Task<IActionResult> GetAuthCallback([FromQuery] string code, [FromQuery] string state)
+    public async Task<IActionResult> GetAuthCallback([FromQuery] string code, [FromQuery] string? state)
     {
         try
         {
             // Access the access_token property
-            (string accessToken, string refreshToken) = await _microsoftGraphApiService.CallAuthCallback(code, state);
+            (string accessToken, string refreshToken) = await _microsoftGraphApiService.CallAuthCallback(code);
 
             UserItem user = await _microsoftGraphApiService.GetMe(accessToken);
 
