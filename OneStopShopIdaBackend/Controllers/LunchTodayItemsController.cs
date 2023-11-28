@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OneStopShopIdaBackend.Models;
 using OneStopShopIdaBackend.Services;
@@ -28,7 +29,7 @@ public class LunchTodayItemsController : CustomControllerBase
     public async Task<ActionResult<bool>> GetLunchTodayIsRegistered()
     {
         string accessToken = HttpContext.Session.GetString("accessToken");
-        string microsoftId = (await ExecuteWithRetry(async () => await _microsoftGraphApiService.GetMe(accessToken))).MicrosoftId;
+        string microsoftId = (await ExecuteWithRetry(async (accessToken) => await _microsoftGraphApiService.GetMe(accessToken), accessToken)).MicrosoftId;
 
         return await _databaseService.GetLunchTodayIsRegistered(microsoftId);
     }
@@ -38,7 +39,7 @@ public class LunchTodayItemsController : CustomControllerBase
     {
         string accessToken = HttpContext.Session.GetString("accessToken");
 
-        string microsoftId = (await ExecuteWithRetry(async () => await _microsoftGraphApiService.GetMe(accessToken))).MicrosoftId;
+        string microsoftId = (await ExecuteWithRetry(async (accessToken) => await _microsoftGraphApiService.GetMe(accessToken), accessToken)).MicrosoftId;
 
         var user = await _microsoftGraphApiService.GetMe(accessToken);
         HttpResponseMessage response = await

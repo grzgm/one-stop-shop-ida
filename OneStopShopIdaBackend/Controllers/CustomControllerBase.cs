@@ -10,24 +10,26 @@ public class CustomControllerBase : ControllerBase
         _microsoftGraphApiService = microsoftGraphApiService;
     }
 
-    public async Task<T> ExecuteWithRetry<T>(Func<Task<T>> action)
+    public async Task<T> ExecuteWithRetry<T>(Func<string, Task<T>> action, string accessToken)
     {
         try
         {
-            return await action();
+            // Try to call Function with given Access Token
+            return await action(accessToken);
         }
         catch (HttpRequestException ex)
         {
             if (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
-                var t = HttpContext.Session.GetString("refreshToken");
                 // Access the access_token property
-                (string accessToken, string refreshToken) = await _microsoftGraphApiService.CallAuthRefresh(HttpContext.Session.GetString("refreshToken"));
+                (string newAccessToken, string refreshToken) = await _microsoftGraphApiService.CallAuthRefresh(HttpContext.Session.GetString("refreshToken"));
 
                 // Store accessToken and refreshToken in the session
                 HttpContext.Session.SetString("accessToken", accessToken);
                 HttpContext.Session.SetString("refreshToken", refreshToken);
-                return await action();
+
+                // Call Function with new Access Token
+                return await action(newAccessToken);
             }
             throw;
         }
