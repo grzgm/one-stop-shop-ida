@@ -60,17 +60,17 @@ public class LunchTodayItemsController : CustomControllerBase
         return StatusCode((int)response.StatusCode);
     }
 
-    [HttpPost("create-is-registered/{microsoftId}")]
-    public async Task<IActionResult> PostLunchTodayItem(string microsoftId)
-    {
-        LunchTodayItem lunchTodayItem = new LunchTodayItem()
-        {
-            MicrosoftId = microsoftId,
-            IsRegistered = false
-        };
-        await _databaseService.PostLunchTodayItem(lunchTodayItem);
-        return NoContent();
-    }
+    //[HttpPost("create-is-registered/{microsoftId}")]
+    //public async Task<IActionResult> PostLunchTodayItem(string microsoftId)
+    //{
+    //    LunchTodayItem lunchTodayItem = new LunchTodayItem()
+    //    {
+    //        MicrosoftId = microsoftId,
+    //        IsRegistered = false
+    //    };
+    //    await _databaseService.PostLunchTodayItem(lunchTodayItem);
+    //    return NoContent();
+    //}
 
     //[ApiExplorerSettings(IgnoreApi = true)]
     //public async Task<IActionResult> UpdateAllLunchTodayItems(bool isRegistered)
