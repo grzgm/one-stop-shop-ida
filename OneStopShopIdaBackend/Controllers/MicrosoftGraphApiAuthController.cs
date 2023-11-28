@@ -57,7 +57,6 @@ public partial class MicrosoftGraphApiController
             // Store Access Token, Refresh Token, Microsoft Id in the session
             HttpContext.Session.SetString("accessToken", accessToken);
             HttpContext.Session.SetString("refreshToken", refreshToken);
-            HttpContext.Session.SetString("microsoftId", user.MicrosoftId);
 
             return Redirect(FrontendUri + $"/popup-login?serverResponse={JsonSerializer.Serialize(StatusCode(200))}");
         }
