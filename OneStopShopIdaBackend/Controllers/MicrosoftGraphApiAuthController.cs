@@ -92,31 +92,17 @@ public partial class MicrosoftGraphApiController
     [HttpGet("auth/is-auth")]
     public async Task<ActionResult<bool>> GetIsAuth()
     {
-        string accessToken = HttpContext.Session.GetString("accessToken");
-        string refreshToken = HttpContext.Session.GetString("refreshToken");
-
         // Is User already authenticated?
-        try
-        {
-            await _microsoftGraphApiService.GetMe(accessToken);
-            return true;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
-        }
-
         // Can User refresh the Access Token?
         try
         {
-            (accessToken, refreshToken) = await _microsoftGraphApiService.CallAuthRefresh(refreshToken);
-            HttpContext.Session.SetString("accessToken", accessToken);
-            HttpContext.Session.SetString("refreshToken", refreshToken);
+            string accessToken = HttpContext.Session.GetString("accessToken");
+
+            await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken);
             return true;
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
             return false;
         }
     }
