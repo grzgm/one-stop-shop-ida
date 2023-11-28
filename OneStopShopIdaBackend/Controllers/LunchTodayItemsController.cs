@@ -7,18 +7,16 @@ namespace OneStopShopIdaBackend.Controllers;
 
 [Route("lunch/today")]
 [ApiController]
-public class LunchTodayItemsController : ControllerBase
+public class LunchTodayItemsController : CustomControllerBase
 {
     private readonly ILogger<LunchTodayItemsController> _logger;
-    private readonly IMicrosoftGraphApiService _microsoftGraphApiService;
     private readonly IDatabaseService _databaseService;
 
     public LunchTodayItemsController(ILogger<LunchTodayItemsController> logger,
-        IMicrosoftGraphApiService microsoftGraphApiService, IDatabaseService databaseService)
+        IMicrosoftGraphApiService microsoftGraphApiService, IDatabaseService databaseService) : base(microsoftGraphApiService)
     {
         _logger = logger;
         _databaseService = databaseService;
-        _microsoftGraphApiService = microsoftGraphApiService;
     }
     private static string RegisterTodayMessage(string officeName, string name) =>
         "Hi,\n" +
@@ -30,7 +28,7 @@ public class LunchTodayItemsController : ControllerBase
     public async Task<ActionResult<bool>> GetLunchTodayIsRegistered()
     {
         string accessToken = HttpContext.Session.GetString("accessToken");
-        string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
+        string microsoftId = (await ExecuteWithRetry(async () => await _microsoftGraphApiService.GetMe(accessToken))).MicrosoftId;
 
         return await _databaseService.GetLunchTodayIsRegistered(microsoftId);
     }
@@ -39,7 +37,8 @@ public class LunchTodayItemsController : ControllerBase
     public async Task<IActionResult> PutLunchTodayRegister([FromQuery] string officeName)
     {
         string accessToken = HttpContext.Session.GetString("accessToken");
-        string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
+
+        string microsoftId = (await ExecuteWithRetry(async () => await _microsoftGraphApiService.GetMe(accessToken))).MicrosoftId;
 
         var user = await _microsoftGraphApiService.GetMe(accessToken);
         HttpResponseMessage response = await
