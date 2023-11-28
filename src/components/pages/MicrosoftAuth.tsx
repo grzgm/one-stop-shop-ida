@@ -1,12 +1,13 @@
 import { useSearchParams } from 'react-router-dom';
 import Button from "../Buttons";
-import { BodyNormal, HeadingLarge } from "../text-wrapers/TextWrapers";
+import { BodyNormal, BodySmall, HeadingLarge } from "../text-wrapers/TextWrapers";
 import { useNavigate } from "react-router-dom";
 import { IsAuth } from '../../api/MicrosoftGraphAPI';
 import { useEffect, useState } from 'react';
 
 function MicrosoftAuth() {
 	const [popupLogin, setPopupLogin] = useState<Window | null>();
+	const [isAuth, setIsAuth] = useState<boolean>();
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -16,6 +17,7 @@ function MicrosoftAuth() {
 			}
 		};
 		IsAuthWrapper();
+		console.log(isAuth)
 	}, []);
 
 	useEffect(() => {
@@ -26,6 +28,10 @@ function MicrosoftAuth() {
 				if ((await IsAuth()).payload) {
 					// if loged in navigate to adequat website
 					navigate(previousLocation)
+					setIsAuth(true)
+				}
+				else{
+					setIsAuth(false)
 				}
 				clearInterval(checkPopupClosed);
 			}
@@ -55,6 +61,8 @@ function MicrosoftAuth() {
 			</div>
 			<main className="microsoft-auth-main">
 				<Button child="Log in" onClick={() => openPopup()} />
+				{isAuth == false &&
+					<BodySmall additionalClasses={["font-colour--fail"]}>Cannot Authenticate the User</BodySmall>}
 			</main>
 		</div>
 	);
