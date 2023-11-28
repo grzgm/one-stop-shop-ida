@@ -29,7 +29,7 @@ public class LunchTodayItemsController : CustomControllerBase
     public async Task<ActionResult<bool>> GetLunchTodayIsRegistered()
     {
         string accessToken = HttpContext.Session.GetString("accessToken");
-        string microsoftId = (await ExecuteWithRetry(async (accessToken) => await _microsoftGraphApiService.GetMe(accessToken), accessToken)).MicrosoftId;
+        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken)).MicrosoftId;
 
         return await _databaseService.GetLunchTodayIsRegistered(microsoftId);
     }
@@ -39,7 +39,7 @@ public class LunchTodayItemsController : CustomControllerBase
     {
         string accessToken = HttpContext.Session.GetString("accessToken");
 
-        string microsoftId = (await ExecuteWithRetry(async (accessToken) => await _microsoftGraphApiService.GetMe(accessToken), accessToken)).MicrosoftId;
+        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken)).MicrosoftId;
 
         var user = await _microsoftGraphApiService.GetMe(accessToken);
         HttpResponseMessage response = await

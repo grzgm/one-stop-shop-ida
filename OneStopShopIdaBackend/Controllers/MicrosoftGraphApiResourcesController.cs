@@ -1,16 +1,18 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
+using MySqlX.XDevAPI;
 using OneStopShopIdaBackend.Models;
 
 namespace OneStopShopIdaBackend.Controllers;
 
-public partial class MicrosoftGraphApiController : ControllerBase
+public partial class MicrosoftGraphApiController
 {
     [HttpPost("resources/send-email")]
     public async Task<IActionResult> PostSendEmail([FromQuery] string message, [FromQuery] string address)
     {
-        HttpResponseMessage response = await
-            _microsoftGraphApiService.SendEmail(HttpContext.Session.GetString("accessToken"), message, address);
+        string accessToken = HttpContext.Session.GetString("accessToken");
+
+        HttpResponseMessage response = await ExecuteWithRetryMicrosoftGraphApi(async (accessToken) => await _microsoftGraphApiService.SendEmail(accessToken, message, address), accessToken);
         return StatusCode((int)response.StatusCode);
     }
 
@@ -41,9 +43,10 @@ public partial class MicrosoftGraphApiController : ControllerBase
     public async Task<IActionResult> PostCreateEvent([FromQuery] string address, [FromQuery] string title,
         [FromQuery] string startDate, [FromQuery] string endDate, [FromQuery] string description)
     {
-        HttpResponseMessage response = await
-            _microsoftGraphApiService.CreateEvent(HttpContext.Session.GetString("accessToken"), address, title,
-                startDate, endDate, description);
+        string accessToken = HttpContext.Session.GetString("accessToken");
+
+        HttpResponseMessage response = await ExecuteWithRetryMicrosoftGraphApi(async (accessToken) => await _microsoftGraphApiService.CreateEvent(HttpContext.Session.GetString("accessToken"), address, title,
+                startDate, endDate, description), accessToken);
 
         return StatusCode((int)response.StatusCode);
     }

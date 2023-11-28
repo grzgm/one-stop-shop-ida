@@ -6,17 +6,15 @@ namespace OneStopShopIdaBackend.Controllers;
 
 [Route("lunch/recurring")]
 [ApiController]
-public class LunchRecurringItemsController : ControllerBase
+public class LunchRecurringItemsController : CustomControllerBase
 {
     private readonly ILogger<LunchRecurringItemsController> _logger;
     private readonly IDatabaseService _databaseService;
-    private readonly IMicrosoftGraphApiService _microsoftGraphApiService;
 
-    public LunchRecurringItemsController(ILogger<LunchRecurringItemsController> logger, IDatabaseService databaseService, IMicrosoftGraphApiService microsoftGraphApiService)
+    public LunchRecurringItemsController(ILogger<LunchRecurringItemsController> logger, IDatabaseService databaseService, IMicrosoftGraphApiService microsoftGraphApiService) : base(microsoftGraphApiService)
     {
         _logger = logger;
         _databaseService = databaseService;
-        _microsoftGraphApiService = microsoftGraphApiService;
     }
 
     private static string RegisterRecurringMessage(string officeName, string name, LunchRecurringItem lunchRecurringItem) =>
@@ -29,7 +27,7 @@ public class LunchRecurringItemsController : ControllerBase
     public async Task<ActionResult<LunchRecurringItemFrontend>> GetRegisteredDays()
     {
         string accessToken = HttpContext.Session.GetString("accessToken");
-        string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
+        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken)).MicrosoftId;
         return new LunchRecurringItemFrontend(await _databaseService.GetRegisteredDays(microsoftId));
     }
 
@@ -37,7 +35,7 @@ public class LunchRecurringItemsController : ControllerBase
     public async Task<IActionResult> PutLunchRecurringItem(LunchRecurringItemFrontend lunchRecurringItemFrontend)
     {
         string accessToken = HttpContext.Session.GetString("accessToken");
-        string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
+        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken)).MicrosoftId;
 
         LunchRecurringItem lunchRecurringItem =
             new(microsoftId, lunchRecurringItemFrontend);
@@ -49,7 +47,7 @@ public class LunchRecurringItemsController : ControllerBase
     //public async Task<IActionResult> PostLunchRecurringItem(string microsoftId)
     //{
     //        string accessToken = HttpContext.Session.GetString("accessToken");
-    //        string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
+    //        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(async (accessToken) => await _microsoftGraphApiService.GetMe(accessToken), accessToken)).MicrosoftId;
     //
     //        await _databaseService.PostLunchRecurringItem(microsoftId);
     //        return NoContent();
@@ -59,7 +57,7 @@ public class LunchRecurringItemsController : ControllerBase
     public async Task<IActionResult> PutLunchRecurringRegistrationItem([FromQuery] string officeName)
     {
         string accessToken = HttpContext.Session.GetString("accessToken");
-        string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
+        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken)).MicrosoftId;
 
         var user = await _microsoftGraphApiService.GetMe(accessToken);
 

@@ -8,19 +8,17 @@ namespace OneStopShopIdaBackend.Controllers;
 
 [Route("push")]
 [ApiController]
-public class PushController : ControllerBase
+public class PushController : CustomControllerBase
 {
     private readonly ILogger<PushController> _logger;
     private readonly IHostingEnvironment _env;
     private readonly IDatabaseService _databaseService;
-    private readonly IMicrosoftGraphApiService _microsoftGraphApiService;
 
-    public PushController(ILogger<PushController> logger, IHostingEnvironment hostingEnvironment, IDatabaseService databaseService, IMicrosoftGraphApiService microsoftGraphApiService)
+    public PushController(ILogger<PushController> logger, IHostingEnvironment hostingEnvironment, IDatabaseService databaseService, IMicrosoftGraphApiService microsoftGraphApiService) : base(microsoftGraphApiService)
     {
         _logger = logger;
         _env = hostingEnvironment;
         _databaseService = databaseService;
-        _microsoftGraphApiService = microsoftGraphApiService;
     }
 
     //[HttpGet, Route("vapidpublickey")]
@@ -33,7 +31,7 @@ public class PushController : ControllerBase
     public async Task<ActionResult<bool>> GetIsSubscribe()
     {
         string accessToken = HttpContext.Session.GetString("accessToken");
-        string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
+        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken)).MicrosoftId;
 
         return await _databaseService.IsSubscribe(microsoftId);
     }
@@ -42,7 +40,7 @@ public class PushController : ControllerBase
     public async Task<ActionResult<PushSubscription>> Subscribe([FromBody] PushSubscriptionFrontend model)
     {
         string accessToken = HttpContext.Session.GetString("accessToken");
-        string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
+        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken)).MicrosoftId;
 
         var subscription = new PushSubscription
         {

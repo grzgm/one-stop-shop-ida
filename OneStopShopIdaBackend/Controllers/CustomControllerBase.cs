@@ -10,7 +10,7 @@ public class CustomControllerBase : ControllerBase
         _microsoftGraphApiService = microsoftGraphApiService;
     }
 
-    public async Task<T> ExecuteWithRetry<T>(Func<string, Task<T>> action, string accessToken)
+    public async Task<T> ExecuteWithRetryMicrosoftGraphApi<T>(Func<string, Task<T>> action, string accessToken)
     {
         try
         {
