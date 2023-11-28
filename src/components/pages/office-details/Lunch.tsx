@@ -123,8 +123,8 @@ function Lunch() {
 			<main className="lunch-main">
 				<div className="lunch-main__recurring">
 					<HeadingSmall>Register recurring</HeadingSmall>
-					<BodySmall>Information will be sent</BodySmall>
-					<BodySmall>before 12:00 on the mentioned day</BodySmall>
+					<BodySmall>Registration will be sent</BodySmall>
+					<BodySmall>for the next week</BodySmall>
 					{!isPushEnabled && <BodySmall additionalClasses={["font-colour--fail"]}>For full functionality enable Push Notifications</BodySmall>}
 					<form className="lunch-main__form body--normal">
 						{Object.keys(registeredDays).map((dayName, index) => (
