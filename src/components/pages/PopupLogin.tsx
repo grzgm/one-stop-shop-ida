@@ -40,7 +40,7 @@ function PopupLogin() {
         <div className="content">
             <div className="description">
                 <HeadingLarge>Microsoft Account</HeadingLarge>
-                {InspectResponseSync(serverResponse).success ?
+                {serverResponse && InspectResponseSync(serverResponse).success ?
                     <>
                         <BodyNormal additionalClasses={["font-colour--success"]}>You have been loged in</BodyNormal>
                         <BodyNormal additionalClasses={["font-colour--success"]}>You can close the window or it will close in {countDown.toString()}s</BodyNormal>
