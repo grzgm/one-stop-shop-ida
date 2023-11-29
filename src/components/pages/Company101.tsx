@@ -11,10 +11,6 @@ function Company101() {
 			</div>
 			<main>
 				<Button child="Initiation Course" onClick={() => window.open(`https://xploregroup.atlassian.net/wiki/spaces/IDANL/pages/8255046389/iDA+NL+employee+orientation+course`)} />
-				<section>
-					<HeadingSmall>Get you key card</HeadingSmall>
-					<BodyNormal>How to get your key card</BodyNormal>
-				</section>
 			</main>
 		</div>
 	);
