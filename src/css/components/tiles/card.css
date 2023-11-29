@@ -3,7 +3,7 @@
     max-width: 30rem;
     min-width: 17.5rem;
     aspect-ratio: 1.8;
-    padding: 1.25rem;
+    padding: 1rem 2rem;
     display: flex;
     /* flex: 0 0 calc(10% - 12.5rem); */
     justify-content: space-between;
@@ -12,10 +12,16 @@
 }
 
 .card__text {
+    width: calc(100% - 4rem);
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 0.625rem;
+}
+
+.card__text h3{
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .card__text__title {
@@ -25,7 +31,7 @@
 }
 
 .card__text__icon {
-    height: 3rem;
+    max-height: 4rem;
     aspect-ratio: 1;
     border-radius: 100%;
     background-color: var(--font-colour-white);
