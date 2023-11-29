@@ -23,20 +23,9 @@
     align-items: center;
 }
 
-#sidebar__options__top{
+.sidebar__options__grouping{
     width: 100%;
-    padding: 0.625rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    border-top: 0.125rem var(--main-red) solid;
-    border-bottom: 0.125rem var(--main-red) solid;
-}
-
-#sidebar__options__bottom{
-    width: 100%;
-    padding: 0.625rem;
+    padding: 1rem 0;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -47,9 +36,10 @@
 
 .sidebar__option{
     height: 100%;
-    padding: 0.625rem;
+    padding: 1rem;
     display: flex;
     align-items: center;
+    border-bottom: 0.125rem var(--main-blue) solid;
 }
 
 .sidebar__option:hover{
@@ -58,7 +48,7 @@
 }
 
 .sidebar__burger-menu{
-    padding: 0.625rem;
+    padding: 1rem;
     display: flex;
     align-items: center;
     font-size: 2.25rem;
@@ -67,7 +57,7 @@
 .sidebar__arrow{
     display: flex;
     height: 100%;
-    padding: 0 0.625rem;
+    padding: 0 1rem;
     align-items: center;
 }
 

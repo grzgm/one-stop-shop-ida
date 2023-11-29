@@ -22,7 +22,7 @@ function Sidebar({ onPressCloseSidebar }: SidebarProps) {
 					<CloseIcon fontSize="inherit" />
 				</div>
 				<div id="sidebar__options">
-					<div id="sidebar__options__top" className="heading--small">
+					<div className="sidebar__options__grouping">
 						<Link className="sidebar__option heading--small" to="/" onClick={() => onPressCloseSidebar(false)}>
 							Home
 							<div className="sidebar__arrow heading--large">
@@ -60,7 +60,7 @@ function Sidebar({ onPressCloseSidebar }: SidebarProps) {
 							</div>
 						</Link>
 					</div>
-					<div id="sidebar__options__bottom">
+					<div className="sidebar__options__grouping">
 						<Link className="sidebar__option heading--small" to="/offices" onClick={() => onPressCloseSidebar(false)}>
 							Offices
 							<div className="sidebar__arrow heading--large">
