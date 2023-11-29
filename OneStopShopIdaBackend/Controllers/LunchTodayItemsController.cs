@@ -1,6 +1,4 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using OneStopShopIdaBackend.Models;
 using OneStopShopIdaBackend.Services;
 
@@ -59,23 +57,4 @@ public class LunchTodayItemsController : CustomControllerBase
 
         return StatusCode((int)response.StatusCode);
     }
-
-    //[HttpPost("create-is-registered/{microsoftId}")]
-    //public async Task<IActionResult> PostLunchTodayItem(string microsoftId)
-    //{
-    //    LunchTodayItem lunchTodayItem = new LunchTodayItem()
-    //    {
-    //        MicrosoftId = microsoftId,
-    //        IsRegistered = false
-    //    };
-    //    await _databaseService.PostLunchTodayItem(lunchTodayItem);
-    //    return NoContent();
-    //}
-
-    //[ApiExplorerSettings(IgnoreApi = true)]
-    //public async Task<IActionResult> UpdateAllLunchTodayItems(bool isRegistered)
-    //{
-    //        await _databaseService.UpdateAllLunchTodayItems(isRegistered);
-    //        return NoContent();
-    //}
 }

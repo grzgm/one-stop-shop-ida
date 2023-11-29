@@ -1,7 +1,4 @@
-﻿using System.Net;
-using Microsoft.AspNetCore.Mvc;
-using MySqlX.XDevAPI;
-using OneStopShopIdaBackend.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace OneStopShopIdaBackend.Controllers;
 
@@ -15,29 +12,6 @@ public partial class MicrosoftGraphApiController
         HttpResponseMessage response = await ExecuteWithRetryMicrosoftGraphApi(async (accessToken) => await _microsoftGraphApiService.SendEmail(accessToken, message, address), accessToken);
         return StatusCode((int)response.StatusCode);
     }
-
-    //[HttpPost("resources/register-lunch-today")]
-    //public async Task<IActionResult> PostRegisterLunchToday([FromQuery] string message)
-    //{
-    //        string accessToken = HttpContext.Session.GetString("accessToken");
-    //        string microsoftId = (await _microsoftGraphApiService.GetMe(accessToken)).MicrosoftId;
-    //        HttpResponseMessage response = await
-    //            _microsoftGraphApiService.RegisterLunchToday(accessToken,
-    //                microsoftId, message);
-
-    //        if (response.IsSuccessStatusCode)
-    //        {
-    //            LunchTodayItem lunchTodayItem = new()
-    //            {
-    //                MicrosoftId = microsoftId,
-    //                IsRegistered = true,
-    //            };
-
-    //            await _databaseService.PutLunchTodayRegister(lunchTodayItem);
-    //        }
-
-    //        return StatusCode((int)response.StatusCode);
-    //}
 
     [HttpPost("resources/create-event")]
     public async Task<IActionResult> PostCreateEvent([FromQuery] string address, [FromQuery] string title,

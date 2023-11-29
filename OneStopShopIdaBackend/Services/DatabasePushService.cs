@@ -45,34 +45,6 @@ public partial class DatabaseService
         await SaveChangesAsync();
     }
 
-    //public async Task Send(string microsoftId, Notification notification)
-    //{
-    //    WebPushClient webPushClient = new();
-    //    foreach (var subscription in await GetUserSubscriptions(microsoftId))
-    //        try
-    //        {
-    //            webPushClient.SendNotification(subscription.ToWebPushSubscription(),
-    //                JsonConvert.SerializeObject(notification), _vapidDetails);
-    //        }
-    //        catch (WebPushException e)
-    //        {
-    //            if (e.Message == "Subscription no longer valid")
-    //            {
-    //                PushSubscription.Remove(subscription);
-    //                await SaveChangesAsync();
-    //            }
-    //            else
-    //            {
-    //                // Track exception with eg. AppInsights
-    //            }
-    //        }
-    //}
-
-    //public async Task Send(string microsoftId, string text)
-    //{
-    //    await Send(microsoftId, new Notification(text));
-    //}
-
     public async Task SendNotificationsToUsers(Notification notification, List<UserItem> userItems)
     {
         WebPushClient webPushClient = new();

@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace OneStopShopIdaBackend.Controllers;
 
@@ -45,9 +44,6 @@ public class ErrorController : ControllerBase
             return NotFound();
         }
         return StatusCode(500);
-        // return Problem(
-        //     detail: exceptionHandlerFeature.Error.StackTrace,
-        //     title: exceptionHandlerFeature.Error.GetType().ToString());
     }
 
     [Route("/error")]

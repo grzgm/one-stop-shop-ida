@@ -117,12 +117,4 @@ public partial class MicrosoftGraphApiController
 
         return Ok(isToken);
     }
-
-    //// GET: api/TodoItems
-    //[HttpGet("auth/get-token")]
-    //public async Task<ActionResult<Object>> GetGetToken()
-    //{
-    //    // Get token from session
-    //    return Ok(new { accessToken = HttpContext.Session.GetString("accessToken") });
-    //}
 }

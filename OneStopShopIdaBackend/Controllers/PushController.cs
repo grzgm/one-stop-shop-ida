@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OneStopShopIdaBackend.Models;
 using OneStopShopIdaBackend.Services;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
@@ -20,12 +19,6 @@ public class PushController : CustomControllerBase
         _env = hostingEnvironment;
         _databaseService = databaseService;
     }
-
-    //[HttpGet, Route("vapidpublickey")]
-    //public ActionResult<string> GetVapidPublicKey()
-    //{
-    //    return Ok(_databaseService.GetVapidPublicKey());
-    //}
 
     [HttpGet("is-subscribed")]
     public async Task<ActionResult<bool>> GetIsSubscribe()
@@ -69,17 +62,4 @@ public class PushController : CustomControllerBase
 
         return subscription;
     }
-
-    //[HttpPost("send/{userId}")]
-    //public async Task<IActionResult> Send([FromRoute] string userId, [FromBody] Notification notification,
-    //    [FromQuery] int? delay)
-    //{
-    //    if (!_env.IsDevelopment()) return Forbid();
-
-    //    if (delay != null) Thread.Sleep((int)delay);
-
-    //    await _databaseService.Send(userId, notification);
-
-    //    return Accepted();
-    //}
 }
