@@ -1,5 +1,4 @@
 .calendar {
-    margin-bottom: 10rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -93,7 +92,7 @@
 .calendar__time-date-picker{
     width: 100%;
     max-width: 40rem;
-    margin: 0 0.625rem;
+    margin: 0 1rem;
     border-top: 0.125rem var(--main-red) solid;
     border-bottom: 0.125rem var(--main-red) solid;
     text-align: center;
