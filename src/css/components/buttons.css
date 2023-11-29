@@ -1,6 +1,7 @@
 .button {
     min-width: 7.5rem;
     max-width: fit-content;
+    margin: 0.5rem;
     padding: 0.5rem 2rem;
     position: relative;
     border: none;
@@ -14,19 +15,12 @@
 }
 
 .button-alt {
-    min-width: 7.5rem;
-    padding: 0.5rem 2rem;
-    position: relative;
     border: 0.125rem var(--main-red) solid;
-    text-align: center;
     color: var(--main-red);
     background-color: var(--font-colour-white);
 }
 
-.button:disabled {
-    background-color: var(--light-red);
-}
-
+/* Corner Animation */
 .button-animation:not(:disabled):before, .button-animation:not(:disabled):after {
     position: absolute;
     width: 1rem;
