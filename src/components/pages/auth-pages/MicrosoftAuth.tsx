@@ -1,9 +1,10 @@
 import { useSearchParams } from 'react-router-dom';
-import Button from "../Buttons";
-import { BodyNormal, BodySmall, HeadingLarge } from "../text-wrapers/TextWrapers";
+import Button from "../../Buttons";
+import { BodyNormal, BodySmall, HeadingLarge } from "../../text-wrapers/TextWrapers";
 import { useNavigate } from "react-router-dom";
-import { IsAuth } from '../../api/MicrosoftGraphAPI';
+import { IsAuth } from '../../../api/MicrosoftGraphAPI';
 import { useEffect, useState } from 'react';
+import "../../../css/auth-pages.css"
 
 function MicrosoftAuth() {
 	const [popupLogin, setPopupLogin] = useState<Window | null>();
@@ -59,7 +60,7 @@ function MicrosoftAuth() {
 				<HeadingLarge>Microsoft Account</HeadingLarge>
 				<BodyNormal>Get access to all the benefits of app!</BodyNormal>
 			</div>
-			<main className="microsoft-auth-main">
+			<main className="auth-main">
 				<Button child="Log in" onClick={() => openPopup()} />
 				{isAuth == false &&
 					<BodySmall additionalClasses={["font-colour--fail"]}>Cannot Authenticate the User</BodySmall>}

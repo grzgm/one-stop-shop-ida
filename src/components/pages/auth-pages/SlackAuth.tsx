@@ -1,9 +1,10 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import Button from "../Buttons";
-import { BodyNormal, BodySmall, HeadingLarge } from "../text-wrapers/TextWrapers";
-import { InspectResponseSync } from '../../api/Response';
-import { IsAuth, SendMessage, SetStatus } from '../../api/SlackAPI';
+import Button from "../../Buttons";
+import { BodyNormal, BodySmall, HeadingLarge } from "../../text-wrapers/TextWrapers";
+import { InspectResponseSync } from '../../../api/Response';
+import { IsAuth, SendMessage, SetStatus } from '../../../api/SlackAPI';
 import { useEffect } from 'react';
+import "../../../css/auth-pages.css"
 
 function SlackAuth() {
 	const navigate = useNavigate();
@@ -35,7 +36,7 @@ function SlackAuth() {
 				<HeadingLarge>Slack Account</HeadingLarge>
 				<BodyNormal>Get access to all the benefits of app!</BodyNormal>
 			</div>
-			<main className="slack-auth-main">
+			<main className="auth-main">
 				{serverResponse &&
 					<BodySmall additionalClasses={[InspectResponseSync(serverResponse).success ? "font-colour--success" : "font-colour--fail"]}>{InspectResponseSync(serverResponse).statusText}</BodySmall>}
 				<Button child="Log in" onClick={() => window.location.href = `http://localhost:3002/slack/auth?route=${encodeURI(previousLocation)}`} />

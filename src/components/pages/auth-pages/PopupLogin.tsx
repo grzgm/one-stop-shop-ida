@@ -1,7 +1,8 @@
 import { useSearchParams } from 'react-router-dom';
-import { BodyNormal, BodySmall, HeadingLarge } from "../text-wrapers/TextWrapers";
-import { InspectResponseSync } from '../../api/Response';
+import { BodyNormal, BodySmall, HeadingLarge } from "../../text-wrapers/TextWrapers";
+import { InspectResponseSync } from '../../../api/Response';
 import { useEffect, useState } from 'react';
+import "../../../css/auth-pages.css"
 
 function PopupLogin() {
     const [countDown, setCountDown] = useState(5);
@@ -37,7 +38,7 @@ function PopupLogin() {
     const serverResponse = queryServerResponse && isValidJSON(queryServerResponse) ? JSON.parse(queryServerResponse) : queryServerResponse;
 
     return (
-        <div className="content">
+        <div className="popup__content">
             <div className="description">
                 <HeadingLarge>Microsoft Account</HeadingLarge>
                 {serverResponse && InspectResponseSync(serverResponse).success ?
@@ -48,7 +49,7 @@ function PopupLogin() {
                     :
                     <BodyNormal additionalClasses={["font-colour--fail"]}>We couldn't log you in</BodyNormal>}
             </div>
-            <main className="microsoft-auth-main">
+            <main>
                 {serverResponse &&
                     <BodySmall additionalClasses={[InspectResponseSync(serverResponse).success ? "font-colour--success" : "font-colour--fail"]}>{InspectResponseSync(serverResponse).statusText}</BodySmall>}
             </main>

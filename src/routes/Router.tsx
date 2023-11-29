@@ -20,10 +20,10 @@ import Settings from "../components/pages/Settings";
 // import ReserveDeskOverview from "../components/pages/office-details/ReserveDeskOverview";
 import Scheduling from "../components/pages/employee-portal/Scheduling";
 import AppOverlay from "../AppOverlay";
-import MicrosoftAuth from "../components/pages/MicrosoftAuth";
-import SlackAuth from "../components/pages/SlackAuth";
+import MicrosoftAuth from "../components/pages/auth-pages/MicrosoftAuth";
+import SlackAuth from "../components/pages/auth-pages/SlackAuth";
 import Push from "../components/pages/push";
-import PopupLogin from "../components/pages/PopupLogin";
+import PopupLogin from "../components/pages/auth-pages/PopupLogin";
 
 function Router(currentOfficeName: string) {
 
