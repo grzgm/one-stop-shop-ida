@@ -146,7 +146,7 @@ function Lunch() {
 							</div>
 						))}
 					</form>
-					{responseRecurringDayChange && <BodySmall additionalClasses={[responseRecurringDayChange.success ? "font-colour--success" : "font-colour--fail"]}>{responseRecurringDayChange.statusText}</BodySmall>}
+					{responseRecurringDayChange && <BodySmall additionalClasses={[responseRecurringDayChange.success ? "font-colour--success" : "font-colour--fail"]}>{responseRecurringDayChange.success ? "Days updated" : "Couldn't update the days"}</BodySmall>}
 					<Button child="Register" disabled={isButtonDisabled} onClick={registerLunchDays} />
 					{responseRecurringRegister && <BodySmall additionalClasses={[responseRecurringRegister.success ? "font-colour--success" : "font-colour--fail"]}>{responseRecurringRegister.statusText}</BodySmall>}
 				</div>
@@ -154,13 +154,11 @@ function Lunch() {
 					<HeadingSmall>Register for today</HeadingSmall>
 					<BodySmall>Only for today</BodySmall>
 					<BodySmall>before 12:00</BodySmall>
+					{isRegisteredToday ?
+						<Button child="Deregister" disabled={isPastNoon() || isButtonDisabled} onClick={() => registerForToday(false)} /> :
+						<Button child="Register" disabled={isPastNoon() || isButtonDisabled} onClick={() => registerForToday(true)} />
+					}
 					{responseToday && <BodySmall additionalClasses={[responseToday.success ? "font-colour--success" : "font-colour--fail"]}>{responseToday.statusText}</BodySmall>}
-					<form>
-						{isRegisteredToday ?
-							<Button child="Deregister" disabled={isPastNoon() || isButtonDisabled} onClick={() => registerForToday(false)} /> :
-							<Button child="Register" disabled={isPastNoon() || isButtonDisabled} onClick={() => registerForToday(true)} />
-						}
-					</form>
 				</div>
 			</main>
 		</div>
