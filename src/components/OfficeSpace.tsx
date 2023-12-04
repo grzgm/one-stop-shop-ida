@@ -5,22 +5,47 @@ import {
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import Button from "./Buttons";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import CurrentOfficeContext from "../contexts/CurrentOfficeContext";
 
-interface IDesk {
-    state: number;
+class Desk {
+    deskId: number;
+    occupiedMorning: boolean;
+    occupiedAfternoon: boolean;
+    isSelected: boolean;
+
+    constructor(deskId: number, occupiedMorning: boolean, occupiedAfternoon: boolean) {
+        this.deskId = deskId;
+        this.occupiedMorning = occupiedMorning;
+        this.occupiedAfternoon = occupiedAfternoon;
+        this.isSelected = false;
+    }
+
+    getState(): number {
+        if (this.isSelected) return 1
+        if (this.occupiedMorning && this.occupiedAfternoon) return 3
+        if (!this.occupiedMorning && !this.occupiedAfternoon) return 0
+        if (this.occupiedMorning || this.occupiedAfternoon) return 2
+        return -1
+    }
 }
 
 interface IDeskCluster {
-    desks: IDesk[];
+    clusterId: number
+    desks: Desk[];
 }
 
 function OfficeSpace() {
+    const officeName = useContext(CurrentOfficeContext).currentOffice;
     const [displayedDate, setDisplayedDate] = useState(new Date());
     const [selectedDesk, setSelectedDesk] = useState([-1, -1]);
     const [checkboxValues, setCheckboxValues] = useState([false, false]);
 
-    const originalDeskClusters: IDeskCluster[] = [{ desks: [{ state: 0 }, { state: 4 }, { state: 2 }, { state: 3 },] }, { desks: [{ state: 0 }, { state: 3 }, { state: 4 }, { state: 3 },] }, { desks: [{ state: 2 }, { state: 0 }, { state: 0 }, { state: 3 },] },]
+    const originalDeskClusters: IDeskCluster[] =
+        // [{ clusterId: 0, desks: [{ deskId: 0, state: 0 }, { deskId: 1, state: 4 }, { deskId: 2, state: 2 }, { deskId: 3, state: 3 },] },
+        //  { clusterId: 1, desks: [{ deskId: 0, state: 0 }, { deskId: 1, state: 3 }, { deskId: 2, state: 4 }, { deskId: 3, state: 3 },] },
+        //  { clusterId: 2, desks: [{ deskId: 0, state: 2 }, { deskId: 1, state: 0 }, { deskId: 2, state: 0 }, { deskId: 3, state: 3 },] },]
+        [{ clusterId: 0, desks: [new Desk(0, true, true), new Desk(1, false, true), new Desk(2, true, false), new Desk(3, false, false),] },]
     const [deskClusters, setDeskClusters] = useState<IDeskCluster[]>(originalDeskClusters)
 
     const PreviousDay = () => {
@@ -52,15 +77,16 @@ function OfficeSpace() {
         }
     };
     const SelectDesk = (clusterId: number, deskId: number) => {
-        if (deskClusters[clusterId].desks[deskId].state == 0 || deskClusters[clusterId].desks[deskId].state == 2) {
+        if (deskClusters[clusterId].desks[deskId].getState() == 0 || deskClusters[clusterId].desks[deskId].getState() == 2) {
             const updatedDeskClusters = [...originalDeskClusters];
 
             // Toggle the class for the selected desk
-            updatedDeskClusters[clusterId].desks[deskId].state = 1;
+            updatedDeskClusters[clusterId].desks[deskId].isSelected = true;
 
             // Update the state with the modified deskClusters
             setDeskClusters(updatedDeskClusters);
             setSelectedDesk([clusterId, deskId])
+            setCheckboxValues([updatedDeskClusters[clusterId].desks[deskId].occupiedMorning, updatedDeskClusters[clusterId].desks[deskId].occupiedAfternoon])
         }
     };
 
@@ -71,7 +97,7 @@ function OfficeSpace() {
     };
 
     const GetData = () => {
-        console.log(displayedDate.toLocaleDateString(), checkboxValues, selectedDesk);
+        console.log(officeName, displayedDate.toLocaleDateString(), selectedDesk, checkboxValues);
     }
 
     return (
@@ -89,7 +115,7 @@ function OfficeSpace() {
             </div>
             <div className="office-space__overview">
                 {deskClusters.map((deskCluster, index) => (
-                    <DeskCluster desks={deskCluster.desks} clusterId={index} selectDesk={SelectDesk} key={index} />
+                    <DeskCluster desks={deskCluster.desks} clusterId={deskCluster.clusterId} selectDesk={SelectDesk} key={index} />
                 ))}
             </div>
             <div className="office-space__availability-bar">
@@ -135,16 +161,15 @@ function OfficeSpace() {
 
 interface DeskClusterProps {
     clusterId: number;
-    desks: IDesk[];
+    desks: Desk[];
     selectDesk: (clusterId: number, deskId: number) => void;
 }
 
 function DeskCluster({ clusterId, desks, selectDesk }: DeskClusterProps) {
-
     return (
         <div className="desk-cluster" id={clusterId.toString()}>
             {desks.map((desk, index) => (
-                <Desk clusterId={clusterId} deskId={index} state={desk.state} selectDesk={selectDesk} key={index} />
+                <DeskElement clusterId={clusterId} desk={desk} selectDesk={selectDesk} key={desk.deskId} />
             ))}
         </div>
     );
@@ -152,17 +177,15 @@ function DeskCluster({ clusterId, desks, selectDesk }: DeskClusterProps) {
 
 interface DeskProps {
     clusterId: number;
-    deskId: number;
-    state: number;
+    desk: Desk;
     selectDesk: (clusterId: number, deskId: number) => void;
 }
 
-function Desk({ clusterId, deskId, state, selectDesk }: DeskProps) {
-
+function DeskElement({ clusterId, desk, selectDesk }: DeskProps) {
     return (
-        <div className="desk" id={deskId.toString()} onClick={() => (selectDesk(clusterId, deskId))}>
+        <div className="desk" id={desk.deskId.toString()} onClick={() => (selectDesk(clusterId, desk.deskId))}>
             <div className="desk__desk">
-                <div className={`desk__chair ${GetDeskState(state)}`}></div>
+                <div className={`desk__chair ${GetDeskState(desk.getState())}`}></div>
             </div>
         </div>
     );
