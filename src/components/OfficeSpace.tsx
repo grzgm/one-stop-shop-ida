@@ -9,12 +9,14 @@ import { useContext, useState } from "react";
 import CurrentOfficeContext from "../contexts/CurrentOfficeContext";
 
 class Desk {
+    clusterId: number
     deskId: number;
     occupiedMorning: boolean;
     occupiedAfternoon: boolean;
     isSelected: boolean;
 
-    constructor(deskId: number, occupiedMorning: boolean, occupiedAfternoon: boolean) {
+    constructor(clusterId: number, deskId: number, occupiedMorning: boolean, occupiedAfternoon: boolean) {
+        this.clusterId = clusterId;
         this.deskId = deskId;
         this.occupiedMorning = occupiedMorning;
         this.occupiedAfternoon = occupiedAfternoon;
@@ -38,14 +40,14 @@ interface IDeskCluster {
 function OfficeSpace() {
     const officeName = useContext(CurrentOfficeContext).currentOffice;
     const [displayedDate, setDisplayedDate] = useState(new Date());
-    const [selectedDesk, setSelectedDesk] = useState([-1, -1]);
+    const [selectedDesk, setSelectedDesk] = useState<Desk | undefined>(undefined);
     const [checkboxValues, setCheckboxValues] = useState([false, false]);
 
     const originalDeskClusters: IDeskCluster[] =
         // [{ clusterId: 0, desks: [{ deskId: 0, state: 0 }, { deskId: 1, state: 4 }, { deskId: 2, state: 2 }, { deskId: 3, state: 3 },] },
         //  { clusterId: 1, desks: [{ deskId: 0, state: 0 }, { deskId: 1, state: 3 }, { deskId: 2, state: 4 }, { deskId: 3, state: 3 },] },
         //  { clusterId: 2, desks: [{ deskId: 0, state: 2 }, { deskId: 1, state: 0 }, { deskId: 2, state: 0 }, { deskId: 3, state: 3 },] },]
-        [{ clusterId: 0, desks: [new Desk(0, true, true), new Desk(1, false, true), new Desk(2, true, false), new Desk(3, false, false),] },]
+        [{ clusterId: 0, desks: [new Desk(0, 0, true, true), new Desk(0, 1, false, true), new Desk(0, 2, true, false), new Desk(0, 3, false, false),] },]
     const [deskClusters, setDeskClusters] = useState<IDeskCluster[]>(originalDeskClusters)
 
     const PreviousDay = () => {
@@ -76,17 +78,18 @@ function OfficeSpace() {
             setDisplayedDate(NextDayDate);
         }
     };
-    const SelectDesk = (clusterId: number, deskId: number) => {
-        if (deskClusters[clusterId].desks[deskId].getState() == 0 || deskClusters[clusterId].desks[deskId].getState() == 2) {
+
+    const SelectDesk = (desk: Desk) => {
+        if (desk.getState() == 0 || desk.getState() == 2) {
             const updatedDeskClusters = [...originalDeskClusters];
 
             // Toggle the class for the selected desk
-            updatedDeskClusters[clusterId].desks[deskId].isSelected = true;
+            updatedDeskClusters[desk.clusterId].desks[desk.deskId].isSelected = true;
 
             // Update the state with the modified deskClusters
             setDeskClusters(updatedDeskClusters);
-            setSelectedDesk([clusterId, deskId])
-            setCheckboxValues([updatedDeskClusters[clusterId].desks[deskId].occupiedMorning, updatedDeskClusters[clusterId].desks[deskId].occupiedAfternoon])
+            setSelectedDesk(desk)
+            setCheckboxValues([desk.occupiedMorning, desk.occupiedAfternoon])
         }
     };
 
@@ -123,15 +126,16 @@ function OfficeSpace() {
                     <BodySmall children="Morning" />
                     <BodySmall children="Afternoon" />
                 </div>
-                <div className="availability-bar__bar">
-                    <div className="availability-bar__bar__morning"></div>
-                    <div className="availability-bar__bar__afternoon"></div>
+                <div className="availability-bar__bars">
+                    <div className={`availability-bar__bar ${!selectedDesk?.occupiedMorning ? "availability-bar__bar--success" : "availability-bar__bar--fail"}`}></div>
+                    <div className={`availability-bar__bar ${!selectedDesk?.occupiedAfternoon ? "availability-bar__bar--success" : "availability-bar__bar--fail"}`}></div>
                 </div>
                 <form className="availability-bar__form body--normal">
                     <div className="availability-bar__checkboxes">
                         <input
                             type="checkbox"
                             checked={checkboxValues[0]}
+                            disabled={selectedDesk?.occupiedMorning}
                             onChange={() => handleCheckboxChange(0)}
                             id="morning"
                         />
@@ -143,6 +147,7 @@ function OfficeSpace() {
                         <input
                             type="checkbox"
                             checked={checkboxValues[1]}
+                            disabled={selectedDesk?.occupiedAfternoon}
                             onChange={() => handleCheckboxChange(1)}
                             id="afternoon"
                         />
@@ -162,28 +167,27 @@ function OfficeSpace() {
 interface DeskClusterProps {
     clusterId: number;
     desks: Desk[];
-    selectDesk: (clusterId: number, deskId: number) => void;
+    selectDesk: (desk: Desk) => void;
 }
 
 function DeskCluster({ clusterId, desks, selectDesk }: DeskClusterProps) {
     return (
         <div className="desk-cluster" id={clusterId.toString()}>
             {desks.map((desk, index) => (
-                <DeskElement clusterId={clusterId} desk={desk} selectDesk={selectDesk} key={desk.deskId} />
+                <DeskElement desk={desk} selectDesk={selectDesk} key={desk.deskId} />
             ))}
         </div>
     );
 }
 
 interface DeskProps {
-    clusterId: number;
     desk: Desk;
-    selectDesk: (clusterId: number, deskId: number) => void;
+    selectDesk: (desk: Desk) => void;
 }
 
-function DeskElement({ clusterId, desk, selectDesk }: DeskProps) {
+function DeskElement({ desk, selectDesk }: DeskProps) {
     return (
-        <div className="desk" id={desk.deskId.toString()} onClick={() => (selectDesk(clusterId, desk.deskId))}>
+        <div className="desk" id={desk.deskId.toString()} onClick={() => (selectDesk(desk))}>
             <div className="desk__desk">
                 <div className={`desk__chair ${GetDeskState(desk.getState())}`}></div>
             </div>

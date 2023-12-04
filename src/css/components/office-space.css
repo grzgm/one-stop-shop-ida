@@ -110,7 +110,7 @@
     justify-content: space-around;
 }
 
-.availability-bar__bar {
+.availability-bar__bars {
     width: 20rem;
     display: flex;
     border-width: 0.0625rem 0;
@@ -118,15 +118,16 @@
     border-style: solid;
 }
 
-.availability-bar__bar__morning {
+.availability-bar__bar {
     width: 10rem;
     height: 2rem;
+}
+
+.availability-bar__bar--success {
     background-color: var(--success);
 }
 
-.availability-bar__bar__afternoon {
-    width: 10rem;
-    height: 2rem;
+.availability-bar__bar--fail {
     background-color: var(--fail);
 }
 
