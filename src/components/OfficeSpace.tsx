@@ -122,40 +122,43 @@ function OfficeSpace() {
                 ))}
             </div>
             <div className="office-space__availability-bar">
-                <div className="availability-bar__times">
-                    <BodySmall children="Morning" />
-                    <BodySmall children="Afternoon" />
-                </div>
-                <div className="availability-bar__bars">
-                    <div className={`availability-bar__bar ${!selectedDesk?.occupiedMorning ? "availability-bar__bar--success" : "availability-bar__bar--fail"}`}></div>
-                    <div className={`availability-bar__bar ${!selectedDesk?.occupiedAfternoon ? "availability-bar__bar--success" : "availability-bar__bar--fail"}`}></div>
-                </div>
-                <form className="availability-bar__form body--normal">
-                    <div className="availability-bar__checkboxes">
-                        <input
-                            type="checkbox"
-                            checked={checkboxValues[0]}
-                            disabled={selectedDesk?.occupiedMorning}
-                            onChange={() => handleCheckboxChange(0)}
-                            id="morning"
-                        />
-                        <label htmlFor="morning">
-                            Morning
-                        </label>
-                    </div>
-                    <div className="availability-bar__checkboxes">
-                        <input
-                            type="checkbox"
-                            checked={checkboxValues[1]}
-                            disabled={selectedDesk?.occupiedAfternoon}
-                            onChange={() => handleCheckboxChange(1)}
-                            id="afternoon"
-                        />
-                        <label htmlFor="afternoon">
-                            Afternoon
-                        </label>
-                    </div>
-                </form>
+                {selectedDesk &&
+                    <>
+                        <div className="availability-bar__times">
+                            <BodySmall children="Morning" />
+                            <BodySmall children="Afternoon" />
+                        </div>
+                        <div className="availability-bar__bars">
+                            <div className={`availability-bar__bar ${!selectedDesk?.occupiedMorning ? "availability-bar__bar--success" : "availability-bar__bar--fail"}`}></div>
+                            <div className={`availability-bar__bar ${!selectedDesk?.occupiedAfternoon ? "availability-bar__bar--success" : "availability-bar__bar--fail"}`}></div>
+                        </div>
+                        <form className="availability-bar__form body--normal">
+                            <div className="availability-bar__checkboxes">
+                                <input
+                                    type="checkbox"
+                                    checked={checkboxValues[0]}
+                                    disabled={selectedDesk?.occupiedMorning}
+                                    onChange={() => handleCheckboxChange(0)}
+                                    id="morning"
+                                />
+                                <label htmlFor="morning">
+                                    Morning
+                                </label>
+                            </div>
+                            <div className="availability-bar__checkboxes">
+                                <input
+                                    type="checkbox"
+                                    checked={checkboxValues[1]}
+                                    disabled={selectedDesk?.occupiedAfternoon}
+                                    onChange={() => handleCheckboxChange(1)}
+                                    id="afternoon"
+                                />
+                                <label htmlFor="afternoon">
+                                    Afternoon
+                                </label>
+                            </div>
+                        </form>
+                    </>}
             </div>
             <div className="office-space__info">
                 <Button child="Book" onClick={() => (GetData())} />
