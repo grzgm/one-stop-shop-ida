@@ -101,15 +101,14 @@ function Lunch() {
 	};
 
 	// Lunch Today
-	const registerForToday = async () => {
+	const registerForToday = async (registration: boolean) => {
 		if (!isPastNoon()) {
-			setIsRegisteredToday(true);
-			const response = await RegisterLunchToday(officeName);
+			const response = await RegisterLunchToday(officeName, registration);
 			// const response = await CreateEvent("grzegorz.malisz@weareida.digital", "lunch event", new Date().toISOString(), new Date().toISOString());
 			// setResponse(await SendEmail(RegisterForTodayMail(officeName), "office@ida-mediafoundry.nl"));
 			setResponseToday(response);
-			if (!response.success) {
-				setIsRegisteredToday(false);
+			if (response.success) {
+				setIsRegisteredToday(registration);
 			}
 		}
 	};
@@ -151,7 +150,10 @@ function Lunch() {
 					<BodySmall>before 12:00</BodySmall>
 					{responseToday && <BodySmall additionalClasses={[responseToday.success ? "font-colour--success" : "font-colour--fail"]}>{responseToday.statusText}</BodySmall>}
 					<form>
-						<Button child="Register" disabled={isPastNoon() || isRegisteredToday} onClick={() => registerForToday()} />
+						{isRegisteredToday ? 
+							<Button child="Deregister" disabled={isPastNoon()} onClick={() => registerForToday(false)} />: 
+							<Button child="Register" disabled={isPastNoon()} onClick={() => registerForToday(true)} />
+						}
 					</form>
 				</div>
 			</main>

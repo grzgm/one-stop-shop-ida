@@ -16,10 +16,10 @@ async function IsRegistered(): Promise<IActionResult<boolean>> {
 	}
 }
 
-async function RegisterLunchToday(officeName: string): Promise<IActionResult<null>> {
+async function RegisterLunchToday(officeName: string, registration: boolean): Promise<IActionResult<null>> {
 	try {
 		const res = await fetch(
-			`http://localhost:3002/lunch/today/register-lunch-today?officeName=${officeName}`,
+			`http://localhost:3002/lunch/today/lunch-today-registration?officeName=${officeName}&registration=${registration}`,
 			{
 				method: "PUT",
 				credentials: "include", // Include credentials (cookies) in the request
