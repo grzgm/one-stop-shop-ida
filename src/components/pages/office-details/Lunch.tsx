@@ -88,13 +88,6 @@ function Lunch() {
 		PostSubscribeWrapper();
 	}, []);
 
-	function TimeoutButtons(){
-		setIsButtonDisabled(true)
-		setTimeout(() => {
-			setIsButtonDisabled(false);
-		}, 500);
-	}
-
 	// Lunch Recurring 
 	const handleDayChange = async (dayName: keyof ILunchRecurringItem) => {
 		const updatedCheckedBoxes = { ...registeredDays };
@@ -104,15 +97,16 @@ function Lunch() {
 		setResponseRecurringDayChange(response);
 	};
 	const registerLunchDays = async () => {
-		TimeoutButtons()
+		setIsButtonDisabled(true);
 		const response = await RegisterLunchRecurring(officeName);
 		setResponseRecurringRegister(response);
+		setIsButtonDisabled(false);
 	};
 
 	// Lunch Today
 	const registerForToday = async (registration: boolean) => {
+		setIsButtonDisabled(true);
 		if (!isPastNoon()) {
-			TimeoutButtons()
 			const response = await RegisterLunchToday(officeName, registration);
 			// const response = await CreateEvent("grzegorz.malisz@weareida.digital", "lunch event", new Date().toISOString(), new Date().toISOString());
 			// setResponse(await SendEmail(RegisterForTodayMail(officeName), "office@ida-mediafoundry.nl"));
@@ -122,6 +116,7 @@ function Lunch() {
 			}
 
 		}
+		setIsButtonDisabled(false);
 	};
 
 	return (
