@@ -26,7 +26,7 @@ namespace OneStopShopIdaBackend.Services
         Task PostUserItem(UserItem userItem);
         Task PutLunchRecurringItem(LunchRecurringItem lunchRecurringItem);
         Task PutLunchRecurringRegistrationItem(LunchRecurringRegistrationItem lunchRecurringRegistrationItem);
-        Task PutLunchTodayRegister(LunchTodayItem lunchTodayItem);
+        Task PutLunchTodayRegistration(LunchTodayItem lunchTodayItem);
         Task PutUserItem(UserItem userItem);
         Task SendNotificationsToUsers(Notification notification, List<UserItem> userItems);
         Task<PushSubscription> Subscribe(PushSubscription subscription, string microsoftId);

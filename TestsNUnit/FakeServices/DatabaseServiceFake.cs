@@ -108,7 +108,7 @@ internal class DatabaseServiceFake : DbContext, IDatabaseService
         throw new NotImplementedException();
     }
 
-    public Task PutLunchTodayRegister(LunchTodayItem lunchTodayItem)
+    public Task PutLunchTodayRegistration(LunchTodayItem lunchTodayItem)
     {
         throw new NotImplementedException();
     }

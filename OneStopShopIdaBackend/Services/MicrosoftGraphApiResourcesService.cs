@@ -7,7 +7,7 @@ namespace OneStopShopIdaBackend.Services;
 
 public partial class MicrosoftGraphApiService
 {
-    public async Task<HttpResponseMessage> SendEmail(string accessToken, string message, string address)
+    public async Task<HttpResponseMessage> SendEmail(string accessToken, string address, string subject, string message)
     {
         // Create E-mail
         Email email = new()
@@ -17,7 +17,7 @@ public partial class MicrosoftGraphApiService
                 Content = message,
                 ContentType = "Text",
             },
-            Subject = "Local application test",
+            Subject = subject,
             ToRecipients = new List<Recipient>
                 {
                     new Recipient
@@ -25,78 +25,6 @@ public partial class MicrosoftGraphApiService
                         EmailAddress = new EmailAddress
                         {
                             Address = address,
-                        }
-                    }
-                }
-        };
-
-        var data = JsonSerializer.Serialize(new { message = email });
-
-        var content = new StringContent(data, Encoding.UTF8, "application/json");
-        // Add the Authorization header to the request
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-
-        HttpResponseMessage response =
-            await _httpClient.PostAsync("https://graph.microsoft.com/v1.0/me/sendMail", content);
-        response.EnsureSuccessStatusCode();
-
-        return response;
-    }
-
-    public async Task<HttpResponseMessage> RegisterLunchToday(string accessToken, string microsoftId, string message)
-    {
-        // Create E-mail
-        Email email = new()
-        {
-            Body = new Body
-            {
-                Content = message,
-                ContentType = "Text",
-            },
-            Subject = "Local application test",
-            ToRecipients = new List<Recipient>
-                {
-                    new Recipient
-                    {
-                        EmailAddress = new EmailAddress
-                        {
-                            Address = LunchEmailAddress,
-                        }
-                    }
-                }
-        };
-
-        var data = JsonSerializer.Serialize(new { message = email });
-
-        var content = new StringContent(data, Encoding.UTF8, "application/json");
-        // Add the Authorization header to the request
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-
-        HttpResponseMessage response =
-            await _httpClient.PostAsync("https://graph.microsoft.com/v1.0/me/sendMail", content);
-        response.EnsureSuccessStatusCode();
-
-        return response;
-    }
-
-    public async Task<HttpResponseMessage> RegisterLunchRecurring(string accessToken, string message)
-    {
-        // Create E-mail
-        Email email = new()
-        {
-            Body = new Body
-            {
-                Content = message,
-                ContentType = "Text",
-            },
-            Subject = "Lunch Recurring",
-            ToRecipients = new List<Recipient>
-                {
-                    new Recipient
-                    {
-                        EmailAddress = new EmailAddress
-                        {
-                            Address = LunchEmailAddress,
                         }
                     }
                 }

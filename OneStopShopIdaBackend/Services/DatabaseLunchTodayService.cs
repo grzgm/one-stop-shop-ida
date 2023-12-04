@@ -19,7 +19,7 @@ public partial class DatabaseService
         return lunchTodayItem.IsRegistered;
     }
 
-    public async Task PutLunchTodayRegister(LunchTodayItem lunchTodayItem)
+    public async Task PutLunchTodayRegistration(LunchTodayItem lunchTodayItem)
     {
         IsDbSetNull("LunchToday");
 

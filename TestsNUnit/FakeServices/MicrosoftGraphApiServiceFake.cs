@@ -34,17 +34,7 @@ public class MicrosoftGraphApiServiceFake : IMicrosoftGraphApiService
         return ModelsObjectsFake.testUserItem;
     }
 
-    public Task<HttpResponseMessage> RegisterLunchRecurring(string accessToken, string message)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<HttpResponseMessage> RegisterLunchToday(string accessToken, string microsoftId, string message)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<HttpResponseMessage> SendEmail(string accessToken, string message, string address)
+    public Task<HttpResponseMessage> SendEmail(string accessToken, string address, string subject, string message)
     {
         throw new NotImplementedException();
     }

@@ -11,6 +11,8 @@ public class LunchRecurringItemsController : CustomControllerBase
     private readonly ILogger<LunchRecurringItemsController> _logger;
     private readonly IDatabaseService _databaseService;
 
+    private const string _lunchEmailAddress = "grzegorz.malisz@weareida.digital";
+
     public LunchRecurringItemsController(ILogger<LunchRecurringItemsController> logger, IDatabaseService databaseService, IMicrosoftGraphApiService microsoftGraphApiService) : base(microsoftGraphApiService)
     {
         _logger = logger;
@@ -63,7 +65,9 @@ public class LunchRecurringItemsController : CustomControllerBase
 
         LunchRecurringItem lunchRecurringItem = await _databaseService.GetRegisteredDays(microsoftId);
 
-        await _microsoftGraphApiService.RegisterLunchRecurring(accessToken, RegisterRecurringMessage(officeName, $"{user.FirstName} {user.Surname}", lunchRecurringItem));
+        string message = RegisterRecurringMessage(officeName, $"{user.FirstName} {user.Surname}", lunchRecurringItem);
+
+        await _microsoftGraphApiService.SendEmail(accessToken, _lunchEmailAddress, "Lunch Registration", message);
 
         LunchRecurringRegistrationItem lunchRecurringRegistrationItem = new() { MicrosoftId = microsoftId, LastRegistered = DateTime.Now };
         await _databaseService.PutLunchRecurringRegistrationItem(lunchRecurringRegistrationItem);

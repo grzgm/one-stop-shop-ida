@@ -5,11 +5,11 @@ namespace OneStopShopIdaBackend.Controllers;
 public partial class MicrosoftGraphApiController
 {
     [HttpPost("resources/send-email")]
-    public async Task<IActionResult> PostSendEmail([FromQuery] string message, [FromQuery] string address)
+    public async Task<IActionResult> PostSendEmail([FromQuery] string address, [FromQuery] string subject, [FromQuery] string message)
     {
         string accessToken = HttpContext.Session.GetString("accessToken");
 
-        HttpResponseMessage response = await ExecuteWithRetryMicrosoftGraphApi(async (accessToken) => await _microsoftGraphApiService.SendEmail(accessToken, message, address), accessToken);
+        HttpResponseMessage response = await ExecuteWithRetryMicrosoftGraphApi(async (accessToken) => await _microsoftGraphApiService.SendEmail(accessToken, address, subject, message), accessToken);
         return StatusCode((int)response.StatusCode);
     }
 
