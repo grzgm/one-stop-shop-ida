@@ -145,7 +145,7 @@ function GenerateCalendarDays(
   }
 
   if (today.getFullYear() == year && today.getMonth() + 1 == month) {
-    const indexToday = currentMonthStart + today.getDate();
+    const indexToday = currentMonthStart + today.getDate() - 1;
     days[indexToday] = React.cloneElement(days[indexToday], {
       className: `${days[indexToday].props.className} calendar__month__day--today`,
     });
