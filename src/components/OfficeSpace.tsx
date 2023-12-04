@@ -79,14 +79,21 @@ function OfficeSpace() {
         }
     };
 
-    const SelectDesk = (desk: Desk) => {
-        if (desk.getState() == 0 || desk.getState() == 2) {
+    const selectDesk = (desk: Desk) => {
+        if (selectedDesk?.clusterId == desk.clusterId && selectedDesk?.deskId == desk.deskId)
+        {
+            // Reset the state with the default values
+            setDeskClusters(originalDeskClusters);
+            setSelectedDesk(undefined)
+            setCheckboxValues([false , false])
+        }
+        else if (desk.getState() == 0 || desk.getState() == 2) {
             const updatedDeskClusters = [...originalDeskClusters];
 
             // Toggle the class for the selected desk
             updatedDeskClusters[desk.clusterId].desks[desk.deskId].isSelected = true;
 
-            // Update the state with the modified deskClusters
+            // Update the state with the modified deskClusters, selected desk, checkboxes
             setDeskClusters(updatedDeskClusters);
             setSelectedDesk(desk)
             setCheckboxValues([desk.occupiedMorning, desk.occupiedAfternoon])
@@ -118,7 +125,7 @@ function OfficeSpace() {
             </div>
             <div className="office-space__overview">
                 {deskClusters.map((deskCluster, index) => (
-                    <DeskCluster desks={deskCluster.desks} clusterId={deskCluster.clusterId} selectDesk={SelectDesk} key={index} />
+                    <DeskCluster desks={deskCluster.desks} clusterId={deskCluster.clusterId} selectDesk={selectDesk} key={index} />
                 ))}
             </div>
             <div className="office-space__availability-bar">
