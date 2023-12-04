@@ -26,6 +26,7 @@ async function LunchLoader(officeName: string) {
 
 function Lunch() {
 	const officeName = useContext(CurrentOfficeContext).currentOffice;
+	const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 	const [responseToday, setResponseToday] = useState<IActionResult<null> | null>(null)
 	const [responseRecurringDayChange, setResponseRecurringDayChange] = useState<IActionResult<undefined> | undefined>(undefined)
 	const [responseRecurringRegister, setResponseRecurringRegister] = useState<IActionResult<undefined> | undefined>(undefined)
@@ -87,6 +88,13 @@ function Lunch() {
 		PostSubscribeWrapper();
 	}, []);
 
+	function TimeoutButtons(){
+		setIsButtonDisabled(true)
+		setTimeout(() => {
+			setIsButtonDisabled(false);
+		}, 500);
+	}
+
 	// Lunch Recurring 
 	const handleDayChange = async (dayName: keyof ILunchRecurringItem) => {
 		const updatedCheckedBoxes = { ...registeredDays };
@@ -96,6 +104,7 @@ function Lunch() {
 		setResponseRecurringDayChange(response);
 	};
 	const registerLunchDays = async () => {
+		TimeoutButtons()
 		const response = await RegisterLunchRecurring(officeName);
 		setResponseRecurringRegister(response);
 	};
@@ -103,6 +112,7 @@ function Lunch() {
 	// Lunch Today
 	const registerForToday = async (registration: boolean) => {
 		if (!isPastNoon()) {
+			TimeoutButtons()
 			const response = await RegisterLunchToday(officeName, registration);
 			// const response = await CreateEvent("grzegorz.malisz@weareida.digital", "lunch event", new Date().toISOString(), new Date().toISOString());
 			// setResponse(await SendEmail(RegisterForTodayMail(officeName), "office@ida-mediafoundry.nl"));
@@ -110,6 +120,7 @@ function Lunch() {
 			if (response.success) {
 				setIsRegisteredToday(registration);
 			}
+
 		}
 	};
 
@@ -141,7 +152,7 @@ function Lunch() {
 						))}
 					</form>
 					{responseRecurringDayChange && <BodySmall additionalClasses={[responseRecurringDayChange.success ? "font-colour--success" : "font-colour--fail"]}>{responseRecurringDayChange.statusText}</BodySmall>}
-					<Button child="Register" onClick={registerLunchDays} />
+					<Button child="Register" disabled={isButtonDisabled} onClick={registerLunchDays} />
 					{responseRecurringRegister && <BodySmall additionalClasses={[responseRecurringRegister.success ? "font-colour--success" : "font-colour--fail"]}>{responseRecurringRegister.statusText}</BodySmall>}
 				</div>
 				<div className="lunch-main__today">
@@ -150,9 +161,9 @@ function Lunch() {
 					<BodySmall>before 12:00</BodySmall>
 					{responseToday && <BodySmall additionalClasses={[responseToday.success ? "font-colour--success" : "font-colour--fail"]}>{responseToday.statusText}</BodySmall>}
 					<form>
-						{isRegisteredToday ? 
-							<Button child="Deregister" disabled={isPastNoon()} onClick={() => registerForToday(false)} />: 
-							<Button child="Register" disabled={isPastNoon()} onClick={() => registerForToday(true)} />
+						{isRegisteredToday ?
+							<Button child="Deregister" disabled={isPastNoon() || isButtonDisabled} onClick={() => registerForToday(false)} /> :
+							<Button child="Register" disabled={isPastNoon() || isButtonDisabled} onClick={() => registerForToday(true)} />
 						}
 					</form>
 				</div>
