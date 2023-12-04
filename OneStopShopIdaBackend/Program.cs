@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using OneStopShopIdaBackend.Controllers;
-using OneStopShopIdaBackend.Models;
 using OneStopShopIdaBackend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,10 +23,10 @@ builder.Services.AddDbContext<IDatabaseService, DatabaseService>(opt =>
     opt.UseMySQL(builder.Configuration["ConnectionStrings:MySqlConnection"]));
 
 // Add the DailyTaskService as a Singleton service
-builder.Services.AddSingleton<IHostedService, MidnightTaskService>();
+builder.Services.AddSingleton<IHostedService, MidnightTaskController>();
 
 // Add the WeeklyTaskService as a Singleton service
-builder.Services.AddSingleton<IHostedService, WeeklyTaskService>();
+builder.Services.AddSingleton<IHostedService, WeeklyTaskController>();
 
 // Register HttpClient as a singleton service
 builder.Services.AddHttpClient();

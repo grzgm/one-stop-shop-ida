@@ -1,14 +1,14 @@
 ﻿using OneStopShopIdaBackend.Models;
-using System;
+using OneStopShopIdaBackend.Services;
 
-namespace OneStopShopIdaBackend.Services;
+namespace OneStopShopIdaBackend.Controllers;
 
-public class WeeklyTaskService : IHostedService, IDisposable
+public class WeeklyTaskController : IHostedService, IDisposable
 {
     private readonly IServiceProvider _serviceProvider;
     private Timer _timer;
 
-    public WeeklyTaskService(IServiceProvider serviceProvider)
+    public WeeklyTaskController(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
     }

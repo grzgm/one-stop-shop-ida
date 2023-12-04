@@ -1,11 +1,13 @@
-﻿namespace OneStopShopIdaBackend.Services;
+﻿using OneStopShopIdaBackend.Services;
 
-public class MidnightTaskService : IHostedService, IDisposable
+namespace OneStopShopIdaBackend.Controllers;
+
+public class MidnightTaskController : IHostedService, IDisposable
 {
     private readonly IServiceProvider _serviceProvider;
     private Timer _timer;
 
-    public MidnightTaskService(IServiceProvider serviceProvider)
+    public MidnightTaskController(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
     }
@@ -16,9 +18,9 @@ public class MidnightTaskService : IHostedService, IDisposable
         var now = DateTime.UtcNow;
         var midnight = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0, DateTimeKind.Utc);
         var timeUntilMidnight = midnight.AddHours(24) - now;
-        
+
         _timer = new Timer(DoWork, null, timeUntilMidnight, TimeSpan.FromDays(1));
-        
+
         return Task.CompletedTask;
     }
 
