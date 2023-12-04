@@ -32,6 +32,17 @@ public class LunchRecurringItem
     [Required]
     public bool Friday { get; set; }
 
+    public bool IsRegistered()
+    {
+        if (Monday) return true;
+        if (Tuesday) return true;
+        if (Wednesday) return true;
+        if (Thursday) return true;
+        if (Friday) return true;
+
+        return false;
+    }
+
     public override string ToString()
     {
         var selectedDays = new List<string>();

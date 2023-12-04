@@ -21,7 +21,12 @@ public class LunchRecurringItemsController : CustomControllerBase
 
     private static string RegisterRecurringMessage(string officeName, string name, LunchRecurringItem lunchRecurringItem) =>
     "Hi,\n" +
-    $"I would like to register for lunch at {officeName} Office on {lunchRecurringItem}.\n" +
+    $"I would like to register for lunch at {officeName} Office on {lunchRecurringItem} in the next week.\n" +
+    "Kind Regards,\n" +
+    $"{name}";
+    private static string DeregisterRecurringMessage(string officeName, string name) =>
+    "Hi,\n" +
+    $"I would like to deregister from lunch list at {officeName} Office in the next week.\n" +
     "Kind Regards,\n" +
     $"{name}";
 
@@ -65,7 +70,10 @@ public class LunchRecurringItemsController : CustomControllerBase
 
         LunchRecurringItem lunchRecurringItem = await _databaseService.GetRegisteredDays(microsoftId);
 
-        string message = RegisterRecurringMessage(officeName, $"{user.FirstName} {user.Surname}", lunchRecurringItem);
+        string message;
+
+        if (lunchRecurringItem.IsRegistered()) message = RegisterRecurringMessage(officeName, $"{user.FirstName} {user.Surname}", lunchRecurringItem);
+        else message = DeregisterRecurringMessage(officeName, $"{user.FirstName} {user.Surname}");
 
         await _microsoftGraphApiService.SendEmail(accessToken, _lunchEmailAddress, "Lunch Registration", message);
 
