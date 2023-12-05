@@ -1,15 +1,17 @@
 import { IActionResult, InspectResponseAsync } from "./Response";
 
-export interface IDesk{
-	office: string;
-	date: Date;
+interface IDeskCluster {
     clusterId: number;
-    deskId: number;
-	timeSlot: number;
-
+    desks: IDesk[];
 }
 
-export async function GetDeskReservationForOfficeDate(office: string, date: Date): Promise<IActionResult<IDesk[]>> {
+export interface IDesk{
+    clusterId: number;
+    deskId: number;
+	occupied: boolean[];
+}
+
+export async function GetDeskReservationForOfficeDate(office: string, date: Date): Promise<IActionResult<IDeskCluster[]>> {
 	try {
 		const res = await fetch(
 			`http://localhost:3002/desk/reservation/${office}?date=${date.toISOString().split('T')[0]}`,
@@ -18,7 +20,7 @@ export async function GetDeskReservationForOfficeDate(office: string, date: Date
 				credentials: "include", // Include credentials (cookies) in the request
 			}
 		);
-		return InspectResponseAsync<IDesk[]>(res);
+		return InspectResponseAsync<IDeskCluster[]>(res);
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };
