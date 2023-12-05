@@ -5,10 +5,16 @@ import {
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import Button from "./Buttons";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import CurrentOfficeContext from "../contexts/CurrentOfficeContext";
+import { IDesk, GetDeskReservationForOfficeDate } from "../api/DeskReservationAPI";
 
-class Desk {
+interface IDeskCluster {
+    clusterId: number;
+    desks: Desk[];
+}
+
+export class Desk {
     clusterId: number
     deskId: number;
     occupiedMorning: boolean;
@@ -32,23 +38,40 @@ class Desk {
     }
 }
 
-interface IDeskCluster {
-    clusterId: number
-    desks: Desk[];
-}
-
 function OfficeSpace() {
     const officeName = useContext(CurrentOfficeContext).currentOffice;
     const [displayedDate, setDisplayedDate] = useState(new Date());
     const [selectedDesk, setSelectedDesk] = useState<Desk | undefined>(undefined);
     const [checkboxValues, setCheckboxValues] = useState([false, false]);
 
-    const originalDeskClusters: IDeskCluster[] =
-        // [{ clusterId: 0, desks: [{ deskId: 0, state: 0 }, { deskId: 1, state: 4 }, { deskId: 2, state: 2 }, { deskId: 3, state: 3 },] },
-        //  { clusterId: 1, desks: [{ deskId: 0, state: 0 }, { deskId: 1, state: 3 }, { deskId: 2, state: 4 }, { deskId: 3, state: 3 },] },
-        //  { clusterId: 2, desks: [{ deskId: 0, state: 2 }, { deskId: 1, state: 0 }, { deskId: 2, state: 0 }, { deskId: 3, state: 3 },] },]
-        [{ clusterId: 0, desks: [new Desk(0, 0, true, true), new Desk(0, 1, false, true), new Desk(0, 2, true, false), new Desk(0, 3, false, false),] },]
+    const [originalDeskClusters, setOriginalDeskClusters] = useState<IDeskCluster[]>([{ clusterId: 0, desks: [new Desk(0, 0, false, false), new Desk(0, 1, false, false), new Desk(0, 2, false, false), new Desk(0, 3, false, false),] },])
+    // let originalDeskClusters: IDeskCluster[] =
+    //     // [{ clusterId: 0, desks: [{ deskId: 0, state: 0 }, { deskId: 1, state: 4 }, { deskId: 2, state: 2 }, { deskId: 3, state: 3 },] },
+    //     //  { clusterId: 1, desks: [{ deskId: 0, state: 0 }, { deskId: 1, state: 3 }, { deskId: 2, state: 4 }, { deskId: 3, state: 3 },] },
+    //     //  { clusterId: 2, desks: [{ deskId: 0, state: 2 }, { deskId: 1, state: 0 }, { deskId: 2, state: 0 }, { deskId: 3, state: 3 },] },]
+    //     // [{ clusterId: 0, desks: [new Desk(0, 0, true, true), new Desk(0, 1, false, true), new Desk(0, 2, true, false), new Desk(0, 3, false, false),] },]
+    //     [{ clusterId: 0, desks: [new Desk(0, 0, false, false), new Desk(0, 1, false, false), new Desk(0, 2, false, false), new Desk(0, 3, false, false),] },]
     const [deskClusters, setDeskClusters] = useState<IDeskCluster[]>(originalDeskClusters)
+
+    useEffect(() => {
+        const GetDeskReservationForOfficeDateWraper = async () => {
+            const reservations = await GetDeskReservationForOfficeDate(officeName, displayedDate);
+            let oldOriginalDeskClusters = [...originalDeskClusters]
+            if (reservations.payload) {
+                for (const desk of reservations?.payload) {
+                    if (desk.timeSlot == 0)
+                        oldOriginalDeskClusters[desk.clusterId].desks[desk.deskId].occupiedMorning = true;
+                    if (desk.timeSlot == 1)
+                        oldOriginalDeskClusters[desk.clusterId].desks[desk.deskId].occupiedAfternoon = true;
+                }
+            }
+            
+            setDeskClusters(oldOriginalDeskClusters);
+            setOriginalDeskClusters(oldOriginalDeskClusters);
+        }
+
+        GetDeskReservationForOfficeDateWraper();
+    }, [])
 
     const PreviousDay = () => {
         const newDate = new Date(displayedDate);
@@ -80,15 +103,18 @@ function OfficeSpace() {
     };
 
     const selectDesk = (desk: Desk) => {
-        if (selectedDesk?.clusterId == desk.clusterId && selectedDesk?.deskId == desk.deskId)
-        {
+        if (selectedDesk?.clusterId == desk.clusterId && selectedDesk?.deskId == desk.deskId) {
             // Reset the state with the default values
+            selectedDesk.isSelected = false;
             setDeskClusters(originalDeskClusters);
             setSelectedDesk(undefined)
-            setCheckboxValues([false , false])
+            setCheckboxValues([false, false])
         }
         else if (desk.getState() == 0 || desk.getState() == 2) {
             const updatedDeskClusters = [...originalDeskClusters];
+            
+            if(selectedDesk)
+                selectedDesk.isSelected = false;
 
             // Toggle the class for the selected desk
             updatedDeskClusters[desk.clusterId].desks[desk.deskId].isSelected = true;
