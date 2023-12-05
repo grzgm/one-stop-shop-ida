@@ -28,15 +28,15 @@ public class DeskReservationItemsController : CustomControllerBase
     "Kind Regards,\n" +
     $"{name}";
 
-    [HttpGet("get-reservations")]
-    public async Task<ActionResult<List<DeskReservationItem>>> GetDeskReservationForOfficeDate([FromQuery] string office, [FromQuery] DateTime date)
+    [HttpGet("{office}")]
+    public async Task<ActionResult<List<DeskReservationItem>>> GetDeskReservationForOfficeDate([FromRoute]string office, [FromQuery] DateTime date)
     {
         // string accessToken = HttpContext.Session.GetString("accessToken");
         // string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken)).MicrosoftId;
         return await _databaseService.GetDeskReservationForOfficeDate(office, date);
     }
     
-    [HttpGet("get-reservations2")]
+    [HttpGet("for-user")]
     public async Task<ActionResult<List<DeskReservationItem>>> GetDeskReservationForUser([FromQuery] string microsoftId)
     {
         // string accessToken = HttpContext.Session.GetString("accessToken");
