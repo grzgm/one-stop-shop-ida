@@ -124,8 +124,8 @@ function OfficeSpace() {
                 </div>
             </div>
             <div className="office-space__overview">
-                {deskClusters.map((deskCluster, index) => (
-                    <DeskCluster desks={deskCluster.desks} clusterId={deskCluster.clusterId} selectDesk={selectDesk} key={index} />
+                {deskClusters.map((deskCluster) => (
+                    <DeskCluster desks={deskCluster.desks} clusterId={deskCluster.clusterId} selectDesk={selectDesk} key={deskCluster.clusterId} />
                 ))}
             </div>
             <div className="office-space__availability-bar">
@@ -136,8 +136,8 @@ function OfficeSpace() {
                             <BodySmall children="Afternoon" />
                         </div>
                         <div className="availability-bar__bars">
-                            <div className={`availability-bar__bar ${!selectedDesk?.occupiedMorning ? "availability-bar__bar--success" : "availability-bar__bar--fail"}`}></div>
-                            <div className={`availability-bar__bar ${!selectedDesk?.occupiedAfternoon ? "availability-bar__bar--success" : "availability-bar__bar--fail"}`}></div>
+                            <div className={`availability-bar__bar availability-bar__bar${!selectedDesk?.occupiedMorning ? "--success" : "--fail"}`}></div>
+                            <div className={`availability-bar__bar availability-bar__bar${!selectedDesk?.occupiedAfternoon ? "--success" : "--fail"}`}></div>
                         </div>
                         <form className="availability-bar__form body--normal">
                             <div className="availability-bar__checkboxes">
@@ -183,7 +183,7 @@ interface DeskClusterProps {
 function DeskCluster({ clusterId, desks, selectDesk }: DeskClusterProps) {
     return (
         <div className="desk-cluster" id={clusterId.toString()}>
-            {desks.map((desk, index) => (
+            {desks.map((desk) => (
                 <DeskElement desk={desk} selectDesk={selectDesk} key={desk.deskId} />
             ))}
         </div>
