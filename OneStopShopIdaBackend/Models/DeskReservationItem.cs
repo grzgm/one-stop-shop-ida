@@ -45,9 +45,9 @@ public class DeskFrontend
     public List<bool> Occupied { get; set; }
 }
 
-public class DeskClusterFrontend
-{
-    public int ClusterId { get; set; }
-
-    public List<DeskFrontend> Desks { get; set; } = new List<DeskFrontend>();
-}
+// public class DeskClusterFrontend
+// {
+//     public int ClusterId { get; set; }
+//
+//     public List<DeskFrontend> Desks { get; set; } = new List<DeskFrontend>();
+// }
