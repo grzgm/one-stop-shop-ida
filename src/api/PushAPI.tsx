@@ -6,6 +6,10 @@ async function PostSubscribe(): Promise<IActionResult<boolean>> {
 		console.error("The user explicitly denied the permission request.");
 		return { success: false, statusText: "The user explicitly denied the permission request." }
 	}
+	// if (result === "default") {
+	// 	console.error("The user still didn't responded to the permission request.");
+	// 	return { success: false, statusText: "You haven't enabled Push Notifications." }
+	// }
 	if (result === "granted") {
 		console.info("The user accepted the permission request.");
 	}
