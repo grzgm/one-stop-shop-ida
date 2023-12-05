@@ -5,21 +5,21 @@ namespace OneStopShopIdaBackend.Services;
 
 public partial class DatabaseService
 {
-    //public async Task<DeskReservationItem> GetDeskReservation(string microsoftId)
-    //{
-    //    IsDbSetNull("DeskReservation");
+    public async Task<List<DeskReservationItem>> GetDeskReservationForOfficeDate(string office, DateTime date)
+    {
+        IsDbSetNull("DeskReservation");
 
-    //    var deskReservationItem = await DeskReservation.FindAsync(microsoftId);
+        var deskReservationItem = await DeskReservation.Where(e=> e.Office == office && e.Date == date).ToListAsync();
 
-    //    if (deskReservationItem == null)
-    //    {
-    //        throw new KeyNotFoundException();
-    //    }
+        if (deskReservationItem == null)
+        {
+            throw new KeyNotFoundException();
+        }
 
-    //    return deskReservationItem;
-    //}
+        return deskReservationItem;
+    }
 
-    public async Task<List<DeskReservationItem>> GetAllDeskReservations(string microsoftId)
+    public async Task<List<DeskReservationItem>> GetDeskReservationForUser(string microsoftId)
     {
         IsDbSetNull("DeskReservation");
 

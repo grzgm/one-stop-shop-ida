@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace OneStopShopIdaBackend.Models;
 
+[PrimaryKey(nameof(Office), nameof(Date), nameof(DeskClusterId), nameof(DeskId), nameof(TimeSlot))]
 public class DeskReservationItem
 {
     public DeskReservationItem() { }
@@ -23,7 +25,6 @@ public class DeskReservationItem
     [Required]
     public string MicrosoftId { get; set; }
 
-    [Key]
     [StringLength(45)]
     [Required]
     public string Office { get; set; }
