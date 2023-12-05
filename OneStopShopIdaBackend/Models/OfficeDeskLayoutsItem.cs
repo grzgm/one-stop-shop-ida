@@ -23,4 +23,5 @@ public class OfficeDeskLayoutsItem
     [Required] public int ClusterId { get; set; }
     [Required] public int DeskId { get; set; }
     [Required] public int IsAvailable { get; set; }
+    [Required] public int AmountOfTimeSlots { get; set; }
 }

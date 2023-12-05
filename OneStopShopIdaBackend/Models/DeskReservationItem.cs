@@ -37,3 +37,17 @@ public class DeskReservationItem
     [Required]
     public int TimeSlot { get; set; }
 }
+
+public class DeskFrontend
+{
+    public int? ClusterId { get; set; }
+    public int? DeskId { get; set; }
+    public List<bool> Occupied { get; set; }
+}
+
+public class DeskClusterFrontend
+{
+    public int ClusterId { get; set; }
+
+    public List<DeskFrontend> Desks { get; set; } = new List<DeskFrontend>();
+}
