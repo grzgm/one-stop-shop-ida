@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore;
 namespace OneStopShopIdaBackend.Models;
 
 [PrimaryKey(nameof(ClusterId), nameof(DeskId), nameof(IsAvailable))]
-public class OfficeLayoutsItem
+public class OfficeDeskLayoutsItem
 {
-    public OfficeLayoutsItem()
+    public OfficeDeskLayoutsItem()
     {
     } 
 
-    public OfficeLayoutsItem(string office, int clusterid, int deskid, int isAvailable)
+    public OfficeDeskLayoutsItem(string office, int clusterid, int deskid, int isAvailable)
     {
         Office = office;
         ClusterId = clusterid;
