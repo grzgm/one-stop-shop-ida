@@ -57,25 +57,25 @@ function OfficeSpace() {
     const [deskClusters, setDeskClusters] = useState<{ [key: string]: DeskCluster }>(initialDeskClusters)
 
     useEffect(() => {
-        const GetDeskReservationForOfficeDateWraper = async () => {
-            const reservations = await GetDeskReservationForOfficeDate(officeName, displayedDate);
-
-            const newDeskClusters: { [key: string]: DeskCluster } = {};
-
-            if (reservations.payload) {
-                for (const clusterId in reservations.payload) {
-                    newDeskClusters[clusterId] = new DeskCluster(clusterId, reservations.payload[clusterId].desks)
-                }
-            }
-
-            setDeskClusters(newDeskClusters);
-            setInitialDeskClusters(newDeskClusters);
-        }
-
-        GetDeskReservationForOfficeDateWraper();
+        SetUpOfficeSpace();
     }, [])
 
-    const PreviousDay = () => {
+    const SetUpOfficeSpace = async (date?: Date) => {
+        const reservations = await GetDeskReservationForOfficeDate(officeName, date ? date : displayedDate);
+
+        const newDeskClusters: { [key: string]: DeskCluster } = {};
+
+        if (reservations.payload) {
+            for (const clusterId in reservations.payload) {
+                newDeskClusters[clusterId] = new DeskCluster(clusterId, reservations.payload[clusterId].desks)
+            }
+        }
+
+        setDeskClusters(newDeskClusters);
+        setInitialDeskClusters(newDeskClusters);
+    }
+
+    const PreviousDay = async () => {
         const newDate = new Date(displayedDate);
         const PreviousDayDate = new Date(newDate.setDate(newDate.getDate() - 1));
         if (
@@ -85,9 +85,10 @@ function OfficeSpace() {
                 new Date().getDate() == newDate.getDate())
         ) {
             setDisplayedDate(PreviousDayDate);
+            await SetUpOfficeSpace(PreviousDayDate)
         }
     };
-    const NextDay = () => {
+    const NextDay = async () => {
         const newDate = new Date(displayedDate);
         const NextDayDate = new Date(newDate.setDate(newDate.getDate() + 1));
 
@@ -99,6 +100,7 @@ function OfficeSpace() {
 
         if (differenceInDays <= 14) {
             setDisplayedDate(NextDayDate);
+            await SetUpOfficeSpace(NextDayDate)
         }
     };
 
