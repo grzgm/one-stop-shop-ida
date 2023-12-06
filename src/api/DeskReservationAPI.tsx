@@ -1,17 +1,17 @@
 import { IActionResult, InspectResponseAsync } from "./Response";
 
 interface IDeskCluster {
-    clusterId: number;
+    clusterId: string;
     desks: IDesk[];
 }
 
 export interface IDesk{
-    clusterId: number;
-    deskId: number;
+    clusterId: string;
+    deskId: string;
 	occupied: boolean[];
 }
 
-export async function GetDeskReservationForOfficeDate(office: string, date: Date): Promise<IActionResult<IDeskCluster[]>> {
+async function GetDeskReservationForOfficeDate(office: string, date: Date): Promise<IActionResult<IDeskCluster[]>> {
 	try {
 		const res = await fetch(
 			`http://localhost:3002/desk/reservation/${office}?date=${date.toISOString().split('T')[0]}`,
@@ -47,20 +47,21 @@ export async function GetDeskReservationForOfficeDate(office: string, date: Date
 // 	}
 // }
 
-// async function RegisterLunchRecurring(officeName: string): Promise<IActionResult<undefined>> {
-// 	try {
-// 		const res = await fetch(
-// 			`http://localhost:3002/lunch/recurring/register-for-lunch-recurring?officeName=${officeName}`,
-// 			{
-// 				method: "PUT",
-// 				credentials: "include", // Include credentials (cookies) in the request
-// 			}
-// 		);
-// 		return InspectResponseAsync(res);
-// 	} catch (error) {
-// 		console.error("Error:", error);
-// 		return { success: false, statusText: "Request could not be send." };
-// 	}
-// }
+async function PostDeskReservation(office: string, date: Date, clusterId: string, deskId: string, timeSlots: number[]): Promise<IActionResult<undefined>> {
+	try {
+		const res = await fetch(
+			`http://localhost:3002/desk/reservation/${office}?date=${date.toISOString().split('T')[0]}&clusterId=${clusterId}&deskId=${deskId}&timeSlots=${timeSlots.join("&timeSlots=")}`,
+			{
+				method: "POST",
+				credentials: "include", // Include credentials (cookies) in the request
+			}
+		);
+		return InspectResponseAsync(res);
+	} catch (error) {
+		console.error("Error:", error);
+		return { success: false, statusText: "Request could not be send." };
+	}
+}
 
 // export { GetDeskReservationForOfficeDate, PutLunchRecurringItem, RegisterLunchRecurring };
+export { GetDeskReservationForOfficeDate, PostDeskReservation}

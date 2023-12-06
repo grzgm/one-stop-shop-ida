@@ -7,15 +7,15 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import Button from "./Buttons";
 import { useContext, useEffect, useState } from "react";
 import CurrentOfficeContext from "../contexts/CurrentOfficeContext";
-import { GetDeskReservationForOfficeDate, IDesk } from "../api/DeskReservationAPI";
+import { GetDeskReservationForOfficeDate, IDesk, PostDeskReservation } from "../api/DeskReservationAPI";
 
 export class Desk {
-    clusterId: number
-    deskId: number;
+    clusterId: string
+    deskId: string;
     occupied: boolean[];
     isSelected: boolean;
 
-    constructor(clusterId: number, deskId: number, occupied: boolean[]) {
+    constructor(clusterId: string, deskId: string, occupied: boolean[]) {
         this.clusterId = clusterId;
         this.deskId = deskId;
         this.occupied = occupied;
@@ -134,7 +134,14 @@ function OfficeSpace() {
     };
 
     const GetData = () => {
-        console.log(officeName, displayedDate.toLocaleDateString(), selectedDesk, checkboxValues);
+        const timeSlots: number[] = [];
+        for (let i = 0; i < checkboxValues.length; i++) {
+            if(selectedDesk?.occupied[i] != checkboxValues[i]) timeSlots.push(i)
+        }
+        if (selectedDesk)
+        {
+            PostDeskReservation(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, timeSlots)
+        }
     }
 
     return (
