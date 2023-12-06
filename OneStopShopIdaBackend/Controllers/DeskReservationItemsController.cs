@@ -58,12 +58,15 @@ public class DeskReservationItemsController : CustomControllerBase
         return deskClusterFrontend;
     }
 
-    [HttpGet("for-user")]
-    public async Task<ActionResult<List<DeskReservationItem>>> GetDeskReservationForUser([FromQuery] string microsoftId)
+    [HttpGet("{office}/user")]
+    public async Task<ActionResult<List<DeskReservationItem>>> GetDeskReservationsOfUser([FromRoute] string office)
     {
+        office = office.ToLower();
         // string accessToken = HttpContext.Session.GetString("accessToken");
         // string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken)).MicrosoftId;
-        return await _databaseService.GetDeskReservationForUser(microsoftId);
+        string microsoftId = "22";
+
+        return await _databaseService.GetDeskReservationsOfUser(microsoftId, office);
     }
 
     // [HttpPut("update-registered-days")]

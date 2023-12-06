@@ -19,11 +19,11 @@ public partial class DatabaseService
         return deskReservationItem;
     }
 
-    public async Task<List<DeskReservationItem>> GetDeskReservationForUser(string microsoftId)
+    public async Task<List<DeskReservationItem>> GetDeskReservationsOfUser(string microsoftId, string office)
     {
         IsDbSetNull("DeskReservation");
 
-        var deskReservationItem = await DeskReservation.Where(e => e.MicrosoftId == microsoftId).ToListAsync();
+        var deskReservationItem = await DeskReservation.Where(e => e.MicrosoftId == microsoftId && e.Date >= DateTime.Now.AddDays(-1) && e.Date <= DateTime.Now.AddDays(14)).ToListAsync();
 
         return deskReservationItem;
     }
