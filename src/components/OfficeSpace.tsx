@@ -36,15 +36,14 @@ export class Desk {
     }
 }
 class DeskCluster {
-    clusterId: number;
-    desks: Desk[];
+    clusterId: string;
+    desks: { [key: string]: Desk };
 
-    constructor(clusterId: number, iDesks: IDesk[]) {
+    constructor(clusterId: string, iDesks: IDesk[]) {
         this.clusterId = clusterId;
-        this.desks = []
-
-        for (const iDesk of iDesks) {
-            this.desks.push(new Desk(iDesk.clusterId, iDesk.deskId, iDesk.occupied))
+        this.desks = {}
+        for (const deskId in iDesks) {
+            this.desks[deskId] = new Desk(iDesks[deskId].clusterId, iDesks[deskId].deskId, iDesks[deskId].occupied)
         }
     }
 }
@@ -54,17 +53,18 @@ function OfficeSpace() {
     const [displayedDate, setDisplayedDate] = useState(new Date());
     const [selectedDesk, setSelectedDesk] = useState<Desk | undefined>(undefined);
     const [checkboxValues, setCheckboxValues] = useState([false, false]);
-    const [initialDeskClusters, setInitialDeskClusters] = useState<DeskCluster[]>([])
-    const [deskClusters, setDeskClusters] = useState<DeskCluster[]>(initialDeskClusters)
+    const [initialDeskClusters, setInitialDeskClusters] = useState<{ [key: string]: DeskCluster }>({})
+    const [deskClusters, setDeskClusters] = useState<{ [key: string]: DeskCluster }>(initialDeskClusters)
 
     useEffect(() => {
         const GetDeskReservationForOfficeDateWraper = async () => {
             const reservations = await GetDeskReservationForOfficeDate(officeName, displayedDate);
-            const newDeskClusters: DeskCluster[] = [];
+
+            const newDeskClusters: { [key: string]: DeskCluster } = {};
 
             if (reservations.payload) {
-                for (const iDeskCluster of reservations.payload) {
-                    newDeskClusters.push(new DeskCluster(iDeskCluster.clusterId, iDeskCluster.desks))
+                for (const clusterId in reservations.payload) {
+                    newDeskClusters[clusterId] = new DeskCluster(clusterId, reservations.payload[clusterId].desks)
                 }
             }
 
@@ -97,8 +97,6 @@ function OfficeSpace() {
         // To calculate the no. of days between two dates 
         const differenceInDays = Math.abs(differenceInTime / (1000 * 3600 * 24));
 
-        console.log(differenceInDays)
-
         if (differenceInDays <= 14) {
             setDisplayedDate(NextDayDate);
         }
@@ -115,7 +113,7 @@ function OfficeSpace() {
             setCheckboxValues([false, false])
         }
         else if (desk.getState() == 0 || desk.getState() == 2) {
-            const updatedDeskClusters = [...initialDeskClusters];
+            const updatedDeskClusters = { ...initialDeskClusters };
 
             // Toggle the class for the selected desk
             updatedDeskClusters[desk.clusterId].desks[desk.deskId].isSelected = true;
@@ -151,8 +149,8 @@ function OfficeSpace() {
                 </div>
             </div>
             <div className="office-space__overview">
-                {deskClusters.map((deskCluster) => (
-                    <DeskClusterComponent desks={deskCluster.desks} clusterId={deskCluster.clusterId} selectDesk={selectDesk} key={deskCluster.clusterId} />
+                {Object.keys(deskClusters).map((index) => (
+                    <DeskClusterComponent desks={deskClusters[index].desks} clusterId={deskClusters[index].clusterId} selectDesk={selectDesk} key={deskClusters[index].clusterId} />
                 ))}
             </div>
             <div className="office-space__availability-bar">
@@ -197,16 +195,16 @@ function OfficeSpace() {
 }
 
 interface DeskClusterComponentProps {
-    clusterId: number;
-    desks: Desk[];
+    clusterId: string;
+    desks: { [key: string]: Desk };
     selectDesk: (desk: Desk) => void;
 }
 
 function DeskClusterComponent({ clusterId, desks, selectDesk }: DeskClusterComponentProps) {
     return (
         <div className="desk-cluster" id={clusterId.toString()}>
-            {desks.map((desk) => (
-                <DeskComponent desk={desk} selectDesk={selectDesk} key={desk.deskId} />
+            {Object.keys(desks).map((index) => (
+                <DeskComponent desk={desks[index]} selectDesk={selectDesk} key={desks[index].deskId} />
             ))}
         </div>
     );
