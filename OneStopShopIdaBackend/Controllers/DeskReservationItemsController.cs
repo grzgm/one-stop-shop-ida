@@ -33,38 +33,23 @@ public class DeskReservationItemsController : CustomControllerBase
         $"{name}";
 
     [HttpGet("{office}")]
-    public async Task<ActionResult<List<List<DeskFrontend>>>> GetDeskReservationForOfficeDate(
+    public async Task<ActionResult<Dictionary<int, DeskClusterFrontend>>> GetDeskReservationForOfficeDate(
             [FromRoute] string office, [FromQuery] DateTime date)
-        // string accessToken = HttpContext.Session.GetString("accessToken");
-        // string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken)).MicrosoftId;
+    // string accessToken = HttpContext.Session.GetString("accessToken");
+    // string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken)).MicrosoftId;
     {
         List<OfficeDeskLayoutsItem> officeDeskLayoutsItems =
             await _databaseService.GetOfficeDeskLayoutForOffice(office);
-        List<List<DeskFrontend>> desksFrontend = new List<List<DeskFrontend>>();
+        Dictionary<int, DeskClusterFrontend> deskClusterFrontend = new Dictionary<int, DeskClusterFrontend>();
 
-        // int clusterIdMax = 0;
-        // int deskIdMax = 0;
-
-        // foreach (var officeDeskLayoutsItem in officeDeskLayoutsItems)
-        // {
-        //     if (officeDeskLayoutsItem.ClusterId > clusterIdMax)
-        //         clusterIdMax = officeDeskLayoutsItem.ClusterId;
-        //     if (officeDeskLayoutsItem.DeskId > deskIdMax)
-        //         deskIdMax = officeDeskLayoutsItem.DeskId;
-        // }
         foreach (var officeDeskLayoutsItem in officeDeskLayoutsItems)
         {
-            while (desksFrontend.Count <= officeDeskLayoutsItem.ClusterId)
+            if (!deskClusterFrontend.ContainsKey(officeDeskLayoutsItem.ClusterId))
             {
-                desksFrontend.Add(new List<DeskFrontend>());
+                deskClusterFrontend[officeDeskLayoutsItem.ClusterId] = new DeskClusterFrontend() { ClusterId = officeDeskLayoutsItem.ClusterId, Desks = new Dictionary<int, DeskFrontend>()};
             }
 
-            while (desksFrontend[officeDeskLayoutsItem.ClusterId].Count <= officeDeskLayoutsItem.DeskId)
-            {
-                desksFrontend[officeDeskLayoutsItem.ClusterId].Add(new DeskFrontend());
-            }
-
-            desksFrontend[officeDeskLayoutsItem.ClusterId][officeDeskLayoutsItem.DeskId] = new DeskFrontend()
+            deskClusterFrontend[officeDeskLayoutsItem.ClusterId].Desks[officeDeskLayoutsItem.DeskId] = new DeskFrontend()
             {
                 ClusterId = officeDeskLayoutsItem.ClusterId,
                 DeskId = officeDeskLayoutsItem.DeskId,
@@ -77,11 +62,11 @@ public class DeskReservationItemsController : CustomControllerBase
 
         foreach (var deskReservationItem in deskReservationItems)
         {
-            desksFrontend[deskReservationItem.ClusterId][deskReservationItem.DeskId]
+            deskClusterFrontend[deskReservationItem.ClusterId].Desks[deskReservationItem.DeskId]
                 .Occupied[deskReservationItem.TimeSlot] = true;
         }
 
-        return desksFrontend;
+        return deskClusterFrontend;
     }
 
     [HttpGet("for-user")]
