@@ -35,23 +35,24 @@ public class DeskReservationItemsController : CustomControllerBase
     [HttpGet("{office}")]
     public async Task<ActionResult<Dictionary<int, DeskClusterFrontend>>> GetDeskReservationForOfficeDate(
             [FromRoute] string office, [FromQuery] DateTime date)
-    // string accessToken = HttpContext.Session.GetString("accessToken");
-    // string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken)).MicrosoftId;
     {
+        // string accessToken = HttpContext.Session.GetString("accessToken");
+        // string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken)).MicrosoftId;
         List<OfficeDeskLayoutsItem> officeDeskLayoutsItems =
             await _databaseService.GetOfficeDeskLayoutForOffice(office);
         Dictionary<int, DeskClusterFrontend> deskClusterFrontend = new Dictionary<int, DeskClusterFrontend>();
 
         foreach (var officeDeskLayoutsItem in officeDeskLayoutsItems)
         {
-            if (!deskClusterFrontend.ContainsKey(officeDeskLayoutsItem.ClusterId))
+            int clusterId = officeDeskLayoutsItem.ClusterId;
+            if (!deskClusterFrontend.ContainsKey(clusterId))
             {
-                deskClusterFrontend[officeDeskLayoutsItem.ClusterId] = new DeskClusterFrontend() { ClusterId = officeDeskLayoutsItem.ClusterId, Desks = new Dictionary<int, DeskFrontend>()};
+                deskClusterFrontend[clusterId] = new DeskClusterFrontend() { ClusterId = clusterId, Desks = new Dictionary<int, DeskFrontend>() };
             }
 
-            deskClusterFrontend[officeDeskLayoutsItem.ClusterId].Desks[officeDeskLayoutsItem.DeskId] = new DeskFrontend()
+            deskClusterFrontend[clusterId].Desks[officeDeskLayoutsItem.DeskId] = new DeskFrontend()
             {
-                ClusterId = officeDeskLayoutsItem.ClusterId,
+                ClusterId = clusterId,
                 DeskId = officeDeskLayoutsItem.DeskId,
                 Occupied = new List<bool>(new bool[officeDeskLayoutsItem.AmountOfTimeSlots])
             };
@@ -62,8 +63,7 @@ public class DeskReservationItemsController : CustomControllerBase
 
         foreach (var deskReservationItem in deskReservationItems)
         {
-            deskClusterFrontend[deskReservationItem.ClusterId].Desks[deskReservationItem.DeskId]
-                .Occupied[deskReservationItem.TimeSlot] = true;
+            deskClusterFrontend[deskReservationItem.ClusterId].Desks[deskReservationItem.DeskId].Occupied[deskReservationItem.TimeSlot] = true;
         }
 
         return deskClusterFrontend;
