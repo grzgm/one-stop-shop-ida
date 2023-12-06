@@ -7,12 +7,13 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import Button from "./Buttons";
 import { useContext, useEffect, useState } from "react";
 import CurrentOfficeContext from "../contexts/CurrentOfficeContext";
-import { GetDeskReservationForOfficeDate, IDesk, PostDeskReservation } from "../api/DeskReservationAPI";
+import { GetDeskReservationForOfficeDate, GetDeskReservationsOfUser, IDesk, IDeskReservation, PostDeskReservation } from "../api/DeskReservationAPI";
 
 export class Desk {
     clusterId: string
     deskId: string;
     occupied: boolean[];
+    userReservations: boolean[];
     isSelected: boolean;
 
     constructor(clusterId: string, deskId: string, occupied: boolean[]) {
@@ -20,6 +21,7 @@ export class Desk {
         this.deskId = deskId;
         this.occupied = occupied;
         this.isSelected = false;
+        this.userReservations = new Array(occupied.length).fill(false);
     }
 
     getState(): number {
@@ -55,12 +57,14 @@ function OfficeSpace() {
     const [checkboxValues, setCheckboxValues] = useState([false, false]);
     const [initialDeskClusters, setInitialDeskClusters] = useState<{ [key: string]: DeskCluster }>({})
     const [deskClusters, setDeskClusters] = useState<{ [key: string]: DeskCluster }>(initialDeskClusters)
+    const [userReservations, setUserReservations] = useState<IDeskReservation[]>([])
 
     useEffect(() => {
         SetUpOfficeSpace();
     }, [])
 
     const SetUpOfficeSpace = async (date?: Date) => {
+
         const reservations = await GetDeskReservationForOfficeDate(officeName, date ? date : displayedDate);
 
         const newDeskClusters: { [key: string]: DeskCluster } = {};
@@ -68,6 +72,25 @@ function OfficeSpace() {
         if (reservations.payload) {
             for (const clusterId in reservations.payload) {
                 newDeskClusters[clusterId] = new DeskCluster(clusterId, reservations.payload[clusterId].desks)
+            }
+        }
+
+        // Handle user reservations
+        if(userReservations.length > 0)
+        {
+            for (const userReservation of userReservations) {
+                newDeskClusters[userReservation.clusterId].desks[userReservation.deskId].userReservations[userReservation.timeSlot] = true;
+            }
+        }
+        else
+        {
+            const userReservationsResponse = await GetDeskReservationsOfUser(officeName)
+            if(userReservationsResponse.payload)
+            {
+                setUserReservations(userReservationsResponse.payload)
+                for (const userReservation of userReservationsResponse.payload) {
+                    newDeskClusters[userReservation.clusterId].desks[userReservation.deskId].userReservations[userReservation.timeSlot] = true;
+                }
             }
         }
 

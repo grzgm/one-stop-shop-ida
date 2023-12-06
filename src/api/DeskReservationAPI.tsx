@@ -11,6 +11,13 @@ export interface IDesk{
 	occupied: boolean[];
 }
 
+export interface IDeskReservation{
+	date: Date;
+    clusterId: string;
+    deskId: string;
+	timeSlot: number;
+}
+
 async function GetDeskReservationForOfficeDate(office: string, date: Date): Promise<IActionResult<IDeskCluster[]>> {
 	try {
 		const res = await fetch(
@@ -21,6 +28,22 @@ async function GetDeskReservationForOfficeDate(office: string, date: Date): Prom
 			}
 		);
 		return InspectResponseAsync<IDeskCluster[]>(res);
+	} catch (error) {
+		console.error("Error:", error);
+		return { success: false, statusText: "Request could not be send." };
+	}
+}
+
+async function GetDeskReservationsOfUser(office: string): Promise<IActionResult<IDeskReservation[]>> {
+	try {
+		const res = await fetch(
+			`http://localhost:3002/desk/reservation/${office}/user`,
+			{
+				method: "GET",
+				credentials: "include", // Include credentials (cookies) in the request
+			}
+		);
+		return InspectResponseAsync<IDeskReservation[]>(res);
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };
@@ -64,4 +87,4 @@ async function PostDeskReservation(office: string, date: Date, clusterId: string
 }
 
 // export { GetDeskReservationForOfficeDate, PutLunchRecurringItem, RegisterLunchRecurring };
-export { GetDeskReservationForOfficeDate, PostDeskReservation}
+export { GetDeskReservationForOfficeDate, GetDeskReservationsOfUser, PostDeskReservation}
