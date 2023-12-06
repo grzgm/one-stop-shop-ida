@@ -38,6 +38,8 @@ public class DeskReservationItemsController : CustomControllerBase
     {
         // string accessToken = HttpContext.Session.GetString("accessToken");
         // string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken)).MicrosoftId;
+        office = office.ToLower();
+
         List<OfficeDeskLayoutsItem> officeDeskLayoutsItems =
             await _databaseService.GetOfficeDeskLayoutForOffice(office);
         Dictionary<int, DeskClusterFrontend> deskClusterFrontend = new Dictionary<int, DeskClusterFrontend>();
@@ -89,15 +91,22 @@ public class DeskReservationItemsController : CustomControllerBase
     //     return NoContent();
     // }
 
-    //[HttpPost("create-lunch-recurring")]
-    //public async Task<IActionResult> PostDeskReservationItem(string microsoftId)
-    //{
-    //        string accessToken = HttpContext.Session.GetString("accessToken");
-    //        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(async (accessToken) => await _microsoftGraphApiService.GetMe(accessToken), accessToken)).MicrosoftId;
-    //
-    //        await _databaseService.PostDeskReservationItem(microsoftId);
-    //        return NoContent();
-    //}
+    [HttpPost("{office}")]
+    public async Task<IActionResult> PostDeskReservation([FromRoute] string office, [FromQuery] DateTime date, [FromQuery] int clusterId, [FromQuery] int deskId, [FromQuery] List<int> timeSlots)
+    {
+        string accessToken = HttpContext.Session.GetString("accessToken");
+        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken)).MicrosoftId;
+
+        List<DeskReservationItem> deskReservationItems = new ();
+
+        foreach (var timeSlot in timeSlots)
+        {
+            deskReservationItems.Add(new DeskReservationItem(microsoftId, office.ToLower(), date, clusterId, deskId, timeSlot));
+        }
+
+        await _databaseService.PostDeskReservation(deskReservationItems);
+        return NoContent();
+    }
 
     // [HttpPut("register-for-lunch-recurring")]
     // public async Task<IActionResult> PutDeskReservationRegistrationItem([FromQuery] string officeName)

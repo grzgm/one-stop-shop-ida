@@ -19,7 +19,6 @@ public class DeskReservationItem
         TimeSlot = timeslot;
     }
 
-    [Key]
     [ForeignKey(nameof(UserItem))]
     [StringLength(255)]
     [Required]

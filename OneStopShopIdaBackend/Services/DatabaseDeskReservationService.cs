@@ -42,11 +42,15 @@ public partial class DatabaseService
         await SaveChangesAsync();
     }
 
-    public async Task PostDeskReservation(DeskReservationItem deskReservationItem)
+    public async Task PostDeskReservation(List<DeskReservationItem> deskReservationItems)
     {
         IsDbSetNull("DeskReservation");
 
-        DeskReservation.Add(deskReservationItem);
+        foreach (var deskReservationItem in deskReservationItems)
+        {
+
+            DeskReservation.Add(deskReservationItem);
+        }
 
         await SaveChangesAsync();
     }
