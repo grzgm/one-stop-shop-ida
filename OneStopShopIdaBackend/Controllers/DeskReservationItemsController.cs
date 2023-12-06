@@ -19,19 +19,6 @@ public class DeskReservationItemsController : CustomControllerBase
         _databaseService = databaseService;
     }
 
-    private static string RegisterRecurringMessage(string officeName, string name,
-        DeskReservationItem deskReservationItem) =>
-        "Hi,\n" +
-        $"I would like to register for lunch at {officeName} Office on {deskReservationItem} in the next week.\n" +
-        "Kind Regards,\n" +
-        $"{name}";
-
-    private static string DeregisterRecurringMessage(string officeName, string name) =>
-        "Hi,\n" +
-        $"I would like to deregister from lunch list at {officeName} Office in the next week.\n" +
-        "Kind Regards,\n" +
-        $"{name}";
-
     [HttpGet("{office}")]
     public async Task<ActionResult<Dictionary<int, DeskClusterFrontend>>> GetDeskReservationForOfficeDate(
             [FromRoute] string office, [FromQuery] DateTime date)
