@@ -165,13 +165,18 @@ function OfficeSpace() {
     };
 
     const GetData = () => {
-        const timeSlots: number[] = [];
+        const reservations: number[] = [];
+        const cancellation: number[] = [];
         for (let i = 0; i < checkboxValues.length; i++) {
-            if(!selectedDesk?.occupied[i] && selectedDesk?.userReservations[i] != checkboxValues[i]) timeSlots.push(i)
+            if(!selectedDesk?.occupied[i] && selectedDesk?.userReservations[i] != checkboxValues[i])
+            {
+                if(checkboxValues[i]) reservations.push(i)
+                else cancellation.push(i)
+            }
         }
         if (selectedDesk)
         {
-            console.log(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, timeSlots)
+            console.log(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, reservations, cancellation)
             // PostDeskReservation(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, timeSlots)
         }
     }
