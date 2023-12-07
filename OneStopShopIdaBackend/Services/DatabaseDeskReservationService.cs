@@ -9,7 +9,8 @@ public partial class DatabaseService
     {
         IsDbSetNull("DeskReservation");
 
-        var deskReservationItem = await DeskReservation.Where(e=> e.Office == office && e.Date == date).ToListAsync();
+        var deskReservationItem = await DeskReservation
+            .Where(e => e.Office == office && e.Date == date).ToListAsync();
 
         if (deskReservationItem == null)
         {
@@ -19,11 +20,13 @@ public partial class DatabaseService
         return deskReservationItem;
     }
 
-    public async Task<List<DeskReservationItem>> GetDeskReservationsOfUser(string microsoftId, string office)
+    public async Task<List<DeskReservationItem>> GetDeskReservationsOfUser(string microsoftId, string office,
+        DateTime date)
     {
         IsDbSetNull("DeskReservation");
 
-        var deskReservationItem = await DeskReservation.Where(e => e.MicrosoftId == microsoftId && e.Date >= DateTime.Now.AddDays(-1) && e.Date <= DateTime.Now.AddDays(14)).ToListAsync();
+        var deskReservationItem = await DeskReservation
+            .Where(e => e.MicrosoftId == microsoftId && e.Office == office && e.Date == date).ToListAsync();
 
         return deskReservationItem;
     }
@@ -48,7 +51,6 @@ public partial class DatabaseService
 
         foreach (var deskReservationItem in deskReservationItems)
         {
-
             DeskReservation.Add(deskReservationItem);
         }
 
