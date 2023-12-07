@@ -62,9 +62,9 @@ public class DeskReservationItemsController : CustomControllerBase
     public async Task<ActionResult<List<DeskReservationItem>>> GetDeskReservationsOfUser([FromRoute] string office)
     {
         office = office.ToLower();
-        // string accessToken = HttpContext.Session.GetString("accessToken");
-        // string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken)).MicrosoftId;
-        string microsoftId = "22";
+        string accessToken = HttpContext.Session.GetString("accessToken");
+        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken)).MicrosoftId;
+        // string microsoftId = "22";
 
         return await _databaseService.GetDeskReservationsOfUser(microsoftId, office);
     }
@@ -94,29 +94,24 @@ public class DeskReservationItemsController : CustomControllerBase
             deskReservationItems.Add(new DeskReservationItem(microsoftId, office.ToLower(), date, clusterId, deskId, timeSlot));
         }
 
-        await _databaseService.PostDeskReservation(deskReservationItems);
+        await _databaseService.PostDeskReservations(deskReservationItems);
         return NoContent();
     }
 
-    // [HttpPut("register-for-lunch-recurring")]
-    // public async Task<IActionResult> PutDeskReservationRegistrationItem([FromQuery] string officeName)
-    // {
-    //     string accessToken = HttpContext.Session.GetString("accessToken");
-    //     string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken)).MicrosoftId;
-    //
-    //     var user = await _microsoftGraphApiService.GetMe(accessToken);
-    //
-    //     DeskReservationItem deskReservationItem = await _databaseService.GetRegisteredDays(microsoftId);
-    //
-    //     string message;
-    //
-    //     if (deskReservationItem.IsRegistered()) message = RegisterRecurringMessage(officeName, $"{user.FirstName} {user.Surname}", deskReservationItem);
-    //     else message = DeregisterRecurringMessage(officeName, $"{user.FirstName} {user.Surname}");
-    //
-    //     await _microsoftGraphApiService.SendEmail(accessToken, _lunchEmailAddress, "Lunch Registration", message);
-    //
-    //     DeskReservationItem deskReservationRegistrationItem = new() { MicrosoftId = microsoftId, LastRegistered = DateTime.Now };
-    //     await _databaseService.PutDeskReservation(deskReservationRegistrationItem);
-    //     return NoContent();
-    // }
+    [HttpDelete("{office}")]
+    public async Task<IActionResult> DeleteDeskReservation([FromRoute] string office, [FromQuery] DateTime date, [FromQuery] int clusterId, [FromQuery] int deskId, [FromQuery] List<int> timeSlots)
+    {
+        string accessToken = HttpContext.Session.GetString("accessToken");
+        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken)).MicrosoftId;
+
+        List<DeskReservationItem> deskReservationItems = new ();
+
+        foreach (var timeSlot in timeSlots)
+        {
+            deskReservationItems.Add(new DeskReservationItem(microsoftId, office.ToLower(), date, clusterId, deskId, timeSlot));
+        }
+
+        await _databaseService.DeleteDeskReservations(deskReservationItems);
+        return NoContent();
+    }
 }

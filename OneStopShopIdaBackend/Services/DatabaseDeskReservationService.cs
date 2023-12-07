@@ -42,7 +42,7 @@ public partial class DatabaseService
         await SaveChangesAsync();
     }
 
-    public async Task PostDeskReservation(List<DeskReservationItem> deskReservationItems)
+    public async Task PostDeskReservations(List<DeskReservationItem> deskReservationItems)
     {
         IsDbSetNull("DeskReservation");
 
@@ -55,11 +55,14 @@ public partial class DatabaseService
         await SaveChangesAsync();
     }
 
-    public async Task DeleteDeskReservation(DeskReservationItem deskReservationItem)
+    public async Task DeleteDeskReservations(List<DeskReservationItem> deskReservationItems)
     {
         IsDbSetNull("DeskReservation");
 
-        DeskReservation.Remove(deskReservationItem);
+        foreach (var deskReservationItem in deskReservationItems)
+        {
+            DeskReservation.Remove(deskReservationItem);
+        }
 
         await SaveChangesAsync();
     }
