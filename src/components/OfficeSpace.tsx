@@ -64,7 +64,9 @@ function OfficeSpace() {
     }, [])
 
     const SetUpOfficeSpace = async (date?: Date, oldSelectedDesk?:Desk ) => {
-        const reservations = await GetDeskReservationForOfficeDate(officeName, date ? date : displayedDate);
+        date = date ? date : displayedDate
+
+        const reservations = await GetDeskReservationForOfficeDate(officeName, date);
 
         const newDeskClusters: { [key: string]: DeskCluster } = {};
 
@@ -75,7 +77,7 @@ function OfficeSpace() {
         }
 
         // Handle user reservations
-        const userReservationsResponse = await GetDeskReservationsOfUser(officeName)
+        const userReservationsResponse = await GetDeskReservationsOfUser(officeName, date)
         if (userReservationsResponse.payload) {
             setUserReservations(userReservationsResponse.payload)
             for (const userReservation of userReservationsResponse.payload) {

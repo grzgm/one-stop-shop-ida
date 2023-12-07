@@ -34,10 +34,10 @@ async function GetDeskReservationForOfficeDate(office: string, date: Date): Prom
 	}
 }
 
-async function GetDeskReservationsOfUser(office: string): Promise<IActionResult<IDeskReservation[]>> {
+async function GetDeskReservationsOfUser(office: string, date: Date): Promise<IActionResult<IDeskReservation[]>> {
 	try {
 		const res = await fetch(
-			`http://localhost:3002/desk/reservation/${office}/user`,
+			`http://localhost:3002/desk/reservation/${office}/user?date=${date.toISOString().split('T')[0]}`,
 			{
 				method: "GET",
 				credentials: "include", // Include credentials (cookies) in the request
