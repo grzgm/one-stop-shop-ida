@@ -80,6 +80,7 @@ function OfficeSpace() {
         {
             for (const userReservation of userReservations) {
                 newDeskClusters[userReservation.clusterId].desks[userReservation.deskId].userReservations[userReservation.timeSlot] = true;
+                newDeskClusters[userReservation.clusterId].desks[userReservation.deskId].occupied[userReservation.timeSlot] = false;
             }
         }
         else
@@ -90,6 +91,7 @@ function OfficeSpace() {
                 setUserReservations(userReservationsResponse.payload)
                 for (const userReservation of userReservationsResponse.payload) {
                     newDeskClusters[userReservation.clusterId].desks[userReservation.deskId].userReservations[userReservation.timeSlot] = true;
+                    newDeskClusters[userReservation.clusterId].desks[userReservation.deskId].occupied[userReservation.timeSlot] = false;
                 }
             }
         }
@@ -143,10 +145,16 @@ function OfficeSpace() {
             // Toggle the class for the selected desk
             updatedDeskClusters[desk.clusterId].desks[desk.deskId].isSelected = true;
 
+            const newCheckboxValues: boolean[] = [];
+
+            for (let i = 0; i < desk.occupied.length; i++) {
+                newCheckboxValues.push(desk.occupied[i] || desk.userReservations[i]);
+            }
+
             // Update the state with the modified deskClusters, selected desk, checkboxes
             setDeskClusters(updatedDeskClusters);
             setSelectedDesk(desk)
-            setCheckboxValues(desk.occupied)
+            setCheckboxValues(newCheckboxValues)
         }
     };
 
@@ -159,11 +167,12 @@ function OfficeSpace() {
     const GetData = () => {
         const timeSlots: number[] = [];
         for (let i = 0; i < checkboxValues.length; i++) {
-            if(selectedDesk?.occupied[i] != checkboxValues[i]) timeSlots.push(i)
+            if(!selectedDesk?.occupied[i] && selectedDesk?.userReservations[i] != checkboxValues[i]) timeSlots.push(i)
         }
         if (selectedDesk)
         {
-            PostDeskReservation(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, timeSlots)
+            console.log(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, timeSlots)
+            // PostDeskReservation(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, timeSlots)
         }
     }
 
