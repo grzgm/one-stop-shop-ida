@@ -7,7 +7,7 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import Button from "./Buttons";
 import { useContext, useEffect, useState } from "react";
 import CurrentOfficeContext from "../contexts/CurrentOfficeContext";
-import { GetDeskReservationForOfficeDate, GetDeskReservationsOfUser, IDesk, IDeskReservation, PostDeskReservation } from "../api/DeskReservationAPI";
+import { DeleteDeskReservation, GetDeskReservationForOfficeDate, GetDeskReservationsOfUser, IDesk, IDeskReservation, PostDeskReservation } from "../api/DeskReservationAPI";
 
 export class Desk {
     clusterId: string
@@ -177,7 +177,8 @@ function OfficeSpace() {
         if (selectedDesk)
         {
             console.log(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, reservations, cancellation)
-            // PostDeskReservation(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, timeSlots)
+            if (reservations.length > 0) PostDeskReservation(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, reservations)
+            if (cancellation.length > 0) DeleteDeskReservation(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, cancellation)
         }
     }
 

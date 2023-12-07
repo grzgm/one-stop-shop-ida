@@ -86,5 +86,21 @@ async function PostDeskReservation(office: string, date: Date, clusterId: string
 	}
 }
 
+async function DeleteDeskReservation(office: string, date: Date, clusterId: string, deskId: string, timeSlots: number[]): Promise<IActionResult<undefined>> {
+	try {
+		const res = await fetch(
+			`http://localhost:3002/desk/reservation/${office}?date=${date.toISOString().split('T')[0]}&clusterId=${clusterId}&deskId=${deskId}&timeSlots=${timeSlots.join("&timeSlots=")}`,
+			{
+				method: "DELETE",
+				credentials: "include", // Include credentials (cookies) in the request
+			}
+		);
+		return InspectResponseAsync(res);
+	} catch (error) {
+		console.error("Error:", error);
+		return { success: false, statusText: "Request could not be send." };
+	}
+}
+
 // export { GetDeskReservationForOfficeDate, PutLunchRecurringItem, RegisterLunchRecurring };
-export { GetDeskReservationForOfficeDate, GetDeskReservationsOfUser, PostDeskReservation}
+export { GetDeskReservationForOfficeDate, GetDeskReservationsOfUser, PostDeskReservation, DeleteDeskReservation}
