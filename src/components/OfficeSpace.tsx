@@ -64,7 +64,6 @@ function OfficeSpace() {
     }, [])
 
     const SetUpOfficeSpace = async (date?: Date) => {
-
         const reservations = await GetDeskReservationForOfficeDate(officeName, date ? date : displayedDate);
 
         const newDeskClusters: { [key: string]: DeskCluster } = {};
@@ -76,24 +75,18 @@ function OfficeSpace() {
         }
 
         // Handle user reservations
-        if(userReservations.length > 0)
-        {
-            for (const userReservation of userReservations) {
+        const userReservationsResponse = await GetDeskReservationsOfUser(officeName)
+        if (userReservationsResponse.payload) {
+            setUserReservations(userReservationsResponse.payload)
+            for (const userReservation of userReservationsResponse.payload) {
                 newDeskClusters[userReservation.clusterId].desks[userReservation.deskId].userReservations[userReservation.timeSlot] = true;
                 newDeskClusters[userReservation.clusterId].desks[userReservation.deskId].occupied[userReservation.timeSlot] = false;
             }
         }
-        else
-        {
-            const userReservationsResponse = await GetDeskReservationsOfUser(officeName)
-            if(userReservationsResponse.payload)
-            {
-                setUserReservations(userReservationsResponse.payload)
-                for (const userReservation of userReservationsResponse.payload) {
-                    newDeskClusters[userReservation.clusterId].desks[userReservation.deskId].userReservations[userReservation.timeSlot] = true;
-                    newDeskClusters[userReservation.clusterId].desks[userReservation.deskId].occupied[userReservation.timeSlot] = false;
-                }
-            }
+
+        if (selectedDesk) {
+            newDeskClusters[selectedDesk.clusterId].desks[selectedDesk.deskId].isSelected = true;
+            setSelectedDesk(newDeskClusters[selectedDesk.clusterId].desks[selectedDesk.deskId])
         }
 
         setDeskClusters(newDeskClusters);
@@ -164,21 +157,20 @@ function OfficeSpace() {
         setCheckboxValues(updatedCheckedBoxes);
     };
 
-    const GetData = () => {
+    const GetData = async () => {
         const reservations: number[] = [];
         const cancellation: number[] = [];
         for (let i = 0; i < checkboxValues.length; i++) {
-            if(!selectedDesk?.occupied[i] && selectedDesk?.userReservations[i] != checkboxValues[i])
-            {
-                if(checkboxValues[i]) reservations.push(i)
+            if (!selectedDesk?.occupied[i] && selectedDesk?.userReservations[i] != checkboxValues[i]) {
+                if (checkboxValues[i]) reservations.push(i)
                 else cancellation.push(i)
             }
         }
-        if (selectedDesk)
-        {
-            console.log(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, reservations, cancellation)
-            if (reservations.length > 0) PostDeskReservation(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, reservations)
-            if (cancellation.length > 0) DeleteDeskReservation(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, cancellation)
+        if (selectedDesk) {
+            // console.log(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, reservations, cancellation)
+            if (reservations.length > 0) await PostDeskReservation(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, reservations)
+            if (cancellation.length > 0) await DeleteDeskReservation(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, cancellation)
+            await SetUpOfficeSpace(displayedDate)
         }
     }
 
@@ -200,9 +192,9 @@ function OfficeSpace() {
                     <DeskClusterComponent desks={deskClusters[index].desks} clusterId={deskClusters[index].clusterId} selectDesk={selectDesk} key={deskClusters[index].clusterId} />
                 ))}
             </div>
-            <div className="office-space__availability-bar">
-                {selectedDesk &&
-                    <>
+            {selectedDesk &&
+                <>
+                    <div className="office-space__availability-bar">
                         <div className="availability-bar__times">
                             <BodySmall children="Morning" />
                             <BodySmall children="Afternoon" />
@@ -232,11 +224,11 @@ function OfficeSpace() {
                                 );
                             })}
                         </form>
-                    </>}
-            </div>
-            <div className="office-space__info">
-                <Button child="Book" onClick={() => (GetData())} />
-            </div>
+                    </div>
+                    <div className="office-space__info">
+                        <Button child="Book" onClick={() => (GetData())} />
+                    </div>
+                </>}
         </div>
     );
 }
