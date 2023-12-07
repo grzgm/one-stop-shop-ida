@@ -63,7 +63,7 @@ function OfficeSpace() {
         SetUpOfficeSpace();
     }, [])
 
-    const SetUpOfficeSpace = async (date?: Date) => {
+    const SetUpOfficeSpace = async (date?: Date, oldSelectedDesk?:Desk ) => {
         const reservations = await GetDeskReservationForOfficeDate(officeName, date ? date : displayedDate);
 
         const newDeskClusters: { [key: string]: DeskCluster } = {};
@@ -84,9 +84,12 @@ function OfficeSpace() {
             }
         }
 
-        if (selectedDesk) {
-            newDeskClusters[selectedDesk.clusterId].desks[selectedDesk.deskId].isSelected = true;
-            setSelectedDesk(newDeskClusters[selectedDesk.clusterId].desks[selectedDesk.deskId])
+        if (oldSelectedDesk) {
+            newDeskClusters[oldSelectedDesk.clusterId].desks[oldSelectedDesk.deskId].isSelected = true;
+            setSelectedDesk(newDeskClusters[oldSelectedDesk.clusterId].desks[oldSelectedDesk.deskId])
+        }
+        else{
+            setSelectedDesk(undefined)
         }
 
         setDeskClusters(newDeskClusters);
@@ -170,7 +173,7 @@ function OfficeSpace() {
             // console.log(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, reservations, cancellation)
             if (reservations.length > 0) await PostDeskReservation(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, reservations)
             if (cancellation.length > 0) await DeleteDeskReservation(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, cancellation)
-            await SetUpOfficeSpace(displayedDate)
+            await SetUpOfficeSpace(displayedDate, selectedDesk)
         }
     }
 
