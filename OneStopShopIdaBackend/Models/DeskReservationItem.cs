@@ -42,6 +42,7 @@ public class DeskFrontend
     public int? ClusterId { get; set; }
     public int? DeskId { get; set; }
     public List<bool> Occupied { get; set; }
+    public List<bool> UserReservations { get; set; }
 }
 
 public class DeskClusterFrontend

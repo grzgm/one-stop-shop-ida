@@ -23,8 +23,9 @@ public class DeskReservationItemsController : CustomControllerBase
     public async Task<ActionResult<Dictionary<int, DeskClusterFrontend>>> GetDeskReservationForOfficeDate(
         [FromRoute] string office, [FromQuery] DateTime date)
     {
-        // string accessToken = HttpContext.Session.GetString("accessToken");
-        // string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken)).MicrosoftId;
+        string accessToken = HttpContext.Session.GetString("accessToken");
+        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
+            .MicrosoftId;
         office = office.ToLower();
 
         List<OfficeDeskLayoutsItem> officeDeskLayoutsItems =
@@ -44,7 +45,8 @@ public class DeskReservationItemsController : CustomControllerBase
             {
                 ClusterId = clusterId,
                 DeskId = officeDeskLayoutsItem.DeskId,
-                Occupied = new List<bool>(new bool[officeDeskLayoutsItem.AmountOfTimeSlots])
+                Occupied = new List<bool>(new bool[officeDeskLayoutsItem.AmountOfTimeSlots]),
+                UserReservations = new List<bool>(new bool[officeDeskLayoutsItem.AmountOfTimeSlots]),
             };
         }
 
@@ -53,8 +55,16 @@ public class DeskReservationItemsController : CustomControllerBase
 
         foreach (var deskReservationItem in deskReservationItems)
         {
-            deskClusterFrontend[deskReservationItem.ClusterId].Desks[deskReservationItem.DeskId]
-                .Occupied[deskReservationItem.TimeSlot] = true;
+            if (deskReservationItem.MicrosoftId == microsoftId)
+            {
+                deskClusterFrontend[deskReservationItem.ClusterId].Desks[deskReservationItem.DeskId]
+                    .UserReservations[deskReservationItem.TimeSlot] = true;
+            }
+            else
+            {
+                deskClusterFrontend[deskReservationItem.ClusterId].Desks[deskReservationItem.DeskId]
+                    .Occupied[deskReservationItem.TimeSlot] = true;
+            }
         }
 
         return deskClusterFrontend;
