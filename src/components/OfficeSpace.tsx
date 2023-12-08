@@ -7,7 +7,7 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import Button from "./Buttons";
 import { useContext, useEffect, useState } from "react";
 import CurrentOfficeContext from "../contexts/CurrentOfficeContext";
-import { DeleteDeskReservation, GetDeskReservationForOfficeDate, GetDeskReservationsOfUser, IDesk, IDeskReservation, PostDeskReservation } from "../api/DeskReservationAPI";
+import { DeleteDeskReservation, GetDeskReservationForOfficeDate, IDesk, PostDeskReservation } from "../api/DeskReservationAPI";
 
 export class Desk {
     clusterId: string

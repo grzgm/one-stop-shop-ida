@@ -1,5 +1,3 @@
-import { ReactNode } from "react";
-
 interface TextProps {
     children: string|string[];
     additionalClasses?: string[];

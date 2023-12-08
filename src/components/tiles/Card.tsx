@@ -12,7 +12,7 @@ export interface CardProps {
   onClick?: () => void;
 }
 
-function Card({ linkAddress = "/", title = "Title", description = "Description", isOpenInNewTab = false, onClick = () => { } }: CardProps) {
+function Card({ linkAddress = "/", title = "Title", description = "Description", isOpenInNewTab = false}: CardProps) {
   const linkProps = isOpenInNewTab ? { to: linkAddress, target: "_blank", rel: "noopener noreferrer" } : { to: linkAddress };
   return (
     <Link className="card" {...linkProps}>

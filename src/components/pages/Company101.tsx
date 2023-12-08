@@ -1,5 +1,5 @@
 import Button from "../Buttons";
-import { BodyNormal, HeadingLarge, HeadingSmall } from "../text-wrapers/TextWrapers";
+import { BodyNormal, HeadingLarge } from "../text-wrapers/TextWrapers";
 
 function Company101() {
 

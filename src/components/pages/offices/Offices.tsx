@@ -7,8 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { officeInformationData } from "../../../assets/OfficeInformationData";
 
 function Offices() {
-  const { currentOffice, setCurrentOffice } = useContext(CurrentOfficeContext);
-  const [position, setPosition] = useState<GeolocationPosition | null>(null);
+  const { setCurrentOffice } = useContext(CurrentOfficeContext);
   const [closestOfficeName, setClosestOfficeName] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -16,7 +15,6 @@ function Offices() {
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
-          setPosition(pos);
           setClosestOfficeName(CalculateClosestOffice(pos.coords.latitude, pos.coords.longitude));
         },
         (error) => {
@@ -42,7 +40,7 @@ function Offices() {
       </div>
       <OfficeMap switchOffice={SwitchOffice} closestOfficeName={closestOfficeName}/>
       <div className="content__panels">
-        {(Object.values(officeInformationData)).map((office, index)=>{
+        {(Object.values(officeInformationData)).map((office)=>{
             return (<Panel linkAddress="/office-details" title={office.officeName} description={office.officeInformation.address} onClick={() => setCurrentOffice(office.officeName)} />)
         })}
       </div>
