@@ -16,12 +16,12 @@ export class Desk {
     userReservations: boolean[];
     isSelected: boolean;
 
-    constructor(clusterId: string, deskId: string, occupied: boolean[]) {
+    constructor(clusterId: string, deskId: string, occupied: boolean[], userReservations: boolean[]) {
         this.clusterId = clusterId;
         this.deskId = deskId;
         this.occupied = occupied;
+        this.userReservations = userReservations;
         this.isSelected = false;
-        this.userReservations = new Array(occupied.length).fill(false);
     }
 
     getState(): number {
@@ -45,7 +45,7 @@ class DeskCluster {
         this.clusterId = clusterId;
         this.desks = {}
         for (const deskId in iDesks) {
-            this.desks[deskId] = new Desk(iDesks[deskId].clusterId, iDesks[deskId].deskId, iDesks[deskId].occupied)
+            this.desks[deskId] = new Desk(iDesks[deskId].clusterId, iDesks[deskId].deskId, iDesks[deskId].occupied, iDesks[deskId].userReservations)
         }
     }
 }
@@ -57,15 +57,15 @@ function OfficeSpace() {
     const [checkboxValues, setCheckboxValues] = useState([false, false]);
     const [initialDeskClusters, setInitialDeskClusters] = useState<{ [key: string]: DeskCluster }>({})
     const [deskClusters, setDeskClusters] = useState<{ [key: string]: DeskCluster }>(initialDeskClusters)
-    const [userReservations, setUserReservations] = useState<IDeskReservation[]>([])
 
     useEffect(() => {
         SetUpOfficeSpace();
     }, [])
 
-    const SetUpOfficeSpace = async (date?: Date, oldSelectedDesk?:Desk ) => {
+    const SetUpOfficeSpace = async (date?: Date, oldSelectedDesk?: Desk) => {
         date = date ? date : displayedDate
 
+        // get general reservations
         const reservations = await GetDeskReservationForOfficeDate(officeName, date);
 
         const newDeskClusters: { [key: string]: DeskCluster } = {};
@@ -76,21 +76,11 @@ function OfficeSpace() {
             }
         }
 
-        // Handle user reservations
-        const userReservationsResponse = await GetDeskReservationsOfUser(officeName, date)
-        if (userReservationsResponse.payload) {
-            setUserReservations(userReservationsResponse.payload)
-            for (const userReservation of userReservationsResponse.payload) {
-                newDeskClusters[userReservation.clusterId].desks[userReservation.deskId].userReservations[userReservation.timeSlot] = true;
-                newDeskClusters[userReservation.clusterId].desks[userReservation.deskId].occupied[userReservation.timeSlot] = false;
-            }
-        }
-
         if (oldSelectedDesk) {
             newDeskClusters[oldSelectedDesk.clusterId].desks[oldSelectedDesk.deskId].isSelected = true;
             setSelectedDesk(newDeskClusters[oldSelectedDesk.clusterId].desks[oldSelectedDesk.deskId])
         }
-        else{
+        else {
             setSelectedDesk(undefined)
         }
 
@@ -231,7 +221,7 @@ function OfficeSpace() {
                         </form>
                     </div>
                     <div className="office-space__info">
-                        <Button child="Book" onClick={() => (GetData())} />
+                        <Button child="Book" onClick={GetData} />
                     </div>
                 </>}
         </div>

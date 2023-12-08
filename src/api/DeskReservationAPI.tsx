@@ -1,20 +1,21 @@
 import { IActionResult, InspectResponseAsync } from "./Response";
 
 interface IDeskCluster {
-    clusterId: string;
-    desks: IDesk[];
+	clusterId: string;
+	desks: IDesk[];
 }
 
-export interface IDesk{
-    clusterId: string;
-    deskId: string;
+export interface IDesk {
+	clusterId: string;
+	deskId: string;
 	occupied: boolean[];
+	userReservations: boolean[];
 }
 
-export interface IDeskReservation{
+export interface IDeskReservation {
 	date: Date;
-    clusterId: string;
-    deskId: string;
+	clusterId: string;
+	deskId: string;
 	timeSlot: number;
 }
 
@@ -103,4 +104,4 @@ async function DeleteDeskReservation(office: string, date: Date, clusterId: stri
 }
 
 // export { GetDeskReservationForOfficeDate, PutLunchRecurringItem, RegisterLunchRecurring };
-export { GetDeskReservationForOfficeDate, GetDeskReservationsOfUser, PostDeskReservation, DeleteDeskReservation}
+export { GetDeskReservationForOfficeDate, GetDeskReservationsOfUser, PostDeskReservation, DeleteDeskReservation }
