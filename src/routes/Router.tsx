@@ -38,7 +38,7 @@ function Router(currentOfficeName: string) {
         </Route>
         <Route path="/office-details">
           <Route index element={<OfficeDetails />} />
-          <Route path="reserve-desk" element={<ReserveDesk />} loader={() => ReserveDeskLoader(currentOfficeName)} />
+          <Route path="reserve-desk" element={<ReserveDesk />} loader={async () => await ReserveDeskLoader(currentOfficeName)} />
           {/* <Route path="reserve-desk-overview" element={<ReserveDeskOverview />} /> */}
           <Route path="lunch" element={<Lunch />} loader={async () => await LunchLoader(currentOfficeName)} />
           <Route path="office-information" element={<OfficeInformation />} />
