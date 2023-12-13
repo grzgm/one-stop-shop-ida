@@ -149,17 +149,24 @@ function OfficeSpace() {
         setCheckboxValues(updatedCheckedBoxes);
     };
 
-    const GetData = async () => {
+    const Book = async () => {
         const reservations: number[] = [];
         const cancellation: number[] = [];
-        for (let i = 0; i < checkboxValues.length; i++) {
-            const selectedDeskRef = selectedDesk ? deskClusters[selectedDesk.clusterId].desks[selectedDesk.deskId] : undefined
-            if (selectedDeskRef && !selectedDeskRef.occupied[i] && selectedDeskRef?.userReservations[i] != checkboxValues[i]) {
-                if (checkboxValues[i]) reservations.push(i)
-                else cancellation.push(i)
-            }
-        }
         if (selectedDesk) {
+            const selectedDeskRef = deskClusters[selectedDesk.clusterId].desks[selectedDesk.deskId]
+            for (let i = 0; i < checkboxValues.length; i++) {
+                if (selectedDeskRef && !selectedDeskRef.occupied[i] && selectedDeskRef?.userReservations[i] != checkboxValues[i]) {
+                    if (checkboxValues[i]) {
+                        reservations.push(i);
+                        selectedDeskRef.userReservations[i] = true;
+                    }
+                    else {
+                        cancellation.push(i);
+                        selectedDeskRef.userReservations[i] = false;
+                    }
+                }
+            }
+            setSelectedDesk({ ...selectedDesk })
             // console.log(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, reservations, cancellation)
             if (reservations.length > 0) await PostDeskReservation(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, reservations)
             if (cancellation.length > 0) await DeleteDeskReservation(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, cancellation)
@@ -219,7 +226,7 @@ function OfficeSpace() {
                         </form>
                     </div>
                     <div className="office-space__info">
-                        <Button child="Book" onClick={GetData} />
+                        <Button child="Book" onClick={Book} />
                     </div>
                 </>}
         </div>
