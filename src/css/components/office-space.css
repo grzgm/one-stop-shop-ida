@@ -79,13 +79,18 @@
     border: 0.3125rem var(--font-colour-white) solid;
 }
 
-.desk__chair--selected {
+.desk__chair--user-booked {
     background-color: var(--success);
     border: 0.3125rem var(--font-colour-white) solid;
 }
 
 .desk__chair--half-booked {
     background-color: var(--moderate);
+    border: 0.3125rem var(--font-colour-white) solid;
+}
+
+.desk__chair--mix-booked {
+    background:  linear-gradient(to bottom left, var(--success) 50%, var(--moderate) 50%);
     border: 0.3125rem var(--font-colour-white) solid;
 }
 
@@ -97,6 +102,11 @@
 .desk__chair--unavailable {
     background-color: var(--light-blue);
     border: none;
+}
+
+.desk__chair--selected {
+    border: 0.3125rem var(--success) solid;
+    /* box-shadow: var(--grey2) 0px 0px 10px 5px; */
 }
 
 .office-space__availability-bar {

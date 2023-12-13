@@ -27,10 +27,18 @@ export class Desk {
         for (const timeSlot of this.occupied) {
             if (timeSlot) amountOfOccupied++;
         }
-        
-        if (amountOfOccupied == this.occupied.length) return 3
-        if (amountOfOccupied == 0) return 0
-        return 2
+        let amountOfReserved = 0;
+        for (const timeSlot of this.userReservations) {
+            if (timeSlot) amountOfReserved++;
+        }
+
+        if (this.occupied.length == 0) return 5
+        if (amountOfOccupied == this.occupied.length) return 4
+        if (amountOfOccupied > 0 && amountOfReserved > 0) return 3
+        if (amountOfOccupied > 0 && amountOfReserved == 0) return 2
+        if (amountOfOccupied == 0 && amountOfReserved > 0) return 1
+        if (amountOfOccupied == 0 && amountOfReserved == 0) return 0
+        return -1
     }
 }
 class DeskCluster {
@@ -114,7 +122,7 @@ function OfficeSpace() {
             setSelectedDesk(undefined)
             setCheckboxValues([false, false])
         }
-        else if (desk.GetState() == 0 || desk.GetState() == 2) {
+        else if (desk.GetState() != 4 && desk.GetState() != 5) {
             const updatedDeskClusters = { ...initialDeskClusters };
             const newCheckboxValues: boolean[] = [];
 
@@ -245,7 +253,7 @@ function DeskComponent({ desk, selectDesk, isSelected }: DeskComponentProps) {
     return (
         <div className="desk" id={desk.deskId.toString()} onClick={() => (selectDesk(desk))}>
             <div className="desk__desk">
-                <div className={`desk__chair ${isSelected(desk.clusterId, desk.deskId) ? GetDeskState(1) : GetDeskState(desk.GetState())}`}></div>
+                <div className={`desk__chair ${GetDeskState(desk.GetState())} ${isSelected(desk.clusterId, desk.deskId) ? GetDeskState(6) : ""}`}></div>
             </div>
         </div>
     );
@@ -257,16 +265,22 @@ function GetDeskState(state: number) {
             return "desk__chair--available";
             break;
         case 1:
-            return "desk__chair--selected";
+            return "desk__chair--user-booked";
             break;
         case 2:
             return "desk__chair--half-booked";
             break;
         case 3:
-            return "desk__chair--fully-booked";
+            return "desk__chair--mix-booked";
             break;
         case 4:
+            return "desk__chair--fully-booked";
+            break;
+        case 5:
             return "desk__chair--unavailable";
+            break;
+        case 6:
+            return "desk__chair--selected";
             break;
         default:
             return "";
