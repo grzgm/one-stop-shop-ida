@@ -167,9 +167,11 @@ function OfficeSpace() {
                 }
             }
             setSelectedDesk({ ...selectedDesk })
+            const apiCalls = [];
             // console.log(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, reservations, cancellation)
-            if (reservations.length > 0) await PostDeskReservation(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, reservations)
-            if (cancellation.length > 0) await DeleteDeskReservation(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, cancellation)
+            if (reservations.length > 0) apiCalls.push(PostDeskReservation(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, reservations));
+            if (cancellation.length > 0) apiCalls.push(DeleteDeskReservation(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, cancellation))
+            await Promise.all(apiCalls);
             await SetUpOfficeSpace(displayedDate)
         }
     }
