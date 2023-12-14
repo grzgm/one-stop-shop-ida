@@ -5,12 +5,13 @@ namespace OneStopShopIdaBackend.Services;
 
 public partial class DatabaseService
 {
-    public async Task<List<DeskReservationItem>> GetDeskReservationForOfficeDate(string office, DateTime date)
+    public async Task<List<DeskReservationItem>> GetDeskReservationForOfficeDate(string office, DateTime startDate,
+        DateTime endDate)
     {
         IsDbSetNull("DeskReservation");
 
         var deskReservationItem = await DeskReservation
-            .Where(e => e.Office == office && e.Date == date).ToListAsync();
+            .Where(e => e.Office == office && (e.Date >= startDate && e.Date <= endDate)).ToListAsync();
 
         if (deskReservationItem == null)
         {
@@ -21,12 +22,13 @@ public partial class DatabaseService
     }
 
     public async Task<List<DeskReservationItem>> GetDeskReservationsOfUser(string microsoftId, string office,
-        DateTime date)
+        DateTime startDate, DateTime endDate)
     {
         IsDbSetNull("DeskReservation");
 
         var deskReservationItem = await DeskReservation
-            .Where(e => e.MicrosoftId == microsoftId && e.Office == office && e.Date == date).ToListAsync();
+            .Where(e => e.MicrosoftId == microsoftId && e.Office == office &&
+                        (e.Date >= startDate && e.Date <= endDate)).ToListAsync();
 
         return deskReservationItem;
     }

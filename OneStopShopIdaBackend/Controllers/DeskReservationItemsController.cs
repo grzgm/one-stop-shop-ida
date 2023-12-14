@@ -20,12 +20,74 @@ public class DeskReservationItemsController : CustomControllerBase
     }
 
     [HttpGet("{office}")]
-    public async Task<ActionResult<Dictionary<int, DeskClusterFrontend>>> GetDeskReservationForOfficeDate(
-        [FromRoute] string office, [FromQuery] DateTime date)
+    public async Task<ActionResult<Dictionary<DateTime, Dictionary<int, DeskClusterFrontend>>>>
+        GetDeskReservationForOfficeDate(
+            [FromRoute] string office, [FromQuery] DateTime? startDate = null, [FromQuery] DateTime? endDate = null)
     {
         string accessToken = HttpContext.Session.GetString("accessToken");
         string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
             .MicrosoftId;
+        // string microsoftId = "22";
+        office = office.ToLower();
+        DateTime startDate2 = startDate ?? DateTime.Now;
+        DateTime endDate2 = endDate ?? DateTime.Now;
+
+        List<OfficeDeskLayoutsItem> officeDeskLayoutsItems =
+            await _databaseService.GetOfficeDeskLayoutForOffice(office);
+        Dictionary<DateTime, Dictionary<int, DeskClusterFrontend>> deskClusterFrontendByDate =
+            new Dictionary<DateTime, Dictionary<int, DeskClusterFrontend>>();
+
+
+        for (DateTime currentDate = startDate2; currentDate <= endDate2; currentDate = currentDate.AddDays(1))
+        {
+            deskClusterFrontendByDate[currentDate] = new Dictionary<int, DeskClusterFrontend>();
+            foreach (var officeDeskLayoutsItem in officeDeskLayoutsItems)
+            {
+                int clusterId = officeDeskLayoutsItem.ClusterId;
+                if (!deskClusterFrontendByDate[currentDate].ContainsKey(clusterId))
+                {
+                    deskClusterFrontendByDate[currentDate][clusterId] = new DeskClusterFrontend()
+                        { ClusterId = clusterId, Desks = new Dictionary<int, DeskFrontend>() };
+                }
+
+                deskClusterFrontendByDate[currentDate][clusterId].Desks[officeDeskLayoutsItem.DeskId] =
+                    new DeskFrontend()
+                    {
+                        ClusterId = clusterId,
+                        DeskId = officeDeskLayoutsItem.DeskId,
+                        Occupied = new List<bool>(new bool[officeDeskLayoutsItem.AmountOfTimeSlots]),
+                        UserReservations = new List<bool>(new bool[officeDeskLayoutsItem.AmountOfTimeSlots]),
+                    };
+            }
+        }
+
+        List<DeskReservationItem> deskReservationItems =
+            await _databaseService.GetDeskReservationForOfficeDate(office, startDate2, endDate2);
+
+        foreach (var deskReservationItem in deskReservationItems)
+        {
+            if (deskReservationItem.MicrosoftId == microsoftId)
+            {
+                deskClusterFrontendByDate[deskReservationItem.Date][deskReservationItem.ClusterId]
+                    .Desks[deskReservationItem.DeskId]
+                    .UserReservations[deskReservationItem.TimeSlot] = true;
+            }
+            else
+            {
+                deskClusterFrontendByDate[deskReservationItem.Date][deskReservationItem.ClusterId]
+                    .Desks[deskReservationItem.DeskId]
+                    .Occupied[deskReservationItem.TimeSlot] = true;
+            }
+        }
+
+        return deskClusterFrontendByDate;
+    }
+
+    [HttpGet("{office}/layout")]
+    public async Task<ActionResult<Dictionary<int, DeskClusterFrontend>>> GetDeskReservationOfficeLayout(
+        [FromRoute] string office)
+    {
+        string accessToken = HttpContext.Session.GetString("accessToken");
         office = office.ToLower();
 
         List<OfficeDeskLayoutsItem> officeDeskLayoutsItems =
@@ -50,37 +112,76 @@ public class DeskReservationItemsController : CustomControllerBase
             };
         }
 
-        List<DeskReservationItem> deskReservationItems =
-            await _databaseService.GetDeskReservationForOfficeDate(office, date);
-
-        foreach (var deskReservationItem in deskReservationItems)
-        {
-            if (deskReservationItem.MicrosoftId == microsoftId)
-            {
-                deskClusterFrontend[deskReservationItem.ClusterId].Desks[deskReservationItem.DeskId]
-                    .UserReservations[deskReservationItem.TimeSlot] = true;
-            }
-            else
-            {
-                deskClusterFrontend[deskReservationItem.ClusterId].Desks[deskReservationItem.DeskId]
-                    .Occupied[deskReservationItem.TimeSlot] = true;
-            }
-        }
-
         return deskClusterFrontend;
     }
 
+
     [HttpGet("{office}/user")]
     public async Task<ActionResult<List<DeskReservationItem>>> GetDeskReservationsOfUser([FromRoute] string office,
-        [FromQuery] DateTime date)
+        [FromQuery] DateTime? startDate = null, [FromQuery] DateTime? endDate = null)
     {
-        office = office.ToLower();
         string accessToken = HttpContext.Session.GetString("accessToken");
         string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
             .MicrosoftId;
         // string microsoftId = "22";
+        office = office.ToLower();
+        DateTime startDate2 = startDate ?? DateTime.Now;
+        DateTime endDate2 = endDate ?? DateTime.Now;
 
-        return await _databaseService.GetDeskReservationsOfUser(microsoftId, office, date);
+        return await _databaseService.GetDeskReservationsOfUser(microsoftId, office, startDate2, endDate2);
+    }
+
+
+    [HttpGet("{office}/all")]
+    public async Task<ActionResult<Dictionary<DateTime, DeskReservationsDayFrontend>>> GetDeskReservationsForOfficeDate(
+        [FromRoute] string office,
+        [FromQuery] DateTime? startDate = null, [FromQuery] DateTime? endDate = null)
+    {
+        string accessToken = HttpContext.Session.GetString("accessToken");
+        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
+        .MicrosoftId;
+        // string microsoftId = "22";
+        office = office.ToLower();
+        DateTime startDate2 = startDate.HasValue ? startDate.Value.Date : DateTime.Now;
+        DateTime endDate2 = endDate.HasValue ? endDate.Value.Date : DateTime.Now;
+
+        Dictionary<DateTime, DeskReservationsDayFrontend> deskReservationsDayFrontend = new();
+        for (DateTime currentDate = startDate2; currentDate <= endDate2; currentDate = currentDate.AddDays(1))
+        {
+            deskReservationsDayFrontend[currentDate] = new();
+        }
+
+        List<DeskReservationItem> deskReservationItems =
+            await _databaseService.GetDeskReservationForOfficeDate(office, startDate2, endDate2);
+        foreach (var deskReservationItem in deskReservationItems)
+        {
+            if (deskReservationItem.MicrosoftId == microsoftId)
+            {
+                deskReservationsDayFrontend[deskReservationItem.Date].UserReservations.Add(
+                    new DeskReservationItemFrontend()
+                    {
+                        IsUser = true,
+                        Date = deskReservationItem.Date,
+                        ClusterId = deskReservationItem.ClusterId,
+                        DeskId = deskReservationItem.DeskId,
+                        TimeSlot = deskReservationItem.TimeSlot,
+                    });
+            }
+            else
+            {
+                deskReservationsDayFrontend[deskReservationItem.Date].Occupied.Add(
+                    new DeskReservationItemFrontend()
+                    {
+                        IsUser = false,
+                        Date = deskReservationItem.Date,
+                        ClusterId = deskReservationItem.ClusterId,
+                        DeskId = deskReservationItem.DeskId,
+                        TimeSlot = deskReservationItem.TimeSlot,
+                    });
+            }
+        }
+
+        return deskReservationsDayFrontend;
     }
 
     // [HttpPut("update-registered-days")]

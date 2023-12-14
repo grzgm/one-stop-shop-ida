@@ -51,3 +51,16 @@ public class DeskClusterFrontend
 
     public Dictionary<int, DeskFrontend> Desks { get; set; } = new Dictionary<int, DeskFrontend>();
 }
+public class DeskReservationItemFrontend
+{
+    public bool IsUser { get; set; }
+    public DateTime Date { get; set; }
+    public int ClusterId { get; set; }
+    public int DeskId { get; set; }
+    public int TimeSlot { get; set; }
+}
+public class DeskReservationsDayFrontend
+{
+    public List<DeskReservationItemFrontend> Occupied { get; set; } = new List<DeskReservationItemFrontend>();
+    public List<DeskReservationItemFrontend> UserReservations { get; set; } = new List<DeskReservationItemFrontend>();
+}
