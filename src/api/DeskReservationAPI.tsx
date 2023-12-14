@@ -1,4 +1,16 @@
 import { IActionResult, InspectResponseAsync } from "./Response";
+export interface IDeskReservationItem {
+	isUser: boolean;
+	date: Date;
+	clusterId: string;
+	deskId: string;
+	timeSlot: number;
+}
+
+export interface IDeskReservationsDay {
+	occupied: IDeskReservationItem[];
+	userReservations: IDeskReservationItem[];
+}
 
 interface IDeskCluster {
 	clusterId: string;
@@ -19,16 +31,48 @@ export interface IDeskReservation {
 	timeSlot: number;
 }
 
-async function GetDeskReservationForOfficeDate(office: string, date: Date): Promise<IActionResult<IDeskCluster[]>> {
+// async function GetDeskReservationForOfficeDate(office: string, startDate?: Date, endDate?: Date): Promise<IActionResult<{ [key: string]: IDeskCluster[] }>> {
+// 	try {
+// 		const res = await fetch(
+// 			`http://localhost:3002/desk/reservation/${office}?startDate=${startDate ? startDate.toISOString().split('T')[0] : ""}&endDate=${endDate ? endDate.toISOString().split('T')[0] : ""}`,
+// 			{
+// 				method: "GET",
+// 				credentials: "include", // Include credentials (cookies) in the request
+// 			}
+// 		);
+// 		return InspectResponseAsync<{ [key: string]: IDeskCluster[] }>(res);
+// 	} catch (error) {
+// 		console.error("Error:", error);
+// 		return { success: false, statusText: "Request could not be send." };
+// 	}
+// }
+
+async function GetDeskReservationOfficeLayout(office: string): Promise<IActionResult<{ [key: string]: IDeskCluster }>> {
 	try {
 		const res = await fetch(
-			`http://localhost:3002/desk/reservation/${office}?date=${date.toISOString().split('T')[0]}`,
+			`http://localhost:3002/desk/reservation/${office}/layout`,
 			{
 				method: "GET",
 				credentials: "include", // Include credentials (cookies) in the request
 			}
 		);
-		return InspectResponseAsync<IDeskCluster[]>(res);
+		return InspectResponseAsync<{ [key: string]: IDeskCluster }>(res);
+	} catch (error) {
+		console.error("Error:", error);
+		return { success: false, statusText: "Request could not be send." };
+	}
+}
+
+async function GetDeskReservationsForOfficeDate(office: string, startDate?: Date, endDate?: Date): Promise<IActionResult<{ [key: string]: IDeskReservationsDay }>> {
+	try {
+		const res = await fetch(
+			`http://localhost:3002/desk/reservation/${office}/all?startDate=${startDate ? startDate.toISOString().split('T')[0] : ""}&endDate=${endDate ? endDate.toISOString().split('T')[0] : ""}`,
+			{
+				method: "GET",
+				credentials: "include", // Include credentials (cookies) in the request
+			}
+		);
+		return InspectResponseAsync<{ [key: string]: IDeskReservationsDay }>(res);
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };
@@ -104,4 +148,4 @@ async function DeleteDeskReservation(office: string, date: Date, clusterId: stri
 }
 
 // export { GetDeskReservationForOfficeDate, PutLunchRecurringItem, RegisterLunchRecurring };
-export { GetDeskReservationForOfficeDate, GetDeskReservationsOfUser, PostDeskReservation, DeleteDeskReservation }
+export { GetDeskReservationOfficeLayout, GetDeskReservationsForOfficeDate, GetDeskReservationsOfUser, PostDeskReservation, DeleteDeskReservation }

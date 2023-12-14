@@ -7,7 +7,7 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import Button from "./Buttons";
 import { useContext, useEffect, useState } from "react";
 import CurrentOfficeContext from "../contexts/CurrentOfficeContext";
-import { DeleteDeskReservation, GetDeskReservationForOfficeDate, IDesk, PostDeskReservation } from "../api/DeskReservationAPI";
+import { DeleteDeskReservation, GetDeskReservationOfficeLayout, GetDeskReservationsForOfficeDate, IDesk, IDeskReservationItem, IDeskReservationsDay, PostDeskReservation } from "../api/DeskReservationAPI";
 
 export class Desk {
     clusterId: string
@@ -20,25 +20,6 @@ export class Desk {
         this.deskId = deskId;
         this.occupied = occupied;
         this.userReservations = userReservations;
-    }
-
-    GetState(): number {
-        let amountOfOccupied = 0;
-        for (const timeSlot of this.occupied) {
-            if (timeSlot) amountOfOccupied++;
-        }
-        let amountOfReserved = 0;
-        for (const timeSlot of this.userReservations) {
-            if (timeSlot) amountOfReserved++;
-        }
-
-        if (this.occupied.length == 0) return 5
-        if (amountOfOccupied == this.occupied.length) return 4
-        if (amountOfOccupied > 0 && amountOfReserved > 0) return 3
-        if (amountOfOccupied > 0 && amountOfReserved == 0) return 2
-        if (amountOfOccupied == 0 && amountOfReserved > 0) return 1
-        if (amountOfOccupied == 0 && amountOfReserved == 0) return 0
-        return -1
     }
 }
 class DeskCluster {
@@ -59,29 +40,78 @@ function OfficeSpace() {
     const [displayedDate, setDisplayedDate] = useState(new Date());
     const [selectedDesk, setSelectedDesk] = useState<{ clusterId: string, deskId: string } | undefined>(undefined);
     const [checkboxValues, setCheckboxValues] = useState([false, false]);
-    const [initialDeskClusters, setInitialDeskClusters] = useState<{ [key: string]: DeskCluster }>({})
-    const [deskClusters, setDeskClusters] = useState<{ [key: string]: DeskCluster }>(initialDeskClusters)
+
+    const [deskLayout, setDeskLayout] = useState<{ [key: string]: DeskCluster }>({})
+    const [allDeskReservations, setAllDeskReservations] = useState<{ [key: string]: IDeskReservationsDay }>({})
+    const [currentOfficeDesks, setCurrentOfficeDesks] = useState<{ [key: string]: DeskCluster }>({})
 
     useEffect(() => {
         SetUpOfficeSpace();
     }, [])
 
-    const SetUpOfficeSpace = async (date?: Date) => {
-        date = date ? date : displayedDate
+    const SetUpOfficeSpace = async () => {
+        const startDate = new Date();
+        const endDate = new Date(startDate);
+        endDate.setDate(startDate.getDate() + 14);
+        const dateIndex = new Date().toISOString().split('T')[0] + 'T00:00:00';
 
         // get general reservations
-        const reservations = await GetDeskReservationForOfficeDate(officeName, date);
+        const newDeskLayoutRes = await GetDeskReservationOfficeLayout(officeName);
 
-        const newDeskClusters: { [key: string]: DeskCluster } = {};
+        const newDeskLayout: { [key: string]: DeskCluster } = {};
 
-        if (reservations.payload) {
-            for (const clusterId in reservations.payload) {
-                newDeskClusters[clusterId] = new DeskCluster(clusterId, reservations.payload[clusterId].desks)
+        if (newDeskLayoutRes.payload) {
+            for (const clusterId in newDeskLayoutRes.payload) {
+                newDeskLayout[clusterId] = new DeskCluster(clusterId, newDeskLayoutRes.payload[clusterId].desks)
             }
         }
 
-        setDeskClusters(newDeskClusters);
-        setInitialDeskClusters(newDeskClusters);
+        setDeskLayout(newDeskLayout)
+
+        const newAllDeskReservationsRes = await GetDeskReservationsForOfficeDate(officeName, startDate, endDate);
+        let todayOccupied: IDeskReservationItem[] = [];
+        let todayUserReservations: IDeskReservationItem[] = [];
+
+        if (newAllDeskReservationsRes.payload) {
+            setAllDeskReservations(newAllDeskReservationsRes.payload)
+            todayOccupied = newAllDeskReservationsRes.payload[dateIndex].occupied
+            todayUserReservations = newAllDeskReservationsRes.payload[dateIndex].userReservations
+        }
+
+        const newCurrentOfficeDesks = structuredClone(newDeskLayout)
+
+        for (const occupation of todayOccupied) {
+            newCurrentOfficeDesks[occupation.clusterId].desks[occupation.deskId].occupied[occupation.timeSlot] = true;
+        }
+
+        for (const reservation of todayUserReservations) {
+            newCurrentOfficeDesks[reservation.clusterId].desks[reservation.deskId].userReservations[reservation.timeSlot] = true;
+        }
+
+        setCurrentOfficeDesks(newCurrentOfficeDesks)
+    }
+
+    const UpdateOfficeSpace = async (date: Date, updatedAllDeskReservations?: { [key: string]: IDeskReservationsDay }) => {
+        date = structuredClone(date)
+        updatedAllDeskReservations = updatedAllDeskReservations ? updatedAllDeskReservations : allDeskReservations
+        const dateIndex = date.toISOString().split('T')[0] + 'T00:00:00'
+
+        // get general reservations
+        const newCurrentOfficeDesks = structuredClone(deskLayout)
+
+        const todayOccupied = updatedAllDeskReservations[dateIndex].occupied;
+        const todayUserReservations = updatedAllDeskReservations[dateIndex].userReservations;
+
+        for (const occupation of todayOccupied) {
+            newCurrentOfficeDesks[occupation.clusterId].desks[occupation.deskId].occupied[occupation.timeSlot] = true;
+        }
+
+        for (const reservation of todayUserReservations) {
+            newCurrentOfficeDesks[reservation.clusterId].desks[reservation.deskId].userReservations[reservation.timeSlot] = true;
+        }
+
+        setAllDeskReservations(updatedAllDeskReservations)
+        setCurrentOfficeDesks(newCurrentOfficeDesks)
     }
 
     const PreviousDay = async () => {
@@ -95,7 +125,7 @@ function OfficeSpace() {
         ) {
             setSelectedDesk(undefined)
             setDisplayedDate(PreviousDayDate);
-            await SetUpOfficeSpace(PreviousDayDate)
+            await UpdateOfficeSpace(PreviousDayDate)
         }
     };
     const NextDay = async () => {
@@ -111,19 +141,17 @@ function OfficeSpace() {
         if (differenceInDays <= 14) {
             setSelectedDesk(undefined)
             setDisplayedDate(NextDayDate);
-            await SetUpOfficeSpace(NextDayDate)
+            await UpdateOfficeSpace(NextDayDate)
         }
     };
 
     const selectDesk = (desk: Desk) => {
         if (selectedDesk?.clusterId == desk.clusterId && selectedDesk?.deskId == desk.deskId) {
             // Reset the state with the default values
-            setDeskClusters(initialDeskClusters);
             setSelectedDesk(undefined)
             setCheckboxValues([false, false])
         }
-        else if (desk.GetState() != 4 && desk.GetState() != 5) {
-            const updatedDeskClusters = { ...initialDeskClusters };
+        else if (GetDeskState(desk) != 4 && GetDeskState(desk) != 5) {
             const newCheckboxValues: boolean[] = [];
 
             for (let i = 0; i < desk.occupied.length; i++) {
@@ -131,7 +159,6 @@ function OfficeSpace() {
             }
 
             // Update the state with the modified deskClusters, selected desk, checkboxes
-            setDeskClusters(updatedDeskClusters);
             setSelectedDesk({ clusterId: desk.clusterId, deskId: desk.deskId })
             setCheckboxValues(newCheckboxValues)
         }
@@ -150,29 +177,53 @@ function OfficeSpace() {
     };
 
     const Book = async () => {
+        const dateIndex = displayedDate.toISOString().split('T')[0] + 'T00:00:00';
+        const updatedAllDeskReservations = structuredClone(allDeskReservations)
         const reservations: number[] = [];
         const cancellation: number[] = [];
         if (selectedDesk) {
-            const selectedDeskRef = deskClusters[selectedDesk.clusterId].desks[selectedDesk.deskId]
+            // selected desk reference for quick ui updating 
+            const selectedDeskRef = currentOfficeDesks[selectedDesk.clusterId].desks[selectedDesk.deskId]
+            // update based on all checkboxes
             for (let i = 0; i < checkboxValues.length; i++) {
+                // change values only if the checkboxes has been interacted with
                 if (selectedDeskRef && !selectedDeskRef.occupied[i] && selectedDeskRef?.userReservations[i] != checkboxValues[i]) {
                     if (checkboxValues[i]) {
                         reservations.push(i);
                         selectedDeskRef.userReservations[i] = true;
+                        updatedAllDeskReservations[dateIndex].userReservations.push({
+                            isUser: true,
+                            date: displayedDate,
+                            clusterId: selectedDesk?.clusterId,
+                            deskId: selectedDesk?.deskId,
+                            timeSlot: i
+                        });
                     }
                     else {
                         cancellation.push(i);
                         selectedDeskRef.userReservations[i] = false;
+                        updatedAllDeskReservations[dateIndex].userReservations = updatedAllDeskReservations[dateIndex].userReservations.filter(item =>
+                            item.isUser !== true ||
+                            item.clusterId !== selectedDesk?.clusterId ||
+                            item.deskId !== selectedDesk?.deskId ||
+                            item.timeSlot !== i
+                        );
                     }
                 }
             }
+            // for quick refresh
             setSelectedDesk({ ...selectedDesk })
             const apiCalls = [];
             // console.log(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, reservations, cancellation)
             if (reservations.length > 0) apiCalls.push(PostDeskReservation(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, reservations));
             if (cancellation.length > 0) apiCalls.push(DeleteDeskReservation(officeName, displayedDate, selectedDesk?.clusterId, selectedDesk?.deskId, cancellation))
-            await Promise.all(apiCalls);
-            await SetUpOfficeSpace(displayedDate)
+            const [reservationsRes, cancellationRes] = await Promise.all(apiCalls);
+
+            // check for correct response, if incorrect go back to old values
+            if ((!reservationsRes || reservationsRes.success) && (!cancellationRes || cancellationRes.success))
+                await UpdateOfficeSpace(displayedDate, updatedAllDeskReservations)
+            else
+                await UpdateOfficeSpace(displayedDate)
         }
     }
 
@@ -190,8 +241,8 @@ function OfficeSpace() {
                 </div>
             </div>
             <div className="office-space__overview">
-                {Object.keys(deskClusters).map((index) => (
-                    <DeskClusterComponent desks={deskClusters[index].desks} clusterId={deskClusters[index].clusterId} selectDesk={selectDesk} key={deskClusters[index].clusterId} isSelected={IsSelected} />
+                {Object.keys(currentOfficeDesks).map((key) => (
+                    <DeskClusterComponent desks={currentOfficeDesks[key].desks} clusterId={currentOfficeDesks[key].clusterId} selectDesk={selectDesk} key={currentOfficeDesks[key].clusterId} isSelected={IsSelected} />
                 ))}
             </div>
             {selectedDesk &&
@@ -202,12 +253,12 @@ function OfficeSpace() {
                             <BodySmall children="Afternoon" />
                         </div>
                         <div className="availability-bar__bars">
-                            {deskClusters[selectedDesk.clusterId].desks[selectedDesk.deskId].occupied.map((isOccupied, index) => (
+                            {currentOfficeDesks[selectedDesk.clusterId].desks[selectedDesk.deskId].occupied.map((isOccupied, index) => (
                                 <div className={`availability-bar__bar availability-bar__bar${!isOccupied ? "--success" : "--fail"}`} key={index}></div>
                             ))}
                         </div>
                         <form className="availability-bar__form body--normal">
-                            {deskClusters[selectedDesk.clusterId].desks[selectedDesk.deskId].occupied.map((isOccupied, index) => {
+                            {currentOfficeDesks[selectedDesk.clusterId].desks[selectedDesk.deskId].occupied.map((isOccupied, index) => {
                                 const onChange = () => {
                                     handleCheckboxChange(index);
                                     // Add your checkbox change logic here
@@ -262,13 +313,32 @@ function DeskComponent({ desk, selectDesk, isSelected }: DeskComponentProps) {
     return (
         <div className="desk" id={desk.deskId.toString()} onClick={() => (selectDesk(desk))}>
             <div className="desk__desk">
-                <div className={`desk__chair ${GetDeskState(desk.GetState())} ${isSelected(desk.clusterId, desk.deskId) ? GetDeskState(6) : ""}`}></div>
+                <div className={`desk__chair ${GetDeskStateClassName(GetDeskState(desk))} ${isSelected(desk.clusterId, desk.deskId) ? GetDeskStateClassName(6) : ""}`}></div>
             </div>
         </div>
     );
 }
 
-function GetDeskState(state: number) {
+function GetDeskState(desk: Desk): number {
+    let amountOfOccupied = 0;
+    for (const timeSlot of desk.occupied) {
+        if (timeSlot) amountOfOccupied++;
+    }
+    let amountOfReserved = 0;
+    for (const timeSlot of desk.userReservations) {
+        if (timeSlot) amountOfReserved++;
+    }
+
+    if (desk.occupied.length == 0) return 5
+    if (amountOfOccupied == desk.occupied.length) return 4
+    if (amountOfOccupied > 0 && amountOfReserved > 0) return 3
+    if (amountOfOccupied > 0 && amountOfReserved == 0) return 2
+    if (amountOfOccupied == 0 && amountOfReserved > 0) return 1
+    if (amountOfOccupied == 0 && amountOfReserved == 0) return 0
+    return -1
+}
+
+function GetDeskStateClassName(state: number) {
     switch (state) {
         case 0:
             return "desk__chair--available";
