@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Configuration;
+using Microsoft.Extensions.Logging;
 using OneStopShopIdaBackend.Controllers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,9 @@ internal class MicrosoftGraphApiControllerUnitTests
 
         // Initialise Microsoft Graph Api Controller
         _microsoftGraphApiController = new MicrosoftGraphApiController(
-            new Logger<MicrosoftGraphApiController>(new LoggerFactory()), microsoftGraphApiServiceFake,
+            new Logger<MicrosoftGraphApiController>(new LoggerFactory()), 
+            ConfigurationFake.GetConfiguration(),
+            microsoftGraphApiServiceFake,
             _databaseServiceFake);
     }
 

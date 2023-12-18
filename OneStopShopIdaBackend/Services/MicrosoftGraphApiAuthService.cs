@@ -35,7 +35,7 @@ public partial class MicrosoftGraphApiService
         var content = new FormUrlEncodedContent(data);
         content.Headers.Clear();
         content.Headers.Add("content-type", "application/x-www-form-urlencoded");
-        content.Headers.Add("Origin", "http://localhost");
+        content.Headers.Add("Origin", BackendUri);
 
         HttpResponseMessage response =
             await _httpClient.PostAsync("https://login.microsoftonline.com/organizations/oauth2/v2.0/token",
@@ -68,7 +68,7 @@ public partial class MicrosoftGraphApiService
             var content = new FormUrlEncodedContent(data);
             content.Headers.Clear();
             content.Headers.Add("content-type", "application/x-www-form-urlencoded");
-            content.Headers.Add("Origin", "http://localhost");
+            content.Headers.Add("Origin", BackendUri);
 
             HttpResponseMessage response =
                 await _httpClient.PostAsync("https://login.microsoftonline.com/organizations/oauth2/v2.0/token",

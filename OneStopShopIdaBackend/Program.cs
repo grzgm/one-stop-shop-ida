@@ -63,7 +63,7 @@ else
 
 // Enable CORS
 app.UseCors(builder => builder
-    .WithOrigins("http://localhost:5173")
+    .WithOrigins(app.Configuration["FrontendUri"])
     .AllowCredentials()
     .AllowAnyHeader()
     .AllowAnyMethod());
