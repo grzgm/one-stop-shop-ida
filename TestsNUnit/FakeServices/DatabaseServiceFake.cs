@@ -33,7 +33,7 @@ internal class DatabaseServiceFake : DbContext, IDatabaseService
         throw new NotImplementedException();
     }
 
-    public Task<DateTime> GetLunchRecurringRegistrationLastRegistered(string microsoftId)
+    public Task<LunchRecurringRegistrationItem> GetLunchRecurringLastRegistrationDate(string microsoftId)
     {
         throw new NotImplementedException();
     }

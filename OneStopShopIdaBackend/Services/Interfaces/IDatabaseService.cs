@@ -13,7 +13,7 @@ namespace OneStopShopIdaBackend.Services
 
         void CheckOrGenerateVapidDetails(string vapidSubject, string vapidPublicKey, string vapidPrivateKey);
         Task DeleteUserItem(string microsoftId);
-        Task<DateTime> GetLunchRecurringRegistrationLastRegistered(string microsoftId);
+        Task<LunchRecurringRegistrationItem> GetLunchRecurringLastRegistrationDate(string microsoftId);
         Task<bool> GetLunchTodayIsRegistered(string microsoftId);
         Task<LunchRecurringItem> GetRegisteredDays(string microsoftId);
         Task<UserItem> GetUserItem(string microsoftId);

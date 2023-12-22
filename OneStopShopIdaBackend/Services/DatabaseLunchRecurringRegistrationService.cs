@@ -5,7 +5,7 @@ namespace OneStopShopIdaBackend.Services;
 
 public partial class DatabaseService
 {
-    public async Task<DateTime> GetLunchRecurringRegistrationLastRegistered(string microsoftId)
+    public async Task<LunchRecurringRegistrationItem> GetLunchRecurringLastRegistrationDate(string microsoftId)
     {
         IsDbSetNull("LunchRecurringRegistration");
 
@@ -16,7 +16,7 @@ public partial class DatabaseService
             throw new KeyNotFoundException();
         }
 
-        return lunchRecurringRegistrationItem.LastRegistered;
+        return lunchRecurringRegistrationItem;
     }
 
     public async Task PutLunchRecurringRegistrationItem(LunchRecurringRegistrationItem lunchRecurringRegistrationItem)
