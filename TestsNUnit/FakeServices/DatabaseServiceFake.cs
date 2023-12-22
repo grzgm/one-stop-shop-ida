@@ -18,7 +18,6 @@ internal class DatabaseServiceFake : DbContext, IDatabaseService
     }
 
     public DbSet<LunchRecurringItem> LunchRecurring { get; set; }
-    public DbSet<LunchRecurringRegistrationItem> LunchRecurringRegistration { get; set; }
     public DbSet<LunchTodayItem> LunchToday { get; set; }
     public DbSet<PushSubscription> PushSubscription { get; set; }
     public DbSet<UserItem> Users { get; set; }
@@ -29,11 +28,6 @@ internal class DatabaseServiceFake : DbContext, IDatabaseService
     }
 
     public Task DeleteUserItem(string microsoftId)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<LunchRecurringRegistrationItem> GetLunchRecurringLastRegistrationDate(string microsoftId)
     {
         throw new NotImplementedException();
     }
@@ -77,13 +71,6 @@ internal class DatabaseServiceFake : DbContext, IDatabaseService
         return Task.CompletedTask;
     }
 
-    public Task PostLunchRecurringRegistrationItem(LunchRecurringRegistrationItem lunchRecurringRegistrationItem)
-    {
-        LunchRecurringRegistration.Add(lunchRecurringRegistrationItem);
-        SaveChanges();
-        return Task.CompletedTask;
-    }
-
     public Task PostLunchTodayItem(LunchTodayItem lunchTodayItem)
     {
         LunchToday.Add(lunchTodayItem);
@@ -99,11 +86,6 @@ internal class DatabaseServiceFake : DbContext, IDatabaseService
     }
 
     public Task PutLunchRecurringItem(LunchRecurringItem lunchRecurringItem)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task PutLunchRecurringRegistrationItem(LunchRecurringRegistrationItem lunchRecurringRegistrationItem)
     {
         throw new NotImplementedException();
     }

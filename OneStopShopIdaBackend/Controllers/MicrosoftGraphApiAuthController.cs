@@ -45,13 +45,6 @@ public partial class MicrosoftGraphApiController
                     Friday = false,
                 };
                 await _databaseService.PostLunchRecurringItem(lunchRecurringItem);
-
-                LunchRecurringRegistrationItem lunchRecurringRegistrationItem = new()
-                {
-                    MicrosoftId = user.MicrosoftId,
-                    LastRegistered = DateTime.Now
-                };
-                await _databaseService.PostLunchRecurringRegistrationItem(lunchRecurringRegistrationItem);
             }
 
             // Store Access Token, Refresh Token, Microsoft Id in the session

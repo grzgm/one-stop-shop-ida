@@ -32,7 +32,6 @@ public partial class DatabaseService : DbContext, IDatabaseService
 
     public DbSet<UserItem> Users { get; set; } = null!;
     public DbSet<LunchRecurringItem> LunchRecurring { get; set; } = null!;
-    public DbSet<LunchRecurringRegistrationItem> LunchRecurringRegistration { get; set; } = null!;
     public DbSet<LunchTodayItem> LunchToday { get; set; } = null!;
     public DbSet<PushSubscription> PushSubscription { get; set; } = null!;
     public DbSet<OfficeDeskLayoutsItem> OfficeDeskLayouts { get; set; } = null!;

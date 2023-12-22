@@ -25,10 +25,4 @@ public static class ModelsObjectsFake
         Thursday = false,
         Friday = false,
     };
-
-    public static LunchRecurringRegistrationItem testLunchRecurringRegistrationItem = new()
-    {
-        MicrosoftId = "testMicrosoftId",
-        LastRegistered = new DateTime(2000,1,1)
-    };
 }

@@ -2,11 +2,13 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OneStopShopIdaBackend.Models;
+
 public class LunchRecurringItem
 {
     public LunchRecurringItem()
     {
     }
+
     public LunchRecurringItem(string microsoftId, LunchRecurringItemFrontend lunchRecurringItemFrontend)
     {
         this.MicrosoftId = microsoftId;
@@ -16,32 +18,18 @@ public class LunchRecurringItem
         this.Thursday = lunchRecurringItemFrontend.Thursday;
         this.Friday = lunchRecurringItemFrontend.Friday;
     }
+
     [Key]
     [ForeignKey(nameof(UserItem))]
     [StringLength(255)]
     [Required]
     public string MicrosoftId { get; set; }
-    [Required]
-    public bool Monday { get; set; }
-    [Required]
-    public bool Tuesday { get; set; }
-    [Required]
-    public bool Wednesday { get; set; }
-    [Required]
-    public bool Thursday { get; set; }
-    [Required]
-    public bool Friday { get; set; }
 
-    public bool IsRegistered()
-    {
-        if (Monday) return true;
-        if (Tuesday) return true;
-        if (Wednesday) return true;
-        if (Thursday) return true;
-        if (Friday) return true;
-
-        return false;
-    }
+    [Required] public bool Monday { get; set; }
+    [Required] public bool Tuesday { get; set; }
+    [Required] public bool Wednesday { get; set; }
+    [Required] public bool Thursday { get; set; }
+    [Required] public bool Friday { get; set; }
 
     public override string ToString()
     {
@@ -55,6 +43,32 @@ public class LunchRecurringItem
 
         return string.Join(", ", selectedDays);
     }
+
+    public bool IsRegisteredOnDate(DateTime date)
+    {
+        DayOfWeek currentDay = date.DayOfWeek;
+
+        switch (currentDay)
+        {
+            case DayOfWeek.Monday:
+                return Monday;
+
+            case DayOfWeek.Tuesday:
+                return Tuesday;
+
+            case DayOfWeek.Wednesday:
+                return Wednesday;
+
+            case DayOfWeek.Thursday:
+                return Thursday;
+
+            case DayOfWeek.Friday:
+                return Friday;
+
+            default:
+                return false; // Handle other days as needed
+        }
+    }
 }
 
 public class LunchRecurringItemFrontend
@@ -62,6 +76,7 @@ public class LunchRecurringItemFrontend
     public LunchRecurringItemFrontend()
     {
     }
+
     public LunchRecurringItemFrontend(LunchRecurringItem lunchRecurringItemFrontend)
     {
         this.Monday = lunchRecurringItemFrontend.Monday;
@@ -70,6 +85,7 @@ public class LunchRecurringItemFrontend
         this.Thursday = lunchRecurringItemFrontend.Thursday;
         this.Friday = lunchRecurringItemFrontend.Friday;
     }
+
     public bool Monday { get; set; }
     public bool Tuesday { get; set; }
     public bool Wednesday { get; set; }

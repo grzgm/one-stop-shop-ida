@@ -75,6 +75,33 @@ public partial class DatabaseService
         }
     }
 
+    public async Task SendNotificationsToUser(Notification notification, UserItem userItem)
+    {
+        WebPushClient webPushClient = new();
+        try
+        {
+            var subscription = await GetUserSubscription(userItem.MicrosoftId);
+            if (subscription != null)
+            {
+                await webPushClient.SendNotificationAsync(subscription.ToWebPushSubscription(),
+                    JsonConvert.SerializeObject(notification), _vapidDetails);
+            }
+        }
+        catch (WebPushException ex)
+        {
+            if (ex.Message == "Subscription no longer valid")
+            {
+                var subscription = await GetUserSubscription(userItem.MicrosoftId);
+                PushSubscription.Remove(subscription);
+                await SaveChangesAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
+        }
+    }
+
     private async Task<List<PushSubscription>> GetUserSubscriptions(string microsoftId) =>
         await PushSubscription.Where(s => s.MicrosoftId == microsoftId).ToListAsync();
 
