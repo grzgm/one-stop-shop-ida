@@ -2,12 +2,12 @@
 
 namespace OneStopShopIdaBackend.Controllers;
 
-public class MidnightTaskController : IHostedService, IDisposable
+public class LunchTodayTaskController : IHostedService, IDisposable
 {
     private readonly IServiceProvider _serviceProvider;
     private Timer _timer;
 
-    public MidnightTaskController(IServiceProvider serviceProvider)
+    public LunchTodayTaskController(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
     }
