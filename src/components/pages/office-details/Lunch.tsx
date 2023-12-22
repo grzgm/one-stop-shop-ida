@@ -8,7 +8,7 @@ import { IsAuth } from "../../../api/MicrosoftGraphAPI";
 import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
 import { IActionResult } from "../../../api/Response";
 import { IsRegistered, RegisterLunchToday } from "../../../api/LunchTodayAPI";
-import { GetLastRegistrationDate, GetRegisteredDays, ILunchRecurringItem, PutLunchRecurringItem, RegisterLunchRecurring } from "../../../api/LunchRecurringAPI";
+import { GetRegisteredDays, ILunchRecurringItem, PutLunchRecurringItem } from "../../../api/LunchRecurringAPI";
 import { PostSubscribe } from "../../../api/PushAPI";
 
 async function LunchLoader(officeName: string) {
@@ -35,8 +35,6 @@ function Lunch() {
 
 	// Lunch Recurring
 	const [responseRecurringDayChange, setResponseRecurringDayChange] = useState<IActionResult<undefined> | undefined>(undefined)
-	const [responseRecurringRegister, setResponseRecurringRegister] = useState<IActionResult<undefined> | undefined>(undefined)
-	const [lastRegistrationDate, setLastRegistrationDate] = useState<Date>(new Date())
 	const [registeredDays, setRegisteredDays] = useState<ILunchRecurringItem>({
 		monday: false,
 		tuesday: false,
@@ -81,12 +79,6 @@ function Lunch() {
 				setRegisteredDays(registeredDaysRes.payload);
 			}
 		}
-		const LastRegistrationDateWrapper = async () => {
-			const lastRegistrationDate = await GetLastRegistrationDate();
-			if (lastRegistrationDate.payload !== undefined) {
-				setLastRegistrationDate(new Date(lastRegistrationDate.payload));
-			}
-		}
 		const PostSubscribeWrapper = async () => {
 			const subscribeRes = await PostSubscribe();
 			if (subscribeRes.success !== undefined) {
@@ -96,7 +88,6 @@ function Lunch() {
 
 		IsRegisteredWrapper();
 		GetRegisteredDaysWrapper();
-		LastRegistrationDateWrapper();
 		PostSubscribeWrapper();
 	}, []);
 
@@ -107,15 +98,6 @@ function Lunch() {
 		setRegisteredDays(updatedCheckedBoxes);
 		const response = await PutLunchRecurringItem(updatedCheckedBoxes);
 		setResponseRecurringDayChange(response);
-	};
-	const registerForRecurring = async (registration: boolean) => {
-		setIsButtonDisabled(true);
-		const response = await RegisterLunchRecurring(officeName, registration);
-		setResponseRecurringRegister(response);
-		if (response.success) {
-			setLastRegistrationDate(new Date());
-		}
-		setIsButtonDisabled(false);
 	};
 
 	// Lunch Today
@@ -143,8 +125,8 @@ function Lunch() {
 			<main className="lunch-main">
 				<div className="lunch-main__recurring">
 					<HeadingSmall>Register recurring</HeadingSmall>
-					<BodySmall>Registration will be sent</BodySmall>
-					<BodySmall>for the next week</BodySmall>
+					<BodySmall>You will get the notification</BodySmall>
+					<BodySmall>to register on the given day at 9:00</BodySmall>
 					{!isPushEnabled && <BodySmall additionalClasses={["font-colour--fail"]}>For full functionality enable Push Notifications</BodySmall>}
 					<form className="lunch-main__form body--normal">
 						{Object.keys(registeredDays).map((dayName, index) => (
@@ -162,14 +144,6 @@ function Lunch() {
 						))}
 					</form>
 					{responseRecurringDayChange && <BodySmall additionalClasses={[responseRecurringDayChange.success ? "font-colour--success" : "font-colour--fail"]}>{responseRecurringDayChange.success ? "Days updated" : "Couldn't update the days"}</BodySmall>}
-					{wasInThisWeek(lastRegistrationDate) ?
-						<>
-							<Button child="Update Registration" disabled={isButtonDisabled} onClick={() => registerForRecurring(true)} />
-							<Button child="Deregister" disabled={isButtonDisabled} onClick={() => registerForRecurring(false)} />
-						</> :
-						<Button child="Register" disabled={isButtonDisabled} onClick={() => registerForRecurring(true)} />}
-
-					{responseRecurringRegister && <BodySmall additionalClasses={[responseRecurringRegister.success ? "font-colour--success" : "font-colour--fail"]}>{responseRecurringRegister.statusText}</BodySmall>}
 				</div>
 				<div className="lunch-main__today">
 					<HeadingSmall>Register for today</HeadingSmall>
@@ -192,15 +166,6 @@ function isPastNoon(): boolean {
 
 	// Compare the current hours with 12 (noon)
 	return currentHours >= 12;
-}
-
-function wasInThisWeek(date: Date): boolean {
-	const today = new Date()
-	today.setHours(0, 0, 0, 0)
-	const firstDayOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + 1));
-
-	// Compare the current hours with 12 (noon)
-	return firstDayOfWeek < date;
 }
 
 export default Lunch;
