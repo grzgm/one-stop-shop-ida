@@ -20,8 +20,8 @@ public class LunchRecurringTaskController : IHostedService, IDisposable
         var midnight = new DateTime(now.Year, now.Month, now.Day, 9, 0, 0, DateTimeKind.Utc);
         var timeUntilMidnight = midnight.AddHours(24) - now;
 
-        // _timer = new Timer(DoWork, null, timeUntilMidnight, TimeSpan.FromDays(1));
-        _timer = new Timer(DoWork, null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10));
+        _timer = new Timer(DoWork, null, timeUntilMidnight, TimeSpan.FromDays(1));
+        // _timer = new Timer(DoWork, null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10));
 
         return Task.CompletedTask;
     }
