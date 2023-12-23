@@ -6,7 +6,6 @@ import { officeInformationData } from "../../../assets/OfficeInformationData";
 import { redirect } from "react-router-dom";
 import { IsAuth } from "../../../api/MicrosoftGraphAPI";
 import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
-import { IActionResult } from "../../../api/Response";
 import { IsRegistered, RegisterLunchToday } from "../../../api/LunchTodayAPI";
 import { GetRegisteredDays, ILunchRecurringItem, PutLunchRecurringItem } from "../../../api/LunchRecurringAPI";
 import { PostSubscribe } from "../../../api/PushAPI";
@@ -32,11 +31,9 @@ function Lunch() {
 	const { setAlert } = useContext(AlertContext);
 
 	// Lunch Today
-	const [responseToday, setResponseToday] = useState<IActionResult<undefined> | undefined>(undefined)
 	const [isRegisteredToday, setIsRegisteredToday] = useState(true)
 
 	// Lunch Recurring
-	const [responseRecurringDayChange, setResponseRecurringDayChange] = useState<IActionResult<undefined> | undefined>(undefined)
 	const [registeredDays, setRegisteredDays] = useState<ILunchRecurringItem>({
 		monday: false,
 		tuesday: false,
@@ -99,7 +96,6 @@ function Lunch() {
 		updatedCheckedBoxes[dayName] = !updatedCheckedBoxes[dayName];
 		setRegisteredDays(updatedCheckedBoxes);
 		const response = await PutLunchRecurringItem(updatedCheckedBoxes);
-		setResponseRecurringDayChange(response);
 		setAlert(response);
 	};
 
@@ -110,7 +106,6 @@ function Lunch() {
 			const response = await RegisterLunchToday(officeName, registration);
 			// const response = await CreateEvent("grzegorz.malisz@weareida.digital", "lunch event", new Date().toISOString(), new Date().toISOString());
 			// setResponse(await SendEmail(RegisterForTodayMail(officeName), "office@ida-mediafoundry.nl"));
-			setResponseToday(response);
 			setAlert(response);
 			if (response.success) {
 				setIsRegisteredToday(registration);
