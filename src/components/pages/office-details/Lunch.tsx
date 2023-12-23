@@ -10,7 +10,6 @@ import { IActionResult } from "../../../api/Response";
 import { IsRegistered, RegisterLunchToday } from "../../../api/LunchTodayAPI";
 import { GetRegisteredDays, ILunchRecurringItem, PutLunchRecurringItem } from "../../../api/LunchRecurringAPI";
 import { PostSubscribe } from "../../../api/PushAPI";
-import InfoIcon from '@mui/icons-material/Info';
 import AlertContext from "../../../contexts/AlertContext";
 
 async function LunchLoader(officeName: string) {
@@ -30,7 +29,7 @@ function Lunch() {
 	const officeName = useContext(CurrentOfficeContext).currentOffice;
 	const [isPushEnabled, setIsPushEnabled] = useState(false);
 	const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-	const { alertResponse, alertTimer, setAlert } = useContext(AlertContext);
+	const { setAlert } = useContext(AlertContext);
 
 	// Lunch Today
 	const [responseToday, setResponseToday] = useState<IActionResult<undefined> | undefined>(undefined)
@@ -148,7 +147,6 @@ function Lunch() {
 							</div>
 						))}
 					</form>
-					{responseRecurringDayChange && <BodySmall additionalClasses={[responseRecurringDayChange.success ? "font-colour--success" : "font-colour--fail"]}>{responseRecurringDayChange.success ? "Days updated" : "Couldn't update the days"}</BodySmall>}
 				</div>
 				<div className="lunch-main__today">
 					<HeadingSmall>Register for today</HeadingSmall>
@@ -158,16 +156,8 @@ function Lunch() {
 						<Button child="Deregister" disabled={isPastNoon() || isButtonDisabled} onClick={() => registerForToday(false)} /> :
 						<Button child="Register" disabled={isPastNoon() || isButtonDisabled} onClick={() => registerForToday(true)} />
 					}
-					{responseToday && <BodySmall additionalClasses={[responseToday.success ? "font-colour--success" : "font-colour--fail"]}>{responseToday.statusText}</BodySmall>}
 				</div>
 			</main>
-			{alertResponse &&
-				<div className={`alert ${alertResponse.success ? "background-colour--success" : "background-colour--fail"}`}>
-					<InfoIcon />
-					<BodySmall>
-						{alertResponse.statusText}
-					</BodySmall>
-				</div>}
 		</div>
 	);
 }

@@ -1,9 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Navbar from "./components/bars/Navbar";
 import Sidebar from "./components/bars/Sidebar";
 import { Outlet } from "react-router-dom";
+import { BodySmall } from "./components/text-wrapers/TextWrapers";
+import AlertContext from "./contexts/AlertContext";
+import InfoIcon from '@mui/icons-material/Info';
 
 function AppOverlay() {
+	const { alertResponse } = useContext(AlertContext);
     const navbarOptionsRef = useRef<HTMLDivElement>(null);
     const maxNavbarOptionsWidth = 1360
     const [navbarOptionsWidth, setNavbarOptionsWidth] = useState(navbarOptionsRef?.current?.offsetWidth);
@@ -39,6 +43,13 @@ function AppOverlay() {
         <>
             <Navbar onPressOpenSidebar={switchShowSidebar} navbarOptionsRef={navbarOptionsRef} />
             {(navbarOptionsWidth && navbarOptionsWidth <= maxNavbarOptionsWidth) && showSidebar && (<Sidebar onPressCloseSidebar={switchShowSidebar} />)}
+			{alertResponse &&
+				<div className={`alert ${alertResponse.success ? "background-colour--success" : "background-colour--fail"}`}>
+					<InfoIcon />
+					<BodySmall>
+						{alertResponse.statusText}
+					</BodySmall>
+				</div>}
             <Outlet />
         </>
     );

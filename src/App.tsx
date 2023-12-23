@@ -44,7 +44,6 @@ function App() {
 			<CurrentOfficeContext.Provider value={{ currentOffice: currentOffice, setCurrentOffice: setCurrentOfficeAndCookie }}>
 				<AlertContext.Provider value={{
 					alertResponse: alertResponse,
-					alertTimer: alertTimer,
 					setAlert: setAlert
 				}}>
 					<RouterProvider router={customBrowserRouter} />
