@@ -43,6 +43,18 @@ function Lunch() {
 	});
 	const weekDaysNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 
+	// Office Dropdown
+	const [selectedOffice, setSelectedOffice] = useState<string>(officeName);
+	let offices = Object.keys(officeInformationData)
+		.filter(key => officeInformationData[key].canRegisterLunch)
+		.map(key => officeInformationData[key].officeName);
+	// offices = [officeName, ...offices.filter(value => value !== officeName)]
+
+	const handleOfficeDropdownChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+		const selectedValue = event.target.value;
+		setSelectedOffice(selectedValue);
+	};
+
 	useEffect(() => {
 		if ("serviceWorker" in navigator && "PushManager" in window) {
 			navigator.serviceWorker
@@ -103,7 +115,7 @@ function Lunch() {
 	const registerForToday = async (registration: boolean) => {
 		setIsButtonDisabled(true);
 		if (!isPastNoon()) {
-			const response = await RegisterLunchToday(officeName, registration);
+			const response = await RegisterLunchToday(selectedOffice, registration);
 			// const response = await CreateEvent("grzegorz.malisz@weareida.digital", "lunch event", new Date().toISOString(), new Date().toISOString());
 			// setResponse(await SendEmail(RegisterForTodayMail(officeName), "office@ida-mediafoundry.nl"));
 			setAlert(response);
@@ -147,8 +159,21 @@ function Lunch() {
 					<HeadingSmall>Register for today</HeadingSmall>
 					<BodySmall>Only for today</BodySmall>
 					<BodySmall>before 12:00</BodySmall>
+					<form className="lunch-main__form body--normal">
+						<label>Select an Office to register at: </label>
+						<select value={selectedOffice} onChange={handleOfficeDropdownChange} className="body--normal">
+							{offices.map((office) => (
+								<option key={office} value={office}>
+									{office}
+								</option>
+							))}
+						</select>
+					</form>
 					{isRegisteredToday ?
-						<Button child="Deregister" disabled={isPastNoon() || isButtonDisabled} onClick={() => registerForToday(false)} /> :
+						<>
+							<Button child="Deregister" disabled={isPastNoon() || isButtonDisabled} onClick={() => registerForToday(false)} />
+							{!isPastNoon() && <BodySmall>You are already registered at: </BodySmall>}
+						</> :
 						<Button child="Register" disabled={isPastNoon() || isButtonDisabled} onClick={() => registerForToday(true)} />
 					}
 				</div>

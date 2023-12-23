@@ -16,7 +16,7 @@ export interface IOfficeInformationData {
   };
 }
 
-export const officeInformationData: Record<string, IOfficeInformationData> = {
+export const officeInformationData: { [key: string]: IOfficeInformationData } = {
   Utrecht: {
     officeName: "Utrecht",
     canReserveDesk: true,
