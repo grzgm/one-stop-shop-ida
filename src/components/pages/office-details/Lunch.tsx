@@ -10,6 +10,8 @@ import { IActionResult } from "../../../api/Response";
 import { IsRegistered, RegisterLunchToday } from "../../../api/LunchTodayAPI";
 import { GetRegisteredDays, ILunchRecurringItem, PutLunchRecurringItem } from "../../../api/LunchRecurringAPI";
 import { PostSubscribe } from "../../../api/PushAPI";
+import InfoIcon from '@mui/icons-material/Info';
+import AlertContext from "../../../contexts/AlertContext";
 
 async function LunchLoader(officeName: string) {
 	const currentOfficeInformationData = officeInformationData[officeName]
@@ -26,12 +28,13 @@ async function LunchLoader(officeName: string) {
 
 function Lunch() {
 	const officeName = useContext(CurrentOfficeContext).currentOffice;
-	const [isPushEnabled, setIsPushEnabled] = useState<boolean>(false)
+	const [isPushEnabled, setIsPushEnabled] = useState(false);
 	const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+	const { alertResponse, alertTimer, setAlert } = useContext(AlertContext);
 
 	// Lunch Today
-	const [responseToday, setResponseToday] = useState<IActionResult<null> | null>(null)
-	const [isRegisteredToday, setIsRegisteredToday] = useState<boolean>(true)
+	const [responseToday, setResponseToday] = useState<IActionResult<undefined> | undefined>(undefined)
+	const [isRegisteredToday, setIsRegisteredToday] = useState(true)
 
 	// Lunch Recurring
 	const [responseRecurringDayChange, setResponseRecurringDayChange] = useState<IActionResult<undefined> | undefined>(undefined)
@@ -98,6 +101,7 @@ function Lunch() {
 		setRegisteredDays(updatedCheckedBoxes);
 		const response = await PutLunchRecurringItem(updatedCheckedBoxes);
 		setResponseRecurringDayChange(response);
+		setAlert(response);
 	};
 
 	// Lunch Today
@@ -108,6 +112,7 @@ function Lunch() {
 			// const response = await CreateEvent("grzegorz.malisz@weareida.digital", "lunch event", new Date().toISOString(), new Date().toISOString());
 			// setResponse(await SendEmail(RegisterForTodayMail(officeName), "office@ida-mediafoundry.nl"));
 			setResponseToday(response);
+			setAlert(response);
 			if (response.success) {
 				setIsRegisteredToday(registration);
 			}
@@ -156,6 +161,13 @@ function Lunch() {
 					{responseToday && <BodySmall additionalClasses={[responseToday.success ? "font-colour--success" : "font-colour--fail"]}>{responseToday.statusText}</BodySmall>}
 				</div>
 			</main>
+			{alertResponse &&
+				<div className={`alert ${alertResponse.success ? "background-colour--success" : "background-colour--fail"}`}>
+					<InfoIcon />
+					<BodySmall>
+						{alertResponse.statusText}
+					</BodySmall>
+				</div>}
 		</div>
 	);
 }

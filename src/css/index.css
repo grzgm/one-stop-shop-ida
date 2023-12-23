@@ -81,8 +81,16 @@ html, body {
     color: var(--fail);
 }
 
+.background-colour--fail{
+    background-color: var(--fail);
+}
+
 .font-colour--success{
     color: var(--success);
+}
+
+.background-colour--success{
+    background-color: var(--success);
 }
 
 .description{
@@ -95,4 +103,16 @@ html, body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.alert {
+    position: fixed;
+    bottom: 3rem;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    padding: 1rem;
+    max-width: 20rem;
+    display: flex;
+    gap: 0.5rem;
+    box-shadow: var(--grey2) 0px 0px 10px 5px;
 }

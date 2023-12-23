@@ -16,7 +16,7 @@ async function IsRegistered(): Promise<IActionResult<boolean>> {
 	}
 }
 
-async function RegisterLunchToday(officeName: string, registration: boolean): Promise<IActionResult<null>> {
+async function RegisterLunchToday(officeName: string, registration: boolean): Promise<IActionResult<undefined>> {
 	try {
 		const res = await fetch(
 			`http://localhost:3002/lunch/today/lunch-today-registration?officeName=${officeName}&registration=${registration}`,

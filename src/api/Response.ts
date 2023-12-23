@@ -9,19 +9,12 @@ async function InspectResponseAsync<T>(
 ): Promise<IActionResult<T>> {
 	// Handle successful response (status code 200-299)
 	if (res.ok) {
-		let payload = undefined;
-		// Try to access payload
-		try {
-			payload = await res.json();
-		} catch (error) {
-			console.error(
-				"Error while parsing response in InspectResponseAsync function: \n",
-				error
-			);
-		}
+		let payload = undefined
+		const statusText = await res.text();
+		if(isJsonString(statusText)) payload = JSON.parse(statusText)
 		return {
 			success: true,
-			statusText: "Request has been sent correctly.",
+			statusText: statusText,
 			payload: payload,
 		};
 	}
@@ -58,6 +51,15 @@ function InspectResponseSync<T>(res: any): IActionResult<T> {
 		success: false,
 		statusText: res.statusText,
 	};
+}
+
+function isJsonString(str: string) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
 }
 
 export { InspectResponseAsync, InspectResponseSync };
