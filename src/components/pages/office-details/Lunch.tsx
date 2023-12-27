@@ -6,7 +6,7 @@ import { officeInformationData } from "../../../assets/OfficeInformationData";
 import { redirect } from "react-router-dom";
 import { IsAuth } from "../../../api/MicrosoftGraphAPI";
 import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
-import { IsRegistered, RegisterLunchToday } from "../../../api/LunchTodayAPI";
+import { ILunchTodayItem, IsRegistered, RegisterLunchToday } from "../../../api/LunchTodayAPI";
 import { GetRegisteredDays, ILunchRecurringItem, PutLunchRecurringItem } from "../../../api/LunchRecurringAPI";
 import { PostSubscribe } from "../../../api/PushAPI";
 import AlertContext from "../../../contexts/AlertContext";
@@ -31,7 +31,7 @@ function Lunch() {
 	const { setAlert } = useContext(AlertContext);
 
 	// Lunch Today
-	const [isRegisteredToday, setIsRegisteredToday] = useState(true)
+	const [todayRegistration, setTodayRegistration] = useState<ILunchTodayItem | undefined>(undefined)
 
 	// Lunch Recurring
 	const [registeredDays, setRegisteredDays] = useState<ILunchRecurringItem>({
@@ -77,12 +77,8 @@ function Lunch() {
 
 		const IsRegisteredWrapper = async () => {
 			const isRegisteredRes = await IsRegistered();
-			if (isRegisteredRes.payload == undefined) {
-				setIsRegisteredToday(true);
-			}
-			else {
-				setIsRegisteredToday(isRegisteredRes.payload);
-			}
+			console.log("isRegisteredRes.payload", isRegisteredRes.payload)
+			setTodayRegistration(isRegisteredRes.payload);
 		}
 		const GetRegisteredDaysWrapper = async () => {
 			const registeredDaysRes = await GetRegisteredDays();
@@ -115,12 +111,12 @@ function Lunch() {
 	const registerForToday = async (registration: boolean) => {
 		setIsButtonDisabled(true);
 		if (!isPastNoon()) {
-			const response = await RegisterLunchToday(selectedOffice, registration);
+			const response = await RegisterLunchToday(registration, selectedOffice);
 			// const response = await CreateEvent("grzegorz.malisz@weareida.digital", "lunch event", new Date().toISOString(), new Date().toISOString());
 			// setResponse(await SendEmail(RegisterForTodayMail(officeName), "office@ida-mediafoundry.nl"));
 			setAlert(response);
 			if (response.success) {
-				setIsRegisteredToday(registration);
+				setTodayRegistration({isRegistered: registration, office: selectedOffice});
 			}
 
 		}
@@ -169,10 +165,10 @@ function Lunch() {
 							))}
 						</select>
 					</form>
-					{isRegisteredToday ?
+					{todayRegistration && todayRegistration.isRegistered ?
 						<>
 							<Button child="Deregister" disabled={isPastNoon() || isButtonDisabled} onClick={() => registerForToday(false)} />
-							{!isPastNoon() && <BodySmall>You are already registered at: </BodySmall>}
+							{!isPastNoon() && <BodySmall>You are already registered at: {todayRegistration.office}</BodySmall>}
 						</> :
 						<Button child="Register" disabled={isPastNoon() || isButtonDisabled} onClick={() => registerForToday(true)} />
 					}

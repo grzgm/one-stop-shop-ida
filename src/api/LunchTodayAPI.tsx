@@ -1,9 +1,14 @@
 import { IActionResult, InspectResponseAsync } from "./Response";
 
-async function IsRegistered(): Promise<IActionResult<boolean>> {
+export interface ILunchTodayItem {
+	isRegistered: boolean;
+	office: string;
+}
+
+async function IsRegistered(): Promise<IActionResult<ILunchTodayItem>> {
 	try {
 		const res = await fetch(
-			`http://localhost:3002/lunch/today/is-registered`,
+			`http://localhost:3002/lunch/today/get-registration`,
 			{
 				method: "GET",
 				credentials: "include", // Include credentials (cookies) in the request
@@ -16,10 +21,10 @@ async function IsRegistered(): Promise<IActionResult<boolean>> {
 	}
 }
 
-async function RegisterLunchToday(officeName: string, registration: boolean): Promise<IActionResult<undefined>> {
+async function RegisterLunchToday(registration: boolean, office: string): Promise<IActionResult<undefined>> {
 	try {
 		const res = await fetch(
-			`http://localhost:3002/lunch/today/lunch-today-registration?officeName=${officeName}&registration=${registration}`,
+			`http://localhost:3002/lunch/today/put-registration?registration=${registration}&office=${office}`,
 			{
 				method: "PUT",
 				credentials: "include", // Include credentials (cookies) in the request
