@@ -2,12 +2,14 @@ import { createContext } from "react";
 import { IActionResult } from "../api/Response";
 
 interface AlertContextProps {
-    alertResponse: IActionResult<any> | undefined;
-    setAlert: (response: IActionResult<any>) => void;
+    alertText: string;
+    alertStatus: boolean;
+    setAlert: (alertText: string, alertStatus: boolean) => void;
 }
 
 const AlertContext = createContext<AlertContextProps>({
-    alertResponse: undefined,
+    alertText: "",
+    alertStatus: true,
     setAlert: () => {},
 });
 

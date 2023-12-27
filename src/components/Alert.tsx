@@ -3,16 +3,17 @@ import { BodySmall } from './text-wrapers/TextWrapers';
 import { IActionResult } from '../api/Response';
 
 interface AlertProps {
-	alertResponse: IActionResult<any>;
+    alertText: string;
+    alertStatus: boolean;
 	onClick: () => void;
 }
 
-function Alert({ alertResponse, onClick }: AlertProps) {
+function Alert({ alertText, alertStatus, onClick }: AlertProps) {
 	return (
-		<div className={`alert ${alertResponse.success ? "background-colour--success" : "background-colour--fail"}`}>
+		<div className={`alert ${alertStatus ? "background-colour--success" : "background-colour--fail"}`}>
 			<InfoIcon />
 			<BodySmall>
-				{alertResponse.statusText}
+				{alertText}
 			</BodySmall>
 		</div>
 	);

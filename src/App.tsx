@@ -24,14 +24,16 @@ function App() {
 	}
 
 	// Alert System
-	const [alertResponse, setAlertResponse] = useState<IActionResult<any> | undefined>(undefined);
+	const [alertText, setAlertText] = useState<string>("");
+	const [alertStatus, setAlertStatus] = useState<boolean>(true);
 	const [alertTimer, setAlertTimer] = useState<NodeJS.Timeout | undefined>(undefined);
 
-	const setAlert = (response: IActionResult<any>) => {
-		setAlertResponse(response);
+	const setAlert = (alertText: string, alertStatus: boolean) => {
+		setAlertText(alertText);
+		setAlertStatus(alertStatus);
 		clearTimeout(alertTimer)
 		setAlertTimer(setTimeout(() => {
-			setAlertResponse(undefined);
+			setAlertText("");
 		}, 3000));
 	}
 
@@ -43,7 +45,8 @@ function App() {
 		<>
 			<CurrentOfficeContext.Provider value={{ currentOffice: currentOffice, setCurrentOffice: setCurrentOfficeAndCookie }}>
 				<AlertContext.Provider value={{
-					alertResponse: alertResponse,
+					alertText: alertText,
+					alertStatus: alertStatus,
 					setAlert: setAlert
 				}}>
 					<RouterProvider router={customBrowserRouter} />

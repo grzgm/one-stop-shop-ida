@@ -106,7 +106,7 @@ function Lunch() {
 		updatedCheckedBoxes[dayName] = !updatedCheckedBoxes[dayName];
 		setRegisteredDays(updatedCheckedBoxes);
 		const response = await PutLunchRecurringItem(updatedCheckedBoxes);
-		setAlert(response);
+		setAlert(response.statusText, response.success);
 	};
 
 	// Lunch Today
@@ -119,7 +119,7 @@ function Lunch() {
 			if (response.payload?.registrationDate) {
 				response.payload.registrationDate = new Date(response.payload.registrationDate)
 			}
-			setAlert(response);
+			setAlert(response.success ? "Registration Updated" : "Cannot Update Registration", response.success);
 			setTodayRegistration(response.payload);
 		}
 		setIsButtonDisabled(false);
