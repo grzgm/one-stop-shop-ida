@@ -32,7 +32,7 @@ internal class DatabaseServiceFake : DbContext, IDatabaseService
         throw new NotImplementedException();
     }
 
-    public Task<bool> GetLunchTodayIsRegistered(string microsoftId)
+    public Task<LunchTodayItem> GetLunchTodayIsRegistered(string microsoftId)
     {
         throw new NotImplementedException();
     }

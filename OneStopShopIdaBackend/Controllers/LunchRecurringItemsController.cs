@@ -38,6 +38,6 @@ public class LunchRecurringItemsController : CustomControllerBase
         LunchRecurringItem lunchRecurringItem =
             new(microsoftId, lunchRecurringItemFrontend);
         await _databaseService.PutLunchRecurringItem(lunchRecurringItem);
-        return NoContent();
+        return Ok($"Days saved: {lunchRecurringItem}");
     }
 }

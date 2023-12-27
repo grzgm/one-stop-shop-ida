@@ -5,7 +5,7 @@ namespace OneStopShopIdaBackend.Services;
 
 public partial class DatabaseService
 {
-    public async Task<bool> GetLunchTodayIsRegistered(string microsoftId)
+    public async Task<LunchTodayItem> GetLunchTodayIsRegistered(string microsoftId)
     {
         IsDbSetNull("LunchToday");
 
@@ -16,7 +16,7 @@ public partial class DatabaseService
             throw new KeyNotFoundException();
         }
 
-        return lunchTodayItem.IsRegistered;
+        return lunchTodayItem;
     }
 
     public async Task PutLunchTodayRegistration(LunchTodayItem lunchTodayItem)

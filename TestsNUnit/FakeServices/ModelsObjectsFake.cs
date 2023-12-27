@@ -13,7 +13,8 @@ public static class ModelsObjectsFake
     public static LunchTodayItem testLunchTodayItem = new()
     {
         MicrosoftId = "testMicrosoftId",
-        IsRegistered = false
+        IsRegistered = false,
+        Office = "testOffice"
     };
 
     public static LunchRecurringItem testLunchRecurringItem = new()

@@ -14,62 +14,67 @@ public class LunchTodayItemsController : CustomControllerBase
     private const string _lunchEmailAddress = "grzegorz.malisz@weareida.digital";
 
     public LunchTodayItemsController(ILogger<LunchTodayItemsController> logger,
-        IMicrosoftGraphApiService microsoftGraphApiService, IDatabaseService databaseService) : base(microsoftGraphApiService)
+        IMicrosoftGraphApiService microsoftGraphApiService, IDatabaseService databaseService) : base(
+        microsoftGraphApiService)
     {
         _logger = logger;
         _databaseService = databaseService;
     }
-    private static string RegisterTodayMessage(string officeName, string name) =>
+
+    private static string RegisterTodayMessage(string office, string name) =>
         "Hi,\n" +
-        $"I would like to register for today's lunch at {officeName} Office.\n" +
-        "Kind Regards,\n" +
-        $"{name}";
-    private static string DeregisterTodayMessage(string officeName, string name) =>
-        "Hi,\n" +
-        $"I would like to deregister from today's lunch list at {officeName} Office.\n" +
+        $"I would like to register for today's lunch at {office} Office.\n" +
         "Kind Regards,\n" +
         $"{name}";
 
-    [HttpGet("is-registered")]
-    public async Task<ActionResult<bool>> GetLunchTodayIsRegistered()
+    private static string DeregisterTodayMessage(string office, string name) =>
+        "Hi,\n" +
+        $"I would like to deregister from today's lunch list at {office} Office.\n" +
+        "Kind Regards,\n" +
+        $"{name}";
+
+    [HttpGet("get-registration")]
+    public async Task<ActionResult<LunchTodayItemFrontend>> GetLunchTodayIsRegistered()
     {
         string accessToken = HttpContext.Session.GetString("accessToken");
-        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken)).MicrosoftId;
+        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
+            .MicrosoftId;
 
-        return await _databaseService.GetLunchTodayIsRegistered(microsoftId);
+        return new LunchTodayItemFrontend(await _databaseService.GetLunchTodayIsRegistered(microsoftId));
     }
 
-    [HttpPut("lunch-today-registration")]
-    public async Task<IActionResult> PutLunchTodayRegistration([FromQuery] string officeName, [FromQuery] bool registration)
+    [HttpPut("put-registration")]
+    public async Task<IActionResult> PutLunchTodayRegistration([FromQuery] bool registration, [FromQuery] string office)
     {
         string accessToken = HttpContext.Session.GetString("accessToken");
-
-        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken)).MicrosoftId;
-
+        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
+            .MicrosoftId;
+        office = office.ToLower();
         var user = await _microsoftGraphApiService.GetMe(accessToken);
 
         string message;
 
         if (registration)
         {
-            message = RegisterTodayMessage(officeName, $"{user.FirstName} {user.Surname}");
+            message = RegisterTodayMessage(office, $"{user.FirstName} {user.Surname}");
         }
         else
         {
-            message = DeregisterTodayMessage(officeName, $"{user.FirstName} {user.Surname}");
+            message = DeregisterTodayMessage(office, $"{user.FirstName} {user.Surname}");
         }
 
         HttpResponseMessage response = await
             _microsoftGraphApiService.SendEmail(accessToken, _lunchEmailAddress, "Lunch Registration", message);
-
+        
         if (response.IsSuccessStatusCode)
         {
             LunchTodayItem lunchTodayItem = new()
             {
                 MicrosoftId = microsoftId,
                 IsRegistered = registration,
+                Office = registration ? office : null,
             };
-
+        
             await _databaseService.PutLunchTodayRegistration(lunchTodayItem);
         }
 
