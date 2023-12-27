@@ -1,5 +1,4 @@
 import { createContext } from "react";
-import { IActionResult } from "../api/Response";
 
 interface AlertContextProps {
     alertText: string;

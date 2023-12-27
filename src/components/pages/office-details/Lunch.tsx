@@ -120,8 +120,6 @@ function Lunch() {
 		setIsButtonDisabled(true);
 		if (!isPastNoon()) {
 			const response = await RegisterLunchToday(registration, selectedOffice);
-			// const response = await CreateEvent("grzegorz.malisz@weareida.digital", "lunch event", new Date().toISOString(), new Date().toISOString());
-			// setResponse(await SendEmail(RegisterForTodayMail(officeName), "office@ida-mediafoundry.nl"));
 			if (response.payload?.registrationDate) {
 				response.payload.registrationDate = new Date(response.payload.registrationDate)
 			}

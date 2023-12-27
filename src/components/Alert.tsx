@@ -1,6 +1,5 @@
 import InfoIcon from '@mui/icons-material/Info';
 import { BodySmall } from './text-wrapers/TextWrapers';
-import { IActionResult } from '../api/Response';
 
 interface AlertProps {
     alertText: string;
