@@ -1,7 +1,7 @@
 import { IActionResult, InspectResponseAsync } from "./Response";
 
 export interface ILunchTodayItem {
-	isRegistered: boolean;
+	registrationDate?: Date;
 	office: string;
 }
 
@@ -21,7 +21,7 @@ async function IsRegistered(): Promise<IActionResult<ILunchTodayItem>> {
 	}
 }
 
-async function RegisterLunchToday(registration: boolean, office: string): Promise<IActionResult<undefined>> {
+async function RegisterLunchToday(registration: boolean, office: string): Promise<IActionResult<ILunchTodayItem>> {
 	try {
 		const res = await fetch(
 			`http://localhost:3002/lunch/today/put-registration?registration=${registration}&office=${office}`,

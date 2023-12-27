@@ -77,7 +77,9 @@ function Lunch() {
 
 		const IsRegisteredWrapper = async () => {
 			const isRegisteredRes = await IsRegistered();
-			console.log("isRegisteredRes.payload", isRegisteredRes.payload)
+			if (isRegisteredRes.payload?.registrationDate) {
+				isRegisteredRes.payload.registrationDate = new Date(isRegisteredRes.payload.registrationDate)
+			}
 			setTodayRegistration(isRegisteredRes.payload);
 		}
 		const GetRegisteredDaysWrapper = async () => {
@@ -114,11 +116,11 @@ function Lunch() {
 			const response = await RegisterLunchToday(registration, selectedOffice);
 			// const response = await CreateEvent("grzegorz.malisz@weareida.digital", "lunch event", new Date().toISOString(), new Date().toISOString());
 			// setResponse(await SendEmail(RegisterForTodayMail(officeName), "office@ida-mediafoundry.nl"));
-			setAlert(response);
-			if (response.success) {
-				setTodayRegistration({isRegistered: registration, office: selectedOffice});
+			if (response.payload?.registrationDate) {
+				response.payload.registrationDate = new Date(response.payload.registrationDate)
 			}
-
+			setAlert(response);
+			setTodayRegistration(response.payload);
 		}
 		setIsButtonDisabled(false);
 	};
@@ -165,7 +167,7 @@ function Lunch() {
 							))}
 						</select>
 					</form>
-					{todayRegistration && todayRegistration.isRegistered ?
+					{todayRegistration && (todayRegistration?.registrationDate && todayRegistration.registrationDate.setHours(0, 0, 0, 0) == new Date().setHours(0, 0, 0, 0)) ?
 						<>
 							<Button child="Deregister" disabled={isPastNoon() || isButtonDisabled} onClick={() => registerForToday(false)} />
 							{!isPastNoon() && <BodySmall>You are already registered at: {todayRegistration.office}</BodySmall>}
