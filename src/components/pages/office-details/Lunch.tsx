@@ -159,7 +159,11 @@ function Lunch() {
 					<BodySmall>before 12:00</BodySmall>
 					<form className="lunch-main__form body--normal">
 						<label>Select an Office to register at: </label>
-						<select value={selectedOffice} onChange={handleOfficeDropdownChange} className="body--normal">
+						<select 
+							value={(todayRegistration?.registrationDate && isToday(todayRegistration.registrationDate)) ? 
+									capitalizeFirstLetter(todayRegistration.office) : officeName} 
+							onChange={handleOfficeDropdownChange} 
+							className="body--normal">
 							{offices.map((office) => (
 								<option key={office} value={office}>
 									{office}
@@ -189,7 +193,11 @@ function isPastNoon(): boolean {
 }
 
 function capitalizeFirstLetter(str: string) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
+	return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function isToday(date: Date) {
+	return date.setHours(0, 0, 0, 0) == new Date().setHours(0, 0, 0, 0);
 }
 
 export default Lunch;
