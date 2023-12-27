@@ -170,7 +170,7 @@ function Lunch() {
 					{todayRegistration && (todayRegistration?.registrationDate && todayRegistration.registrationDate.setHours(0, 0, 0, 0) == new Date().setHours(0, 0, 0, 0)) ?
 						<>
 							<Button child="Deregister" disabled={isPastNoon() || isButtonDisabled} onClick={() => registerForToday(false)} />
-							{!isPastNoon() && <BodySmall>You are already registered at: {todayRegistration.office}</BodySmall>}
+							{!isPastNoon() && <BodySmall>You are already registered at: {capitalizeFirstLetter(todayRegistration.office)}</BodySmall>}
 						</> :
 						<Button child="Register" disabled={isPastNoon() || isButtonDisabled} onClick={() => registerForToday(true)} />
 					}
@@ -186,6 +186,10 @@ function isPastNoon(): boolean {
 
 	// Compare the current hours with 12 (noon)
 	return currentHours >= 12;
+}
+
+function capitalizeFirstLetter(str: string) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 export default Lunch;
