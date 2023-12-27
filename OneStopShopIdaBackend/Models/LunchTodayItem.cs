@@ -10,28 +10,24 @@ namespace OneStopShopIdaBackend.Models
         [StringLength(255)]
         [Required]
         public string MicrosoftId { get; set; }
-
-        [Required]
-        public bool IsRegistered { get; set; }
-        
+        public DateTime? RegistrationDate { get; set; }
         [StringLength(45)]
-        [Required]
         public string? Office { get; set; }
     }
     public class LunchTodayItemFrontend
     {
-        public bool IsRegistered { get; set; }
+        public DateTime? RegistrationDate { get; set; }
         public string? Office { get; set; }
 
-        public LunchTodayItemFrontend(bool isRegistered, string office)
+        public LunchTodayItemFrontend(DateTime? registrationDate, string office)
         {
-            IsRegistered = isRegistered;
+            RegistrationDate = registrationDate;
             Office = office;
         }
 
         public LunchTodayItemFrontend(LunchTodayItem lunchTodayItem)
         {
-            IsRegistered = lunchTodayItem.IsRegistered;
+            RegistrationDate = lunchTodayItem.RegistrationDate;
             Office = lunchTodayItem.Office;
         }
     }

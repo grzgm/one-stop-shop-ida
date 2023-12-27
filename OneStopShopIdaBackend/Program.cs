@@ -22,8 +22,8 @@ builder.Services.AddScoped<ISlackApiServices, SlackApiServices>();
 builder.Services.AddDbContext<IDatabaseService, DatabaseService>(opt =>
     opt.UseMySQL(builder.Configuration["ConnectionStrings:MySqlConnection"]));
 
-// Add the LunchTodayTaskController as a Singleton service
-builder.Services.AddSingleton<IHostedService, LunchTodayTaskController>();
+// // Add the LunchTodayTaskController as a Singleton service
+// builder.Services.AddSingleton<IHostedService, LunchTodayTaskController>();
 
 // Add the WeeklyTaskService as a Singleton service
 // builder.Services.AddSingleton<IHostedService, WeeklyTaskController>();

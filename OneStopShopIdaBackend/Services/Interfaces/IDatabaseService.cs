@@ -27,7 +27,7 @@ namespace OneStopShopIdaBackend.Services
         Task SendNotificationsToUsers(Notification notification, List<UserItem> userItems);
         Task<PushSubscription> Subscribe(PushSubscription subscription, string microsoftId);
         Task Unsubscribe(PushSubscription subscription);
-        Task UpdateAllLunchTodayItems(bool isRegistered);
+        // Task UpdateAllLunchTodayItems(bool isRegistered);
         bool UserItemExists(string microsoftId);
     }
 }

@@ -44,7 +44,7 @@ public class LunchTodayItemsController : CustomControllerBase
     }
 
     [HttpPut("put-registration")]
-    public async Task<IActionResult> PutLunchTodayRegistration([FromQuery] bool registration, [FromQuery] string office)
+    public async Task<ActionResult<LunchTodayItemFrontend>> PutLunchTodayRegistration([FromQuery] bool registration, [FromQuery] string office)
     {
         string accessToken = HttpContext.Session.GetString("accessToken");
         string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
@@ -66,18 +66,18 @@ public class LunchTodayItemsController : CustomControllerBase
         HttpResponseMessage response = await
             _microsoftGraphApiService.SendEmail(accessToken, _lunchEmailAddress, "Lunch Registration", message);
         
+        LunchTodayItem lunchTodayItem = new()
+        {
+            MicrosoftId = microsoftId,
+            RegistrationDate = registration ? DateTime.Now : null,
+            Office = registration ? office : null,
+        };
+        
         if (response.IsSuccessStatusCode)
         {
-            LunchTodayItem lunchTodayItem = new()
-            {
-                MicrosoftId = microsoftId,
-                IsRegistered = registration,
-                Office = registration ? office : null,
-            };
-        
             await _databaseService.PutLunchTodayRegistration(lunchTodayItem);
         }
 
-        return StatusCode((int)response.StatusCode);
+        return new LunchTodayItemFrontend(lunchTodayItem);
     }
 }

@@ -31,7 +31,7 @@ public partial class MicrosoftGraphApiController
                 LunchTodayItem lunchTodayItem = new LunchTodayItem()
                 {
                     MicrosoftId = user.MicrosoftId,
-                    IsRegistered = false,
+                    RegistrationDate = null,
                     Office = null,
                 };
                 await _databaseService.PostLunchTodayItem(lunchTodayItem);
