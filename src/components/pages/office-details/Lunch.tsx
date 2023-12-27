@@ -44,7 +44,10 @@ function Lunch() {
 	const weekDaysNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 
 	// Office Dropdown
-	const [selectedOffice, setSelectedOffice] = useState<string>(officeName);
+	const [selectedOffice, setSelectedOffice] = useState<string>
+		((todayRegistration?.registrationDate && isToday(todayRegistration.registrationDate)) ?
+		capitalizeFirstLetter(todayRegistration.office) : officeName);
+
 	let offices = Object.keys(officeInformationData)
 		.filter(key => officeInformationData[key].canRegisterLunch)
 		.map(key => officeInformationData[key].officeName);
@@ -78,7 +81,10 @@ function Lunch() {
 		const IsRegisteredWrapper = async () => {
 			const isRegisteredRes = await IsRegistered();
 			if (isRegisteredRes.payload?.registrationDate) {
-				isRegisteredRes.payload.registrationDate = new Date(isRegisteredRes.payload.registrationDate)
+				isRegisteredRes.payload.registrationDate = new Date(isRegisteredRes.payload.registrationDate);
+				
+				setSelectedOffice((isRegisteredRes?.payload.registrationDate && isToday(isRegisteredRes.payload.registrationDate)) ?
+				capitalizeFirstLetter(isRegisteredRes.payload.office) : officeName)
 			}
 			setTodayRegistration(isRegisteredRes.payload);
 		}
@@ -159,11 +165,7 @@ function Lunch() {
 					<BodySmall>before 12:00</BodySmall>
 					<form className="lunch-main__form body--normal">
 						<label>Select an Office to register at: </label>
-						<select 
-							value={(todayRegistration?.registrationDate && isToday(todayRegistration.registrationDate)) ? 
-									capitalizeFirstLetter(todayRegistration.office) : officeName} 
-							onChange={handleOfficeDropdownChange} 
-							className="body--normal">
+						<select value={selectedOffice} onChange={handleOfficeDropdownChange} className="body--normal">
 							{offices.map((office) => (
 								<option key={office} value={office}>
 									{office}
