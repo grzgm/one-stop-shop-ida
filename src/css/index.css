@@ -112,6 +112,8 @@ html, body {
     padding: 1rem;
     max-width: 20rem;
     display: flex;
+    justify-content: center;
+    align-items: center;
     gap: 0.5rem;
     box-shadow: var(--grey2) 0px 0px 10px 5px;
     z-index: 100;
