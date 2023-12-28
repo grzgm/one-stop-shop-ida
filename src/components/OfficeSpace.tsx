@@ -155,6 +155,11 @@ function OfficeSpace() {
             setCheckboxValues([false, false])
         }
         else if (GetDeskState(desk) != 4 && GetDeskState(desk) != 5) {
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: 'smooth'
+            });
+
             const newCheckboxValues: boolean[] = [];
 
             for (let i = 0; i < desk.occupied.length; i++) {
