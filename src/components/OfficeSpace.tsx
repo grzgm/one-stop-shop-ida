@@ -8,6 +8,7 @@ import Button from "./Buttons";
 import { useContext, useEffect, useState } from "react";
 import CurrentOfficeContext from "../contexts/CurrentOfficeContext";
 import { DeleteDeskReservation, GetDeskReservationOfficeLayout, GetDeskReservationsForOfficeDate, IDesk, IDeskReservationItem, IDeskReservationsDay, PostDeskReservation } from "../api/DeskReservationAPI";
+import AlertContext from "../contexts/AlertContext";
 
 export class Desk {
     clusterId: string
@@ -37,6 +38,8 @@ class DeskCluster {
 
 function OfficeSpace() {
     const officeName = useContext(CurrentOfficeContext).currentOffice;
+    const { setAlert } = useContext(AlertContext);
+
     const [displayedDate, setDisplayedDate] = useState(new Date());
     const [selectedDesk, setSelectedDesk] = useState<{ clusterId: string, deskId: string } | undefined>(undefined);
     const [checkboxValues, setCheckboxValues] = useState([false, false]);
@@ -220,10 +223,14 @@ function OfficeSpace() {
             const [reservationsRes, cancellationRes] = await Promise.all(apiCalls);
 
             // check for correct response, if incorrect go back to old values
-            if ((!reservationsRes || reservationsRes.success) && (!cancellationRes || cancellationRes.success))
-                await UpdateOfficeSpace(displayedDate, updatedAllDeskReservations)
-            else
-                await UpdateOfficeSpace(displayedDate)
+            if ((!reservationsRes || reservationsRes.success) && (!cancellationRes || cancellationRes.success)) {
+                await UpdateOfficeSpace(displayedDate, updatedAllDeskReservations);
+                setAlert("Successfully Reserved.", reservationsRes.success);
+            }
+            else {
+                await UpdateOfficeSpace(displayedDate);
+                setAlert("Cannot Reserve the Desk.", reservationsRes.success);
+            }
         }
     }
 
