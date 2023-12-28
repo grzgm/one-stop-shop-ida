@@ -77,23 +77,23 @@ html, body {
     line-height: 1rem;
 }
 
-.font-colour--fail{
+.font-colour--fail {
     color: var(--fail);
 }
 
-.background-colour--fail{
+.background-colour--fail {
     background-color: var(--fail);
 }
 
-.font-colour--success{
+.font-colour--success {
     color: var(--success);
 }
 
-.background-colour--success{
+.background-colour--success {
     background-color: var(--success);
 }
 
-.description{
+.description {
     padding: 1.25rem;
     text-align: center;
 }
@@ -107,13 +107,21 @@ html, body {
 
 .alert {
     position: fixed;
+    right: 3.5rem;
     bottom: 3rem;
-    left: 50%;
-    transform: translate(-50%, 50%);
     padding: 1rem;
     max-width: 20rem;
     display: flex;
     gap: 0.5rem;
     box-shadow: var(--grey2) 0px 0px 10px 5px;
     z-index: 100;
+}
+
+@media (max-width: 45rem) {
+    .alert {
+        top: 7.25rem;
+        right: auto;
+        bottom: auto;
+        left: 1rem;
+    }
 }
