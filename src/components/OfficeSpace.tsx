@@ -39,6 +39,8 @@ class DeskCluster {
 function OfficeSpace() {
     const officeName = useContext(CurrentOfficeContext).currentOffice;
     const { setAlert } = useContext(AlertContext);
+    const startHour = 8;
+    const endHour = 20;
 
     const [displayedDate, setDisplayedDate] = useState(new Date());
     const [selectedDesk, setSelectedDesk] = useState<{ clusterId: string, deskId: string } | undefined>(undefined);
@@ -234,7 +236,7 @@ function OfficeSpace() {
             }
             else {
                 await UpdateOfficeSpace(displayedDate);
-                if(reservationsRes.statusCode == 422)
+                if (reservationsRes.statusCode == 422)
                     setAlert("You have too many desk Reservations.", reservationsRes.success);
                 else
                     setAlert("Cannot Reserve the Desk.", reservationsRes.success);
@@ -261,44 +263,47 @@ function OfficeSpace() {
                 ))}
             </div>
             <div className="office-space__reservation-controlls">
-            {selectedDesk &&
-                <>
-                    <div className="reservation-controlls__availability-bar">
-                        <div className="availability-bar__times">
-                            <BodySmall children="Morning" />
-                            <BodySmall children="Afternoon" />
-                        </div>
-                        <div className="availability-bar__bars">
-                            {currentOfficeDesks[selectedDesk.clusterId].desks[selectedDesk.deskId].occupied.map((isOccupied, index) => (
-                                <div className={`availability-bar__bar availability-bar__bar${!isOccupied ? "--success" : "--fail"}`} key={index}></div>
-                            ))}
-                        </div>
-                        <form className="availability-bar__form body--normal">
-                            {currentOfficeDesks[selectedDesk.clusterId].desks[selectedDesk.deskId].occupied.map((isOccupied, index) => {
-                                const onChange = () => {
-                                    handleCheckboxChange(index);
-                                    // Add your checkbox change logic here
-                                };
-
-                                return (
-                                    <div className="availability-bar__checkboxes" key={index} id={index.toString()}>
-                                        <input
-                                            type="checkbox"
-                                            checked={checkboxValues[index]}
-                                            disabled={isOccupied}
-                                            onChange={onChange}
-                                            id={`morning-${index}`}
-                                        />
+                {selectedDesk &&
+                    <>
+                        <div className="reservation-controlls__availability-bar">
+                            <div className="availability-bar__times">
+                                {Array.from({ length: (endHour - startHour) / ((endHour - startHour) / (currentOfficeDesks[selectedDesk.clusterId].desks[selectedDesk.deskId].occupied.length)) }, (_, index) => (
+                                    <div key={index} className="hour-item">
+                                        {startHour + index * Math.floor((endHour - startHour) / (currentOfficeDesks[selectedDesk.clusterId].desks[selectedDesk.deskId].occupied.length))}:00
                                     </div>
-                                );
-                            })}
-                        </form>
-                    </div>
-                    <div className="reservation-controlls__info">
-                        <Button child="Book" onClick={Book} />
-                    </div>
-                </>}
-                </div>
+                                ))}
+                            </div>
+                            <div className="availability-bar__bars">
+                                {currentOfficeDesks[selectedDesk.clusterId].desks[selectedDesk.deskId].occupied.map((isOccupied, index) => (
+                                    <div className={`availability-bar__bar availability-bar__bar${!isOccupied ? "--success" : "--fail"}`} key={index}></div>
+                                ))}
+                            </div>
+                            <form className="availability-bar__form body--normal">
+                                {currentOfficeDesks[selectedDesk.clusterId].desks[selectedDesk.deskId].occupied.map((isOccupied, index) => {
+                                    const onChange = () => {
+                                        handleCheckboxChange(index);
+                                        // Add your checkbox change logic here
+                                    };
+
+                                    return (
+                                        <div className="availability-bar__checkboxes" key={index} id={index.toString()}>
+                                            <input
+                                                type="checkbox"
+                                                checked={checkboxValues[index]}
+                                                disabled={isOccupied}
+                                                onChange={onChange}
+                                                id={`morning-${index}`}
+                                            />
+                                        </div>
+                                    );
+                                })}
+                            </form>
+                        </div>
+                        <div className="reservation-controlls__info">
+                            <Button child="Book" onClick={Book} />
+                        </div>
+                    </>}
+            </div>
         </div>
     );
 }
