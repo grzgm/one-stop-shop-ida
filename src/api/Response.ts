@@ -1,5 +1,6 @@
 export interface IActionResult<T> {
 	success: boolean;
+	statusCode: number;
 	statusText: string;
 	payload?: T;
 }
@@ -14,6 +15,7 @@ async function InspectResponseAsync<T>(
 		if(isJsonString(statusText)) payload = JSON.parse(statusText)
 		return {
 			success: true,
+			statusCode: res.status,
 			statusText: statusText,
 			payload: payload,
 		};
@@ -22,6 +24,7 @@ async function InspectResponseAsync<T>(
 	console.error("HTTP error! status: ", res.status);
 	return {
 		success: false,
+		statusCode: res.status,
 		statusText: res.statusText,
 	};
 }
@@ -41,6 +44,7 @@ function InspectResponseSync<T>(res: any): IActionResult<T> {
 		// Handle successful response (status code 200-299)
 		return {
 			success: true,
+			statusCode: res.status,
 			statusText: "Request has been sent correctly.",
 			payload: payload,
 		};
@@ -49,6 +53,7 @@ function InspectResponseSync<T>(res: any): IActionResult<T> {
 	console.error("HTTP error! status: ", res.status);
 	return {
 		success: false,
+		statusCode: res.status,
 		statusText: res.statusText,
 	};
 }

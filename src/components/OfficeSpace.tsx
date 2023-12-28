@@ -234,7 +234,10 @@ function OfficeSpace() {
             }
             else {
                 await UpdateOfficeSpace(displayedDate);
-                setAlert("Cannot Reserve the Desk.", reservationsRes.success);
+                if(reservationsRes.statusCode == 422)
+                    setAlert("You have too many desk Reservations.", reservationsRes.success);
+                else
+                    setAlert("Cannot Reserve the Desk.", reservationsRes.success);
             }
         }
     }
