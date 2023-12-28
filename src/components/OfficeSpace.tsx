@@ -257,9 +257,10 @@ function OfficeSpace() {
                     <DeskClusterComponent desks={currentOfficeDesks[key].desks} clusterId={currentOfficeDesks[key].clusterId} selectDesk={selectDesk} key={currentOfficeDesks[key].clusterId} isSelected={IsSelected} />
                 ))}
             </div>
+            <div className="office-space__reservation-controlls">
             {selectedDesk &&
                 <>
-                    <div className="office-space__availability-bar">
+                    <div className="reservation-controlls__availability-bar">
                         <div className="availability-bar__times">
                             <BodySmall children="Morning" />
                             <BodySmall children="Afternoon" />
@@ -290,10 +291,11 @@ function OfficeSpace() {
                             })}
                         </form>
                     </div>
-                    <div className="office-space__info">
+                    <div className="reservation-controlls__info">
                         <Button child="Book" onClick={Book} />
                     </div>
                 </>}
+                </div>
         </div>
     );
 }
