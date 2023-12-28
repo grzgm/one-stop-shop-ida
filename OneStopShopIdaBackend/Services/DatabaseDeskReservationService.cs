@@ -26,11 +26,11 @@ public partial class DatabaseService
     {
         IsDbSetNull("DeskReservation");
 
-        var deskReservationItem = await DeskReservation
+        var deskReservationItems = await DeskReservation
             .Where(e => e.MicrosoftId == microsoftId && e.Office == office &&
                         (e.Date >= startDate && e.Date <= endDate)).ToListAsync();
 
-        return deskReservationItem;
+        return deskReservationItems;
     }
 
     public async Task PutDeskReservation(DeskReservationItem deskReservationItem)
@@ -69,6 +69,35 @@ public partial class DatabaseService
         }
 
         await SaveChangesAsync();
+    }
+
+    // public async Task<int> AmountOfDeskReservations(string microsoftId, string office, DateTime startDate,
+    //     DateTime endDate)
+    // {
+    //     IsDbSetNull("DeskReservation");
+    //
+    //     var deskReservationItems = await DeskReservation
+    //         .Where(e => e.MicrosoftId == microsoftId && e.Office == office &&
+    //                     (e.Date >= startDate && e.Date <= endDate)).ToListAsync();
+    //     int amountOfDeskReservations = deskReservationItems.Select(item => new { item.DeskId, item.ClusterId })
+    //         .Distinct()
+    //         .Count();
+    //
+    //     return amountOfDeskReservations;
+    // }
+
+    public async Task<bool> AreDeskResservationTimeslotsDifferent(string microsoftId, string office, DateTime startDate,
+        DateTime endDate, List<DeskReservationItem> newDeskReservationItems)
+    {
+        IsDbSetNull("DeskReservation");
+
+        List<DeskReservationItem> oldDeskReservationItems = await DeskReservation
+            .Where(e => e.MicrosoftId == microsoftId && e.Office == office &&
+                        (e.Date >= startDate && e.Date <= endDate)).ToListAsync();
+
+        var deskReservationItems = oldDeskReservationItems.Concat(newDeskReservationItems);
+        
+        return deskReservationItems.GroupBy(r => r.TimeSlot).All(group => group.Count() <= 1);
     }
 
     private bool DeskReservationItemExists(string microsoftId)

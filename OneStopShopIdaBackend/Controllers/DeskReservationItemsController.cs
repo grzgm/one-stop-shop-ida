@@ -139,7 +139,7 @@ public class DeskReservationItemsController : CustomControllerBase
     {
         string accessToken = HttpContext.Session.GetString("accessToken");
         string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
-        .MicrosoftId;
+            .MicrosoftId;
         // string microsoftId = "22";
         office = office.ToLower();
         DateTime startDate2 = startDate.HasValue ? startDate.Value.Date : DateTime.Now;
@@ -203,7 +203,6 @@ public class DeskReservationItemsController : CustomControllerBase
         string accessToken = HttpContext.Session.GetString("accessToken");
         string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
             .MicrosoftId;
-
         List<DeskReservationItem> deskReservationItems = new();
 
         foreach (var timeSlot in timeSlots)
@@ -212,6 +211,11 @@ public class DeskReservationItemsController : CustomControllerBase
                 timeSlot));
         }
 
+        if (!await _databaseService.AreDeskResservationTimeslotsDifferent(microsoftId, office, date, date, deskReservationItems))
+        {
+            return UnprocessableEntity();
+        }
+        
         await _databaseService.PostDeskReservations(deskReservationItems);
         return NoContent();
     }
