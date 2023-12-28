@@ -22,12 +22,6 @@
     align-items: center;
 }
 
-.office-space__space {
-    display: flex;
-    justify-content: center;
-    background-color: var(--light-red);
-}
-
 .office-space__overview {
     width: 100%;
     padding: 5rem 0;
@@ -91,7 +85,7 @@
 }
 
 .desk__chair--mix-booked {
-    background:  linear-gradient(to bottom left, var(--success) 50%, var(--moderate) 50%);
+    background: linear-gradient(to bottom left, var(--success) 50%, var(--moderate) 50%);
     border: 0.3125rem var(--font-colour-white) solid;
 }
 
@@ -159,4 +153,11 @@
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
+}
+
+@media (max-width: 35rem) {
+    .office-space__overview {
+        flex-wrap: nowrap;
+        overflow: scroll;
+    }
 }
