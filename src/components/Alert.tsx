@@ -1,4 +1,5 @@
 import InfoIcon from '@mui/icons-material/Info';
+import CloseIcon from "@mui/icons-material/Close";
 import { BodySmall } from './text-wrapers/TextWrapers';
 
 interface AlertProps {
@@ -14,6 +15,7 @@ function Alert({ alertText, alertStatus, onClick }: AlertProps) {
 			<BodySmall>
 				{alertText}
 			</BodySmall>
+			<CloseIcon onClick={onClick}/>
 		</div>
 	);
 }

@@ -6,7 +6,7 @@ import AlertContext from "./contexts/AlertContext";
 import { Alert } from "./components/Alert";
 
 function AppOverlay() {
-	const { alertText, alertStatus } = useContext(AlertContext);
+	const { alertText, alertStatus, closeAlert } = useContext(AlertContext);
     const navbarOptionsRef = useRef<HTMLDivElement>(null);
     const maxNavbarOptionsWidth = 1360
     const [navbarOptionsWidth, setNavbarOptionsWidth] = useState(navbarOptionsRef?.current?.offsetWidth);
@@ -42,7 +42,7 @@ function AppOverlay() {
         <>
             <Navbar onPressOpenSidebar={switchShowSidebar} navbarOptionsRef={navbarOptionsRef} />
             {(navbarOptionsWidth && navbarOptionsWidth <= maxNavbarOptionsWidth) && showSidebar && (<Sidebar onPressCloseSidebar={switchShowSidebar} />)}
-			{alertText && <Alert alertText={alertText} alertStatus={alertStatus} onClick={() => {}} />}
+			{alertText && <Alert alertText={alertText} alertStatus={alertStatus} onClick={closeAlert} />}
             <Outlet />
         </>
     );

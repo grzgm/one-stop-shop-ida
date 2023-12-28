@@ -36,6 +36,11 @@ function App() {
 		}, 3000));
 	}
 
+	const closeAlert = () => {
+		clearTimeout(alertTimer)
+		setAlertText("");
+	}
+
 	const customBrowserRouter = createBrowserRouter(createRoutesFromElements(
 		Router(currentOffice)
 	))
@@ -46,7 +51,8 @@ function App() {
 				<AlertContext.Provider value={{
 					alertText: alertText,
 					alertStatus: alertStatus,
-					setAlert: setAlert
+					setAlert: setAlert,
+					closeAlert: closeAlert,
 				}}>
 					<RouterProvider router={customBrowserRouter} />
 				</AlertContext.Provider>
