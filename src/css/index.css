@@ -104,26 +104,3 @@ html, body {
     justify-content: center;
     align-items: center;
 }
-
-.alert {
-    position: fixed;
-    right: 3.5rem;
-    bottom: 3rem;
-    padding: 1rem;
-    max-width: 20rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-    box-shadow: var(--grey2) 0px 0px 10px 5px;
-    z-index: 100;
-}
-
-@media (max-width: 45rem) {
-    .alert {
-        top: 7.25rem;
-        right: auto;
-        bottom: auto;
-        left: 1rem;
-    }
-}

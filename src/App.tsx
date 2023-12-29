@@ -1,10 +1,11 @@
 import "./css/App.css";
 import Router from "./routes/Router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CurrentOfficeContext from "../src/contexts/CurrentOfficeContext.ts"
 import { RouterProvider, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
 import Cookies from "universal-cookie";
 import AlertContext from "./contexts/AlertContext.ts";
+import { Alert } from "./components/Alert.tsx";
 
 function App() {
 	// Current Office
@@ -26,18 +27,34 @@ function App() {
 	const [alertText, setAlertText] = useState<string>("");
 	const [alertStatus, setAlertStatus] = useState<boolean>(true);
 	const [alertTimer, setAlertTimer] = useState<NodeJS.Timeout | undefined>(undefined);
+	const [alertLineInterval, setAlertLineInterval] = useState<NodeJS.Timeout | undefined>(undefined);
+	const [alertLineLength, setAlertLineLength] = useState<number>(100);
+	const alertVisibilityTime = 3000;
+	const alertIntervalDuration = (alertVisibilityTime - 200) / (100 / 5);
 
 	const setAlert = (alertText: string, alertStatus: boolean) => {
 		setAlertText(alertText);
 		setAlertStatus(alertStatus);
-		clearTimeout(alertTimer)
+		clearTimeout(alertTimer);
+		clearInterval(alertLineInterval);
+		// Reset Alert Line Length
+		setAlertLineLength(100)
+
 		setAlertTimer(setTimeout(() => {
 			setAlertText("");
-		}, 3000));
+		}, alertVisibilityTime));
+
+		// Update the line length every half second
+		setAlertLineInterval(setInterval(() => {
+			// Decrease the line length by a certain amount
+			setAlertLineLength((prevLength) => Math.max(0, prevLength - 5));
+			if (alertLineLength <= 0) clearInterval(alertLineInterval);
+		}, alertIntervalDuration));
 	}
 
 	const closeAlert = () => {
-		clearTimeout(alertTimer)
+		clearTimeout(alertTimer);
+		clearInterval(alertLineInterval);
 		setAlertText("");
 	}
 
@@ -54,7 +71,10 @@ function App() {
 					setAlert: setAlert,
 					closeAlert: closeAlert,
 				}}>
-					<RouterProvider router={customBrowserRouter} />
+					<>
+						<RouterProvider router={customBrowserRouter} />
+						{alertText && <Alert alertText={alertText} alertStatus={alertStatus} alertLineLength={alertLineLength} onClick={closeAlert} />}
+					</>
 				</AlertContext.Provider>
 			</CurrentOfficeContext.Provider>
 		</>
