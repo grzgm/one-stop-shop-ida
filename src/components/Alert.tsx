@@ -2,7 +2,6 @@ import CheckIcon from '@mui/icons-material/Check';
 import ReportIcon from '@mui/icons-material/Report';
 import CloseIcon from "@mui/icons-material/Close";
 import { BodySmall } from './text-wrapers/TextWrapers';
-import { useState, useEffect } from 'react';
 import "../css/components/alert.css"
 
 interface AlertProps {
