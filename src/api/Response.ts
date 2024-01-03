@@ -1,6 +1,6 @@
 export interface IActionResult<T> {
 	success: boolean;
-	statusCode: number;
+	statusCode?: number;
 	statusText: string;
 	payload?: T;
 }
