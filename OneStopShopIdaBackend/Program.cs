@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using OneStopShopIdaBackend.Controllers;
 using OneStopShopIdaBackend.Services;
@@ -15,6 +16,10 @@ builder.Services.AddScoped<IMicrosoftGraphApiService, MicrosoftGraphApiService>(
 
 // Add the SlackApiServices as a Scoped service
 builder.Services.AddScoped<ISlackApiServices, SlackApiServices>();
+
+// Add Data Protection and configure XML encryptor
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo("/app/DataProtectionKeys"));
 
 // Add the Database connection as a Scoped service
 builder.Services.AddDbContext<IDatabaseService, DatabaseService>(opt =>
