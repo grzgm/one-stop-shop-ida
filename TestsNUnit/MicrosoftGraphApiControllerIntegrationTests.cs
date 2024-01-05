@@ -12,7 +12,6 @@ internal class MicrosoftGraphApiControllerIntegrationTests : PageTest
     [SetUp]
     public void Setup()
     {
-
     }
 
     [Test]
@@ -26,7 +25,7 @@ internal class MicrosoftGraphApiControllerIntegrationTests : PageTest
         // create a locator
         await Page.WaitForTimeoutAsync(1000);
         var emailInput = await Page.QuerySelectorAsync("input[type=email]");
-        await emailInput.FillAsync("");
+        await emailInput.FillAsync("malisgr@cronos.be");
 
         var button = await Page.QuerySelectorAsync("input[type=submit]");
         await button.ClickAsync();
@@ -34,7 +33,7 @@ internal class MicrosoftGraphApiControllerIntegrationTests : PageTest
         // Password page
         await Page.WaitForTimeoutAsync(2000);
         var passwordInput = await Page.QuerySelectorAsync("input[type=password]");
-        await passwordInput.FillAsync("");
+        await passwordInput.FillAsync("zaq1@#$ES");
 
         button = await Page.QuerySelectorAsync("input[type=submit]");
         await button.ClickAsync();
@@ -48,7 +47,7 @@ internal class MicrosoftGraphApiControllerIntegrationTests : PageTest
         await button.ClickAsync();
 
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-        await Page.WaitForTimeoutAsync(1000);
+        await Page.WaitForTimeoutAsync(7000);
         await Expect(Page).ToHaveURLAsync(new Regex("/office-details/lunch"));
         //await Expect(Page).ToHaveTitleAsync(new Regex("Sign in to your account"));
     }
