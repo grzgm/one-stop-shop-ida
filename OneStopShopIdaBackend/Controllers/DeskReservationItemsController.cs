@@ -1,21 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using OneStopShopIdaBackend.Models;
 using OneStopShopIdaBackend.Services;
 
 namespace OneStopShopIdaBackend.Controllers;
 
+[Authorize]
 [Route("desk/reservation")]
 [ApiController]
 public class DeskReservationItemsController : CustomControllerBase
 {
     private readonly ILogger<DeskReservationItemsController> _logger;
+    private readonly IMemoryCache _memoryCache;
     private readonly DatabaseService _databaseService;
 
-    public DeskReservationItemsController(ILogger<DeskReservationItemsController> logger,
+    public DeskReservationItemsController(ILogger<DeskReservationItemsController> logger, IMemoryCache memoryCache,
         DatabaseService databaseService, IMicrosoftGraphApiService microsoftGraphApiService) : base(
         microsoftGraphApiService)
     {
         _logger = logger;
+        _memoryCache = memoryCache;
         _databaseService = databaseService;
     }
 
@@ -24,7 +29,7 @@ public class DeskReservationItemsController : CustomControllerBase
         GetDeskReservationForOfficeDate(
             [FromRoute] string office, [FromQuery] DateTime? startDate = null, [FromQuery] DateTime? endDate = null)
     {
-        string accessToken = HttpContext.Session.GetString("accessToken");
+        string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
         string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
             .MicrosoftId;
         // string microsoftId = "22";
@@ -87,7 +92,7 @@ public class DeskReservationItemsController : CustomControllerBase
     public async Task<ActionResult<Dictionary<int, DeskClusterFrontend>>> GetDeskReservationOfficeLayout(
         [FromRoute] string office)
     {
-        string accessToken = HttpContext.Session.GetString("accessToken");
+        string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
         office = office.ToLower();
 
         List<OfficeDeskLayoutsItem> officeDeskLayoutsItems =
@@ -120,7 +125,7 @@ public class DeskReservationItemsController : CustomControllerBase
     public async Task<ActionResult<List<DeskReservationItem>>> GetDeskReservationsOfUser([FromRoute] string office,
         [FromQuery] DateTime? startDate = null, [FromQuery] DateTime? endDate = null)
     {
-        string accessToken = HttpContext.Session.GetString("accessToken");
+        string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
         string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
             .MicrosoftId;
         // string microsoftId = "22";
@@ -137,7 +142,7 @@ public class DeskReservationItemsController : CustomControllerBase
         [FromRoute] string office,
         [FromQuery] DateTime? startDate = null, [FromQuery] DateTime? endDate = null)
     {
-        string accessToken = HttpContext.Session.GetString("accessToken");
+        string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
         string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
             .MicrosoftId;
         // string microsoftId = "22";
@@ -187,7 +192,7 @@ public class DeskReservationItemsController : CustomControllerBase
     // [HttpPut("update-registered-days")]
     // public async Task<IActionResult> PutDeskReservationItem(DeskReservationItem deskReservationItemFrontend)
     // {
-    //     string accessToken = HttpContext.Session.GetString("accessToken");
+    //     string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
     //     string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken)).MicrosoftId;
     //
     //     DeskReservationItem deskReservationItem =
@@ -200,7 +205,7 @@ public class DeskReservationItemsController : CustomControllerBase
     public async Task<IActionResult> PostDeskReservation([FromRoute] string office, [FromQuery] DateTime date,
         [FromQuery] int clusterId, [FromQuery] int deskId, [FromQuery] List<int> timeSlots)
     {
-        string accessToken = HttpContext.Session.GetString("accessToken");
+        string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
         string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
             .MicrosoftId;
         List<DeskReservationItem> deskReservationItems = new();
@@ -224,7 +229,7 @@ public class DeskReservationItemsController : CustomControllerBase
     public async Task<IActionResult> DeleteDeskReservation([FromRoute] string office, [FromQuery] DateTime date,
         [FromQuery] int clusterId, [FromQuery] int deskId, [FromQuery] List<int> timeSlots)
     {
-        string accessToken = HttpContext.Session.GetString("accessToken");
+        string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
         string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
             .MicrosoftId;
 
