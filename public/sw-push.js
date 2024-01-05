@@ -30,7 +30,7 @@ self.addEventListener("notificationclick", (event) => {
   event.notification.close();
 
   if (event.action === 'register') {
-    event.waitUntil(self.clients.openWindow("http://localhost:5173/office-details/lunch"));
+    event.waitUntil(self.clients.openWindow(`${import.meta.env.VITE_FRONTEND_URI}/office-details/lunch`));
   }
-  event.waitUntil(self.clients.openWindow("http://localhost:5173"));
+  event.waitUntil(self.clients.openWindow(`${import.meta.env.VITE_FRONTEND_URI}`));
 });

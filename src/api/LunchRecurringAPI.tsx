@@ -12,7 +12,7 @@ export interface ILunchRecurringItem {
 async function GetRegisteredDays(): Promise<IActionResult<ILunchRecurringItem>> {
 	try {
 		const res = await fetch(
-			`http://localhost:3002/lunch/recurring/get-registered-days`,
+			`${import.meta.env.VITE_BACKEND_URI}/lunch/recurring/get-registered-days`,
 			{
 				method: "GET",
 				credentials: "include", // Include credentials (cookies) in the request
@@ -39,7 +39,7 @@ async function GetRegisteredDays(): Promise<IActionResult<ILunchRecurringItem>> 
 async function PutLunchRecurringItem(lunchRecurringItem: ILunchRecurringItem): Promise<IActionResult<undefined>>{
 	try {
 		const res = await fetch(
-			`http://localhost:3002/lunch/recurring/update-registered-days`,
+			`${import.meta.env.VITE_BACKEND_URI}/lunch/recurring/update-registered-days`,
 			{
 				method: "PUT",
 				credentials: "include", // Include credentials (cookies) in the request

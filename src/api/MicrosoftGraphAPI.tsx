@@ -4,7 +4,7 @@ import { IActionResult, InspectResponseAsync } from "./Response";
 async function IsAuth(): Promise<IActionResult<boolean>> {
 	try {
 		const res = await fetch(
-			`http://localhost:3002/microsoft/auth/is-auth`,
+			`${import.meta.env.VITE_BACKEND_URI}/microsoft/auth/is-auth`,
 			{
 				method: "GET",
 				credentials: "include", // Include credentials (cookies) in the request
@@ -24,7 +24,7 @@ async function IsAuth(): Promise<IActionResult<boolean>> {
 async function SendEmail(message: string, address: string): Promise<IActionResult<null>> {
 	try {
 		const res = await fetch(
-			`http://localhost:3002/microsoft/resources/send-email?message=${encodeURI(message)}&address=${encodeURI(address)}`,
+			`${import.meta.env.VITE_BACKEND_URI}/microsoft/resources/send-email?message=${encodeURI(message)}&address=${encodeURI(address)}`,
 			{
 				method: "POST",
 				credentials: "include", // Include credentials (cookies) in the request
@@ -44,7 +44,7 @@ async function SendEmail(message: string, address: string): Promise<IActionResul
 async function CreateEvent(address: string, title: string, startDate: string, endDate: string, description?: string): Promise<IActionResult<null>> {
 	try {
 		const res = await fetch(
-			`http://localhost:3002/microsoft/resources/create-event?address=${encodeURI(address)}&title=${title}&startDate=${startDate}&endDate=${endDate}&description=${description}`,
+			`${import.meta.env.VITE_BACKEND_URI}/microsoft/resources/create-event?address=${encodeURI(address)}&title=${title}&startDate=${startDate}&endDate=${endDate}&description=${description}`,
 			{
 				method: "POST",
 				credentials: "include", // Include credentials (cookies) in the request

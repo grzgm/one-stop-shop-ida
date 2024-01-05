@@ -29,7 +29,7 @@ function MicrosoftAuth() {
 		const getURL = async () => {
 			try {
 				const res = await fetch(
-					`http://localhost:3002/microsoft/auth?route=${encodeURI(previousLocation)}`,
+					`${import.meta.env.VITE_BACKEND_URI}/microsoft/auth?route=${encodeURI(previousLocation)}`,
 					{
 						method: "GET",
 						credentials: "include", // Include credentials (cookies) in the request
@@ -51,7 +51,7 @@ function MicrosoftAuth() {
 			try {
 				if (!cookies.get("jwt")) {
 					const res = await fetch(
-						`http://localhost:3002/authentication/token`,
+						`${import.meta.env.VITE_BACKEND_URI}/authentication/token`,
 						{
 							method: "GET",
 							credentials: "include", // Include credentials (cookies) in the request
@@ -66,6 +66,7 @@ function MicrosoftAuth() {
 				return { success: false, statusText: "Request could not be send." };
 			}
 		}
+		console.log(import.meta.env.VITE_BACKEND_URI)
 		authenticate().then(getURL)
 	}, []);
 

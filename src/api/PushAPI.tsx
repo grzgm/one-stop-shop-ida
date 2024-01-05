@@ -32,7 +32,7 @@ async function PostSubscribe(): Promise<IActionResult<boolean>> {
 			: ""),
 	});
 	try {
-		fetch("http://localhost:3002/push/subscribe", {
+		fetch(`${import.meta.env.VITE_BACKEND_URI}/push/subscribe`, {
 			method: "POST",
 			credentials: "include", // Include credentials (cookies) in the request
 			headers: {
@@ -52,7 +52,7 @@ async function PostSubscribe(): Promise<IActionResult<boolean>> {
 
 async function GetIsSubscribed(): Promise<IActionResult<boolean>> {
 	try {
-		const res = await fetch("http://localhost:3002/push/is-subscribed", {
+		const res = await fetch(`${import.meta.env.VITE_BACKEND_URI}/push/is-subscribed`, {
 			method: "GET",
 			credentials: "include", // Include credentials (cookies) in the request
 			headers: {
@@ -71,7 +71,7 @@ async function GetIsSubscribed(): Promise<IActionResult<boolean>> {
 // async function PostUnsubscribe() {
 // 	const registration = await navigator.serviceWorker.getRegistration();
 // 	const subscription = await registration!.pushManager.getSubscription();
-// 	fetch("http://localhost:3002/push/unsubscribe", {
+// 	fetch(`${import.meta.env.VITE_BACKEND_URI}/push/unsubscribe`, {
 // 		method: "POST",
 //		credentials: "include", // Include credentials (cookies) in the request
 // 		headers: {

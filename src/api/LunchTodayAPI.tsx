@@ -9,7 +9,7 @@ export interface ILunchTodayItem {
 async function IsRegistered(): Promise<IActionResult<ILunchTodayItem>> {
 	try {
 		const res = await fetch(
-			`http://localhost:3002/lunch/today/get-registration`,
+			`${import.meta.env.VITE_BACKEND_URI}/lunch/today/get-registration`,
 			{
 				method: "GET",
 				credentials: "include", // Include credentials (cookies) in the request
@@ -29,7 +29,7 @@ async function IsRegistered(): Promise<IActionResult<ILunchTodayItem>> {
 async function RegisterLunchToday(registration: boolean, office: string): Promise<IActionResult<ILunchTodayItem>> {
 	try {
 		const res = await fetch(
-			`http://localhost:3002/lunch/today/put-registration?registration=${registration}&office=${office}`,
+			`${import.meta.env.VITE_BACKEND_URI}/lunch/today/put-registration?registration=${registration}&office=${office}`,
 			{
 				method: "PUT",
 				credentials: "include", // Include credentials (cookies) in the request

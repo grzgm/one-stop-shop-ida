@@ -4,7 +4,7 @@ import { IActionResult, InspectResponseAsync } from "./Response";
 async function IsAuth(): Promise<IActionResult<boolean>> {
 	try {
 		const res = await fetch(
-			`http://localhost:3002/slack/auth/check-token`,
+			`${import.meta.env.VITE_BACKEND_URI}/slack/auth/check-token`,
 			{
 				method: "GET",
 				credentials: "include", // Include credentials (cookies) in the request
@@ -24,7 +24,7 @@ async function IsAuth(): Promise<IActionResult<boolean>> {
 async function SendMessage(message: string, channel: string): Promise<IActionResult<null>> {
 	try {
 		const res = await fetch(
-			`http://localhost:3002/slack/send-message?message=${message}&channel=${channel}`,
+			`${import.meta.env.VITE_BACKEND_URI}/slack/send-message?message=${message}&channel=${channel}`,
 			{
 				method: "POST",
 				credentials: "include", // Include credentials (cookies) in the request
@@ -44,7 +44,7 @@ async function SendMessage(message: string, channel: string): Promise<IActionRes
 async function SetStatus(text?: string, emoji?: string, expiration?: string): Promise<IActionResult<null>> {
 	try {
 		const res = await fetch(
-			`http://localhost:3002/slack/set-status?text=${text}&emoji=${emoji}&expiration=${expiration}`,
+			`${import.meta.env.VITE_BACKEND_URI}/slack/set-status?text=${text}&emoji=${emoji}&expiration=${expiration}`,
 			{
 				method: "PUT",
 				credentials: "include", // Include credentials (cookies) in the request

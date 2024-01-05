@@ -35,7 +35,7 @@ export interface IDeskReservation {
 // async function GetDeskReservationForOfficeDate(office: string, startDate?: Date, endDate?: Date): Promise<IActionResult<{ [key: string]: IDeskCluster[] }>> {
 // 	try {
 // 		const res = await fetch(
-// 			`http://localhost:3002/desk/reservation/${office}?startDate=${startDate ? startDate.toISOString().split('T')[0] : ""}&endDate=${endDate ? endDate.toISOString().split('T')[0] : ""}`,
+// 			`${import.meta.env.VITE_BACKEND_URI}/desk/reservation/${office}?startDate=${startDate ? startDate.toISOString().split('T')[0] : ""}&endDate=${endDate ? endDate.toISOString().split('T')[0] : ""}`,
 // 			{
 // 				method: "GET",
 // 				credentials: "include", // Include credentials (cookies) in the request
@@ -55,7 +55,7 @@ export interface IDeskReservation {
 async function GetDeskReservationOfficeLayout(office: string): Promise<IActionResult<{ [key: string]: IDeskCluster }>> {
 	try {
 		const res = await fetch(
-			`http://localhost:3002/desk/reservation/${office}/layout`,
+			`${import.meta.env.VITE_BACKEND_URI}/desk/reservation/${office}/layout`,
 			{
 				method: "GET",
 				credentials: "include", // Include credentials (cookies) in the request
@@ -75,7 +75,7 @@ async function GetDeskReservationOfficeLayout(office: string): Promise<IActionRe
 async function GetDeskReservationsForOfficeDate(office: string, startDate?: Date, endDate?: Date): Promise<IActionResult<{ [key: string]: IDeskReservationsDay }>> {
 	try {
 		const res = await fetch(
-			`http://localhost:3002/desk/reservation/${office}/all?startDate=${startDate ? startDate.toISOString().split('T')[0] : ""}&endDate=${endDate ? endDate.toISOString().split('T')[0] : ""}`,
+			`${import.meta.env.VITE_BACKEND_URI}/desk/reservation/${office}/all?startDate=${startDate ? startDate.toISOString().split('T')[0] : ""}&endDate=${endDate ? endDate.toISOString().split('T')[0] : ""}`,
 			{
 				method: "GET",
 				credentials: "include", // Include credentials (cookies) in the request
@@ -95,7 +95,7 @@ async function GetDeskReservationsForOfficeDate(office: string, startDate?: Date
 async function GetDeskReservationsOfUser(office: string, date: Date): Promise<IActionResult<IDeskReservation[]>> {
 	try {
 		const res = await fetch(
-			`http://localhost:3002/desk/reservation/${office}/user?date=${date.toISOString().split('T')[0]}`,
+			`${import.meta.env.VITE_BACKEND_URI}/desk/reservation/${office}/user?date=${date.toISOString().split('T')[0]}`,
 			{
 				method: "GET",
 				credentials: "include", // Include credentials (cookies) in the request
@@ -115,7 +115,7 @@ async function GetDeskReservationsOfUser(office: string, date: Date): Promise<IA
 // async function PutLunchRecurringItem(lunchRecurringItem: Desk): Promise<IActionResult<undefined>>{
 // 	try {
 // 		const res = await fetch(
-// 			`http://localhost:3002/lunch/recurring/update-registered-days`,
+// 			`${import.meta.env.VITE_BACKEND_URI}/lunch/recurring/update-registered-days`,
 // 			{
 // 				method: "PUT",
 // 				credentials: "include", // Include credentials (cookies) in the request
@@ -136,7 +136,7 @@ async function GetDeskReservationsOfUser(office: string, date: Date): Promise<IA
 async function PostDeskReservation(office: string, date: Date, clusterId: string, deskId: string, timeSlots: number[]): Promise<IActionResult<undefined>> {
 	try {
 		const res = await fetch(
-			`http://localhost:3002/desk/reservation/${office}?date=${date.toISOString().split('T')[0]}&clusterId=${clusterId}&deskId=${deskId}&timeSlots=${timeSlots.join("&timeSlots=")}`,
+			`${import.meta.env.VITE_BACKEND_URI}/desk/reservation/${office}?date=${date.toISOString().split('T')[0]}&clusterId=${clusterId}&deskId=${deskId}&timeSlots=${timeSlots.join("&timeSlots=")}`,
 			{
 				method: "POST",
 				credentials: "include", // Include credentials (cookies) in the request
@@ -156,7 +156,7 @@ async function PostDeskReservation(office: string, date: Date, clusterId: string
 async function DeleteDeskReservation(office: string, date: Date, clusterId: string, deskId: string, timeSlots: number[]): Promise<IActionResult<undefined>> {
 	try {
 		const res = await fetch(
-			`http://localhost:3002/desk/reservation/${office}?date=${date.toISOString().split('T')[0]}&clusterId=${clusterId}&deskId=${deskId}&timeSlots=${timeSlots.join("&timeSlots=")}`,
+			`${import.meta.env.VITE_BACKEND_URI}/desk/reservation/${office}?date=${date.toISOString().split('T')[0]}&clusterId=${clusterId}&deskId=${deskId}&timeSlots=${timeSlots.join("&timeSlots=")}`,
 			{
 				method: "DELETE",
 				credentials: "include", // Include credentials (cookies) in the request
