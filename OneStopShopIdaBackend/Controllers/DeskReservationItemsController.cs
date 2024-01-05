@@ -12,15 +12,13 @@ namespace OneStopShopIdaBackend.Controllers;
 public class DeskReservationItemsController : CustomControllerBase
 {
     private readonly ILogger<DeskReservationItemsController> _logger;
-    private readonly IMemoryCache _memoryCache;
     private readonly DatabaseService _databaseService;
 
     public DeskReservationItemsController(ILogger<DeskReservationItemsController> logger, IMemoryCache memoryCache,
-        DatabaseService databaseService, IMicrosoftGraphApiService microsoftGraphApiService) : base(
+        DatabaseService databaseService, IMicrosoftGraphApiService microsoftGraphApiService) : base(memoryCache, 
         microsoftGraphApiService)
     {
         _logger = logger;
-        _memoryCache = memoryCache;
         _databaseService = databaseService;
     }
 

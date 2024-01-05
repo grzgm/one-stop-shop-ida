@@ -1,24 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace OneStopShopIdaBackend.Controllers
 {
     public partial class SlackApiController : ControllerBase
     {
-        // OAuth Step 1: Redirect users to Slack's authorization URL
+        [Authorize]
         [HttpPost("send-message")]
         public async Task<IActionResult> PostSendMessage([FromQuery] string message, [FromQuery] string channel)
         {
-            using (HttpResponseMessage response = await _slackApiServices.SendMessage(HttpContext.Session.GetString("slackAccessToken"), message, channel))
+            
+            using (HttpResponseMessage response = await _slackApiServices.SendMessage(_memoryCache.Get<string>($"{User.FindFirst("UserId").Value}SlackAccessToken"), message, channel))
             {
                 return StatusCode((int)response.StatusCode);
             }
         }
 
-        // OAuth Step 2: Handle the OAuth callback
+        [Authorize]
         [HttpPut("set-status")]
         public async Task<IActionResult> PutSetStatus([FromQuery] string text = "", [FromQuery] string emoji = "", [FromQuery] string expiration = "0")
         {
-            using (HttpResponseMessage response = await _slackApiServices.SetStatus(HttpContext.Session.GetString("slackAccessToken"), text, emoji, expiration))
+            using (HttpResponseMessage response = await _slackApiServices.SetStatus(_memoryCache.Get<string>($"{User.FindFirst("UserId").Value}SlackAccessToken"), text, emoji, expiration))
             {
                 return StatusCode((int)response.StatusCode);
             }

@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using OneStopShopIdaBackend.Models;
 using OneStopShopIdaBackend.Services;
 
 namespace OneStopShopIdaBackend.Controllers;
 
+[Authorize]
 [Route("lunch/today")]
 [ApiController]
 public class LunchTodayItemsController : CustomControllerBase
@@ -13,8 +16,8 @@ public class LunchTodayItemsController : CustomControllerBase
 
     private const string _lunchEmailAddress = "grzegorz.malisz@weareida.digital";
 
-    public LunchTodayItemsController(ILogger<LunchTodayItemsController> logger,
-        IMicrosoftGraphApiService microsoftGraphApiService, IDatabaseService databaseService) : base(
+    public LunchTodayItemsController(ILogger<LunchTodayItemsController> logger, IMemoryCache memoryCache,
+        IMicrosoftGraphApiService microsoftGraphApiService, IDatabaseService databaseService) : base(memoryCache, 
         microsoftGraphApiService)
     {
         _logger = logger;
@@ -36,7 +39,7 @@ public class LunchTodayItemsController : CustomControllerBase
     [HttpGet("get-registration")]
     public async Task<ActionResult<LunchTodayItemFrontend>> GetLunchTodayIsRegistered()
     {
-        string accessToken = HttpContext.Session.GetString("accessToken");
+        string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
         string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
             .MicrosoftId;
 
@@ -46,7 +49,7 @@ public class LunchTodayItemsController : CustomControllerBase
     [HttpPut("put-registration")]
     public async Task<ActionResult<LunchTodayItemFrontend>> PutLunchTodayRegistration([FromQuery] bool registration, [FromQuery] string office)
     {
-        string accessToken = HttpContext.Session.GetString("accessToken");
+        string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
         string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
             .MicrosoftId;
         office = office.ToLower();

@@ -1,11 +1,13 @@
-﻿using System.Net;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace OneStopShopIdaBackend.Controllers;
 public partial class SlackApiController : ControllerBase
 {
     // OAuth Step 1: Redirect users to Slack's authorization URL
+    [Authorize]
     [HttpGet("auth")]
     public async Task<IActionResult> GetAuth([FromQuery] string route)
     {
@@ -21,8 +23,11 @@ public partial class SlackApiController : ControllerBase
             // Access the access_token property
             string slackAccessToken = await _slackApiServices.CallAuthCallback(code, state);
 
-            // Store accessToken and refreshToken in the session
-            HttpContext.Session.SetString("slackAccessToken", slackAccessToken);
+            // Store accessToken in the memory cache
+            _memoryCache.Set($"{state}SlackAccessToken", slackAccessToken, new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1) // Adjust expiration as needed
+            });
 
             return Redirect(FrontendUri + state);
         }
@@ -38,13 +43,13 @@ public partial class SlackApiController : ControllerBase
         }
     }
 
-    // GET: api/TodoItems
+    [Authorize]
     [HttpGet("auth/check-token")]
     public async Task<ActionResult<Boolean>> GetCheckToken()
     {
-        // Check if the accessToken and refreshToken are stored in session
-        string accessToken = HttpContext.Session.GetString("slackAccessToken");
-        bool isToken = accessToken != null;
+        // Check if the accessToken are stored in memory cache
+        string slackAccessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}SlackAccessToken");
+        bool isToken = slackAccessToken != null;
 
         return Ok(isToken);
     }

@@ -1,15 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace OneStopShopIdaBackend.Controllers;
 
 public partial class MicrosoftGraphApiController
 {
     [HttpPost("resources/send-email")]
-    public async Task<IActionResult> PostSendEmail([FromQuery] string address, [FromQuery] string subject, [FromQuery] string message)
+    public async Task<IActionResult> PostSendEmail([FromQuery] string address, [FromQuery] string subject,
+        [FromQuery] string message)
     {
-        string accessToken = HttpContext.Session.GetString("accessToken");
+        string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
 
-        HttpResponseMessage response = await ExecuteWithRetryMicrosoftGraphApi(async (accessToken) => await _microsoftGraphApiService.SendEmail(accessToken, address, subject, message), accessToken);
+        HttpResponseMessage response = await ExecuteWithRetryMicrosoftGraphApi(
+            async (accessToken) => await
+                _microsoftGraphApiService.SendEmail(accessToken, address, subject, message), accessToken);
         return StatusCode((int)response.StatusCode);
     }
 
@@ -17,9 +21,10 @@ public partial class MicrosoftGraphApiController
     public async Task<IActionResult> PostCreateEvent([FromQuery] string address, [FromQuery] string title,
         [FromQuery] string startDate, [FromQuery] string endDate, [FromQuery] string description)
     {
-        string accessToken = HttpContext.Session.GetString("accessToken");
+        string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
 
-        HttpResponseMessage response = await ExecuteWithRetryMicrosoftGraphApi(async (accessToken) => await _microsoftGraphApiService.CreateEvent(HttpContext.Session.GetString("accessToken"), address, title,
+        HttpResponseMessage response = await ExecuteWithRetryMicrosoftGraphApi(async (accessToken) =>
+            await _microsoftGraphApiService.CreateEvent(accessToken, address, title,
                 startDate, endDate, description), accessToken);
 
         return StatusCode((int)response.StatusCode);
