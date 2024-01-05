@@ -1,3 +1,4 @@
+import Cookies from "universal-cookie";
 import { IActionResult, InspectResponseAsync } from "./Response";
 
 async function PostSubscribe(): Promise<IActionResult<boolean>> {
@@ -35,7 +36,8 @@ async function PostSubscribe(): Promise<IActionResult<boolean>> {
 			method: "POST",
 			credentials: "include", // Include credentials (cookies) in the request
 			headers: {
-				"Content-Type": "application/json",
+				'Authorization': `Bearer ${new Cookies().get("jwt")}`,
+				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify(subscription),
 		});
@@ -53,6 +55,10 @@ async function GetIsSubscribed(): Promise<IActionResult<boolean>> {
 		const res = await fetch("http://localhost:3002/push/is-subscribed", {
 			method: "GET",
 			credentials: "include", // Include credentials (cookies) in the request
+			headers: {
+				'Authorization': `Bearer ${new Cookies().get("jwt")}`,
+				'Content-Type': 'application/json',
+			},
 		});
 		return InspectResponseAsync(res);
 	}
@@ -69,7 +75,8 @@ async function GetIsSubscribed(): Promise<IActionResult<boolean>> {
 // 		method: "POST",
 //		credentials: "include", // Include credentials (cookies) in the request
 // 		headers: {
-// 			"Content-Type": "application/json",
+// 			'Authorization': `Bearer ${new Cookies().get("jwt")}`,
+// 			'Content-Type': 'application/json',
 // 		},
 // 		body: JSON.stringify(subscription),
 // 	});

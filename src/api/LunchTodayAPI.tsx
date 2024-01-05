@@ -1,3 +1,4 @@
+import Cookies from "universal-cookie";
 import { IActionResult, InspectResponseAsync } from "./Response";
 
 export interface ILunchTodayItem {
@@ -12,6 +13,10 @@ async function IsRegistered(): Promise<IActionResult<ILunchTodayItem>> {
 			{
 				method: "GET",
 				credentials: "include", // Include credentials (cookies) in the request
+				headers: {
+					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
+					'Content-Type': 'application/json',
+				}
 			}
 		);
 		return InspectResponseAsync(res);
@@ -28,6 +33,10 @@ async function RegisterLunchToday(registration: boolean, office: string): Promis
 			{
 				method: "PUT",
 				credentials: "include", // Include credentials (cookies) in the request
+				headers: {
+					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
+					'Content-Type': 'application/json',
+				}
 			}
 		);
 		return InspectResponseAsync(res);

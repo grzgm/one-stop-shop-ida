@@ -1,3 +1,4 @@
+import Cookies from "universal-cookie";
 import { IActionResult, InspectResponseAsync } from "./Response";
 
 async function IsAuth(): Promise<IActionResult<boolean>> {
@@ -7,6 +8,10 @@ async function IsAuth(): Promise<IActionResult<boolean>> {
 			{
 				method: "GET",
 				credentials: "include", // Include credentials (cookies) in the request
+				headers: {
+					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
+					'Content-Type': 'application/json',
+				},
 			}
 		);
 		return InspectResponseAsync(res);
@@ -23,6 +28,10 @@ async function SendMessage(message: string, channel: string): Promise<IActionRes
 			{
 				method: "POST",
 				credentials: "include", // Include credentials (cookies) in the request
+				headers: {
+					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
+					'Content-Type': 'application/json',
+				},
 			}
 		);
 		return InspectResponseAsync(res);
@@ -39,6 +48,10 @@ async function SetStatus(text?: string, emoji?: string, expiration?: string): Pr
 			{
 				method: "PUT",
 				credentials: "include", // Include credentials (cookies) in the request
+				headers: {
+					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
+					'Content-Type': 'application/json',
+				},
 			}
 		);
 		return InspectResponseAsync(res);

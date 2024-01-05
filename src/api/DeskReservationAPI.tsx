@@ -1,3 +1,4 @@
+import Cookies from "universal-cookie";
 import { IActionResult, InspectResponseAsync } from "./Response";
 export interface IDeskReservationItem {
 	isUser: boolean;
@@ -38,6 +39,10 @@ export interface IDeskReservation {
 // 			{
 // 				method: "GET",
 // 				credentials: "include", // Include credentials (cookies) in the request
+// 				headers: {
+// 					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
+// 					'Content-Type': 'application/json',
+// 				}
 // 			}
 // 		);
 // 		return InspectResponseAsync<{ [key: string]: IDeskCluster[] }>(res);
@@ -54,6 +59,10 @@ async function GetDeskReservationOfficeLayout(office: string): Promise<IActionRe
 			{
 				method: "GET",
 				credentials: "include", // Include credentials (cookies) in the request
+				headers: {
+					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
+					'Content-Type': 'application/json',
+				}
 			}
 		);
 		return InspectResponseAsync<{ [key: string]: IDeskCluster }>(res);
@@ -70,6 +79,10 @@ async function GetDeskReservationsForOfficeDate(office: string, startDate?: Date
 			{
 				method: "GET",
 				credentials: "include", // Include credentials (cookies) in the request
+				headers: {
+					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
+					'Content-Type': 'application/json',
+				}
 			}
 		);
 		return InspectResponseAsync<{ [key: string]: IDeskReservationsDay }>(res);
@@ -86,6 +99,10 @@ async function GetDeskReservationsOfUser(office: string, date: Date): Promise<IA
 			{
 				method: "GET",
 				credentials: "include", // Include credentials (cookies) in the request
+				headers: {
+					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
+					'Content-Type': 'application/json',
+				}
 			}
 		);
 		return InspectResponseAsync<IDeskReservation[]>(res);
@@ -103,8 +120,9 @@ async function GetDeskReservationsOfUser(office: string, date: Date): Promise<IA
 // 				method: "PUT",
 // 				credentials: "include", // Include credentials (cookies) in the request
 // 				headers: {
-// 				'Content-Type': 'application/json'
-// 				},
+// 					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
+// 					'Content-Type': 'application/json',
+// 				}
 // 				body: JSON.stringify(lunchRecurringItem),
 // 			}
 // 		);
@@ -122,6 +140,10 @@ async function PostDeskReservation(office: string, date: Date, clusterId: string
 			{
 				method: "POST",
 				credentials: "include", // Include credentials (cookies) in the request
+				headers: {
+					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
+					'Content-Type': 'application/json',
+				}
 			}
 		);
 		return InspectResponseAsync(res);
@@ -138,6 +160,10 @@ async function DeleteDeskReservation(office: string, date: Date, clusterId: stri
 			{
 				method: "DELETE",
 				credentials: "include", // Include credentials (cookies) in the request
+				headers: {
+					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
+					'Content-Type': 'application/json',
+				}
 			}
 		);
 		return InspectResponseAsync(res);

@@ -1,3 +1,4 @@
+import Cookies from "universal-cookie";
 import { IActionResult, InspectResponseAsync } from "./Response";
 
 export interface ILunchRecurringItem {
@@ -15,6 +16,10 @@ async function GetRegisteredDays(): Promise<IActionResult<ILunchRecurringItem>> 
 			{
 				method: "GET",
 				credentials: "include", // Include credentials (cookies) in the request
+				headers: {
+					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
+					'Content-Type': 'application/json',
+				}
 			}
 		);
 		// const resData = await InspectResponseAsync<ILunchRecurringItem>(res);
@@ -39,7 +44,8 @@ async function PutLunchRecurringItem(lunchRecurringItem: ILunchRecurringItem): P
 				method: "PUT",
 				credentials: "include", // Include credentials (cookies) in the request
 				headers: {
-				'Content-Type': 'application/json'
+					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
+					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify(lunchRecurringItem),
 			}

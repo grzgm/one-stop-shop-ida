@@ -5,11 +5,17 @@ import { useNavigate } from "react-router-dom";
 import { IsAuth } from '../../../api/MicrosoftGraphAPI';
 import { useEffect, useState } from 'react';
 import "../../../css/auth-pages.css"
+import { InspectResponseAsync } from '../../../api/Response';
+import Cookies from 'universal-cookie';
 
 function MicrosoftAuth() {
 	const [popupLogin, setPopupLogin] = useState<Window | null>();
 	const [isAuth, setIsAuth] = useState<boolean>();
+	const [url, setUrl] = useState<string>("");
 	const navigate = useNavigate();
+
+	const cookies = new Cookies();
+
 
 	useEffect(() => {
 		const IsAuthWrapper = async () => {
@@ -19,6 +25,48 @@ function MicrosoftAuth() {
 		};
 		IsAuthWrapper();
 		console.log(isAuth)
+
+		const getURL = async () => {
+			try {
+				const res = await fetch(
+					`http://localhost:3002/microsoft/auth?route=${encodeURI(previousLocation)}`,
+					{
+						method: "GET",
+						credentials: "include", // Include credentials (cookies) in the request
+						headers: {
+							'Authorization': `Bearer ${new Cookies().get("jwt")}`,
+							'Content-Type': 'application/json',
+						}
+					}
+				);
+				const payload = (await InspectResponseAsync(res)).statusText
+				setUrl(payload as string)
+			} catch (error) {
+				console.error("Error:", error);
+				return { success: false, statusText: "Request could not be send." };
+			}
+		}
+
+		const authenticate = async () => {
+			try {
+				if (!cookies.get("jwt")) {
+					const res = await fetch(
+						`http://localhost:3002/authentication/token`,
+						{
+							method: "GET",
+							credentials: "include", // Include credentials (cookies) in the request
+						}
+					);
+					const payload = (await InspectResponseAsync(res)).statusText
+					cookies.set("jwt", payload)
+					console.log("cookies.set(jwt, payload)", payload)
+				}
+			} catch (error) {
+				console.error("Error:", error);
+				return { success: false, statusText: "Request could not be send." };
+			}
+		}
+		authenticate().then(getURL)
 	}, []);
 
 	useEffect(() => {
@@ -31,7 +79,7 @@ function MicrosoftAuth() {
 					navigate(previousLocation)
 					setIsAuth(true)
 				}
-				else{
+				else {
 					setIsAuth(false)
 				}
 				clearInterval(checkPopupClosed);
@@ -43,7 +91,8 @@ function MicrosoftAuth() {
 	}, [popupLogin]);
 
 	const openPopup = () => {
-		setPopupLogin(window.open(`http://localhost:3002/microsoft/auth?route=${encodeURI(previousLocation)}`, '_blank', 'width=500,height=600'));
+		if (url)
+			setPopupLogin(window.open(url, '_blank', 'width=500,height=600'));
 	};
 
 	// Get the search parameters from the URL
@@ -61,7 +110,7 @@ function MicrosoftAuth() {
 				<BodyNormal>Get access to all the benefits of app!</BodyNormal>
 			</div>
 			<main className="auth-main">
-				<Button child="Log in" onClick={() => openPopup()} />
+				{url && <Button child="Log in" onClick={() => openPopup()} />}
 				{isAuth == false &&
 					<BodySmall additionalClasses={["font-colour--fail"]}>Cannot Authenticate the User</BodySmall>}
 			</main>
