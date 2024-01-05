@@ -9,7 +9,7 @@ public partial class MicrosoftGraphApiService : IMicrosoftGraphApiService
     private readonly string BackendUri;
     private readonly string RedirectUri;
 
-    private const string MicrosoftClientId = "ff6757d9-6533-46f4-99c7-32db8a7d606d";
+    private readonly string MicrosoftClientId;
     private const string Tenant = "organizations";
     private const string Scopes = "offline_access user.read mail.read mail.send calendars.readwrite";
 
@@ -22,5 +22,6 @@ public partial class MicrosoftGraphApiService : IMicrosoftGraphApiService
         _codeChallengeGeneratorService = codeChallengeGeneratorService;
         BackendUri = _config["BackendUri"];
         RedirectUri = _config["BackendUri"] + "/microsoft/auth/callback";
+        MicrosoftClientId = _config["Microsoft:MicrosoftClientId"];
     }
 }
