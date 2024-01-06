@@ -13,9 +13,7 @@ function MicrosoftAuth() {
 	const [isAuth, setIsAuth] = useState<boolean>();
 	const [url, setUrl] = useState<string>("");
 	const navigate = useNavigate();
-
 	const cookies = new Cookies();
-
 
 	useEffect(() => {
 		const IsAuthWrapper = async () => {

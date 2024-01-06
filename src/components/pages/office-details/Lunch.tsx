@@ -5,6 +5,7 @@ import "../../../css/components/pages/office-details/lunch.css"
 import { officeInformationData } from "../../../assets/OfficeInformationData";
 import { redirect } from "react-router-dom";
 import { IsAuth } from "../../../api/MicrosoftGraphAPI";
+import { IsAuth as IsAuthSlack } from "../../../api/SlackAPI";
 import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
 import { ILunchTodayItem, IsRegistered, RegisterLunchToday } from "../../../api/LunchTodayAPI";
 import { GetRegisteredDays, ILunchRecurringItem, PutLunchRecurringItem } from "../../../api/LunchRecurringAPI";
@@ -14,6 +15,9 @@ import AlertContext from "../../../contexts/AlertContext";
 async function LunchLoader(officeName: string) {
 	const currentOfficeInformationData = officeInformationData[officeName]
 	if (currentOfficeInformationData.canRegisterLunch == true) {
+		if (!(await IsAuthSlack()).payload) {
+			return redirect(`/slack-auth?previousLocation=${encodeURI("/office-details/lunch")}`)
+		}
 		if ((await IsAuth()).payload) {
 			return null
 		}
@@ -46,7 +50,7 @@ function Lunch() {
 	// Office Dropdown
 	const [selectedOffice, setSelectedOffice] = useState<string>
 		((todayRegistration?.registrationDate && isToday(todayRegistration.registrationDate)) ?
-		capitalizeFirstLetter(todayRegistration.office) : officeName);
+			capitalizeFirstLetter(todayRegistration.office) : officeName);
 
 	let offices = Object.keys(officeInformationData)
 		.filter(key => officeInformationData[key].canRegisterLunch)
@@ -82,9 +86,9 @@ function Lunch() {
 			const isRegisteredRes = await IsRegistered();
 			if (isRegisteredRes.payload?.registrationDate) {
 				isRegisteredRes.payload.registrationDate = new Date(isRegisteredRes.payload.registrationDate);
-				
+
 				setSelectedOffice((isRegisteredRes?.payload.registrationDate && isToday(isRegisteredRes.payload.registrationDate)) ?
-				capitalizeFirstLetter(isRegisteredRes.payload.office) : officeName)
+					capitalizeFirstLetter(isRegisteredRes.payload.office) : officeName)
 			}
 			setTodayRegistration(isRegisteredRes.payload);
 		}

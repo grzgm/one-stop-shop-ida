@@ -4,7 +4,7 @@ import { IActionResult, InspectResponseAsync } from "./Response";
 async function IsAuth(): Promise<IActionResult<boolean>> {
 	try {
 		const res = await fetch(
-			`${import.meta.env.VITE_BACKEND_URI}/slack/auth/check-token`,
+			`${import.meta.env.VITE_BACKEND_URI}/slack/auth/is-auth`,
 			{
 				method: "GET",
 				credentials: "include", // Include credentials (cookies) in the request
