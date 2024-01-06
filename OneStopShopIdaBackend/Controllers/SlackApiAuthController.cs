@@ -9,9 +9,9 @@ public partial class SlackApiController : ControllerBase
     // OAuth Step 1: Redirect users to Slack's authorization URL
     [Authorize]
     [HttpGet("auth")]
-    public async Task<IActionResult> GetAuth([FromQuery] string route)
+    public async Task<ActionResult<string>> GetAuth([FromQuery] string route)
     {
-        return Redirect(_slackApiServices.GenerateSlackAPIAuthUrl(route));
+        return _slackApiServices.GenerateSlackAPIAuthUrl(User.FindFirst("UserId").Value);
     }
 
     // OAuth Step 2: Handle the OAuth callback
@@ -44,13 +44,13 @@ public partial class SlackApiController : ControllerBase
     }
 
     [Authorize]
-    [HttpGet("auth/check-token")]
-    public async Task<ActionResult<Boolean>> GetCheckToken()
+    [HttpGet("auth/is-auth")]
+    public async Task<ActionResult<bool>> GetCheckToken()
     {
         // Check if the accessToken are stored in memory cache
         string slackAccessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}SlackAccessToken");
         bool isToken = slackAccessToken != null;
 
-        return Ok(isToken);
+        return isToken;
     }
 }

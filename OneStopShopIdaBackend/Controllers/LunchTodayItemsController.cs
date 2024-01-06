@@ -12,15 +12,19 @@ namespace OneStopShopIdaBackend.Controllers;
 public class LunchTodayItemsController : CustomControllerBase
 {
     private readonly ILogger<LunchTodayItemsController> _logger;
+    private readonly ISlackApiServices _slackApiServices;
     private readonly IDatabaseService _databaseService;
 
-    private const string _lunchEmailAddress = "grzegorz.malisz@weareida.digital";
+    private const string LunchEmailAddress = "grzegorz.malisz@weareida.digital";
+    private const string LunchSlackChannel = "D05QWNGJMAR";
 
     public LunchTodayItemsController(ILogger<LunchTodayItemsController> logger, IMemoryCache memoryCache,
-        IMicrosoftGraphApiService microsoftGraphApiService, IDatabaseService databaseService) : base(memoryCache, 
+        IMicrosoftGraphApiService microsoftGraphApiService, ISlackApiServices slackApiServices,
+        IDatabaseService databaseService) : base(memoryCache,
         microsoftGraphApiService)
     {
         _logger = logger;
+        _slackApiServices = slackApiServices;
         _databaseService = databaseService;
     }
 
@@ -47,7 +51,8 @@ public class LunchTodayItemsController : CustomControllerBase
     }
 
     [HttpPut("put-registration")]
-    public async Task<ActionResult<LunchTodayItemFrontend>> PutLunchTodayRegistration([FromQuery] bool registration, [FromQuery] string office)
+    public async Task<ActionResult<LunchTodayItemFrontend>> PutLunchTodayRegistration([FromQuery] bool registration,
+        [FromQuery] string office)
     {
         string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
         string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
@@ -66,8 +71,7 @@ public class LunchTodayItemsController : CustomControllerBase
             message = DeregisterTodayMessage(office, $"{user.FirstName} {user.Surname}");
         }
 
-        HttpResponseMessage response = await
-            _microsoftGraphApiService.SendEmail(accessToken, _lunchEmailAddress, "Lunch Registration", message);
+        HttpResponseMessage response = null;
         
         LunchTodayItem lunchTodayItem = new()
         {
@@ -75,7 +79,18 @@ public class LunchTodayItemsController : CustomControllerBase
             RegistrationDate = registration ? DateTime.Now : null,
             Office = registration ? office : null,
         };
-        
+
+        if (office == "utrecht")
+        {
+            response = await
+                _microsoftGraphApiService.SendEmail(accessToken, LunchEmailAddress, "Lunch Registration", message);
+        }
+        else if (office == "amsterdam")
+        {
+            string slackAccessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}SlackAccessToken");
+            response = await _slackApiServices.SendMessage(slackAccessToken, message, LunchSlackChannel);
+        }
+
         if (response.IsSuccessStatusCode)
         {
             await _databaseService.PutLunchTodayRegistration(lunchTodayItem);
