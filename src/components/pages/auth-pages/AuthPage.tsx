@@ -4,15 +4,17 @@ import { BodyNormal, BodySmall, HeadingLarge } from "../../text-wrapers/TextWrap
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import "../../../css/auth-pages.css"
-import { IActionResult, InspectResponseAsync } from '../../../api/Response';
+import { IActionResult } from '../../../api/Response';
 import Cookies from 'universal-cookie';
+import { Auth as AuthJWT, IsAuth as IsAuthJWT } from '../../../api/AuthenticationAPI';
 
 export interface AuthPageProps {
     authTarget: string,
     isAuth: () =>  Promise<IActionResult<boolean>>,
+    authUrl: () => Promise<IActionResult<string>>,
 }
 
-function AuthPage({ authTarget, isAuth: IsAuth }: AuthPageProps) {
+function AuthPage({ authTarget, isAuth: IsAuth, authUrl: AuthUrl }: AuthPageProps) {
     authTarget = authTarget.toLowerCase()
     const [popupLogin, setPopupLogin] = useState<Window | null>();
     const [isAuth, setIsAuth] = useState<boolean>();
@@ -21,56 +23,37 @@ function AuthPage({ authTarget, isAuth: IsAuth }: AuthPageProps) {
     const cookies = new Cookies();
 
     useEffect(() => {
+        // Auth target config
         const IsAuthWrapper = async () => {
             if ((await IsAuth()).payload) {
                 navigate("/")
             }
         };
         IsAuthWrapper();
-        console.log(isAuth)
 
+        // Client JWT config
         const getURL = async () => {
-            try {
-                const res = await fetch(
-                    `${import.meta.env.VITE_BACKEND_URI}/${authTarget}/auth?route=${encodeURI(previousLocation)}`,
-                    {
-                        method: "GET",
-                        credentials: "include", // Include credentials (cookies) in the request
-                        headers: {
-                            'Authorization': `Bearer ${new Cookies().get("jwt")}`,
-                            'Content-Type': 'application/json',
-                        }
-                    }
-                );
-                const payload = (await InspectResponseAsync(res)).statusText
-                setUrl(payload as string)
-            } catch (error) {
-                console.error("Error:", error);
-                return { success: false, statusText: "Request could not be send." };
+            const res = await AuthUrl()
+            if (res.success)
+                setUrl(res.statusText)
+        }
+
+        const UrlWrapper = async () => {
+            if (await IsAuthJWT())
+            {
+                await getURL();
+            }
+            else{
+                const res = await AuthJWT()
+                if(res.success)
+                    await getURL()
             }
         }
 
-        const authenticate = async () => {
-            try {
-                if (!cookies.get("jwt")) {
-                    const res = await fetch(
-                        `${import.meta.env.VITE_BACKEND_URI}/authentication/token`,
-                        {
-                            method: "GET",
-                            credentials: "include", // Include credentials (cookies) in the request
-                        }
-                    );
-                    const payload = (await InspectResponseAsync(res)).statusText
-                    cookies.set("jwt", payload, { path: "/", expires: new Date(Date.now() + 3600000) })
-                }
-            } catch (error) {
-                console.error("Error:", error);
-                return { success: false, statusText: "Request could not be send." };
-            }
-        }
-        authenticate().then(getURL)
+        UrlWrapper()
     }, []);
 
+    // Pop up config
     useEffect(() => {
         // Check if the popup is closed at regular intervals
         const checkPopupClosed = setInterval(async () => {

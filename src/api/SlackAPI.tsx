@@ -10,4 +10,13 @@ async function IsAuth(): Promise<IActionResult<boolean>> {
 	}
 }
 
-export { IsAuth };
+async function AuthUrl(): Promise<IActionResult<string>> {
+	try {
+		return await ExecuteApiCall<string>(`/slack/auth/url`, "GET");
+	} catch (error) {
+		console.error("Error:", error);
+		return { success: false, statusText: "Request could not be send." };
+	}
+}
+
+export { IsAuth, AuthUrl };

@@ -10,6 +10,15 @@ async function IsAuth(): Promise<IActionResult<boolean>> {
 	}
 }
 
+async function AuthUrl(): Promise<IActionResult<string>> {
+	try {
+		return await ExecuteApiCall<string>(`/microsoft/auth/url`, "GET");
+	} catch (error) {
+		console.error("Error:", error);
+		return { success: false, statusText: "Request could not be send." };
+	}
+}
+
 async function SendEmail(message: string, address: string): Promise<IActionResult<null>> {
 	try {
 		return await ExecuteApiCall<null>(`/microsoft/resources/send-email?message=${encodeURI(message)}&address=${encodeURI(address)}`, "POST");
@@ -28,4 +37,4 @@ async function CreateEvent(address: string, title: string, startDate: string, en
 	}
 }
 
-export { IsAuth, SendEmail, CreateEvent };
+export { IsAuth, AuthUrl, SendEmail, CreateEvent };

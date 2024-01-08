@@ -22,8 +22,8 @@ import Scheduling from "../components/pages/employee-portal/Scheduling";
 import AppOverlay from "../AppOverlay";
 import PopupLogin from "../components/pages/auth-pages/PopupLogin";
 import AuthPage from "../components/pages/auth-pages/AuthPage";
-import { IsAuth as MicrosoftIsAuth } from "../api/MicrosoftGraphAPI";
-import { IsAuth as SlackIsAuth } from "../api/SlackAPI";
+import { AuthUrl as MicrosoftAuthUrl, IsAuth as MicrosoftIsAuth } from "../api/MicrosoftGraphAPI";
+import { AuthUrl as SlackAuthUrl, IsAuth as SlackIsAuth } from "../api/SlackAPI";
 
 function Router(currentOfficeName: string) {
 
@@ -55,8 +55,8 @@ function Router(currentOfficeName: string) {
           <Route path="amsterdam" element={<Amsterdam />} />
         </Route>
         <Route path="/settings" element={<Settings />} />
-        <Route path="/microsoft-auth" element={<AuthPage authTarget="microsoft" isAuth={MicrosoftIsAuth}/>} />
-        <Route path="/slack-auth" element={<AuthPage authTarget="slack" isAuth={SlackIsAuth}/>} />
+        <Route path="/microsoft-auth" element={<AuthPage authTarget="microsoft" isAuth={MicrosoftIsAuth} authUrl={MicrosoftAuthUrl}/>} />
+        <Route path="/slack-auth" element={<AuthPage authTarget="slack" isAuth={SlackIsAuth} authUrl={SlackAuthUrl}/>} />
         <Route path="*" element={<NotFound />} />
       </Route>
       <Route path="/popup-login" element={<PopupLogin />} />
