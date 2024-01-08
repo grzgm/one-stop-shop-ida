@@ -10,8 +10,8 @@ public partial class MicrosoftGraphApiController
 {
     // OAuth Step 1: Redirect users to microsoft's authorization URL
     [Authorize]
-    [HttpGet("auth")]
-    public async Task<ActionResult<string>> GetAuth([FromQuery] string route)
+    [HttpGet("auth/url")]
+    public async Task<ActionResult<string>> GetAuth()
     {
         return _microsoftGraphApiService.GenerateMicrosoftGraphAPIAuthUrl(User.FindFirst("UserId").Value);
     }

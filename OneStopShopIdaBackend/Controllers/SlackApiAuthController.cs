@@ -8,8 +8,8 @@ public partial class SlackApiController : ControllerBase
 {
     // OAuth Step 1: Redirect users to Slack's authorization URL
     [Authorize]
-    [HttpGet("auth")]
-    public async Task<ActionResult<string>> GetAuth([FromQuery] string route)
+    [HttpGet("auth/url")]
+    public async Task<ActionResult<string>> GetAuth()
     {
         return _slackApiServices.GenerateSlackAPIAuthUrl(User.FindFirst("UserId").Value);
     }

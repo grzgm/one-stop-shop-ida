@@ -4,9 +4,11 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
-[ApiController]
+namespace OneStopShopIdaBackend.Controllers;
+
 [Route("authentication")]
-public class AuthenticationController
+[ApiController]
+public class AuthenticationController : ControllerBase
 {
     private readonly ILogger<AuthenticationController> _logger;
     private readonly IConfiguration _config;
@@ -17,8 +19,8 @@ public class AuthenticationController
         _config = config;
     }
 
-    [HttpGet("token")]
-    public string GetToken()
+    [HttpGet("auth")]
+    public string GetAuth()
     {
         var claims = new[]
         {
@@ -38,5 +40,17 @@ public class AuthenticationController
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    [HttpGet("is-auth")]
+    public async Task<ActionResult<bool>> GetIsAuth()
+    {
+        // Check if the user is authenticated
+        if (User.Identity.IsAuthenticated)
+        {
+            return true;
+        }
+
+        return false;
     }
 }
