@@ -46,7 +46,7 @@ async function PostSubscribe(): Promise<IActionResult<boolean>> {
 
 async function GetIsSubscribed(): Promise<IActionResult<boolean>> {
 	try {
-		return ExecuteApiCall<boolean>(`/push/is-subscribed`, "GET");
+		return await ExecuteApiCall<boolean>(`/push/is-subscribed`, "GET");
 	}
 	catch (error) {
 		console.error("Error:", error);

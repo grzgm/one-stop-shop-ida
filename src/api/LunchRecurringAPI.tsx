@@ -11,7 +11,7 @@ export interface ILunchRecurringItem {
 
 async function GetRegisteredDays(): Promise<IActionResult<ILunchRecurringItem>> {
 	try {
-		return ExecuteApiCall<ILunchRecurringItem>(`/lunch/recurring/get-registered-days`, "GET");
+		return await ExecuteApiCall<ILunchRecurringItem>(`/lunch/recurring/get-registered-days`, "GET");
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };
@@ -20,7 +20,7 @@ async function GetRegisteredDays(): Promise<IActionResult<ILunchRecurringItem>> 
 
 async function PutLunchRecurringItem(lunchRecurringItem: ILunchRecurringItem): Promise<IActionResult<undefined>>{
 	try {
-		return ExecuteApiCall<undefined>(`/lunch/recurring/get-registered-days`, "GET", JSON.stringify(lunchRecurringItem));
+		return await ExecuteApiCall<undefined>(`/lunch/recurring/get-registered-days`, "GET", JSON.stringify(lunchRecurringItem));
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };

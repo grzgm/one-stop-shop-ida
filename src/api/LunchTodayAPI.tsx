@@ -8,7 +8,7 @@ export interface ILunchTodayItem {
 
 async function IsRegistered(): Promise<IActionResult<ILunchTodayItem>> {
 	try {
-		return ExecuteApiCall<ILunchTodayItem>(`/lunch/today/get-registration`, "GET");
+		return await ExecuteApiCall<ILunchTodayItem>(`/lunch/today/get-registration`, "GET");
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };
@@ -17,7 +17,7 @@ async function IsRegistered(): Promise<IActionResult<ILunchTodayItem>> {
 
 async function RegisterLunchToday(registration: boolean, office: string): Promise<IActionResult<ILunchTodayItem>> {
 	try {
-		return ExecuteApiCall<ILunchTodayItem>(`/lunch/today/put-registration?registration=${registration}&office=${office}`, "PUT");
+		return await ExecuteApiCall<ILunchTodayItem>(`/lunch/today/put-registration?registration=${registration}&office=${office}`, "PUT");
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };

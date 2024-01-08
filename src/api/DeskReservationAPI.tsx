@@ -34,7 +34,7 @@ export interface IDeskReservation {
 
 async function GetDeskReservationOfficeLayout(office: string): Promise<IActionResult<{ [key: string]: IDeskCluster }>> {
 	try {
-		return ExecuteApiCall<{ [key: string]: IDeskCluster }>(`/desk/reservation/${office}/layout`, "GET");
+		return await ExecuteApiCall<{ [key: string]: IDeskCluster }>(`/desk/reservation/${office}/layout`, "GET");
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };
@@ -43,7 +43,7 @@ async function GetDeskReservationOfficeLayout(office: string): Promise<IActionRe
 
 async function GetDeskReservationsForOfficeDate(office: string, startDate?: Date, endDate?: Date): Promise<IActionResult<{ [key: string]: IDeskReservationsDay }>> {
 	try {
-		return ExecuteApiCall<{ [key: string]: IDeskReservationsDay }>(`/desk/reservation/${office}/all?startDate=${startDate ? startDate.toISOString().split('T')[0] : ""}&endDate=${endDate ? endDate.toISOString().split('T')[0] : ""}`, "GET");
+		return await ExecuteApiCall<{ [key: string]: IDeskReservationsDay }>(`/desk/reservation/${office}/all?startDate=${startDate ? startDate.toISOString().split('T')[0] : ""}&endDate=${endDate ? endDate.toISOString().split('T')[0] : ""}`, "GET");
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };
@@ -52,7 +52,7 @@ async function GetDeskReservationsForOfficeDate(office: string, startDate?: Date
 
 async function GetDeskReservationsOfUser(office: string, date: Date): Promise<IActionResult<IDeskReservation[]>> {
 	try {
-		return ExecuteApiCall<IDeskReservation[]>(`/desk/reservation/${office}/user?date=${date.toISOString().split('T')[0]}`, "GET");
+		return await ExecuteApiCall<IDeskReservation[]>(`/desk/reservation/${office}/user?date=${date.toISOString().split('T')[0]}`, "GET");
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };
@@ -61,7 +61,7 @@ async function GetDeskReservationsOfUser(office: string, date: Date): Promise<IA
 
 async function PostDeskReservation(office: string, date: Date, clusterId: string, deskId: string, timeSlots: number[]): Promise<IActionResult<undefined>> {
 	try {
-		return ExecuteApiCall<undefined>(`/desk/reservation/${office}?date=${date.toISOString().split('T')[0]}&clusterId=${clusterId}&deskId=${deskId}&timeSlots=${timeSlots.join("&timeSlots=")}`, "POST");
+		return await ExecuteApiCall<undefined>(`/desk/reservation/${office}?date=${date.toISOString().split('T')[0]}&clusterId=${clusterId}&deskId=${deskId}&timeSlots=${timeSlots.join("&timeSlots=")}`, "POST");
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };
@@ -70,7 +70,7 @@ async function PostDeskReservation(office: string, date: Date, clusterId: string
 
 async function DeleteDeskReservation(office: string, date: Date, clusterId: string, deskId: string, timeSlots: number[]): Promise<IActionResult<undefined>> {
 	try {
-		return ExecuteApiCall<undefined>(`/desk/reservation/${office}?date=${date.toISOString().split('T')[0]}&clusterId=${clusterId}&deskId=${deskId}&timeSlots=${timeSlots.join("&timeSlots=")}`, "DELETE");
+		return await ExecuteApiCall<undefined>(`/desk/reservation/${office}?date=${date.toISOString().split('T')[0]}&clusterId=${clusterId}&deskId=${deskId}&timeSlots=${timeSlots.join("&timeSlots=")}`, "DELETE");
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };
