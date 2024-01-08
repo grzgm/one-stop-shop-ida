@@ -1,5 +1,5 @@
-import Cookies from "universal-cookie";
-import { IActionResult, InspectResponseAsync } from "./Response";
+import { IActionResult } from "./Response";
+import ExecuteApiCall from "./Request";
 
 export interface ILunchTodayItem {
 	registrationDate?: Date;
@@ -8,18 +8,7 @@ export interface ILunchTodayItem {
 
 async function IsRegistered(): Promise<IActionResult<ILunchTodayItem>> {
 	try {
-		const res = await fetch(
-			`${import.meta.env.VITE_BACKEND_URI}/lunch/today/get-registration`,
-			{
-				method: "GET",
-				credentials: "include", // Include credentials (cookies) in the request
-				headers: {
-					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
-					'Content-Type': 'application/json',
-				}
-			}
-		);
-		return InspectResponseAsync(res);
+		return ExecuteApiCall<ILunchTodayItem>(`/lunch/today/get-registration`, "GET");
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };
@@ -28,18 +17,7 @@ async function IsRegistered(): Promise<IActionResult<ILunchTodayItem>> {
 
 async function RegisterLunchToday(registration: boolean, office: string): Promise<IActionResult<ILunchTodayItem>> {
 	try {
-		const res = await fetch(
-			`${import.meta.env.VITE_BACKEND_URI}/lunch/today/put-registration?registration=${registration}&office=${office}`,
-			{
-				method: "PUT",
-				credentials: "include", // Include credentials (cookies) in the request
-				headers: {
-					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
-					'Content-Type': 'application/json',
-				}
-			}
-		);
-		return InspectResponseAsync(res);
+		return ExecuteApiCall<ILunchTodayItem>(`/lunch/today/put-registration?registration=${registration}&office=${office}`, "PUT");
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };

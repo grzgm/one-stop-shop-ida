@@ -1,5 +1,5 @@
-import Cookies from "universal-cookie";
-import { IActionResult, InspectResponseAsync } from "./Response";
+import { IActionResult } from "./Response";
+import ExecuteApiCall from "./Request";
 
 async function PostSubscribe(): Promise<IActionResult<boolean>> {
 	const result = await Notification.requestPermission();
@@ -32,17 +32,11 @@ async function PostSubscribe(): Promise<IActionResult<boolean>> {
 			: ""),
 	});
 	try {
-		fetch(`${import.meta.env.VITE_BACKEND_URI}/push/subscribe`, {
-			method: "POST",
-			credentials: "include", // Include credentials (cookies) in the request
-			headers: {
-				'Authorization': `Bearer ${new Cookies().get("jwt")}`,
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(subscription),
-		});
-		console.info("User has been subscribed.");
-		return { success: true, statusText: "User has been subscribed." }
+		const res = await ExecuteApiCall<boolean>(`/push/subscribe`, "POST", JSON.stringify(subscription));
+		if (res.success)
+			return { success: true, statusText: "User has been subscribed." }
+		else
+			return { success: false, statusText: "Failed to subscribe." }
 	}
 	catch (error) {
 		console.error("Error:", error);
@@ -52,15 +46,7 @@ async function PostSubscribe(): Promise<IActionResult<boolean>> {
 
 async function GetIsSubscribed(): Promise<IActionResult<boolean>> {
 	try {
-		const res = await fetch(`${import.meta.env.VITE_BACKEND_URI}/push/is-subscribed`, {
-			method: "GET",
-			credentials: "include", // Include credentials (cookies) in the request
-			headers: {
-				'Authorization': `Bearer ${new Cookies().get("jwt")}`,
-				'Content-Type': 'application/json',
-			},
-		});
-		return InspectResponseAsync(res);
+		return ExecuteApiCall<boolean>(`/push/is-subscribed`, "GET");
 	}
 	catch (error) {
 		console.error("Error:", error);

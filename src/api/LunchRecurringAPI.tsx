@@ -1,5 +1,5 @@
-import Cookies from "universal-cookie";
-import { IActionResult, InspectResponseAsync } from "./Response";
+import { IActionResult } from "./Response";
+import ExecuteApiCall from "./Request";
 
 export interface ILunchRecurringItem {
 	monday: boolean;
@@ -11,25 +11,7 @@ export interface ILunchRecurringItem {
 
 async function GetRegisteredDays(): Promise<IActionResult<ILunchRecurringItem>> {
 	try {
-		const res = await fetch(
-			`${import.meta.env.VITE_BACKEND_URI}/lunch/recurring/get-registered-days`,
-			{
-				method: "GET",
-				credentials: "include", // Include credentials (cookies) in the request
-				headers: {
-					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
-					'Content-Type': 'application/json',
-				}
-			}
-		);
-		// const resData = await InspectResponseAsync<ILunchRecurringItem>(res);
-		// const resDataConverted: IActionResult<ILunchRecurringItem> = {
-		// 	success: resData.success,
-		// 	status: resData.status,
-		// 	payload: resData.payload ? resData.payload as ILunchRecurringItem : undefined,
-		// };
-		// return resDataConverted;
-		return InspectResponseAsync<ILunchRecurringItem>(res);
+		return ExecuteApiCall<ILunchRecurringItem>(`/lunch/recurring/get-registered-days`, "GET");
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };
@@ -38,19 +20,7 @@ async function GetRegisteredDays(): Promise<IActionResult<ILunchRecurringItem>> 
 
 async function PutLunchRecurringItem(lunchRecurringItem: ILunchRecurringItem): Promise<IActionResult<undefined>>{
 	try {
-		const res = await fetch(
-			`${import.meta.env.VITE_BACKEND_URI}/lunch/recurring/update-registered-days`,
-			{
-				method: "PUT",
-				credentials: "include", // Include credentials (cookies) in the request
-				headers: {
-					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(lunchRecurringItem),
-			}
-		);
-		return InspectResponseAsync(res);
+		return ExecuteApiCall<undefined>(`/lunch/recurring/get-registered-days`, "GET", JSON.stringify(lunchRecurringItem));
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };

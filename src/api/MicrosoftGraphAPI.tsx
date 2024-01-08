@@ -1,20 +1,9 @@
-import Cookies from "universal-cookie";
-import { IActionResult, InspectResponseAsync } from "./Response";
+import { IActionResult } from "./Response";
+import ExecuteApiCall from "./Request";
 
 async function IsAuth(): Promise<IActionResult<boolean>> {
 	try {
-		const res = await fetch(
-			`${import.meta.env.VITE_BACKEND_URI}/microsoft/auth/is-auth`,
-			{
-				method: "GET",
-				credentials: "include", // Include credentials (cookies) in the request
-				headers: {
-					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
-					'Content-Type': 'application/json',
-				}
-			}
-		);
-		return InspectResponseAsync(res);
+		return ExecuteApiCall<boolean>(`/microsoft/auth/is-auth`, "GET");
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };
@@ -23,18 +12,7 @@ async function IsAuth(): Promise<IActionResult<boolean>> {
 
 async function SendEmail(message: string, address: string): Promise<IActionResult<null>> {
 	try {
-		const res = await fetch(
-			`${import.meta.env.VITE_BACKEND_URI}/microsoft/resources/send-email?message=${encodeURI(message)}&address=${encodeURI(address)}`,
-			{
-				method: "POST",
-				credentials: "include", // Include credentials (cookies) in the request
-				headers: {
-					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
-					'Content-Type': 'application/json',
-				}
-			}
-		);
-		return InspectResponseAsync(res);
+		return ExecuteApiCall<null>(`/microsoft/resources/send-email?message=${encodeURI(message)}&address=${encodeURI(address)}`, "POST");
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };
@@ -43,18 +21,7 @@ async function SendEmail(message: string, address: string): Promise<IActionResul
 
 async function CreateEvent(address: string, title: string, startDate: string, endDate: string, description?: string): Promise<IActionResult<null>> {
 	try {
-		const res = await fetch(
-			`${import.meta.env.VITE_BACKEND_URI}/microsoft/resources/create-event?address=${encodeURI(address)}&title=${title}&startDate=${startDate}&endDate=${endDate}&description=${description}`,
-			{
-				method: "POST",
-				credentials: "include", // Include credentials (cookies) in the request
-				headers: {
-					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
-					'Content-Type': 'application/json',
-				}
-			}
-		);
-		return InspectResponseAsync(res);
+		return ExecuteApiCall<null>(`/microsoft/resources/create-event?address=${encodeURI(address)}&title=${title}&startDate=${startDate}&endDate=${endDate}&description=${description}`, "GET");
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };

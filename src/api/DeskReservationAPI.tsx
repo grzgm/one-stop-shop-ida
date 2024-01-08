@@ -1,5 +1,5 @@
-import Cookies from "universal-cookie";
-import { IActionResult, InspectResponseAsync } from "./Response";
+import { IActionResult } from "./Response";
+import ExecuteApiCall from "./Request";
 export interface IDeskReservationItem {
 	isUser: boolean;
 	date: Date;
@@ -32,40 +32,9 @@ export interface IDeskReservation {
 	timeSlot: number;
 }
 
-// async function GetDeskReservationForOfficeDate(office: string, startDate?: Date, endDate?: Date): Promise<IActionResult<{ [key: string]: IDeskCluster[] }>> {
-// 	try {
-// 		const res = await fetch(
-// 			`${import.meta.env.VITE_BACKEND_URI}/desk/reservation/${office}?startDate=${startDate ? startDate.toISOString().split('T')[0] : ""}&endDate=${endDate ? endDate.toISOString().split('T')[0] : ""}`,
-// 			{
-// 				method: "GET",
-// 				credentials: "include", // Include credentials (cookies) in the request
-// 				headers: {
-// 					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
-// 					'Content-Type': 'application/json',
-// 				}
-// 			}
-// 		);
-// 		return InspectResponseAsync<{ [key: string]: IDeskCluster[] }>(res);
-// 	} catch (error) {
-// 		console.error("Error:", error);
-// 		return { success: false, statusText: "Request could not be send." };
-// 	}
-// }
-
 async function GetDeskReservationOfficeLayout(office: string): Promise<IActionResult<{ [key: string]: IDeskCluster }>> {
 	try {
-		const res = await fetch(
-			`${import.meta.env.VITE_BACKEND_URI}/desk/reservation/${office}/layout`,
-			{
-				method: "GET",
-				credentials: "include", // Include credentials (cookies) in the request
-				headers: {
-					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
-					'Content-Type': 'application/json',
-				}
-			}
-		);
-		return InspectResponseAsync<{ [key: string]: IDeskCluster }>(res);
+		return ExecuteApiCall<{ [key: string]: IDeskCluster }>(`/desk/reservation/${office}/layout`, "GET");
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };
@@ -74,18 +43,7 @@ async function GetDeskReservationOfficeLayout(office: string): Promise<IActionRe
 
 async function GetDeskReservationsForOfficeDate(office: string, startDate?: Date, endDate?: Date): Promise<IActionResult<{ [key: string]: IDeskReservationsDay }>> {
 	try {
-		const res = await fetch(
-			`${import.meta.env.VITE_BACKEND_URI}/desk/reservation/${office}/all?startDate=${startDate ? startDate.toISOString().split('T')[0] : ""}&endDate=${endDate ? endDate.toISOString().split('T')[0] : ""}`,
-			{
-				method: "GET",
-				credentials: "include", // Include credentials (cookies) in the request
-				headers: {
-					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
-					'Content-Type': 'application/json',
-				}
-			}
-		);
-		return InspectResponseAsync<{ [key: string]: IDeskReservationsDay }>(res);
+		return ExecuteApiCall<{ [key: string]: IDeskReservationsDay }>(`/desk/reservation/${office}/all?startDate=${startDate ? startDate.toISOString().split('T')[0] : ""}&endDate=${endDate ? endDate.toISOString().split('T')[0] : ""}`, "GET");
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };
@@ -94,59 +52,16 @@ async function GetDeskReservationsForOfficeDate(office: string, startDate?: Date
 
 async function GetDeskReservationsOfUser(office: string, date: Date): Promise<IActionResult<IDeskReservation[]>> {
 	try {
-		const res = await fetch(
-			`${import.meta.env.VITE_BACKEND_URI}/desk/reservation/${office}/user?date=${date.toISOString().split('T')[0]}`,
-			{
-				method: "GET",
-				credentials: "include", // Include credentials (cookies) in the request
-				headers: {
-					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
-					'Content-Type': 'application/json',
-				}
-			}
-		);
-		return InspectResponseAsync<IDeskReservation[]>(res);
+		return ExecuteApiCall<IDeskReservation[]>(`/desk/reservation/${office}/user?date=${date.toISOString().split('T')[0]}`, "GET");
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };
 	}
 }
 
-// async function PutLunchRecurringItem(lunchRecurringItem: Desk): Promise<IActionResult<undefined>>{
-// 	try {
-// 		const res = await fetch(
-// 			`${import.meta.env.VITE_BACKEND_URI}/lunch/recurring/update-registered-days`,
-// 			{
-// 				method: "PUT",
-// 				credentials: "include", // Include credentials (cookies) in the request
-// 				headers: {
-// 					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
-// 					'Content-Type': 'application/json',
-// 				}
-// 				body: JSON.stringify(lunchRecurringItem),
-// 			}
-// 		);
-// 		return InspectResponseAsync(res);
-// 	} catch (error) {
-// 		console.error("Error:", error);
-// 		return { success: false, statusText: "Request could not be send." };
-// 	}
-// }
-
 async function PostDeskReservation(office: string, date: Date, clusterId: string, deskId: string, timeSlots: number[]): Promise<IActionResult<undefined>> {
 	try {
-		const res = await fetch(
-			`${import.meta.env.VITE_BACKEND_URI}/desk/reservation/${office}?date=${date.toISOString().split('T')[0]}&clusterId=${clusterId}&deskId=${deskId}&timeSlots=${timeSlots.join("&timeSlots=")}`,
-			{
-				method: "POST",
-				credentials: "include", // Include credentials (cookies) in the request
-				headers: {
-					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
-					'Content-Type': 'application/json',
-				}
-			}
-		);
-		return InspectResponseAsync(res);
+		return ExecuteApiCall<undefined>(`/desk/reservation/${office}?date=${date.toISOString().split('T')[0]}&clusterId=${clusterId}&deskId=${deskId}&timeSlots=${timeSlots.join("&timeSlots=")}`, "POST");
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };
@@ -155,18 +70,7 @@ async function PostDeskReservation(office: string, date: Date, clusterId: string
 
 async function DeleteDeskReservation(office: string, date: Date, clusterId: string, deskId: string, timeSlots: number[]): Promise<IActionResult<undefined>> {
 	try {
-		const res = await fetch(
-			`${import.meta.env.VITE_BACKEND_URI}/desk/reservation/${office}?date=${date.toISOString().split('T')[0]}&clusterId=${clusterId}&deskId=${deskId}&timeSlots=${timeSlots.join("&timeSlots=")}`,
-			{
-				method: "DELETE",
-				credentials: "include", // Include credentials (cookies) in the request
-				headers: {
-					'Authorization': `Bearer ${new Cookies().get("jwt")}`,
-					'Content-Type': 'application/json',
-				}
-			}
-		);
-		return InspectResponseAsync(res);
+		return ExecuteApiCall<undefined>(`/desk/reservation/${office}?date=${date.toISOString().split('T')[0]}&clusterId=${clusterId}&deskId=${deskId}&timeSlots=${timeSlots.join("&timeSlots=")}`, "DELETE");
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };
