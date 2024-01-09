@@ -20,7 +20,6 @@ function AuthPage({ authTarget, isAuth: IsAuth, authUrl: AuthUrl }: AuthPageProp
     const [isAuth, setIsAuth] = useState<boolean>();
     const [url, setUrl] = useState<string>("");
     const navigate = useNavigate();
-    const cookies = new Cookies();
 
     useEffect(() => {
         // Auth target config
@@ -39,7 +38,7 @@ function AuthPage({ authTarget, isAuth: IsAuth, authUrl: AuthUrl }: AuthPageProp
         }
 
         const UrlWrapper = async () => {
-            if (await IsAuthJWT())
+            if ((await IsAuthJWT()).payload)
             {
                 await getURL();
             }
