@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import "../../../css/auth-pages.css"
 import { IActionResult } from '../../../api/Response';
-import Cookies from 'universal-cookie';
 import { Auth as AuthJWT, IsAuth as IsAuthJWT } from '../../../api/AuthenticationAPI';
 
 export interface AuthPageProps {
