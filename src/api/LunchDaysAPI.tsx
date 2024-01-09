@@ -11,7 +11,7 @@ export interface ILunchDaysItem {
 
 async function GetRegisteredDays(): Promise<IActionResult<ILunchDaysItem>> {
 	try {
-		return await ExecuteApiCall<ILunchDaysItem>(`/lunch/days/get-registered-days`, "GET");
+		return await ExecuteApiCall<ILunchDaysItem>(`/lunch/days/get-days`, "GET");
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };
@@ -20,7 +20,7 @@ async function GetRegisteredDays(): Promise<IActionResult<ILunchDaysItem>> {
 
 async function PutLunchDaysItem(lunchDaysItem: ILunchDaysItem): Promise<IActionResult<undefined>>{
 	try {
-		return await ExecuteApiCall<undefined>(`/lunch/days/get-registered-days`, "GET", JSON.stringify(lunchDaysItem));
+		return await ExecuteApiCall<undefined>(`/lunch/days/update-days`, "PUT", JSON.stringify(lunchDaysItem));
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };
