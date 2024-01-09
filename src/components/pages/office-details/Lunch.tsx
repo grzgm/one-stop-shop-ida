@@ -7,8 +7,8 @@ import { redirect } from "react-router-dom";
 import { IsAuth } from "../../../api/MicrosoftGraphAPI";
 import { IsAuth as IsAuthSlack } from "../../../api/SlackAPI";
 import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
-import { ILunchTodayItem, IsRegistered, RegisterLunchToday } from "../../../api/LunchTodayAPI";
-import { GetRegisteredDays, ILunchRecurringItem, PutLunchRecurringItem } from "../../../api/LunchRecurringAPI";
+import { ILunchRegistrationsItem, IsRegistered, PutLunchRegistrationsItem } from "../../../api/LunchRegistrationsAPI";
+import { GetRegisteredDays, ILunchDaysItem, PutLunchDaysItem } from "../../../api/LunchDaysAPI";
 import { PostSubscribe } from "../../../api/PushAPI";
 import AlertContext from "../../../contexts/AlertContext";
 
@@ -34,11 +34,11 @@ function Lunch() {
 	const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 	const { setAlert } = useContext(AlertContext);
 
-	// Lunch Today
-	const [todayRegistration, setTodayRegistration] = useState<ILunchTodayItem | undefined>(undefined)
+	// Lunch Today Registration
+	const [todayRegistration, setTodayRegistration] = useState<ILunchRegistrationsItem | undefined>(undefined)
 
-	// Lunch Recurring
-	const [registeredDays, setRegisteredDays] = useState<ILunchRecurringItem>({
+	// Lunch Days
+	const [registeredDays, setRegisteredDays] = useState<ILunchDaysItem>({
 		monday: false,
 		tuesday: false,
 		wednesday: false,
@@ -110,12 +110,12 @@ function Lunch() {
 		PostSubscribeWrapper();
 	}, []);
 
-	// Lunch Recurring 
-	const handleDayChange = async (dayName: keyof ILunchRecurringItem) => {
+	// Lunch Days 
+	const handleDayChange = async (dayName: keyof ILunchDaysItem) => {
 		const updatedCheckedBoxes = { ...registeredDays };
 		updatedCheckedBoxes[dayName] = !updatedCheckedBoxes[dayName];
 		setRegisteredDays(updatedCheckedBoxes);
-		const response = await PutLunchRecurringItem(updatedCheckedBoxes);
+		const response = await PutLunchDaysItem(updatedCheckedBoxes);
 		setAlert(response.statusText, response.success);
 	};
 
@@ -123,7 +123,7 @@ function Lunch() {
 	const registerForToday = async (registration: boolean) => {
 		setIsButtonDisabled(true);
 		if (!isPastNoon()) {
-			const response = await RegisterLunchToday(registration, selectedOffice);
+			const response = await PutLunchRegistrationsItem(registration, selectedOffice);
 			if (response.payload?.registrationDate) {
 				response.payload.registrationDate = new Date(response.payload.registrationDate)
 			}
@@ -140,8 +140,8 @@ function Lunch() {
 				<BodyNormal>Don't forget to register!</BodyNormal>
 			</div>
 			<main className="lunch-main">
-				<div className="lunch-main__recurring">
-					<HeadingSmall>Register recurring</HeadingSmall>
+				<div className="lunch-main__days">
+					<HeadingSmall>Lunch Days</HeadingSmall>
 					<BodySmall>You will get the notification</BodySmall>
 					<BodySmall>to register on the given day at 9:00</BodySmall>
 					{!isPushEnabled && <BodySmall additionalClasses={["font-colour--fail"]}>For full functionality enable Push Notifications</BodySmall>}
@@ -150,8 +150,8 @@ function Lunch() {
 							<div className="lunch-main__form__checkboxes" key={dayName}>
 								<input
 									type="checkbox"
-									checked={registeredDays[dayName as keyof ILunchRecurringItem]}
-									onChange={() => handleDayChange(dayName as keyof ILunchRecurringItem)}
+									checked={registeredDays[dayName as keyof ILunchDaysItem]}
+									onChange={() => handleDayChange(dayName as keyof ILunchDaysItem)}
 									id={dayName}
 								/>
 								<label key={dayName} htmlFor={dayName}>
@@ -161,7 +161,7 @@ function Lunch() {
 						))}
 					</form>
 				</div>
-				<div className="lunch-main__today">
+				<div className="lunch-main__registrations">
 					<HeadingSmall>Register for today</HeadingSmall>
 					<BodySmall>Only for today</BodySmall>
 					<BodySmall>before 12:00</BodySmall>
