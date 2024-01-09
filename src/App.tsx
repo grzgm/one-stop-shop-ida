@@ -14,13 +14,13 @@ function App() {
 
 	if (!currentOfficeCookies) {
 		currentOfficeCookies = "Utrecht"
-		cookies.set("currentOffice", JSON.stringify(currentOfficeCookies), { path: "/" })
+		cookies.set("currentOffice", JSON.stringify(currentOfficeCookies), { path: "/", sameSite: 'none', secure: true })
 	}
 	const [currentOffice, setCurrentOffice] = useState(currentOfficeCookies)
 
 	const setCurrentOfficeAndCookie = (newCurrentOffice: string) => {
 		setCurrentOffice(newCurrentOffice);
-		cookies.set("currentOffice", newCurrentOffice, { path: '/' });
+		cookies.set("currentOffice", newCurrentOffice, { path: '/', sameSite: 'none', secure: true });
 	}
 
 	// Alert System

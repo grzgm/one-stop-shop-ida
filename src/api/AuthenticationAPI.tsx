@@ -14,7 +14,7 @@ async function IsAuth(): Promise<IActionResult<boolean>> {
 async function Auth(): Promise<IActionResult<undefined>> {
 	try {
 		const res =  await ExecuteApiCall<undefined>(`/authentication/auth`, "GET");
-        new Cookies().set("jwt", res.statusText, { path: "/", expires: new Date(Date.now() + 3600000) })
+        new Cookies().set("jwt", res.statusText, { path: "/", expires: new Date(Date.now() + (24 * 60 * 60 * 1000)), sameSite: 'none', secure: true })
         return res;
 	} catch (error) {
 		console.error("Error:", error);
