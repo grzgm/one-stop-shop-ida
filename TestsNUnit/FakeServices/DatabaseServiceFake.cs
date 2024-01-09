@@ -17,8 +17,8 @@ internal class DatabaseServiceFake : DbContext, IDatabaseService
     {
     }
 
-    public DbSet<LunchRecurringItem> LunchRecurring { get; set; }
-    public DbSet<LunchTodayItem> LunchToday { get; set; }
+    public DbSet<LunchDaysItem> LunchDays { get; set; }
+    public DbSet<LunchRegistrationsItem> LunchRegistrations { get; set; }
     public DbSet<PushSubscription> PushSubscription { get; set; }
     public DbSet<UserItem> Users { get; set; }
 
@@ -32,15 +32,15 @@ internal class DatabaseServiceFake : DbContext, IDatabaseService
         throw new NotImplementedException();
     }
 
-    public Task<LunchTodayItem> GetLunchTodayIsRegistered(string microsoftId)
+    public Task<LunchRegistrationsItem> GetLunchIsRegisteredToday(string microsoftId)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<LunchRecurringItem> GetRegisteredDays(string microsoftId)
+    public async Task<LunchDaysItem> GetRegisteredDays(string microsoftId)
     {
-        LunchRecurringItem lunchRecurringItem = await LunchRecurring.FindAsync(microsoftId);
-        return lunchRecurringItem;
+        LunchDaysItem lunchDaysItem = await LunchDays.FindAsync(microsoftId);
+        return lunchDaysItem;
     }
 
     public async Task<UserItem> GetUserItem(string microsoftId)
@@ -64,16 +64,16 @@ internal class DatabaseServiceFake : DbContext, IDatabaseService
         throw new NotImplementedException();
     }
 
-    public Task PostLunchRecurringItem(LunchRecurringItem lunchRecurringItem)
+    public Task PostLunchDaysItem(LunchDaysItem lunchDaysItem)
     {
-        LunchRecurring.Add(lunchRecurringItem);
+        LunchDays.Add(lunchDaysItem);
         SaveChanges();
         return Task.CompletedTask;
     }
 
-    public Task PostLunchTodayItem(LunchTodayItem lunchTodayItem)
+    public Task PostLunchRegistrationItem(LunchRegistrationsItem lunchRegistrationsItem)
     {
-        LunchToday.Add(lunchTodayItem);
+        LunchRegistrations.Add(lunchRegistrationsItem);
         SaveChanges();
         return Task.CompletedTask;
     }
@@ -85,12 +85,12 @@ internal class DatabaseServiceFake : DbContext, IDatabaseService
         return Task.CompletedTask;
     }
 
-    public Task PutLunchRecurringItem(LunchRecurringItem lunchRecurringItem)
+    public Task PutLunchDaysItem(LunchDaysItem lunchDaysItem)
     {
         throw new NotImplementedException();
     }
 
-    public Task PutLunchTodayRegistration(LunchTodayItem lunchTodayItem)
+    public Task PutLunchRegistrationItem(LunchRegistrationsItem lunchRegistrationsItem)
     {
         throw new NotImplementedException();
     }

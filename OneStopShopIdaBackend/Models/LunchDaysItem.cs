@@ -3,20 +3,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OneStopShopIdaBackend.Models;
 
-public class LunchRecurringItem
+public class LunchDaysItem
 {
-    public LunchRecurringItem()
+    public LunchDaysItem()
     {
     }
 
-    public LunchRecurringItem(string microsoftId, LunchRecurringItemFrontend lunchRecurringItemFrontend)
+    public LunchDaysItem(string microsoftId, LunchDaysItemFrontend lunchDaysItemFrontend)
     {
         this.MicrosoftId = microsoftId;
-        this.Monday = lunchRecurringItemFrontend.Monday;
-        this.Tuesday = lunchRecurringItemFrontend.Tuesday;
-        this.Wednesday = lunchRecurringItemFrontend.Wednesday;
-        this.Thursday = lunchRecurringItemFrontend.Thursday;
-        this.Friday = lunchRecurringItemFrontend.Friday;
+        this.Monday = lunchDaysItemFrontend.Monday;
+        this.Tuesday = lunchDaysItemFrontend.Tuesday;
+        this.Wednesday = lunchDaysItemFrontend.Wednesday;
+        this.Thursday = lunchDaysItemFrontend.Thursday;
+        this.Friday = lunchDaysItemFrontend.Friday;
     }
 
     [Key]
@@ -71,19 +71,19 @@ public class LunchRecurringItem
     }
 }
 
-public class LunchRecurringItemFrontend
+public class LunchDaysItemFrontend
 {
-    public LunchRecurringItemFrontend()
+    public LunchDaysItemFrontend()
     {
     }
 
-    public LunchRecurringItemFrontend(LunchRecurringItem lunchRecurringItemFrontend)
+    public LunchDaysItemFrontend(LunchDaysItem lunchDaysItemFrontend)
     {
-        this.Monday = lunchRecurringItemFrontend.Monday;
-        this.Tuesday = lunchRecurringItemFrontend.Tuesday;
-        this.Wednesday = lunchRecurringItemFrontend.Wednesday;
-        this.Thursday = lunchRecurringItemFrontend.Thursday;
-        this.Friday = lunchRecurringItemFrontend.Friday;
+        this.Monday = lunchDaysItemFrontend.Monday;
+        this.Tuesday = lunchDaysItemFrontend.Tuesday;
+        this.Wednesday = lunchDaysItemFrontend.Wednesday;
+        this.Thursday = lunchDaysItemFrontend.Thursday;
+        this.Friday = lunchDaysItemFrontend.Friday;
     }
 
     public bool Monday { get; set; }

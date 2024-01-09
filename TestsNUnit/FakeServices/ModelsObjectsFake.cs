@@ -10,14 +10,14 @@ public static class ModelsObjectsFake
     public static UserItem testUserItem = new()
         { MicrosoftId = "testMicrosoftId", FirstName = "testFirstName", Surname = "testSurname", Email = "testEmail" };
 
-    public static LunchTodayItem testLunchTodayItem = new()
+    public static LunchRegistrationsItem TestLunchRegistrationsItem = new()
     {
         MicrosoftId = "testMicrosoftId",
         RegistrationDate = new DateTime(),
         Office = "testOffice"
     };
 
-    public static LunchRecurringItem testLunchRecurringItem = new()
+    public static LunchDaysItem TestLunchDaysItem = new()
     {
         MicrosoftId = "testMicrosoftId",
         Monday = false,

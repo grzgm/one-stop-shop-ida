@@ -3,12 +3,12 @@ using OneStopShopIdaBackend.Services;
 
 namespace OneStopShopIdaBackend.Controllers;
 
-public class LunchRecurringTaskController : IHostedService, IDisposable
+public class LunchDaysTaskController : IHostedService, IDisposable
 {
     private readonly IServiceProvider _serviceProvider;
     private Timer? _timer;
 
-    public LunchRecurringTaskController(IServiceProvider serviceProvider)
+    public LunchDaysTaskController(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
     }
@@ -43,10 +43,10 @@ public class LunchRecurringTaskController : IHostedService, IDisposable
             {
                 try
                 {
-                    LunchRecurringItem lunchRecurringItem =
+                    LunchDaysItem lunchDaysItem =
                         await databaseService.GetRegisteredDays(userItem.MicrosoftId);
                     
-                    if (lunchRecurringItem.IsRegisteredOnDate(DateTime.Now.AddDays(1)))
+                    if (lunchDaysItem.IsRegisteredOnDate(DateTime.Now.AddDays(1)))
                     {
                         await databaseService.SendNotificationsToUser(notification, userItem);
                     }

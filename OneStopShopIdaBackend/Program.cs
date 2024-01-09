@@ -28,12 +28,6 @@ builder.Services.AddDataProtection()
 builder.Services.AddDbContext<IDatabaseService, DatabaseService>(opt =>
     opt.UseMySQL(builder.Configuration["ConnectionStrings:MySqlConnection"]));
 
-// Add the WeeklyTaskService as a Singleton service
-// builder.Services.AddSingleton<IHostedService, WeeklyTaskController>();
-
-// Add the LunchRecurringController as a Singleton service
-builder.Services.AddSingleton<IHostedService, LunchRecurringTaskController>();
-
 // Register HttpClient as a singleton service
 builder.Services.AddHttpClient();
 

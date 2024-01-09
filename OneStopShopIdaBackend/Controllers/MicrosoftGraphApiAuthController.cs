@@ -31,15 +31,15 @@ public partial class MicrosoftGraphApiController
             {
                 await _databaseService.PostUserItem(user);
 
-                LunchTodayItem lunchTodayItem = new LunchTodayItem()
+                LunchRegistrationsItem lunchRegistrationsItem = new LunchRegistrationsItem()
                 {
                     MicrosoftId = user.MicrosoftId,
                     RegistrationDate = null,
                     Office = null,
                 };
-                await _databaseService.PostLunchTodayItem(lunchTodayItem);
+                await _databaseService.PostLunchRegistrationItem(lunchRegistrationsItem);
 
-                LunchRecurringItem lunchRecurringItem = new()
+                LunchDaysItem lunchDaysItem = new()
                 {
                     MicrosoftId = user.MicrosoftId,
                     Monday = false,
@@ -48,7 +48,7 @@ public partial class MicrosoftGraphApiController
                     Thursday = false,
                     Friday = false,
                 };
-                await _databaseService.PostLunchRecurringItem(lunchRecurringItem);
+                await _databaseService.PostLunchDaysItem(lunchDaysItem);
             }
 
             // Store Access Token, Refresh Token in Memory Cache with GUID

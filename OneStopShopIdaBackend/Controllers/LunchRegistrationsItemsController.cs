@@ -7,11 +7,11 @@ using OneStopShopIdaBackend.Services;
 namespace OneStopShopIdaBackend.Controllers;
 
 [Authorize]
-[Route("lunch/today")]
+[Route("lunch/registrations")]
 [ApiController]
-public class LunchTodayItemsController : CustomControllerBase
+public class LunchRegistrationsItemsController : CustomControllerBase
 {
-    private readonly ILogger<LunchTodayItemsController> _logger;
+    private readonly ILogger<LunchRegistrationsItemsController> _logger;
     private readonly IConfiguration _config;
     private readonly ISlackApiServices _slackApiServices;
     private readonly IDatabaseService _databaseService;
@@ -19,7 +19,7 @@ public class LunchTodayItemsController : CustomControllerBase
     private readonly string _lunchEmailAddress;
     private readonly string _lunchSlackChannel;
 
-    public LunchTodayItemsController(ILogger<LunchTodayItemsController> logger, IConfiguration config,
+    public LunchRegistrationsItemsController(ILogger<LunchRegistrationsItemsController> logger, IConfiguration config,
         IMemoryCache memoryCache, IMicrosoftGraphApiService microsoftGraphApiService,
         ISlackApiServices slackApiServices, IDatabaseService databaseService) : base(memoryCache,
         microsoftGraphApiService)
@@ -46,17 +46,17 @@ public class LunchTodayItemsController : CustomControllerBase
         $"{name}";
 
     [HttpGet("get-registration")]
-    public async Task<ActionResult<LunchTodayItemFrontend>> GetLunchTodayIsRegistered()
+    public async Task<ActionResult<LunchRegistrationsItemFrontend>> GetLunchIsRegisteredToday()
     {
         string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
         string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
             .MicrosoftId;
 
-        return new LunchTodayItemFrontend(await _databaseService.GetLunchTodayIsRegistered(microsoftId));
+        return new LunchRegistrationsItemFrontend(await _databaseService.GetLunchIsRegisteredToday(microsoftId));
     }
 
     [HttpPut("put-registration")]
-    public async Task<ActionResult<LunchTodayItemFrontend>> PutLunchTodayRegistration([FromQuery] bool registration,
+    public async Task<ActionResult<LunchRegistrationsItemFrontend>> PutLunchRegistrationItem([FromQuery] bool registration,
         [FromQuery] string office)
     {
         string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
@@ -78,7 +78,7 @@ public class LunchTodayItemsController : CustomControllerBase
 
         HttpResponseMessage response = null;
 
-        LunchTodayItem lunchTodayItem = new()
+        LunchRegistrationsItem lunchRegistrationsItem = new()
         {
             MicrosoftId = microsoftId,
             RegistrationDate = registration ? DateTime.Now : null,
@@ -98,9 +98,9 @@ public class LunchTodayItemsController : CustomControllerBase
 
         if (response.IsSuccessStatusCode)
         {
-            await _databaseService.PutLunchTodayRegistration(lunchTodayItem);
+            await _databaseService.PutLunchRegistrationItem(lunchRegistrationsItem);
         }
 
-        return new LunchTodayItemFrontend(lunchTodayItem);
+        return new LunchRegistrationsItemFrontend(lunchRegistrationsItem);
     }
 }
