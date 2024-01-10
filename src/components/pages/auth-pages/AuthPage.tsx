@@ -49,7 +49,7 @@ function AuthPage({ authTarget, isAuth: IsAuth, authUrl: AuthUrl }: AuthPageProp
         }
 
         UrlWrapper()
-    }, []);
+    }, [authTarget]);
 
     // Pop up config
     useEffect(() => {
