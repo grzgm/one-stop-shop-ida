@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 using Org.BouncyCastle.Utilities.Collections;
@@ -17,38 +18,50 @@ internal class MicrosoftGraphApiControllerIntegrationTests : PageTest
     [Test]
     public async Task MicrosoftAuthTest()
     {
-        await Page.GotoAsync("http://localhost:3002/microsoft/auth?route=/office-details/lunch");
+        // Go to Home Page
+        await Page.GotoAsync("http://localhost:5173");
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         // Expect a title "to contain" a substring.
         //await Expect(Page).ToHaveTitleAsync(new Regex("Sign in to your account"));
 
-        // create a locator
-        await Page.WaitForTimeoutAsync(1000);
-        var emailInput = await Page.QuerySelectorAsync("input[type=email]");
-        await emailInput.FillAsync("malisgr@cronos.be");
+        // Navigate to Reserve Desk Page
+        await Page.GotoAsync("http://localhost:5173/microsoft-auth?previousLocation=/office-details/reserve-desk");
 
-        var button = await Page.QuerySelectorAsync("input[type=submit]");
+        // Click Button to register
+        var newPage = await Context.RunAndWaitForPageAsync(async () =>
+        {
+            await Page.ClickAsync(".button");
+        });
+        await newPage.WaitForLoadStateAsync();
+        
+        // create a locator
+        await newPage.WaitForTimeoutAsync(2000);
+        var emailInput = await newPage.QuerySelectorAsync("input[type=email]");
+        await emailInput.FillAsync("");
+
+        var button = await newPage.QuerySelectorAsync("input[type=submit]");
         await button.ClickAsync();
 
         // Password page
-        await Page.WaitForTimeoutAsync(2000);
-        var passwordInput = await Page.QuerySelectorAsync("input[type=password]");
-        await passwordInput.FillAsync("zaq1@#$ES");
+        await newPage.WaitForTimeoutAsync(2000);
+        var passwordInput = await newPage.QuerySelectorAsync("input[type=password]");
+        await passwordInput.FillAsync("");
 
-        button = await Page.QuerySelectorAsync("input[type=submit]");
+        button = await newPage.QuerySelectorAsync("input[type=submit]");
         await button.ClickAsync();
 
         // Microsoft Two step Auth
         //string divTextContent = await Page.TextContentAsync("#idRichContext_DisplaySign");
 
-        await Page.WaitForTimeoutAsync(1000);
+        await newPage.WaitForTimeoutAsync(25000);
 
-        button = await Page.QuerySelectorAsync("input[type=submit][value=Tak]");
-        await button.ClickAsync();
+        //button = await newPage.QuerySelectorAsync("input[type=submit][value=Tak]");
+        //await button.ClickAsync();
+
+        await Page.WaitForTimeoutAsync(7000);
 
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-        await Page.WaitForTimeoutAsync(7000);
-        await Expect(Page).ToHaveURLAsync(new Regex("/office-details/lunch"));
+        await Expect(Page).ToHaveURLAsync(new Regex("\\/office-details\\/reserve-desk"));
         //await Expect(Page).ToHaveTitleAsync(new Regex("Sign in to your account"));
     }
 }
