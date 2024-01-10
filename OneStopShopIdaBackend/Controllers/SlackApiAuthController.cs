@@ -28,18 +28,20 @@ public partial class SlackApiController : ControllerBase
             {
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1) // Adjust expiration as needed
             });
-
-            return Redirect(FrontendUri + state);
+            
+            return Redirect(FrontendUri + $"/popup-login?serverResponse={JsonSerializer.Serialize(StatusCode(200))}");
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.StatusCode} {ex.Message}");
-            return StatusCode((int)ex.StatusCode);
+            _logger.LogError($"{GetType().Name}\nError calling external API: {ex.Message}");
+            return Redirect(FrontendUri +
+                            $"/popup-login?serverResponse={JsonSerializer.Serialize(StatusCode(500))}");
         }
         catch (Exception ex)
         {
-            _logger.LogError($"{this.GetType().Name}\nError calling external API: {ex.Message}");
-            return Redirect(FrontendUri + $"/slack-auth?serverResponse={JsonSerializer.Serialize(StatusCode(500))}");
+            _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
+            return Redirect(FrontendUri +
+                            $"/popup-login?serverResponse={JsonSerializer.Serialize(StatusCode(500))}");
         }
     }
 
