@@ -2,9 +2,6 @@ import { Route } from "react-router-dom";
 import EmployeePortal from "../components/pages/employee-portal/EmployeePortal";
 import Home from "../components/pages/Home";
 import NotFound from "../components/pages/NotFound";
-import Utrecht from "../components/pages/offices/Utrecht";
-import Eindhoven from "../components/pages/offices/Eindhoven";
-import Amsterdam from "../components/pages/offices/Amsterdam";
 import Offices from "../components/pages/offices/Offices";
 import SickLeave from "../components/pages/employee-portal/SickLeave";
 import Vacation from "../components/pages/employee-portal/Vacation";
@@ -48,15 +45,10 @@ function Router(currentOfficeName: string) {
         <Route path="/company101" element={<Company101 />} />
         <Route path="/personal-skills" element={<PersonalSkills />} />
         <Route path="/expenses" element={<Expenses />} />
-        <Route path="/offices">
-          <Route index element={<Offices />} />
-          <Route path="utrecht" element={<Utrecht />} />
-          <Route path="eindhoven" element={<Eindhoven />} />
-          <Route path="amsterdam" element={<Amsterdam />} />
-        </Route>
+        <Route path="/offices" element={<Offices />} />
         <Route path="/settings" element={<Settings />} />
-        <Route path="/microsoft-auth" element={<AuthPage authTarget="microsoft" isAuth={MicrosoftIsAuth} authUrl={MicrosoftAuthUrl}/>} />
-        <Route path="/slack-auth" element={<AuthPage authTarget="slack" isAuth={SlackIsAuth} authUrl={SlackAuthUrl}/>} />
+        <Route path="/microsoft-auth" element={<AuthPage authTarget="microsoft" isAuth={MicrosoftIsAuth} authUrl={MicrosoftAuthUrl} />} />
+        <Route path="/slack-auth" element={<AuthPage authTarget="slack" isAuth={SlackIsAuth} authUrl={SlackAuthUrl} />} />
         <Route path="*" element={<NotFound />} />
       </Route>
       <Route path="/popup-login" element={<PopupLogin />} />

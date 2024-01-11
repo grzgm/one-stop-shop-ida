@@ -41,7 +41,7 @@ function Offices() {
       <OfficeMap switchOffice={SwitchOffice} closestOfficeName={closestOfficeName}/>
       <div className="content__panels">
         {(Object.values(officeInformationData)).map((office)=>{
-            return (<Panel linkAddress="/office-details" title={office.officeName} description={office.officeInformation.address} onClick={() => setCurrentOffice(office.officeName)} />)
+            return (<Panel key={office.officeName} linkAddress="/office-details" title={office.officeName} description={office.officeInformation.address} onClick={() => setCurrentOffice(office.officeName)} />)
         })}
       </div>
     </div>
