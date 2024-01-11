@@ -47,12 +47,18 @@ public partial class SlackApiController : ControllerBase
 
     [Authorize]
     [HttpGet("auth/is-auth")]
-    public async Task<ActionResult<bool>> GetCheckToken()
+    public async Task<ActionResult<bool>> GetIsAuth()
     {
-        // Check if the accessToken are stored in memory cache
-        string slackAccessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}SlackAccessToken");
-        bool isToken = slackAccessToken != null;
+        try
+        {
+            string slackAccessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}SlackAccessToken");
+            bool isToken = slackAccessToken != null;
 
-        return isToken;
+            return isToken;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
     }
 }
