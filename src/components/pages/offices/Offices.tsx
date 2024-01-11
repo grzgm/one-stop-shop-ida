@@ -8,7 +8,7 @@ import { officeInformationData } from "../../../assets/OfficeInformationData";
 
 function Offices() {
   const { setCurrentOffice } = useContext(CurrentOfficeContext);
-  const [closestOfficeName, setClosestOfficeName] = useState<string | null>(null);
+  const [closestOfficeName, setClosestOfficeName] = useState<string | undefined>(undefined);
   const navigate = useNavigate();
 
   useEffect(() => {

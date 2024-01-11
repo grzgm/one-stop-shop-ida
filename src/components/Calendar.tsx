@@ -10,8 +10,8 @@ import React from "react";
 
 function Calendar() {
   const [displayedDate, setDisplayedDate] = useState(new Date());
-  const [startSelected, setStartSelected] = useState<Date | null>(null);
-  const [endSelected, setEndSelected] = useState<Date | null>(null);
+  const [startSelected, setStartSelected] = useState<Date | undefined>(undefined);
+  const [endSelected, setEndSelected] = useState<Date | undefined>(undefined);
   const [selectSwitch, setSelectSwitch] = useState(false);
 
   const PreviousMonth = () => {
@@ -48,7 +48,7 @@ function Calendar() {
     }
   };
 
-  const GetData = (startSelected: Date | null, endSelected: Date | null) => {
+  const GetData = (startSelected: Date | undefined, endSelected: Date | undefined) => {
     console.log(startSelected, endSelected);
   }
 
@@ -77,10 +77,10 @@ function Calendar() {
       <div className="calendar__time-date-pickers">
         <div className="calendar__time-date-picker calendar__time-date-picker__start">
           Start:{" "}
-          {startSelected == null ? "-" : startSelected.toLocaleDateString()}
+          {startSelected == undefined ? "-" : startSelected.toLocaleDateString()}
         </div>
         <div className="calendar__time-date-picker calendar__time-date-picker__end">
-          End: {endSelected == null ? "-" : endSelected.toLocaleDateString()}
+          End: {endSelected == undefined ? "-" : endSelected.toLocaleDateString()}
         </div>
       </div>
       <div className="calendar__info">
@@ -106,8 +106,8 @@ function GetDayNumberInWeek(date: Date): number {
 function GenerateCalendarDays(
   year: number,
   month: number,
-  selectedStart: Date | null,
-  selectedEnd: Date | null,
+  selectedStart: Date | undefined,
+  selectedEnd: Date | undefined,
   selectDate: (dayNumber: number) => void
 ) {
   let days = Array.from({ length: 42 }, (_, index) => <div key={index} />);
@@ -180,8 +180,8 @@ function GenerateCalendarDays(
 interface CalendarMonthProps {
   year: number;
   month: number;
-  selectedStart: Date | null;
-  selectedEnd: Date | null;
+  selectedStart: Date | undefined;
+  selectedEnd: Date | undefined;
   selectDate: (dayNumber: number) => void;
 }
 

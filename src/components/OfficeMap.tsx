@@ -7,7 +7,7 @@ const mapStyles = {
 };
 
 interface OfficeMapProps {
-    closestOfficeName?: string | null;
+    closestOfficeName?: string | undefined;
     switchOffice: (officeName: string) => void;
 }
 
