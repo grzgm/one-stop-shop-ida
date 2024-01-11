@@ -1,4 +1,4 @@
-import OfficeSpace from "../../OfficeSpace";
+import OfficeSpace from "./OfficeSpace";
 import { BodyNormal, BodySmall, HeadingLarge } from "../../text-wrapers/TextWrapers";
 import "../../../css/components/pages/office-details/reserve-desk.css"
 import { officeInformationData } from "../../../assets/OfficeInformationData";

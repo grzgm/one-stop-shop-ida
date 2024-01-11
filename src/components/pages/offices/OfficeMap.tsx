@@ -1,5 +1,5 @@
 import { GoogleMap, InfoWindow, MarkerF, useLoadScript } from '@react-google-maps/api';
-import { officeInformationData } from '../assets/OfficeInformationData';
+import { officeInformationData } from '../../../assets/OfficeInformationData';
 
 const mapStyles = {
     height: '400px',

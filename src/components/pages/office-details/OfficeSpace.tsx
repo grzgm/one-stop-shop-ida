@@ -1,11 +1,11 @@
-import "../css/components/office-space.css";
+import "../../../css/components/office-space.css";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
-import Button from "./Buttons";
+import Button from "../../Buttons";
 import { useContext, useEffect, useState } from "react";
-import CurrentOfficeContext from "../contexts/CurrentOfficeContext";
-import { DeleteDeskReservation, GetDeskReservationOfficeLayout, GetDeskReservationsForOfficeDate, IDesk, IDeskReservationItem, IDeskReservationsDay, PostDeskReservation } from "../api/DeskReservationAPI";
-import AlertContext from "../contexts/AlertContext";
+import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
+import { DeleteDeskReservation, GetDeskReservationOfficeLayout, GetDeskReservationsForOfficeDate, IDesk, IDeskReservationItem, IDeskReservationsDay, PostDeskReservation } from "../../../api/DeskReservationAPI";
+import AlertContext from "../../../contexts/AlertContext";
 
 export class Desk {
     clusterId: string

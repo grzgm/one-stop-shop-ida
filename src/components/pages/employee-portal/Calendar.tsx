@@ -1,10 +1,10 @@
-import "../css/components/calendar.css";
+import "../../../css/components/calendar.css";
 import {
   BodySmall,
-} from "./text-wrapers/TextWrapers";
+} from "../../text-wrapers/TextWrapers";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
-import Button from "./Buttons";
+import Button from "../../Buttons";
 import { useState } from "react";
 import React from "react";
 

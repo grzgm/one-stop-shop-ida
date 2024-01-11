@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { BodyNormal, HeadingLarge } from "../../text-wrapers/TextWrapers";
 import Panel from "../../tiles/Panel";
 import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
-import OfficeMap from "../../OfficeMap";
+import OfficeMap from "./OfficeMap";
 import { useNavigate } from "react-router-dom";
 import { officeInformationData } from "../../../assets/OfficeInformationData";
 

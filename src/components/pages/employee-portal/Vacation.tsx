@@ -1,5 +1,5 @@
 import "../../../css/components/pages/employee-portal/vacation.css"
-import Calendar from "../../Calendar";
+import Calendar from "./Calendar";
 import { BodyNormal, HeadingLarge } from "../../text-wrapers/TextWrapers";
 
 function Vacation() {
