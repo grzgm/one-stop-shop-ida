@@ -19,22 +19,23 @@ async function AuthUrl(): Promise<IActionResult<string>> {
 	}
 }
 
-async function SendEmail(message: string, address: string): Promise<IActionResult<undefined>> {
-	try {
-		return await ExecuteApiCall<undefined>(`/microsoft/resources/send-email?message=${encodeURI(message)}&address=${encodeURI(address)}`, "POST");
-	} catch (error) {
-		console.error("Error:", error);
-		return { success: false, statusText: "Request could not be send." };
-	}
-}
+// async function SendEmail(message: string, address: string): Promise<IActionResult<undefined>> {
+// 	try {
+// 		return await ExecuteApiCall<undefined>(`/microsoft/resources/send-email?message=${encodeURI(message)}&address=${encodeURI(address)}`, "POST");
+// 	} catch (error) {
+// 		console.error("Error:", error);
+// 		return { success: false, statusText: "Request could not be send." };
+// 	}
+// }
 
-async function CreateEvent(address: string, title: string, startDate: string, endDate: string, description?: string): Promise<IActionResult<undefined>> {
-	try {
-		return await ExecuteApiCall<undefined>(`/microsoft/resources/create-event?address=${encodeURI(address)}&title=${title}&startDate=${startDate}&endDate=${endDate}&description=${description}`, "GET");
-	} catch (error) {
-		console.error("Error:", error);
-		return { success: false, statusText: "Request could not be send." };
-	}
-}
+// async function CreateEvent(address: string, title: string, startDate: string, endDate: string, description?: string): Promise<IActionResult<undefined>> {
+// 	try {
+// 		return await ExecuteApiCall<undefined>(`/microsoft/resources/create-event?address=${encodeURI(address)}&title=${title}&startDate=${startDate}&endDate=${endDate}&description=${description}`, "GET");
+// 	} catch (error) {
+// 		console.error("Error:", error);
+// 		return { success: false, statusText: "Request could not be send." };
+// 	}
+// }
 
-export { IsAuth, AuthUrl, SendEmail, CreateEvent };
+// export { IsAuth, AuthUrl, SendEmail, CreateEvent };
+export { IsAuth, AuthUrl };
