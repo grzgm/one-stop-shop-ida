@@ -16,7 +16,7 @@ import Expenses from "../components/pages/Expenses";
 import Settings from "../components/pages/Settings";
 // import ReserveDeskOverview from "../components/pages/office-details/ReserveDeskOverview";
 import Scheduling from "../components/pages/employee-portal/Scheduling";
-import AppOverlay from "../AppOverlay";
+import AppOverlay, { AppLoader } from "../AppOverlay";
 import PopupLogin from "../components/pages/auth-pages/PopupLogin";
 import AuthPage from "../components/pages/auth-pages/AuthPage";
 import { AuthUrl as MicrosoftAuthUrl, IsAuth as MicrosoftIsAuth } from "../api/MicrosoftGraphAPI";
@@ -26,7 +26,7 @@ function Router(currentOfficeName: string) {
 
   return (
     <>
-      <Route path="/" element={<AppOverlay />}>
+      <Route path="/" element={<AppOverlay />} loader={async () => await AppLoader()}>
         <Route index element={<Home />} />
         <Route path="/employee-portal">
           <Route index element={<EmployeePortal />} />
@@ -47,10 +47,10 @@ function Router(currentOfficeName: string) {
         <Route path="/expenses" element={<Expenses />} />
         <Route path="/offices" element={<Offices />} />
         <Route path="/settings" element={<Settings />} />
-        <Route path="/microsoft-auth" element={<AuthPage authTarget="microsoft" isAuth={MicrosoftIsAuth} authUrl={MicrosoftAuthUrl} />} />
         <Route path="/slack-auth" element={<AuthPage authTarget="slack" isAuth={SlackIsAuth} authUrl={SlackAuthUrl} />} />
         <Route path="*" element={<NotFound />} />
       </Route>
+      <Route path="/microsoft-auth" element={<AuthPage authTarget="microsoft" isAuth={MicrosoftIsAuth} authUrl={MicrosoftAuthUrl} />} />
       <Route path="/popup-login" element={<PopupLogin />} />
     </>
   );

@@ -1,7 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import Navbar from "./components/bars/Navbar";
 import Sidebar from "./components/bars/Sidebar";
-import { Outlet } from "react-router-dom";
+import { Outlet, redirect } from "react-router-dom";
+import { IsAuth } from "./api/MicrosoftGraphAPI";
+
+async function AppLoader() {
+    if ((await IsAuth()).payload) {
+        return null
+    }
+    else {
+        return redirect(`/microsoft-auth?previousLocation=${encodeURI("/")}`)
+    }
+}
 
 function AppOverlay() {
     const navbarOptionsRef = useRef<HTMLDivElement>(null);
@@ -45,3 +55,4 @@ function AppOverlay() {
 }
 
 export default AppOverlay;
+export { AppLoader };
