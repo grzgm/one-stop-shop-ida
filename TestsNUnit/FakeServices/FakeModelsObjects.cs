@@ -2,7 +2,7 @@
 
 namespace TestsNUnit.FakeServices;
 
-public static class ModelsObjectsFake
+public static class FakeModelsObjects
 {
     public static string testAccessToken = "testAccessToken";
     public static string testRefreshToken = "testRefreshToken";

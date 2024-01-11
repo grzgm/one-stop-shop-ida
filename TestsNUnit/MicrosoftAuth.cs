@@ -18,7 +18,7 @@ public class MicrosoftAuth
         // Create Microsoft Graph Api Service
         MicrosoftGraphApiService microsoftGraphApiServiceFake =
             new(new Logger<MicrosoftGraphApiService>(new LoggerFactory()),
-                ConfigurationFake.GetConfiguration(),
+                FakeConfiguration.GetConfiguration(),
                 new HttpClient(),
                 new CodeChallengeGeneratorService());
     }

@@ -1,25 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using OneStopShopIdaBackend.Models;
 using OneStopShopIdaBackend.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace TestsNUnit.FakeServices;
-internal class DatabaseServiceFake : DbContext, IDatabaseService
+internal class FakeDatabaseService : DbContext, IDatabaseService
 {
-    public DatabaseServiceFake(DbContextOptions<DatabaseServiceFake> options): base(options)
+    public FakeDatabaseService(DbContextOptions<FakeDatabaseService> options): base(options)
     {
     }
 
     public DbSet<LunchDaysItem> LunchDays { get; set; }
     public DbSet<LunchRegistrationsItem> LunchRegistrations { get; set; }
     public DbSet<PushSubscription> PushSubscription { get; set; }
+    public DbSet<OfficeDeskLayoutsItem> OfficeDeskLayouts { get; set; }
+    public DbSet<DeskReservationItem> DeskReservation { get; set; }
     public DbSet<UserItem> Users { get; set; }
 
     public void CheckOrGenerateVapidDetails(string vapidSubject, string vapidPublicKey, string vapidPrivateKey)
@@ -33,6 +27,11 @@ internal class DatabaseServiceFake : DbContext, IDatabaseService
     }
 
     public Task<LunchRegistrationsItem> GetLunchIsRegisteredToday(string microsoftId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<OfficeDeskLayoutsItem>> GetOfficeDeskLayoutForOffice(string office)
     {
         throw new NotImplementedException();
     }
@@ -101,6 +100,42 @@ internal class DatabaseServiceFake : DbContext, IDatabaseService
     }
 
     public Task SendNotificationsToUsers(Notification notification, List<UserItem> userItems)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task SendNotificationsToUser(Notification notification, UserItem userItem)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<DeskReservationItem>> GetDeskReservationForOfficeDate(string office, DateTime startDate, DateTime endDate)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<DeskReservationItem>> GetDeskReservationsOfUser(string microsoftId, string office, DateTime startDate, DateTime endDate)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task PutDeskReservation(DeskReservationItem deskReservationItem)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task PostDeskReservations(List<DeskReservationItem> deskReservationItems)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task DeleteDeskReservations(List<DeskReservationItem> deskReservationItems)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> AreDeskResservationTimeslotsDifferent(string microsoftId, string office, DateTime startDate, DateTime endDate,
+        List<DeskReservationItem> newDeskReservationItems)
     {
         throw new NotImplementedException();
     }

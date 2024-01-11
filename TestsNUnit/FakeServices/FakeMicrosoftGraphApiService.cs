@@ -3,9 +3,9 @@ using OneStopShopIdaBackend.Models;
 using OneStopShopIdaBackend.Services;
 
 namespace TestsNUnit.FakeServices;
-public class MicrosoftGraphApiServiceFake : IMicrosoftGraphApiService
+public class FakeMicrosoftGraphApiService : IMicrosoftGraphApiService
 {
-    public MicrosoftGraphApiServiceFake()
+    public FakeMicrosoftGraphApiService()
     {
     }
 
@@ -31,7 +31,7 @@ public class MicrosoftGraphApiServiceFake : IMicrosoftGraphApiService
 
     public async Task<UserItem> GetMe(string accessToken)
     {
-        return ModelsObjectsFake.testUserItem;
+        return FakeModelsObjects.testUserItem;
     }
 
     public Task<HttpResponseMessage> SendEmail(string accessToken, string address, string subject, string message)

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace TestsNUnit.FakeServices;
 
-public static class HttpContextFake
+public static class FakeHttpContext
 {
     public static HttpContext GetHttpContextFake()
     {

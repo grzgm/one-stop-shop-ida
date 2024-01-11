@@ -2,7 +2,7 @@
 
 namespace TestsNUnit.FakeServices;
 
-public static class ConfigurationFake
+public static class FakeConfiguration
 {
     public static IConfiguration GetConfiguration()
     {

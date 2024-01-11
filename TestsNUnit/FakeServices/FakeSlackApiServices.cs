@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TestsNUnit.FakeServices;
-internal class SlackApiServicesFake : ISlackApiServices
+internal class FakeSlackApiServices : ISlackApiServices
 {
     public Task<string> CallAuthCallback(string code, string state)
     {
