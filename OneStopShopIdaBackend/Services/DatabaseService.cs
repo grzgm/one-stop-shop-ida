@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OneStopShopIdaBackend.Controllers;
 using OneStopShopIdaBackend.Models;
+using System.Reflection.Metadata;
 using WebPush;
 using PushSubscription = OneStopShopIdaBackend.Models.PushSubscription;
 
@@ -31,11 +32,14 @@ public partial class DatabaseService : DbContext, IDatabaseService
     }
 
     public DbSet<UserItem> Users { get; set; } = null!;
+    public DbSet<DeskReservationItem> DeskReservation { get; set; } = null!;
     public DbSet<LunchDaysItem> LunchDays { get; set; } = null!;
     public DbSet<LunchRegistrationsItem> LunchRegistrations { get; set; } = null!;
     public DbSet<PushSubscription> PushSubscription { get; set; } = null!;
     public DbSet<OfficeDeskLayoutsItem> OfficeDeskLayouts { get; set; } = null!;
-    public DbSet<DeskReservationItem> DeskReservation { get; set; } = null!;
+    public DbSet<OfficeFeaturesItem> OfficeFeatures { get; set; } = null!;
+    public DbSet<OfficeInformationItem> OfficeInformation { get; set; } = null!;
+    public DbSet<OfficeCoordinatesItem> OfficeCoordinates { get; set; } = null!;
 
     private void IsDbSetNull(string dbSetName)
     {

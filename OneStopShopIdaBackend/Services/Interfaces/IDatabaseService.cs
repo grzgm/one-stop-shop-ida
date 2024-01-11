@@ -44,4 +44,6 @@ public interface IDatabaseService
 
     Task<bool> AreDeskResservationTimeslotsDifferent(string microsoftId, string office, DateTime startDate,
         DateTime endDate, List<DeskReservationItem> newDeskReservationItems);
+    Task<List<OfficeFeaturesItem>> GetAllOfficeFeaturesItem();
+    Task<OfficeFeaturesItem> GetOfficeFeaturesItem(string officeName);
 }
