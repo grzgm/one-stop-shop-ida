@@ -8,6 +8,8 @@ using OneStopShopIdaBackend.Models;
 using TestsNUnit.FakeServices;
 using System.Text;
 using Microsoft.Extensions.Caching.Memory;
+using Azure.Core;
+using System.Security.Claims;
 
 namespace TestsNUnit;
 
@@ -16,10 +18,14 @@ internal class MicrosoftGraphApiControllerUnitTests
 {
     private FakeDatabaseService _fakeDatabaseService;
     private MicrosoftGraphApiController _microsoftGraphApiController;
+    private MemoryCache _memoryCache;
 
     [SetUp]
     public void Setup()
     {
+        // Fake cache
+        _memoryCache = new MemoryCache(new MemoryCacheOptions());
+
         // Create Fake Database
         var options = new DbContextOptionsBuilder<FakeDatabaseService>()
             .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -36,29 +42,24 @@ internal class MicrosoftGraphApiControllerUnitTests
         _microsoftGraphApiController = new MicrosoftGraphApiController(
             new Logger<MicrosoftGraphApiController>(new LoggerFactory()), 
             FakeConfiguration.GetConfiguration(),
-            new MemoryCache(new MemoryCacheOptions()),
+            _memoryCache,
             fakeMicrosoftGraphApiService,
             _fakeDatabaseService);
     }
 
     [Test]
-    // Check whether Controller saves user information to session correctly
+    // Check whether Controller saves user information to Memory Cache correctly
     public async Task GetAuthCallbackUserInDatabaseTest()
     {
         // Arrange
         // Add Test User Item to Fake Database
         await _fakeDatabaseService.PostUserItem(FakeModelsObjects.testUserItem);
-        // Fake Session
-        var httpContext = FakeHttpContext.GetHttpContextFake();
-        _microsoftGraphApiController.ControllerContext = new ControllerContext() { HttpContext = httpContext };
-        // Controller Response
-        IActionResult response;
 
         // Act
-        response = await _microsoftGraphApiController.GetAuthCallback("testCode", "testState");
+        await _microsoftGraphApiController.GetAuthCallback("testCode", "testUserGUID");
 
         // Assert
-        Assert.AreEqual(FakeModelsObjects.testAccessToken, _microsoftGraphApiController.HttpContext.Session.GetString("accessToken"));
+        Assert.That(_memoryCache.Get<string>($"testUserGUIDAccessToken"), Is.EqualTo(FakeModelsObjects.testAccessToken));
     }
 
     [Test]
@@ -66,57 +67,73 @@ internal class MicrosoftGraphApiControllerUnitTests
     public async Task GetAuthCallbackUserNotInDatabaseTest()
     {
         // Arrange
-        // Fake Session
+        // Fake Memory Cache
         var httpContext = FakeHttpContext.GetHttpContextFake();
         _microsoftGraphApiController.ControllerContext = new ControllerContext() { HttpContext = httpContext };
         // Controller Response
         IActionResult response;
 
         // Act
-        response = await _microsoftGraphApiController.GetAuthCallback("testCode", "testState");
+        response = await _microsoftGraphApiController.GetAuthCallback("testCode", "testUserGUID");
         UserItem userItem = await _fakeDatabaseService.GetUserItem(FakeModelsObjects.testUserItem.MicrosoftId);
         LunchDaysItem lunchDaysItem =
             await _fakeDatabaseService.GetRegisteredDays(FakeModelsObjects.testUserItem.MicrosoftId);
 
         // Assert
-        Assert.AreEqual(FakeModelsObjects.testUserItem.MicrosoftId, userItem.MicrosoftId);
-        Assert.AreEqual(FakeModelsObjects.TestLunchDaysItem.MicrosoftId, lunchDaysItem.MicrosoftId);
+        Assert.That(userItem.MicrosoftId, Is.EqualTo(FakeModelsObjects.testUserItem.MicrosoftId));
+        Assert.That(lunchDaysItem.MicrosoftId, Is.EqualTo(FakeModelsObjects.TestLunchDaysItem.MicrosoftId));
     }
 
     [Test]
-    // Check whether Controller saves user information to session correctly
+    // Check whether Controller saves user information to Memory Cache correctly
     public async Task GetAuthCallbackUserAuthorisedAlready()
     {
         // Arrange
         // Add Test User Item to Fake Database
         await _fakeDatabaseService.PostUserItem(FakeModelsObjects.testUserItem);
-        // Fake Session
-        var httpContext = FakeHttpContext.GetHttpContextFake();
-        httpContext.Session.SetString("accessToken", "oldAccessToken");
-        httpContext.Session.SetString("refreshToken", "oldRefreshToken");
-        _microsoftGraphApiController.ControllerContext = new ControllerContext() { HttpContext = httpContext };
+        // Fake Memory Cache
+        _memoryCache.Set("testUserGUIDAccessToken", "oldAccessToken", new MemoryCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1) // Adjust expiration as needed
+        });
+        _memoryCache.Set("testUserGUIDRefreshToken", "oldRefreshToken", new MemoryCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1) // Adjust expiration as needed
+        });
         // Controller Response
         IActionResult response;
 
         // Act
-        response = await _microsoftGraphApiController.GetAuthCallback("testCode", "testState");
+        response = await _microsoftGraphApiController.GetAuthCallback("testCode", "testUserGUID");
 
         // Assert
-        Assert.AreNotEqual("oldAccessToken", _microsoftGraphApiController.HttpContext.Session.GetString("accessToken"));
-        Assert.AreNotEqual("oldRefreshToken", _microsoftGraphApiController.HttpContext.Session.GetString("refreshToken"));
+        Assert.That(_memoryCache.Get<string>($"testUserGUIDAccessToken"), Is.Not.EqualTo("oldAccessToken"));
+        Assert.That(_memoryCache.Get<string>($"testUserGUIDRefreshToken"), Is.Not.EqualTo("oldRefreshToken"));
     }
-
 
     [Test]
     // Check whether Controller saves new user information to database correctly
     public async Task GetAuthRefreshTest()
     {
         // Arrange
-        // Fake Session
+        // Fake Memory Cache
+        _memoryCache.Set("testUserGUIDAccessToken", "oldAccessToken", new MemoryCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1) // Adjust expiration as needed
+        });
+        _memoryCache.Set("testUserGUIDRefreshToken", "oldRefreshToken", new MemoryCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1) // Adjust expiration as needed
+        });
+        // Fake Http Context
         var httpContext = FakeHttpContext.GetHttpContextFake();
-        httpContext.Session.SetString("accessToken", "oldAccessToken");
-        httpContext.Session.SetString("refreshToken", "oldRefreshToken");
         _microsoftGraphApiController.ControllerContext = new ControllerContext() { HttpContext = httpContext };
+        // Fake User Id from JWT
+        httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+        {
+            new Claim("UserId", "testUserGUID"),
+            // Add other claims as needed
+        }, "mock"));
         // Controller Response
         IActionResult response;
 
@@ -124,19 +141,77 @@ internal class MicrosoftGraphApiControllerUnitTests
         response = await _microsoftGraphApiController.GetAuthRefresh();
 
         // Assert
-        Assert.AreNotEqual("oldAccessToken", _microsoftGraphApiController.HttpContext.Session.GetString("accessToken"));
-        Assert.AreNotEqual("oldRefreshToken", _microsoftGraphApiController.HttpContext.Session.GetString("refreshToken"));
+        Assert.That(_memoryCache.Get<string>($"testUserGUIDAccessToken"), Is.Not.EqualTo("oldAccessToken"));
+        Assert.That(_memoryCache.Get<string>($"testUserGUIDRefreshToken"), Is.Not.EqualTo("oldRefreshToken"));
     }
 
     [Test]
-    public async Task GetCheckTokenTokenInSessionTest()
+    // Check whether Controller correctly returns information about user authentication
+    public async Task GetIsAuthUserAuthenticatedTest()
     {
         // Arrange
-        // Fake Session
+        // Fake Memory Cache
+        _memoryCache.Set("testUserGUIDAccessToken", FakeModelsObjects.testAccessToken, new MemoryCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1) // Adjust expiration as needed
+        });
+        _memoryCache.Set("testUserGUIDRefreshToken", FakeModelsObjects.testRefreshToken, new MemoryCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1) // Adjust expiration as needed
+        });
+        // Fake Http Context
         var httpContext = FakeHttpContext.GetHttpContextFake();
-        httpContext.Session.SetString("accessToken", "oldAccessToken");
-        httpContext.Session.SetString("refreshToken", "oldRefreshToken");
         _microsoftGraphApiController.ControllerContext = new ControllerContext() { HttpContext = httpContext };
+        // Fake User Id from JWT
+        httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+        {
+            new Claim("UserId", "testUserGUID"),
+            // Add other claims as needed
+        }, "mock"));
+        ActionResult<bool> response;
+
+        // Act
+        response = await _microsoftGraphApiController.GetIsAuth();
+
+        // Assert
+        Assert.That(response.Value, Is.EqualTo(true));
+    }
+
+    [Test]
+    // Check whether Controller correctly returns information about user authentication
+    public async Task GetIsAuthUserNotAuthenticatedTest()
+    {
+        // Arrange
+
+        // Act
+        var response = await _microsoftGraphApiController.GetIsAuth();
+
+        // Assert
+        Assert.That(response.Value, Is.EqualTo(false));
+    }
+
+    [Test]
+    public async Task GetCheckTokenTokenInMemoryCacheTest()
+    {
+        // Arrange
+        // Fake Memory Cache
+        _memoryCache.Set("testUserGUIDAccessToken", "oldAccessToken", new MemoryCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1) // Adjust expiration as needed
+        });
+        _memoryCache.Set("testUserGUIDRefreshToken", "oldRefreshToken", new MemoryCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1) // Adjust expiration as needed
+        });
+        // Fake Http Context
+        var httpContext = FakeHttpContext.GetHttpContextFake();
+        _microsoftGraphApiController.ControllerContext = new ControllerContext() { HttpContext = httpContext };
+        // Fake User Id from JWT
+        httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+        {
+            new Claim("UserId", "testUserGUID"),
+            // Add other claims as needed
+        }, "mock"));
         // Controller Response
         ActionResult<bool> response;
 
@@ -147,16 +222,22 @@ internal class MicrosoftGraphApiControllerUnitTests
 
         // Assert
         Assert.IsNotNull(okObjectResult);
-        Assert.AreEqual(true, isToken);
+        Assert.That(isToken, Is.EqualTo(true));
     }
 
     [Test]
-    public async Task GetCheckTokenTokenNotInSessionTest()
+    public async Task GetCheckTokenTokenNotInMemoryCacheTest()
     {
         // Arrange
-        // Fake Session
+        // Fake Http Context
         var httpContext = FakeHttpContext.GetHttpContextFake();
         _microsoftGraphApiController.ControllerContext = new ControllerContext() { HttpContext = httpContext };
+        // Fake User Id from JWT
+        httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+        {
+            new Claim("UserId", "testUserGUID"),
+            // Add other claims as needed
+        }, "mock"));
         // Controller Response
         ActionResult<bool> response;
 
@@ -167,6 +248,6 @@ internal class MicrosoftGraphApiControllerUnitTests
 
         // Assert
         Assert.IsNotNull(okObjectResult);
-        Assert.AreEqual(false, isToken);
+        Assert.That(isToken, Is.EqualTo(false));
     }
 }
