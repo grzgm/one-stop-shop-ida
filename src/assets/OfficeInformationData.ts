@@ -1,22 +1,29 @@
-export interface IOfficeInformationData {
-  officeName: string;
-  canReserveDesk: Boolean;
-  canRegisterLunch: Boolean;
-  canRegisterPresence: Boolean;
-  officeInformation: {
-    address: string;
-    coords: {
-      lat: number;
-      lng: number;
-    };
-    openingHours: string;
-    accessInformation: string;
-    parkingInformation: string;
-    lunchInformation: string;
-  };
+import { IOfficeFeatures } from "../api/OfficeFeaturesAPI";
+
+export const officeInformationUtrechtDefaultData: { [key: string]: IOfficeFeatures } = {
+  Utrecht: {
+    officeName: "Utrecht",
+    canReserveDesk: true,
+    canRegisterLunch: true,
+    canRegisterPresence: true,
+    officeInformation: {
+      address: "Orteliuslaan 25 3528BA",
+      coords: {
+        lat: 52.0722482,
+        lng: 5.0746558,
+      },
+      openingHours: "6:00 - 21:30 working days",
+      accessInformation:
+        "You need a Creative Valley Papendorp access pass to enter the Creative Valley building and its Xplore Group office.",
+      parkingInformation:
+        "Xplore Group has a limited number of parking lots available in the parking  garage. Provide the license plate of your car to the Xplore Group HR team via office@ida-mediafoundry.nl if you want to make use of these parking lots.",
+      lunchInformation:
+        "Lunch is served in the Creative Valley Papendorp “brasserie” (canteen) at 12 AM. Report via email to office@ida-mediafoundry.nl that you will have lunch in the canteen to have you added to the iDA NL lunch list",
+    },
+  },
 }
 
-export const officeInformationData: { [key: string]: IOfficeInformationData } = {
+export const officeInformationData: { [key: string]: IOfficeFeatures } = {
   Utrecht: {
     officeName: "Utrecht",
     canReserveDesk: true,

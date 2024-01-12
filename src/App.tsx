@@ -1,11 +1,14 @@
 import "./css/App.css";
 import Router from "./routes/Router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CurrentOfficeContext from "../src/contexts/CurrentOfficeContext.ts"
 import { RouterProvider, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
 import Cookies from "universal-cookie";
 import AlertContext from "./contexts/AlertContext.ts";
 import { Alert } from "./components/Alert.tsx";
+import { GetAllOfficeFeaturesItems, IOfficeFeatures } from "./api/OfficeFeaturesAPI.tsx";
+import OfficeFeaturesContext from "./contexts/OfficeFeaturesContext.ts";
+import { officeInformationUtrechtDefaultData } from "./assets/OfficeInformationData.ts";
 
 function App() {
 	// Current Office
@@ -22,6 +25,27 @@ function App() {
 		setCurrentOffice(newCurrentOffice);
 		cookies.set("currentOffice", newCurrentOffice, { path: '/', sameSite: 'none', secure: true });
 	}
+
+	// Office Features
+	const [officeFeatures, setOfficeFeatures] = useState(officeInformationUtrechtDefaultData)
+
+	useEffect(() => {
+		const getAllOfficeFeaturesItemsWrapper = async () => {
+			const res = await GetAllOfficeFeaturesItems()
+			const newOfficeFeatures: { [key: string]: IOfficeFeatures } = {};
+
+			if (res.payload) {
+				for (const office of res.payload) {
+					newOfficeFeatures[office.officeName] = office;
+				}
+			}
+
+			if (Object.keys(newOfficeFeatures).length > 0)
+				setOfficeFeatures(newOfficeFeatures)
+		}
+
+		getAllOfficeFeaturesItemsWrapper()
+	}, [])
 
 	// Alert System
 	const [alertText, setAlertText] = useState<string>("");
@@ -64,19 +88,21 @@ function App() {
 
 	return (
 		<>
-			<CurrentOfficeContext.Provider value={{ currentOffice: currentOffice, setCurrentOffice: setCurrentOfficeAndCookie }}>
-				<AlertContext.Provider value={{
-					alertText: alertText,
-					alertStatus: alertStatus,
-					setAlert: setAlert,
-					closeAlert: closeAlert,
-				}}>
-					<>
-						<RouterProvider router={customBrowserRouter} />
-						{alertText && <Alert alertText={alertText} alertStatus={alertStatus} alertLineLength={alertLineLength} onClick={closeAlert} />}
-					</>
-				</AlertContext.Provider>
-			</CurrentOfficeContext.Provider>
+			<OfficeFeaturesContext.Provider value={{ officeFeatures: officeFeatures }}>
+				<CurrentOfficeContext.Provider value={{ currentOffice: currentOffice, setCurrentOffice: setCurrentOfficeAndCookie }}>
+					<AlertContext.Provider value={{
+						alertText: alertText,
+						alertStatus: alertStatus,
+						setAlert: setAlert,
+						closeAlert: closeAlert,
+					}}>
+						<>
+							<RouterProvider router={customBrowserRouter} />
+							{alertText && <Alert alertText={alertText} alertStatus={alertStatus} alertLineLength={alertLineLength} onClick={closeAlert} />}
+						</>
+					</AlertContext.Provider>
+				</CurrentOfficeContext.Provider>
+			</OfficeFeaturesContext.Provider>
 		</>
 	);
 }
