@@ -6,7 +6,7 @@ interface CurrentOfficeContextProps {
 }
 
 const CurrentOfficeContext = createContext<CurrentOfficeContextProps>({
-  currentOffice: "",
+  currentOffice: "utrecht",
   setCurrentOffice: () => {},
 });
 
