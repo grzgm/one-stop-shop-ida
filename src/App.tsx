@@ -11,23 +11,18 @@ import OfficeFeaturesContext from "./contexts/OfficeFeaturesContext.ts";
 import { officeInformationUtrechtDefaultData } from "./assets/OfficeInformationData.ts";
 
 function App() {
-	// Current Office
-	const cookies = new Cookies();
-	let currentOfficeCookies = cookies.get("currentOffice")
+	// Current Office & Office Features
+	const [officeFeatures, setOfficeFeatures] = useState(officeInformationUtrechtDefaultData)
+	const [currentOffice, setCurrentOffice] = useState("utrecht")
 
-	if (!currentOfficeCookies) {
-		currentOfficeCookies = "utrecht"
-		cookies.set("currentOffice", JSON.stringify(currentOfficeCookies), { path: "/", sameSite: 'none', secure: true })
-	}
-	const [currentOffice, setCurrentOffice] = useState(currentOfficeCookies)
+	const cookies = new Cookies();
 
 	const setCurrentOfficeAndCookie = (newCurrentOffice: string) => {
-		setCurrentOffice(newCurrentOffice);
-		cookies.set("currentOffice", newCurrentOffice, { path: '/', sameSite: 'none', secure: true });
+		if (officeFeatures.hasOwnProperty(newCurrentOffice)) {
+			setCurrentOffice(newCurrentOffice);
+			cookies.set("currentOffice", newCurrentOffice, { path: '/', sameSite: 'none', secure: true });
+		}
 	}
-
-	// Office Features
-	const [officeFeatures, setOfficeFeatures] = useState(officeInformationUtrechtDefaultData)
 
 	useEffect(() => {
 		const getAllOfficeFeaturesItemsWrapper = async () => {
@@ -42,6 +37,15 @@ function App() {
 
 			if (Object.keys(newOfficeFeatures).length > 0)
 				setOfficeFeatures(newOfficeFeatures)
+
+				let currentOfficeCookies = cookies.get("currentOffice");
+				if (currentOfficeCookies && newOfficeFeatures.hasOwnProperty(currentOfficeCookies)) {
+					setCurrentOffice(currentOfficeCookies)
+				}
+				else{
+					currentOfficeCookies = currentOffice
+					cookies.set("currentOffice", JSON.stringify(currentOfficeCookies), { path: "/", sameSite: 'none', secure: true })
+				}
 		}
 
 		getAllOfficeFeaturesItemsWrapper()
@@ -83,7 +87,7 @@ function App() {
 	}
 
 	const customBrowserRouter = createBrowserRouter(createRoutesFromElements(
-		Router(currentOffice)
+		Router(officeFeatures[currentOffice])
 	))
 
 	return (
