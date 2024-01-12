@@ -3,11 +3,12 @@ import "../../css/components/pages/home.css";
 import { BodyNormal, HeadingLarge } from "../text-wrapers/TextWrapers";
 import { useContext } from "react";
 import CurrentOfficeContext from "../../contexts/CurrentOfficeContext";
-import { officeInformationData } from "../../assets/OfficeInformationData";
+import OfficeFeaturesContext from "../../contexts/OfficeFeaturesContext";
 
 function Home() {
   const officeName = useContext(CurrentOfficeContext).currentOffice;
-  const currentOfficeInformationData = officeInformationData[officeName]
+	const { officeFeatures } = useContext(OfficeFeaturesContext);
+  const currentOfficeInformationData = officeFeatures[officeName]
 
   const officeDetails = [(currentOfficeInformationData.canReserveDesk ? {linkAddress:"/office-details/reserve-desk", title:"Reserve a Desk", description:"Reserve a Desk"} : {}),
   (currentOfficeInformationData.canRegisterLunch ? {linkAddress:"/office-details/lunch", title:"Lunch", description:"Sign up for Lunch"} : {}),
