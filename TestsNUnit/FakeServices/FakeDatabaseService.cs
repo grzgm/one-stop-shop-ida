@@ -140,6 +140,16 @@ internal class FakeDatabaseService : DbContext, IDatabaseService
         throw new NotImplementedException();
     }
 
+    public Task<List<OfficeFeaturesItem>> GetAllOfficeFeaturesItem()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<OfficeFeaturesItem> GetOfficeFeaturesItem(string officeName)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<PushSubscription> Subscribe(PushSubscription subscription, string microsoftId)
     {
         throw new NotImplementedException();
