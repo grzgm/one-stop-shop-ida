@@ -4,10 +4,12 @@ import { officeInformationUtrechtDefaultData } from "../assets/OfficeInformation
 
 interface OfficeFeaturesContextProps {
   officeFeatures: { [key: string]: IOfficeFeatures };
+  setUpAllOfficeFeatures: () => void
 }
 
 const OfficeFeaturesContext = createContext<OfficeFeaturesContextProps>({
   officeFeatures: officeInformationUtrechtDefaultData,
+  setUpAllOfficeFeatures: () => {},
 });
 
 export default OfficeFeaturesContext;

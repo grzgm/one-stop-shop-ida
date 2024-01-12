@@ -9,9 +9,13 @@ import { IOfficeFeatures } from "../../../api/OfficeFeaturesAPI";
 
 function Offices() {
 	const { setCurrentOffice } = useContext(CurrentOfficeContext);
-	const { officeFeatures } = useContext(OfficeFeaturesContext);
+	const { officeFeatures, setUpAllOfficeFeatures } = useContext(OfficeFeaturesContext);
 	const [closestOfficeName, setClosestOfficeName] = useState<string | undefined>(undefined);
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		setUpAllOfficeFeatures()
+	}, []);
 
 	useEffect(() => {
 		if ('geolocation' in navigator) {

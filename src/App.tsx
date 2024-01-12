@@ -25,6 +25,20 @@ function App() {
 		}
 	}
 
+	const setUpAllOfficeFeatures = async () => {
+		const res = await GetAllOfficeFeaturesItems()
+		const newOfficeFeatures: { [key: string]: IOfficeFeatures } = {};
+
+		if (res.payload) {
+			for (const office of res.payload) {
+				newOfficeFeatures[office.officeName] = office;
+			}
+		}
+
+		if (Object.keys(newOfficeFeatures).length > 0)
+			setOfficeFeatures(newOfficeFeatures)
+	}
+
 	useEffect(() => {
 		const getAllOfficeFeaturesItemsWrapper = async () => {
 			const res = await GetAllOfficeFeaturesItems()
@@ -94,7 +108,7 @@ function App() {
 
 	return (
 		<>
-			<OfficeFeaturesContext.Provider value={{ officeFeatures: officeFeatures }}>
+			<OfficeFeaturesContext.Provider value={{ officeFeatures: officeFeatures, setUpAllOfficeFeatures: setUpAllOfficeFeatures }}>
 				<CurrentOfficeContext.Provider value={{ currentOffice: currentOffice, setCurrentOffice: setCurrentOfficeAndCookie }}>
 					<AlertContext.Provider value={{
 						alertText: alertText,
