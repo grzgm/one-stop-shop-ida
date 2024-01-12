@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import { BodyNormal, BodySmall, HeadingLarge, HeadingSmall } from "../../text-wrapers/TextWrapers";
 import Button from "../../Buttons";
 import "../../../css/components/pages/office-details/lunch.css"
-import { officeInformationData } from "../../../assets/OfficeInformationData";
 import { redirect } from "react-router-dom";
 import { IsAuth } from "../../../api/MicrosoftGraphAPI";
 import { IsAuth as IsAuthSlack } from "../../../api/SlackAPI";
@@ -12,6 +11,7 @@ import { GetRegisteredDays, ILunchDaysItem, PutLunchDaysItem } from "../../../ap
 import { PostSubscribe } from "../../../api/PushAPI";
 import AlertContext from "../../../contexts/AlertContext";
 import { IOfficeFeatures } from "../../../api/OfficeFeaturesAPI";
+import OfficeFeaturesContext from "../../../contexts/OfficeFeaturesContext";
 
 async function LunchLoader(currentOfficeFeatures: IOfficeFeatures) {
 	if (currentOfficeFeatures && currentOfficeFeatures.canRegisterLunch == true) {
@@ -30,6 +30,7 @@ async function LunchLoader(currentOfficeFeatures: IOfficeFeatures) {
 
 function Lunch() {
 	const officeName = useContext(CurrentOfficeContext).currentOffice;
+	const { officeFeatures } = useContext(OfficeFeaturesContext);
 	const [isPushEnabled, setIsPushEnabled] = useState(false);
 	const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 	const { setAlert } = useContext(AlertContext);
@@ -52,9 +53,9 @@ function Lunch() {
 		((todayRegistration?.registrationDate && isToday(todayRegistration.registrationDate)) ?
 			capitalizeFirstLetter(todayRegistration.office) : officeName);
 
-	let offices = Object.keys(officeInformationData)
-		.filter(key => officeInformationData[key].canRegisterLunch)
-		.map(key => officeInformationData[key].officeName);
+	let offices = Object.keys(officeFeatures)
+		.filter(key => officeFeatures[key].canRegisterLunch)
+		.map(key => officeFeatures[key].officeName);
 	// offices = [officeName, ...offices.filter(value => value !== officeName)]
 
 	const handleOfficeDropdownChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
