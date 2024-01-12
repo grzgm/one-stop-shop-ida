@@ -4,7 +4,11 @@ import { InspectResponseSync } from '../../../api/Response';
 import { useEffect, useState } from 'react';
 import "../../../css/auth-pages.css"
 
-function PopupLogin() {
+export interface PopupLoginProps {
+    authTarget: string,
+}
+
+function PopupLogin({ authTarget }: PopupLoginProps) {
     const [countDown, setCountDown] = useState(5);
 
     useEffect(() => {
@@ -40,7 +44,7 @@ function PopupLogin() {
     return (
         <div className="popup__content">
             <div className="description">
-                <HeadingLarge>Microsoft Account</HeadingLarge>
+                <HeadingLarge>{capitalizeFirstLetter(authTarget)} Account</HeadingLarge>
                 {serverResponse && InspectResponseSync(serverResponse).success ?
                     <>
                         <BodyNormal additionalClasses={["font-colour--success"]}>You have been loged in</BodyNormal>
@@ -64,6 +68,10 @@ function isValidJSON(str: string) {
     } catch (e) {
         return false;
     }
+}
+
+function capitalizeFirstLetter(str: string) {
+	return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 export default PopupLogin;

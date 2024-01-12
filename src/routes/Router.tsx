@@ -52,7 +52,7 @@ function Router(currentOfficeFeatures: IOfficeFeatures) {
         <Route path="*" element={<NotFound />} />
       </Route>
       <Route path="/microsoft-auth" element={<AuthPage authTarget="microsoft" isAuth={MicrosoftIsAuth} authUrl={MicrosoftAuthUrl} />} />
-      <Route path="/popup-login" element={<PopupLogin />} />
+      <Route path="/popup-login" element={<PopupLogin authTarget="microsoft" />} />
     </>
   );
 }
