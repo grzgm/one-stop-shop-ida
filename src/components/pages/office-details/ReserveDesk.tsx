@@ -1,13 +1,12 @@
 import OfficeSpace from "./OfficeSpace";
 import { BodyNormal, BodySmall, HeadingLarge } from "../../text-wrapers/TextWrapers";
 import "../../../css/components/pages/office-details/reserve-desk.css"
-import { officeInformationData } from "../../../assets/OfficeInformationData";
 import { redirect } from "react-router-dom";
 import { IsAuth } from "../../../api/MicrosoftGraphAPI";
+import { IOfficeFeatures } from "../../../api/OfficeFeaturesAPI";
 
-async function ReserveDeskLoader(officeName: string) {
-	const currentOfficeInformationData = officeInformationData[officeName]
-	if (currentOfficeInformationData && currentOfficeInformationData.canReserveDesk == true) {
+async function ReserveDeskLoader(currentOfficeFeatures: IOfficeFeatures) {
+	if (currentOfficeFeatures && currentOfficeFeatures.canReserveDesk == true) {
 		if ((await IsAuth()).payload) {
 			return null
 		}

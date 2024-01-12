@@ -1,9 +1,8 @@
-import { officeInformationData } from "../../../assets/OfficeInformationData";
 import { redirect } from "react-router-dom";
+import { IOfficeFeatures } from "../../../api/OfficeFeaturesAPI";
 
-function PresenceLoader(officeName: string) {
-      const currentOfficeInformationData = officeInformationData[officeName]
-      if (currentOfficeInformationData && currentOfficeInformationData.canRegisterPresence == true) {
+function PresenceLoader(currentOfficeFeatures: IOfficeFeatures) {
+      if (currentOfficeFeatures && currentOfficeFeatures.canRegisterPresence == true) {
             return null
       }
       throw redirect("/")

@@ -11,10 +11,10 @@ import { ILunchRegistrationsItem, IsRegistered, PutLunchRegistrationsItem } from
 import { GetRegisteredDays, ILunchDaysItem, PutLunchDaysItem } from "../../../api/LunchDaysAPI";
 import { PostSubscribe } from "../../../api/PushAPI";
 import AlertContext from "../../../contexts/AlertContext";
+import { IOfficeFeatures } from "../../../api/OfficeFeaturesAPI";
 
-async function LunchLoader(officeName: string) {
-	const currentOfficeInformationData = officeInformationData[officeName]
-	if (currentOfficeInformationData.canRegisterLunch == true) {
+async function LunchLoader(currentOfficeFeatures: IOfficeFeatures) {
+	if (currentOfficeFeatures && currentOfficeFeatures.canRegisterLunch == true) {
 		if (!(await IsAuthSlack()).payload) {
 			return redirect(`/slack-auth?previousLocation=${encodeURI("/office-details/lunch")}`)
 		}
