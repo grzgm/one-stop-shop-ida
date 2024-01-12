@@ -25,6 +25,7 @@ public class OfficeFeaturesItemsController : CustomControllerBase
     public async Task<ActionResult<OfficeFeaturesItem>> GetOfficeFeaturesItem([FromRoute] string office)
     {
         string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
+        await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken);
         office = office.ToLower();
 
         return (await _databaseService.GetOfficeFeaturesItem(office));
@@ -34,6 +35,7 @@ public class OfficeFeaturesItemsController : CustomControllerBase
     public async Task<ActionResult<List<OfficeFeaturesItem>>> GetAllOfficeFeaturesItem()
     {
         string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
+        await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken);
 
         return await _databaseService.GetAllOfficeFeaturesItem();
     }
