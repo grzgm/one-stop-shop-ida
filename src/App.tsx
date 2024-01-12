@@ -16,7 +16,7 @@ function App() {
 	let currentOfficeCookies = cookies.get("currentOffice")
 
 	if (!currentOfficeCookies) {
-		currentOfficeCookies = "Utrecht"
+		currentOfficeCookies = "utrecht"
 		cookies.set("currentOffice", JSON.stringify(currentOfficeCookies), { path: "/", sameSite: 'none', secure: true })
 	}
 	const [currentOffice, setCurrentOffice] = useState(currentOfficeCookies)

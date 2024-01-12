@@ -1,12 +1,14 @@
 import { useContext } from "react";
 import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
-import { officeInformationData } from "../../../assets/OfficeInformationData";
 import { BodyNormal, HeadingLarge, HeadingSmall } from "../../text-wrapers/TextWrapers";
 import "../../../css/components/pages/office-details/office-information.css"
+import OfficeFeaturesContext from "../../../contexts/OfficeFeaturesContext";
+import { officeInformationUtrechtDefaultData } from "../../../assets/OfficeInformationData";
 
 function OfficeInformation() {
-	const officeName = useContext(CurrentOfficeContext).currentOffice;
-	const currentOfficeInformationData = officeInformationData[officeName]
+	const officeName = useContext(CurrentOfficeContext).currentOffice ?? 'Utrecht';
+	const { officeFeatures } = useContext(OfficeFeaturesContext) ?? {officeInformationUtrechtDefaultData};
+	const currentOfficeInformationData = officeFeatures[officeName.toLocaleLowerCase()]
 
 	return (
 		<div className="content">

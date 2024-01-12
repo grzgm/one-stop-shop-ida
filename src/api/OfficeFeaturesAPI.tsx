@@ -8,7 +8,7 @@ export interface IOfficeFeatures {
     canRegisterPresence: Boolean;
     officeInformation: {
       address: string;
-      coords: {
+      officeCoordinates: {
         lat: number;
         lng: number;
       };

@@ -26,7 +26,7 @@ function Offices() {
 		} else {
 			console.error('Geolocation not supported');
 		}
-	}, []);
+	}, [officeFeatures]);
 
 	const SwitchOffice = (officeName: string) => {
 		setCurrentOffice(officeName);
@@ -40,7 +40,7 @@ function Offices() {
 				<BodyNormal>Pick from the map</BodyNormal>
 				<BodyNormal>or tap on the office!</BodyNormal>
 			</div>
-			<OfficeMap switchOffice={SwitchOffice} closestOfficeName={closestOfficeName} />
+			<OfficeMap switchOffice={SwitchOffice} closestOfficeName={closestOfficeName} officeFeatures={officeFeatures} />
 			<div className="content__panels">
 				{(Object.values(officeFeatures)).map((office) => {
 					return (<Panel key={office.officeName} linkAddress="/office-details" title={office.officeName} description={office.officeInformation.address} onClick={() => setCurrentOffice(office.officeName)} />)
@@ -52,11 +52,11 @@ function Offices() {
 
 function CalculateClosestOffice(officeFeatures: { [key: string]: IOfficeFeatures }, userLat: number, userLng: number) {
 	let firstOffice = Object.values(officeFeatures)[0]
-	let shortestDistance = CalculateDistance(userLat, userLng, firstOffice.officeInformation.coords.lat, firstOffice.officeInformation.coords.lng);
+	let shortestDistance = CalculateDistance(userLat, userLng, firstOffice.officeInformation.officeCoordinates.lat, firstOffice.officeInformation.officeCoordinates.lng);
 	let closestOfficeName = firstOffice.officeName;
 
 	for (let office of Object.values(officeFeatures)) {
-		let newDistance = CalculateDistance(userLat, userLng, office.officeInformation.coords.lat, office.officeInformation.coords.lng);
+		let newDistance = CalculateDistance(userLat, userLng, office.officeInformation.officeCoordinates.lat, office.officeInformation.officeCoordinates.lng);
 		if (newDistance < shortestDistance) {
 			shortestDistance = newDistance;
 			closestOfficeName = office.officeName;
