@@ -18,6 +18,7 @@ function App() {
 	const cookies = new Cookies();
 
 	const setCurrentOfficeAndCookie = (newCurrentOffice: string) => {
+		newCurrentOffice = newCurrentOffice.toLowerCase()
 		if (officeFeatures.hasOwnProperty(newCurrentOffice)) {
 			setCurrentOffice(newCurrentOffice);
 			cookies.set("currentOffice", newCurrentOffice, { path: '/', sameSite: 'none', secure: true });
@@ -39,6 +40,7 @@ function App() {
 				setOfficeFeatures(newOfficeFeatures)
 
 				let currentOfficeCookies = cookies.get("currentOffice");
+				currentOfficeCookies = currentOfficeCookies.toLowerCase();
 				if (currentOfficeCookies && newOfficeFeatures.hasOwnProperty(currentOfficeCookies)) {
 					setCurrentOffice(currentOfficeCookies)
 				}

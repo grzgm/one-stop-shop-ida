@@ -43,7 +43,7 @@ function Offices() {
 			<OfficeMap switchOffice={SwitchOffice} closestOfficeName={closestOfficeName} officeFeatures={officeFeatures} />
 			<div className="content__panels">
 				{(Object.values(officeFeatures)).map((office) => {
-					return (<Panel key={office.officeName} linkAddress="/office-details" title={office.officeName} description={office.officeInformation.address} onClick={() => setCurrentOffice(office.officeName)} />)
+					return (<Panel key={office.officeName} linkAddress="/office-details" title={capitalizeFirstLetter(office.officeName)} description={office.officeInformation.address} onClick={() => setCurrentOffice(office.officeName)} />)
 				})}
 			</div>
 		</div>
@@ -81,6 +81,10 @@ function CalculateDistance(userLat: number, userLng: number, destLat: number, de
 	// console.log("userLat: ", userLat, "userLng: ", userLng, "destLat: ", destLat, "destLng: ", destLng)
 	// console.log("distance ", distance)
 	return distance;
+}
+
+function capitalizeFirstLetter(str: string) {
+	return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 export default Offices;
