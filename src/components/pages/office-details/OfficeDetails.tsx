@@ -2,11 +2,12 @@ import { useContext } from "react";
 import { BodyNormal, HeadingLarge } from "../../text-wrapers/TextWrapers";
 import Panel from "../../tiles/Panel";
 import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
-import { officeInformationData } from "../../../assets/OfficeInformationData";
+import OfficeFeaturesContext from "../../../contexts/OfficeFeaturesContext";
 
 function OfficeDetails() {
   const officeName = useContext(CurrentOfficeContext).currentOffice;
-  const currentOfficeInformationData = officeInformationData[officeName]
+	const { officeFeatures } = useContext(OfficeFeaturesContext);
+  const currentOfficeInformationData = officeFeatures[officeName]
 
   return (
     <div className="content">
