@@ -52,7 +52,7 @@ internal class OneStopShopIntegrationTests : PageTest
         // Microsoft Two step Auth
         //string divTextContent = await Page.TextContentAsync("#idRichContext_DisplaySign");
 
-        await microsoftAuthPage.WaitForTimeoutAsync(20000);
+        await microsoftAuthPage.WaitForTimeoutAsync(15000);
 
         // if asks to show message everytime
         //button = await newPage.QuerySelectorAsync("input[type=submit][value=Tak]");
@@ -63,5 +63,19 @@ internal class OneStopShopIntegrationTests : PageTest
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         await Expect(Page).ToHaveURLAsync("http://localhost:5173/office-details/reserve-desk");
+        await Page.WaitForTimeoutAsync(1000);
+        // Find the div with class "desk-cluster" and id "0"
+        await Page.Locator("#dc0 > #d3").ClickAsync();
+        //
+        await Page.Locator("input[type=checkbox]").First.ClickAsync();
+        // 
+        await Page.Locator("button[type=button]").ClickAsync();
+        await Page.WaitForTimeoutAsync(1000); 
+        // Wait for an alert with class "alert" and text "Successfully Reserved."
+        var successAlertElement = await Page.QuerySelectorAsync(".alert:has-text('Successfully Reserved.')");
+
+        // Wait for an alert with class "alert" and text "You have too many desk Reservations."
+        var errorAlertElement = await Page.QuerySelectorAsync(".alert:has-text('You have too many desk Reservations.')");
+        Assert.IsNotNull(successAlertElement ?? errorAlertElement, "Alert element not found on the page.");
     }
 }
