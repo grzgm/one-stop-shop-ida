@@ -314,7 +314,7 @@ interface DeskClusterComponentProps {
 
 function DeskClusterComponent({ clusterId, desks, selectDesk, isSelected }: DeskClusterComponentProps) {
     return (
-        <div className="desk-cluster" id={clusterId.toString()}>
+        <div className="desk-cluster" id={"dc" + clusterId.toString()}>
             {Object.keys(desks).map((index) => (
                 <DeskComponent desk={desks[index]} selectDesk={selectDesk} key={desks[index].deskId} isSelected={isSelected} />
             ))}
@@ -330,7 +330,7 @@ interface DeskComponentProps {
 
 function DeskComponent({ desk, selectDesk, isSelected }: DeskComponentProps) {
     return (
-        <div className="desk" id={desk.deskId.toString()} onClick={() => (selectDesk(desk))}>
+        <div className="desk" id={"d" + desk.deskId.toString()} onClick={() => (selectDesk(desk))}>
             <div className="desk__desk">
                 <div className={`desk__chair ${GetDeskStateClassName(GetDeskState(desk))} ${isSelected(desk.clusterId, desk.deskId) ? GetDeskStateClassName(6) : ""}`}></div>
             </div>
