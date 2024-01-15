@@ -11,20 +11,19 @@ namespace OneStopShopIdaBackend.Controllers;
 [ApiController]
 public class OfficeFeaturesItemsController : CustomControllerBase
 {
-    private readonly ILogger<OfficeFeaturesItemsController> _logger;
     private readonly IDatabaseService _databaseService;
-    public OfficeFeaturesItemsController(ILogger<OfficeFeaturesItemsController> logger, IMemoryCache memoryCache,
+    public OfficeFeaturesItemsController(IMemoryCache memoryCache,
         IDatabaseService databaseService, IMicrosoftGraphApiService microsoftGraphApiService) : base(memoryCache,
         microsoftGraphApiService)
     {
-        _logger = logger;
         _databaseService = databaseService;
     }
 
     [HttpGet("{office}")]
     public async Task<ActionResult<OfficeFeaturesItem>> GetOfficeFeaturesItem([FromRoute] string office)
     {
-        string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
+        string accessToken = MemoryCache.Get<string>($"{User.FindFirst("UserId")?.Value}AccessToken") ?? string.Empty;
+        await ExecuteWithRetryMicrosoftGraphApi(MicrosoftGraphApiService.GetMe, accessToken);
         office = office.ToLower();
 
         return (await _databaseService.GetOfficeFeaturesItem(office));
@@ -33,8 +32,9 @@ public class OfficeFeaturesItemsController : CustomControllerBase
     [HttpGet("all")]
     public async Task<ActionResult<List<OfficeFeaturesItem>>> GetAllOfficeFeaturesItem()
     {
-        string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
-
+        string accessToken = MemoryCache.Get<string>($"{User.FindFirst("UserId")?.Value}AccessToken") ?? string.Empty;
+        await ExecuteWithRetryMicrosoftGraphApi(MicrosoftGraphApiService.GetMe, accessToken);
+            
         return await _databaseService.GetAllOfficeFeaturesItem();
     }
 }

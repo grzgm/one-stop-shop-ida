@@ -11,14 +11,12 @@ namespace OneStopShopIdaBackend.Controllers;
 [ApiController]
 public class DeskReservationItemsController : CustomControllerBase
 {
-    private readonly ILogger<DeskReservationItemsController> _logger;
     private readonly DatabaseService _databaseService;
 
-    public DeskReservationItemsController(ILogger<DeskReservationItemsController> logger, IMemoryCache memoryCache,
+    public DeskReservationItemsController(IMemoryCache memoryCache,
         DatabaseService databaseService, IMicrosoftGraphApiService microsoftGraphApiService) : base(memoryCache, 
         microsoftGraphApiService)
     {
-        _logger = logger;
         _databaseService = databaseService;
     }
 
@@ -27,8 +25,8 @@ public class DeskReservationItemsController : CustomControllerBase
         GetDeskReservationForOfficeDate(
             [FromRoute] string office, [FromQuery] DateTime? startDate = null, [FromQuery] DateTime? endDate = null)
     {
-        string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
-        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
+        string accessToken = MemoryCache.Get<string>($"{User.FindFirst("UserId")?.Value}AccessToken") ?? string.Empty;
+        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(MicrosoftGraphApiService.GetMe, accessToken))
             .MicrosoftId;
         // string microsoftId = "22";
         office = office.ToLower();
@@ -71,15 +69,19 @@ public class DeskReservationItemsController : CustomControllerBase
         {
             if (deskReservationItem.MicrosoftId == microsoftId)
             {
-                deskClusterFrontendByDate[deskReservationItem.Date][deskReservationItem.ClusterId]
+                var userReservations = deskClusterFrontendByDate[deskReservationItem.Date][deskReservationItem.ClusterId]
                     .Desks[deskReservationItem.DeskId]
-                    .UserReservations[deskReservationItem.TimeSlot] = true;
+                    .UserReservations;
+                if (userReservations != null)
+                    userReservations[deskReservationItem.TimeSlot] = true;
             }
             else
             {
-                deskClusterFrontendByDate[deskReservationItem.Date][deskReservationItem.ClusterId]
+                var occupied = deskClusterFrontendByDate[deskReservationItem.Date][deskReservationItem.ClusterId]
                     .Desks[deskReservationItem.DeskId]
-                    .Occupied[deskReservationItem.TimeSlot] = true;
+                    .Occupied;
+                if (occupied != null)
+                    occupied[deskReservationItem.TimeSlot] = true;
             }
         }
 
@@ -90,7 +92,6 @@ public class DeskReservationItemsController : CustomControllerBase
     public async Task<ActionResult<Dictionary<int, DeskClusterFrontend>>> GetDeskReservationOfficeLayout(
         [FromRoute] string office)
     {
-        string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
         office = office.ToLower();
 
         List<OfficeDeskLayoutsItem> officeDeskLayoutsItems =
@@ -123,8 +124,8 @@ public class DeskReservationItemsController : CustomControllerBase
     public async Task<ActionResult<List<DeskReservationItem>>> GetDeskReservationsOfUser([FromRoute] string office,
         [FromQuery] DateTime? startDate = null, [FromQuery] DateTime? endDate = null)
     {
-        string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
-        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
+        string accessToken = MemoryCache.Get<string>($"{User.FindFirst("UserId")?.Value}AccessToken") ?? string.Empty;
+        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(MicrosoftGraphApiService.GetMe, accessToken))
             .MicrosoftId;
         // string microsoftId = "22";
         office = office.ToLower();
@@ -140,10 +141,9 @@ public class DeskReservationItemsController : CustomControllerBase
         [FromRoute] string office,
         [FromQuery] DateTime? startDate = null, [FromQuery] DateTime? endDate = null)
     {
-        string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
-        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
+        string accessToken = MemoryCache.Get<string>($"{User.FindFirst("UserId")?.Value}AccessToken") ?? string.Empty;
+        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(MicrosoftGraphApiService.GetMe, accessToken))
             .MicrosoftId;
-        // string microsoftId = "22";
         office = office.ToLower();
         DateTime startDate2 = startDate.HasValue ? startDate.Value.Date : DateTime.Now;
         DateTime endDate2 = endDate.HasValue ? endDate.Value.Date : DateTime.Now;
@@ -203,8 +203,8 @@ public class DeskReservationItemsController : CustomControllerBase
     public async Task<IActionResult> PostDeskReservation([FromRoute] string office, [FromQuery] DateTime date,
         [FromQuery] int clusterId, [FromQuery] int deskId, [FromQuery] List<int> timeSlots)
     {
-        string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
-        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
+        string accessToken = MemoryCache.Get<string>($"{User.FindFirst("UserId")?.Value}AccessToken") ?? string.Empty;
+        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(MicrosoftGraphApiService.GetMe, accessToken))
             .MicrosoftId;
         List<DeskReservationItem> deskReservationItems = new();
 
@@ -227,8 +227,8 @@ public class DeskReservationItemsController : CustomControllerBase
     public async Task<IActionResult> DeleteDeskReservation([FromRoute] string office, [FromQuery] DateTime date,
         [FromQuery] int clusterId, [FromQuery] int deskId, [FromQuery] List<int> timeSlots)
     {
-        string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
-        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
+        string accessToken = MemoryCache.Get<string>($"{User.FindFirst("UserId")?.Value}AccessToken") ?? string.Empty;
+        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(MicrosoftGraphApiService.GetMe, accessToken))
             .MicrosoftId;
 
         List<DeskReservationItem> deskReservationItems = new();

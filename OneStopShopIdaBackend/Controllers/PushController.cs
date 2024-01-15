@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using OneStopShopIdaBackend.Models;
 using OneStopShopIdaBackend.Services;
-using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace OneStopShopIdaBackend.Controllers;
 
@@ -12,24 +11,19 @@ namespace OneStopShopIdaBackend.Controllers;
 [ApiController]
 public class PushController : CustomControllerBase
 {
-    private readonly ILogger<PushController> _logger;
-    private readonly IHostingEnvironment _env;
     private readonly IDatabaseService _databaseService;
 
-    public PushController(ILogger<PushController> logger, IMemoryCache memoryCache,
-        IHostingEnvironment hostingEnvironment, IDatabaseService databaseService,
+    public PushController(IMemoryCache memoryCache, IDatabaseService databaseService,
         IMicrosoftGraphApiService microsoftGraphApiService) : base(memoryCache, microsoftGraphApiService)
     {
-        _logger = logger;
-        _env = hostingEnvironment;
         _databaseService = databaseService;
     }
 
     [HttpGet("is-subscribed")]
     public async Task<ActionResult<bool>> GetIsSubscribe()
     {
-        string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
-        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
+        string accessToken = MemoryCache.Get<string>($"{User.FindFirst("UserId")?.Value}AccessToken") ?? string.Empty;
+        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(MicrosoftGraphApiService.GetMe, accessToken))
             .MicrosoftId;
 
         return await _databaseService.IsSubscribe(microsoftId);
@@ -38,8 +32,8 @@ public class PushController : CustomControllerBase
     [HttpPost("subscribe")]
     public async Task<ActionResult<PushSubscription>> Subscribe([FromBody] PushSubscriptionFrontend model)
     {
-        string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
-        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
+        string accessToken = MemoryCache.Get<string>($"{User.FindFirst("UserId")?.Value}AccessToken") ?? string.Empty;
+        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(MicrosoftGraphApiService.GetMe, accessToken))
             .MicrosoftId;
 
         var subscription = new PushSubscription

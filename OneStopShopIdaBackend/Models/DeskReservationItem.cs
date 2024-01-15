@@ -9,13 +9,13 @@ public class DeskReservationItem
 {
     public DeskReservationItem() { }
 
-    public DeskReservationItem(string microsoftid, string office, DateTime date, int clusterid, int deskid, int timeslot)
+    public DeskReservationItem(string microsoftId, string office, DateTime date, int clusterId, int deskId, int timeslot)
     {
-        MicrosoftId = microsoftid;
+        MicrosoftId = microsoftId;
         Office = office;
         Date = date;
-        ClusterId = clusterid;
-        DeskId = deskid;
+        ClusterId = clusterId;
+        DeskId = deskId;
         TimeSlot = timeslot;
     }
 
@@ -41,8 +41,8 @@ public class DeskFrontend
 {
     public int? ClusterId { get; set; }
     public int? DeskId { get; set; }
-    public List<bool> Occupied { get; set; }
-    public List<bool> UserReservations { get; set; }
+    public List<bool>? Occupied { get; set; }
+    public List<bool>? UserReservations { get; set; }
 }
 
 public class DeskClusterFrontend

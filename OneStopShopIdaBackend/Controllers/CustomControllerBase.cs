@@ -5,12 +5,12 @@ using OneStopShopIdaBackend.Services;
 namespace OneStopShopIdaBackend.Controllers;
 public class CustomControllerBase : ControllerBase
 {
-    protected readonly IMemoryCache _memoryCache;
-    protected readonly IMicrosoftGraphApiService _microsoftGraphApiService;
+    protected readonly IMemoryCache MemoryCache;
+    protected readonly IMicrosoftGraphApiService MicrosoftGraphApiService;
     public CustomControllerBase(IMemoryCache memoryCache, IMicrosoftGraphApiService microsoftGraphApiService)
     {
-        _memoryCache = memoryCache;
-        _microsoftGraphApiService = microsoftGraphApiService;
+        MemoryCache = memoryCache;
+        MicrosoftGraphApiService = microsoftGraphApiService;
     }
 
     public async Task<T> ExecuteWithRetryMicrosoftGraphApi<T>(Func<string, Task<T>> action, string accessToken)
@@ -25,14 +25,14 @@ public class CustomControllerBase : ControllerBase
             if (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
                 // Access the access_token property
-                (string newAccessToken, string refreshToken) = await _microsoftGraphApiService.CallAuthRefresh(_memoryCache.Get<string>($"{User.FindFirst("UserId").Value}RefreshToken"));
+                (string newAccessToken, string refreshToken) = await MicrosoftGraphApiService.CallAuthRefresh(MemoryCache.Get<string>($"{User.FindFirst("UserId")?.Value}RefreshToken") ?? string.Empty);
 
                 // Store Access Token and Refresh Token in Memory Cache with GUID
-                _memoryCache.Set($"{User.FindFirst("UserId").Value}AccessToken", accessToken, new MemoryCacheEntryOptions
+                MemoryCache.Set($"{User.FindFirst("UserId")?.Value}AccessToken", accessToken, new MemoryCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1) // Adjust expiration as needed
                 });
-                _memoryCache.Set($"{User.FindFirst("UserId").Value}RefreshToken", refreshToken, new MemoryCacheEntryOptions
+                MemoryCache.Set($"{User.FindFirst("UserId")?.Value}RefreshToken", refreshToken, new MemoryCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(24) // Adjust expiration as needed
                 });

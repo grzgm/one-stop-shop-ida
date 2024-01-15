@@ -11,7 +11,7 @@ namespace OneStopShopIdaBackend.Controllers
         public async Task<IActionResult> PostSendMessage([FromQuery] string message, [FromQuery] string channel)
         {
             
-            using (HttpResponseMessage response = await _slackApiServices.SendMessage(_memoryCache.Get<string>($"{User.FindFirst("UserId").Value}SlackAccessToken"), message, channel))
+            using (HttpResponseMessage response = await _slackApiServices.SendMessage(_memoryCache.Get<string>($"{User.FindFirst("UserId")?.Value}SlackAccessToken") ?? string.Empty, message, channel))
             {
                 return StatusCode((int)response.StatusCode);
             }
@@ -21,7 +21,7 @@ namespace OneStopShopIdaBackend.Controllers
         [HttpPut("set-status")]
         public async Task<IActionResult> PutSetStatus([FromQuery] string text = "", [FromQuery] string emoji = "", [FromQuery] string expiration = "0")
         {
-            using (HttpResponseMessage response = await _slackApiServices.SetStatus(_memoryCache.Get<string>($"{User.FindFirst("UserId").Value}SlackAccessToken"), text, emoji, expiration))
+            using (HttpResponseMessage response = await _slackApiServices.SetStatus(_memoryCache.Get<string>($"{User.FindFirst("UserId")?.Value}SlackAccessToken") ?? string.Empty, text, emoji, expiration))
             {
                 return StatusCode((int)response.StatusCode);
             }

@@ -9,17 +9,15 @@ namespace OneStopShopIdaBackend.Controllers;
 public partial class MicrosoftGraphApiController : CustomControllerBase
 {
     private readonly ILogger<MicrosoftGraphApiController> _logger;
-    private readonly IConfiguration _config;
     private readonly IDatabaseService _databaseService;
-    private readonly string FrontendUri;
+    private readonly string _frontendUri;
     
     public MicrosoftGraphApiController(ILogger<MicrosoftGraphApiController> logger, IConfiguration config, IMemoryCache memoryCache,
         IMicrosoftGraphApiService microsoftGraphApiService, IDatabaseService databaseService) : base(memoryCache, microsoftGraphApiService)
     {
         _logger = logger;
-        _config = config;
         _databaseService = databaseService;
         
-        FrontendUri = _config["FrontendUri"];
+        _frontendUri = config["FrontendUri"] ?? string.Empty;
     }
 }

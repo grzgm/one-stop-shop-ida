@@ -10,12 +10,10 @@ namespace OneStopShopIdaBackend.Controllers;
 [ApiController]
 public class AuthenticationController : ControllerBase
 {
-    private readonly ILogger<AuthenticationController> _logger;
     private readonly IConfiguration _config;
 
-    public AuthenticationController(ILogger<AuthenticationController> logger, IConfiguration config)
+    public AuthenticationController(IConfiguration config)
     {
-        _logger = logger;
         _config = config;
     }
 
@@ -28,7 +26,7 @@ public class AuthenticationController : ControllerBase
         };
 
         var key = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(_config["JwtSettings:Secret"]));
+            Encoding.UTF8.GetBytes(_config["JwtSettings:Secret"] ?? string.Empty));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
@@ -43,14 +41,14 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpGet("is-auth")]
-    public async Task<ActionResult<bool>> GetIsAuth()
+    public Task<ActionResult<bool>> GetIsAuth()
     {
         // Check if the user is authenticated
-        if (User.Identity.IsAuthenticated)
+        if (User.Identity is { IsAuthenticated: true })
         {
-            return true;
+            return Task.FromResult<ActionResult<bool>>(true);
         }
 
-        return false;
+        return Task.FromResult<ActionResult<bool>>(false);
     }
 }

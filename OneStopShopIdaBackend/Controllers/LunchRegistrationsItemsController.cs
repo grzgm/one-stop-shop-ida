@@ -11,26 +11,23 @@ namespace OneStopShopIdaBackend.Controllers;
 [ApiController]
 public class LunchRegistrationsItemsController : CustomControllerBase
 {
-    private readonly ILogger<LunchRegistrationsItemsController> _logger;
-    private readonly IConfiguration _config;
     private readonly ISlackApiServices _slackApiServices;
     private readonly IDatabaseService _databaseService;
 
     private readonly string _lunchEmailAddress;
     private readonly string _lunchSlackChannel;
 
-    public LunchRegistrationsItemsController(ILogger<LunchRegistrationsItemsController> logger, IConfiguration config,
+    public LunchRegistrationsItemsController(IConfiguration config,
         IMemoryCache memoryCache, IMicrosoftGraphApiService microsoftGraphApiService,
         ISlackApiServices slackApiServices, IDatabaseService databaseService) : base(memoryCache,
         microsoftGraphApiService)
     {
-        _logger = logger;
-        _config = config;
+        var config1 = config;
         _slackApiServices = slackApiServices;
         _databaseService = databaseService;
 
-        _lunchEmailAddress = _config["LunchEmailAddress"];
-        _lunchSlackChannel = _config["LunchSlackChannel"];
+        _lunchEmailAddress = config1["LunchEmailAddress"] ?? string.Empty;
+        _lunchSlackChannel = config1["LunchSlackChannel"] ?? string.Empty;
     }
 
     private static string RegisterTodayMessage(string office, string name) =>
@@ -48,8 +45,8 @@ public class LunchRegistrationsItemsController : CustomControllerBase
     [HttpGet("get-registration")]
     public async Task<ActionResult<LunchRegistrationsItemFrontend>> GetLunchIsRegisteredToday()
     {
-        string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
-        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
+        string accessToken = MemoryCache.Get<string>($"{User.FindFirst("UserId")?.Value}AccessToken") ?? string.Empty;
+        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(MicrosoftGraphApiService.GetMe, accessToken))
             .MicrosoftId;
 
         return new LunchRegistrationsItemFrontend(await _databaseService.GetLunchIsRegisteredToday(microsoftId));
@@ -59,11 +56,11 @@ public class LunchRegistrationsItemsController : CustomControllerBase
     public async Task<ActionResult<LunchRegistrationsItemFrontend>> PutLunchRegistrationItem([FromQuery] bool registration,
         [FromQuery] string office)
     {
-        string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
-        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
+        string accessToken = MemoryCache.Get<string>($"{User.FindFirst("UserId")?.Value}AccessToken") ?? string.Empty;
+        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(MicrosoftGraphApiService.GetMe, accessToken))
             .MicrosoftId;
         office = office.ToLower();
-        var user = await _microsoftGraphApiService.GetMe(accessToken);
+        var user = await MicrosoftGraphApiService.GetMe(accessToken);
 
         string message;
 
@@ -76,7 +73,7 @@ public class LunchRegistrationsItemsController : CustomControllerBase
             message = DeregisterTodayMessage(office, $"{user.FirstName} {user.Surname}");
         }
 
-        HttpResponseMessage response = null;
+        HttpResponseMessage? response = null;
 
         LunchRegistrationsItem lunchRegistrationsItem = new()
         {
@@ -88,15 +85,15 @@ public class LunchRegistrationsItemsController : CustomControllerBase
         if (office == "utrecht")
         {
             response = await
-                _microsoftGraphApiService.SendEmail(accessToken, _lunchEmailAddress, "Lunch Registration", message);
+                MicrosoftGraphApiService.SendEmail(accessToken, _lunchEmailAddress, "Lunch Registration", message);
         }
         else if (office == "amsterdam")
         {
-            string slackAccessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}SlackAccessToken");
+            string slackAccessToken = MemoryCache.Get<string>($"{User.FindFirst("UserId")?.Value}SlackAccessToken") ?? string.Empty;
             response = await _slackApiServices.SendMessage(slackAccessToken, message, _lunchSlackChannel);
         }
 
-        if (response.IsSuccessStatusCode)
+        if (response is { IsSuccessStatusCode: true })
         {
             await _databaseService.PutLunchRegistrationItem(lunchRegistrationsItem);
         }

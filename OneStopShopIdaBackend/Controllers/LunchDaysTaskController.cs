@@ -26,13 +26,13 @@ public class LunchDaysTaskController : IHostedService, IDisposable
         return Task.CompletedTask;
     }
 
-    private async void DoWork(object state)
+    private async void DoWork(object? state)
     {
         Notification notification = new()
         {
             Title = "iDA Lunch Reminder",
             Body = "Open the App and register for lunch in next week!",
-            Actions = new List<NotificationAction>() { new NotificationAction() { Action = "register", Title = "register" } }
+            Actions = new List<NotificationAction>() { new() { Action = "register", Title = "register" } }
         };
 
         using (var scope = _serviceProvider.CreateScope())
@@ -51,13 +51,13 @@ public class LunchDaysTaskController : IHostedService, IDisposable
                         await databaseService.SendNotificationsToUser(notification, userItem);
                     }
                 }
-                catch (KeyNotFoundException exception)
+                catch (KeyNotFoundException)
                 {
-                    continue;
+                    Console.WriteLine("No User in Database");
                 }
-                catch (Exception exception)
+                catch (Exception)
                 {
-                    continue;
+                    Console.WriteLine("Cannot send lunch reminder");
                 }
             }
         }

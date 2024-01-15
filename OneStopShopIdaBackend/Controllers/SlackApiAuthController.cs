@@ -4,14 +4,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace OneStopShopIdaBackend.Controllers;
-public partial class SlackApiController : ControllerBase
+public partial class SlackApiController
 {
     // OAuth Step 1: Redirect users to Slack's authorization URL
     [Authorize]
     [HttpGet("auth/url")]
-    public async Task<ActionResult<string>> GetAuth()
+    public Task<ActionResult<string>> GetAuth()
     {
-        return _slackApiServices.GenerateSlackAPIAuthUrl(User.FindFirst("UserId").Value);
+        return Task.FromResult<ActionResult<string>>(_slackApiServices.GenerateSlackAPIAuthUrl(User.FindFirst("UserId")?.Value ?? string.Empty));
     }
 
     // OAuth Step 2: Handle the OAuth callback
@@ -29,36 +29,36 @@ public partial class SlackApiController : ControllerBase
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1) // Adjust expiration as needed
             });
             
-            return Redirect(FrontendUri + $"/popup-login?serverResponse={JsonSerializer.Serialize(StatusCode(200))}");
+            return Redirect(_frontendUri + $"/popup-login?serverResponse={JsonSerializer.Serialize(StatusCode(200))}");
         }
         catch (HttpRequestException ex)
         {
             _logger.LogError($"{GetType().Name}\nError calling external API: {ex.Message}");
-            return Redirect(FrontendUri +
+            return Redirect(_frontendUri +
                             $"/popup-login?serverResponse={JsonSerializer.Serialize(StatusCode(500))}");
         }
         catch (Exception ex)
         {
             _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
-            return Redirect(FrontendUri +
+            return Redirect(_frontendUri +
                             $"/popup-login?serverResponse={JsonSerializer.Serialize(StatusCode(500))}");
         }
     }
 
     [Authorize]
     [HttpGet("auth/is-auth")]
-    public async Task<ActionResult<bool>> GetIsAuth()
+    public Task<ActionResult<bool>> GetIsAuth()
     {
         try
         {
-            string slackAccessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}SlackAccessToken");
-            bool isToken = slackAccessToken != null;
+            string slackAccessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId")?.Value}SlackAccessToken") ?? string.Empty;
+            bool isToken = slackAccessToken != string.Empty;
 
-            return isToken;
+            return Task.FromResult<ActionResult<bool>>(isToken);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return false;
+            return Task.FromResult<ActionResult<bool>>(false);
         }
     }
 }

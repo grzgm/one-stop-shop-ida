@@ -11,22 +11,20 @@ namespace OneStopShopIdaBackend.Controllers;
 [ApiController]
 public class LunchDaysItemsController : CustomControllerBase
 {
-    private readonly ILogger<LunchDaysItemsController> _logger;
     private readonly IDatabaseService _databaseService;
 
-    public LunchDaysItemsController(ILogger<LunchDaysItemsController> logger, IMemoryCache memoryCache,
+    public LunchDaysItemsController(IMemoryCache memoryCache,
         IDatabaseService databaseService, IMicrosoftGraphApiService microsoftGraphApiService) : base(memoryCache, 
         microsoftGraphApiService)
     {
-        _logger = logger;
         _databaseService = databaseService;
     }
 
     [HttpGet("get-days")]
     public async Task<ActionResult<LunchDaysItemFrontend>> GetRegisteredDays()
     {
-        string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
-        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
+        string accessToken = MemoryCache.Get<string>($"{User.FindFirst("UserId")?.Value}AccessToken") ?? string.Empty;
+        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(MicrosoftGraphApiService.GetMe, accessToken))
             .MicrosoftId;
         return new LunchDaysItemFrontend(await _databaseService.GetRegisteredDays(microsoftId));
     }
@@ -34,8 +32,8 @@ public class LunchDaysItemsController : CustomControllerBase
     [HttpPut("update-days")]
     public async Task<IActionResult> PutLunchDaysItem(LunchDaysItemFrontend lunchDaysItemFrontend)
     {
-        string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
-        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken))
+        string accessToken = MemoryCache.Get<string>($"{User.FindFirst("UserId")?.Value}AccessToken") ?? string.Empty;
+        string microsoftId = (await ExecuteWithRetryMicrosoftGraphApi(MicrosoftGraphApiService.GetMe, accessToken))
             .MicrosoftId;
 
         LunchDaysItem lunchDaysItem =

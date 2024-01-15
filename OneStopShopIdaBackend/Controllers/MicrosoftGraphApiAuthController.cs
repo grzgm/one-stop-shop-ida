@@ -11,9 +11,9 @@ public partial class MicrosoftGraphApiController
     // OAuth Step 1: Redirect users to microsoft's authorization URL
     [Authorize]
     [HttpGet("auth/url")]
-    public async Task<ActionResult<string>> GetAuth()
+    public Task<ActionResult<string>> GetAuth()
     {
-        return _microsoftGraphApiService.GenerateMicrosoftGraphAPIAuthUrl(User.FindFirst("UserId").Value);
+        return Task.FromResult<ActionResult<string>>(MicrosoftGraphApiService.GenerateMicrosoftGraphAPIAuthUrl(User.FindFirst("UserId")?.Value ?? string.Empty));
     }
 
     // OAuth Step 2: Handle the OAuth callback
@@ -23,9 +23,9 @@ public partial class MicrosoftGraphApiController
         try
         {
             // Access the access_token property
-            (string accessToken, string refreshToken) = await _microsoftGraphApiService.CallAuthCallback(code);
+            (string accessToken, string refreshToken) = await MicrosoftGraphApiService.CallAuthCallback(code);
 
-            UserItem user = await _microsoftGraphApiService.GetMe(accessToken);
+            UserItem user = await MicrosoftGraphApiService.GetMe(accessToken);
 
             if (!_databaseService.UserItemExists(user.MicrosoftId))
             {
@@ -52,27 +52,27 @@ public partial class MicrosoftGraphApiController
             }
 
             // Store Access Token, Refresh Token in Memory Cache with GUID
-            _memoryCache.Set($"{state}AccessToken", accessToken, new MemoryCacheEntryOptions
+            MemoryCache.Set($"{state}AccessToken", accessToken, new MemoryCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1) // Adjust expiration as needed
             });
-            _memoryCache.Set($"{state}RefreshToken", refreshToken, new MemoryCacheEntryOptions
+            MemoryCache.Set($"{state}RefreshToken", refreshToken, new MemoryCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(24) // Adjust expiration as needed
             });
 
-            return Redirect(FrontendUri + $"/popup-login?serverResponse={JsonSerializer.Serialize(StatusCode(200))}");
+            return Redirect(_frontendUri + $"/popup-login?serverResponse={JsonSerializer.Serialize(StatusCode(200))}");
         }
         catch (HttpRequestException ex)
         {
             _logger.LogError($"{GetType().Name}\nError calling external API: {ex.Message}");
-            return Redirect(FrontendUri +
+            return Redirect(_frontendUri +
                             $"/popup-login?serverResponse={JsonSerializer.Serialize(StatusCode(500))}");
         }
         catch (Exception ex)
         {
             _logger.LogError($"{GetType().Name}\nError: {ex.Message}");
-            return Redirect(FrontendUri +
+            return Redirect(_frontendUri +
                             $"/popup-login?serverResponse={JsonSerializer.Serialize(StatusCode(500))}");
         }
     }
@@ -84,15 +84,15 @@ public partial class MicrosoftGraphApiController
     {
         // Access the access_token property
         (string accessToken, string refreshToken) =
-            await _microsoftGraphApiService.CallAuthRefresh(
-                _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}RefreshToken"));
+            await MicrosoftGraphApiService.CallAuthRefresh(
+                MemoryCache.Get<string>($"{User.FindFirst("UserId")?.Value}RefreshToken") ?? string.Empty);
 
         // Store Access Token, Refresh Token in Memory Cache with GUID
-        _memoryCache.Set($"{User.FindFirst("UserId").Value}AccessToken", accessToken, new MemoryCacheEntryOptions
+        MemoryCache.Set($"{User.FindFirst("UserId")?.Value}AccessToken", accessToken, new MemoryCacheEntryOptions
         {
             AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1) // Adjust expiration as needed
         });
-        _memoryCache.Set($"{User.FindFirst("UserId").Value}RefreshToken", refreshToken, new MemoryCacheEntryOptions
+        MemoryCache.Set($"{User.FindFirst("UserId")?.Value}RefreshToken", refreshToken, new MemoryCacheEntryOptions
         {
             AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(24) // Adjust expiration as needed
         });
@@ -108,12 +108,13 @@ public partial class MicrosoftGraphApiController
         // Can User refresh the Access Token?
         try
         {
-            string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
+            string accessToken = MemoryCache.Get<string>($"{User.FindFirst("UserId")?.Value}AccessToken") ??
+                                 string.Empty;
 
-            await ExecuteWithRetryMicrosoftGraphApi(_microsoftGraphApiService.GetMe, accessToken);
+            await ExecuteWithRetryMicrosoftGraphApi(MicrosoftGraphApiService.GetMe, accessToken);
             return true;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return false;
         }
@@ -121,13 +122,13 @@ public partial class MicrosoftGraphApiController
 
     [Authorize]
     [HttpGet("auth/check-token")]
-    public async Task<ActionResult<bool>> GetCheckToken()
+    public Task<ActionResult<bool>> GetCheckToken()
     {
         // Check if the accessToken and refreshToken are stored in cache
-        string accessToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}AccessToken");
-        string refreshToken = _memoryCache.Get<string>($"{User.FindFirst("UserId").Value}RefreshToken");
-        bool isToken = accessToken != null && refreshToken != null;
+        string accessToken = MemoryCache.Get<string>($"{User.FindFirst("UserId")?.Value}AccessToken") ?? string.Empty;
+        string refreshToken = MemoryCache.Get<string>($"{User.FindFirst("UserId")?.Value}RefreshToken") ?? string.Empty;
+        bool isToken = accessToken != string.Empty && refreshToken != string.Empty;
 
-        return Ok(isToken);
+        return Task.FromResult<ActionResult<bool>>(Ok(isToken));
     }
 }
