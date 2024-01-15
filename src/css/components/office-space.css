@@ -162,5 +162,6 @@
     .office-space__overview {
         flex-wrap: nowrap;
         overflow: scroll;
+        justify-content: unset;
     }
 }
