@@ -101,7 +101,7 @@ public partial class MicrosoftGraphApiService
         response.EnsureSuccessStatusCode();
 
         string responseData = await response.Content.ReadAsStringAsync();
-        dynamic responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject(responseData);
+        dynamic responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject(responseData) ?? new Object();
 
         user.MicrosoftId = responseObject.id;
         user.FirstName = responseObject.givenName;

@@ -18,9 +18,4 @@ public partial class DatabaseService
 
         return officeDeskLayoutsItem;
     }
-
-    private bool OfficeDeskLayoutsItemExists(string microsoftId)
-    {
-        return (DeskReservation?.Any(e => e.MicrosoftId == microsoftId)).GetValueOrDefault();
-    }
 }

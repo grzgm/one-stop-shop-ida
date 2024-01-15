@@ -3,13 +3,12 @@
 public partial class MicrosoftGraphApiService : IMicrosoftGraphApiService
 {
     private readonly ILogger<MicrosoftGraphApiService> _logger;
-    private readonly IConfiguration _config;
     private readonly HttpClient _httpClient;
     private readonly CodeChallengeGeneratorService _codeChallengeGeneratorService;
-    private readonly string BackendUri;
-    private readonly string RedirectUri;
+    private readonly string _backendUri;
+    private readonly string _redirectUri;
 
-    private readonly string MicrosoftClientId;
+    private readonly string _microsoftClientId;
     private const string Tenant = "organizations";
     private const string Scopes = "offline_access user.read mail.read mail.send calendars.readwrite";
 
@@ -17,11 +16,10 @@ public partial class MicrosoftGraphApiService : IMicrosoftGraphApiService
         HttpClient httpClient, CodeChallengeGeneratorService codeChallengeGeneratorService)
     {
         _logger = logger;
-        _config = config;
         _httpClient = httpClient;
         _codeChallengeGeneratorService = codeChallengeGeneratorService;
-        BackendUri = _config["BackendUri"];
-        RedirectUri = _config["BackendUri"] + "/microsoft/auth/callback";
-        MicrosoftClientId = _config["Microsoft:MicrosoftClientId"];
+        _backendUri = config["BackendUri"] ?? string.Empty;
+        _redirectUri = config["BackendUri"] + "/microsoft/auth/callback";
+        _microsoftClientId = config["Microsoft:MicrosoftClientId"] ?? string.Empty;
     }
 }

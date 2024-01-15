@@ -17,8 +17,7 @@ public partial class SlackApiServices
             Content = new StringContent(JsonSerializer.Serialize(
             new
             {
-                text = message,
-                channel = channel
+                message, channel
             }))
             {
                 Headers =
@@ -31,7 +30,7 @@ public partial class SlackApiServices
         using (HttpResponseMessage response = await _httpClient.SendAsync(request))
         {
             response.EnsureSuccessStatusCode();
-            var body = await response.Content.ReadAsStringAsync();
+            await response.Content.ReadAsStringAsync();
             return response;
         }
     }
@@ -66,7 +65,7 @@ public partial class SlackApiServices
         using (HttpResponseMessage response = await _httpClient.SendAsync(request))
         {
             response.EnsureSuccessStatusCode();
-            var body = await response.Content.ReadAsStringAsync();
+            await response.Content.ReadAsStringAsync();
             return response;
         }
     }

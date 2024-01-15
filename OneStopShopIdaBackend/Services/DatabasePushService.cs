@@ -64,7 +64,7 @@ public partial class DatabaseService
                 if (ex.Message == "Subscription no longer valid")
                 {
                     var subscription = await GetUserSubscription(userItem.MicrosoftId);
-                    PushSubscription.Remove(subscription);
+                    if (subscription != null) PushSubscription.Remove(subscription);
                     await SaveChangesAsync();
                 }
             }
@@ -92,7 +92,7 @@ public partial class DatabaseService
             if (ex.Message == "Subscription no longer valid")
             {
                 var subscription = await GetUserSubscription(userItem.MicrosoftId);
-                PushSubscription.Remove(subscription);
+                if (subscription != null) PushSubscription.Remove(subscription);
                 await SaveChangesAsync();
             }
         }

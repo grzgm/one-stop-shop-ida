@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using OneStopShopIdaBackend.Controllers;
 using OneStopShopIdaBackend.Models;
-using System.Reflection.Metadata;
 using WebPush;
 using PushSubscription = OneStopShopIdaBackend.Models.PushSubscription;
 
@@ -14,9 +12,9 @@ public partial class DatabaseService : DbContext, IDatabaseService
     public DatabaseService(ILogger<DatabaseService> logger, DbContextOptions<DatabaseService> options, IConfiguration configuration) : base(options)
     {
         _logger = logger;
-        var vapidSubject = configuration.GetValue<string>("Vapid:Subject");
-        var vapidPublicKey = configuration.GetValue<string>("Vapid:PublicKey");
-        var vapidPrivateKey = configuration.GetValue<string>("Vapid:PrivateKey");
+        var vapidSubject = configuration.GetValue<string>("Vapid:Subject") ?? string.Empty;
+        var vapidPublicKey = configuration.GetValue<string>("Vapid:PublicKey") ?? string.Empty;
+        var vapidPrivateKey = configuration.GetValue<string>("Vapid:PrivateKey") ?? string.Empty;
 
         CheckOrGenerateVapidDetails(vapidSubject, vapidPublicKey, vapidPrivateKey);
 

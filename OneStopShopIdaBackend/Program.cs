@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using OneStopShopIdaBackend.Controllers;
 using OneStopShopIdaBackend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,7 +25,7 @@ builder.Services.AddDataProtection()
 
 // Add the Database connection as a Scoped service
 builder.Services.AddDbContext<IDatabaseService, DatabaseService>(opt =>
-    opt.UseMySQL(builder.Configuration["ConnectionStrings:MySqlConnection"]));
+    opt.UseMySQL(builder.Configuration["ConnectionStrings:MySqlConnection"] ?? string.Empty));
 
 // Register HttpClient as a singleton service
 builder.Services.AddHttpClient();
@@ -60,7 +59,7 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
         ValidAudience = builder.Configuration["JwtSettings:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Secret"]))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Secret"] ?? string.Empty))
     };
 });
 
@@ -72,7 +71,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin", policyBuilder =>
     {
-        policyBuilder.WithOrigins(builder.Configuration["FrontendUri"])
+        policyBuilder.WithOrigins(builder.Configuration["FrontendUri"] ?? string.Empty)
             .AllowCredentials()
             .AllowAnyHeader()
             .AllowAnyMethod();
@@ -96,8 +95,8 @@ else
 }
 
 // Enable CORS
-app.UseCors(builder => builder
-    .WithOrigins(app.Configuration["FrontendUri"])
+app.UseCors(corsPolicyBuilder => corsPolicyBuilder
+    .WithOrigins(app.Configuration["FrontendUri"] ?? string.Empty)
     .AllowCredentials()
     .AllowAnyHeader()
     .AllowAnyMethod());

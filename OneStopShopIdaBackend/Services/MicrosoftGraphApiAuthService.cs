@@ -7,9 +7,9 @@ public partial class MicrosoftGraphApiService
     {
         string authUrl =
             $"https://login.microsoftonline.com/{Tenant}/oauth2/v2.0/authorize?" +
-            $"client_id={MicrosoftClientId}" +
+            $"client_id={_microsoftClientId}" +
             $"&response_type=code" +
-            $"&redirect_uri={RedirectUri}" +
+            $"&redirect_uri={_redirectUri}" +
             $"&response_mode=query" +
             $"&scope={Scopes}" +
             $"&state={route}" +
@@ -24,10 +24,10 @@ public partial class MicrosoftGraphApiService
     {
         var data = new Dictionary<string, string>
         {
-            { "client_id", MicrosoftClientId },
+            { "client_id", _microsoftClientId },
             { "scope", Scopes },
             { "code", code },
-            { "redirect_uri", RedirectUri },
+            { "redirect_uri", _redirectUri },
             { "grant_type", "authorization_code" },
             { "code_verifier", _codeChallengeGeneratorService.CodeVerifier }
         };
@@ -35,7 +35,7 @@ public partial class MicrosoftGraphApiService
         var content = new FormUrlEncodedContent(data);
         content.Headers.Clear();
         content.Headers.Add("content-type", "application/x-www-form-urlencoded");
-        content.Headers.Add("Origin", BackendUri);
+        content.Headers.Add("Origin", _backendUri);
 
         HttpResponseMessage response =
             await _httpClient.PostAsync("https://login.microsoftonline.com/organizations/oauth2/v2.0/token",
@@ -43,7 +43,7 @@ public partial class MicrosoftGraphApiService
         response.EnsureSuccessStatusCode();
 
         string responseData = await response.Content.ReadAsStringAsync();
-        dynamic responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject(responseData);
+        dynamic responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject(responseData) ?? new Object();
 
         // Access the access_token property
         string accessToken = responseObject.access_token;
@@ -58,17 +58,17 @@ public partial class MicrosoftGraphApiService
         {
             var data = new Dictionary<string, string>
             {
-                { "client_id", MicrosoftClientId },
+                { "client_id", _microsoftClientId },
                 { "scope", Scopes },
                 { "refresh_token", refreshToken },
-                { "redirect_uri", RedirectUri },
+                { "redirect_uri", _redirectUri },
                 { "grant_type", "refresh_token" },
             };
 
             var content = new FormUrlEncodedContent(data);
             content.Headers.Clear();
             content.Headers.Add("content-type", "application/x-www-form-urlencoded");
-            content.Headers.Add("Origin", BackendUri);
+            content.Headers.Add("Origin", _backendUri);
 
             HttpResponseMessage response =
                 await _httpClient.PostAsync("https://login.microsoftonline.com/organizations/oauth2/v2.0/token",
@@ -76,7 +76,7 @@ public partial class MicrosoftGraphApiService
             response.EnsureSuccessStatusCode();
 
             string responseData = await response.Content.ReadAsStringAsync();
-            dynamic responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject(responseData);
+            dynamic responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject(responseData) ?? new Object();
 
             // Access the access_token property
             string newAccessToken = responseObject.access_token;

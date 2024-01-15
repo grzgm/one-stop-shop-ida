@@ -20,8 +20,11 @@ public partial class DatabaseService
             throw new KeyNotFoundException();
         }
 
-        officeInformationItem.OfficeCoordinates = officeCoordinatesItem;
-        officeFeaturesItem.OfficeInformation = officeInformationItem;
+        if (officeInformationItem != null)
+        {
+            officeInformationItem.OfficeCoordinates = officeCoordinatesItem;
+            officeFeaturesItem.OfficeInformation = officeInformationItem;
+        }
 
         return officeFeaturesItem;
     }
@@ -38,15 +41,13 @@ public partial class DatabaseService
             var officeInformationItem = await OfficeInformation.FindAsync(item.OfficeName);
             var officeCoordinatesItem = await OfficeCoordinates.FindAsync(item.OfficeName);
 
-            officeInformationItem.OfficeCoordinates = officeCoordinatesItem;
-            item.OfficeInformation = officeInformationItem;
+            if (officeInformationItem != null)
+            {
+                officeInformationItem.OfficeCoordinates = officeCoordinatesItem;
+                item.OfficeInformation = officeInformationItem;
+            }
         }
 
         return officeFeaturesItems;
-    }
-
-    private bool OfficeFeaturesItemExists(string officeName)
-    {
-        return (OfficeFeatures?.Any(e => e.OfficeName == officeName)).GetValueOrDefault();
     }
 }
