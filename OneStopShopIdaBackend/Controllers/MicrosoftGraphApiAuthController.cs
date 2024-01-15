@@ -13,7 +13,7 @@ public partial class MicrosoftGraphApiController
     [HttpGet("auth/url")]
     public Task<ActionResult<string>> GetAuth()
     {
-        return Task.FromResult<ActionResult<string>>(MicrosoftGraphApiService.GenerateMicrosoftGraphAPIAuthUrl(User.FindFirst("UserId")?.Value ?? string.Empty));
+        return Task.FromResult<ActionResult<string>>(MicrosoftGraphApiService.GenerateMicrosoftGraphApiAuthUrl(User.FindFirst("UserId")?.Value ?? string.Empty));
     }
 
     // OAuth Step 2: Handle the OAuth callback

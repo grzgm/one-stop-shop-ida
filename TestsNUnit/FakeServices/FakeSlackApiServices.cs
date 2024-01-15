@@ -13,7 +13,7 @@ internal class FakeSlackApiServices : ISlackApiServices
         throw new NotImplementedException();
     }
 
-    public string GenerateSlackAPIAuthUrl(string route)
+    public string GenerateSlackApiAuthUrl(string route)
     {
         throw new NotImplementedException();
     }

@@ -3,7 +3,7 @@
 public partial class MicrosoftGraphApiService
 {
     // OAuth Step 1: Redirect users to microsoft's authorization URL
-    public string GenerateMicrosoftGraphAPIAuthUrl(string route)
+    public string GenerateMicrosoftGraphApiAuthUrl(string route)
     {
         string authUrl =
             $"https://login.microsoftonline.com/{Tenant}/oauth2/v2.0/authorize?" +

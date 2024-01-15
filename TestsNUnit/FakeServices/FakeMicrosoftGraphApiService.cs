@@ -24,7 +24,7 @@ public class FakeMicrosoftGraphApiService : IMicrosoftGraphApiService
         throw new NotImplementedException();
     }
 
-    public string GenerateMicrosoftGraphAPIAuthUrl(string route)
+    public string GenerateMicrosoftGraphApiAuthUrl(string route)
     {
         throw new NotImplementedException();
     }

@@ -1,7 +1,7 @@
 ﻿namespace OneStopShopIdaBackend.Services;
 public partial class SlackApiServices
 {
-    public string GenerateSlackAPIAuthUrl(string route)
+    public string GenerateSlackApiAuthUrl(string route)
     {
         string authUrl =
         $"https://slack.com/oauth/v2/authorize?client_id={_slackClientId}&&scope=&user_scope={Scopes}&redirect_uri={_redirectUri}&state={route}";

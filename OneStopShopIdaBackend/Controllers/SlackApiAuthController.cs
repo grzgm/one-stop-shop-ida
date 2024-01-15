@@ -11,7 +11,7 @@ public partial class SlackApiController
     [HttpGet("auth/url")]
     public Task<ActionResult<string>> GetAuth()
     {
-        return Task.FromResult<ActionResult<string>>(_slackApiServices.GenerateSlackAPIAuthUrl(User.FindFirst("UserId")?.Value ?? string.Empty));
+        return Task.FromResult<ActionResult<string>>(_slackApiServices.GenerateSlackApiAuthUrl(User.FindFirst("UserId")?.Value ?? string.Empty));
     }
 
     // OAuth Step 2: Handle the OAuth callback
