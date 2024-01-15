@@ -12,7 +12,7 @@ function OfficeDetails() {
   return (
     <div className="content">
       <div className="description">
-        <HeadingLarge>{officeName}</HeadingLarge>
+        <HeadingLarge>{capitalizeFirstLetter(officeName)}</HeadingLarge>
         <HeadingLarge>Office Details</HeadingLarge>
         <BodyNormal>Manage all office</BodyNormal>
         <BodyNormal>related information!</BodyNormal>
@@ -25,6 +25,10 @@ function OfficeDetails() {
       </div>}
     </div>
   );
+}
+
+function capitalizeFirstLetter(str: string) {
+	return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 export default OfficeDetails;
