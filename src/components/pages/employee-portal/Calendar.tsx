@@ -1,4 +1,4 @@
-import "../../../css/components/calendar.css";
+import "../../../css/components/pages/employee-portal/calendar.css";
 import {
   BodySmall,
 } from "../../text-wrapers/TextWrapers";

@@ -1,4 +1,4 @@
-import "../../../css/components/office-space.css";
+import "../../../css/components/pages/office-details/office-space.css";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import Button from "../../Buttons";
