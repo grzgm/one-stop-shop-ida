@@ -32,11 +32,17 @@
     box-shadow: var(--grey2) 0px 0px 5px 1px;
 }
 
-.lunch-main__form__checkboxes label{
+.lunch-main__form__checkboxes label {
     margin-left: 0.5rem;
 }
 
-@media (max-width: 50rem) {.lunch-main {
-    flex-direction: column;
-}
+@media (max-width: 50rem) {
+    .lunch-main {
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+    }
+    .lunch-main__registrations {
+        margin-bottom: 10rem;
+    }
 }

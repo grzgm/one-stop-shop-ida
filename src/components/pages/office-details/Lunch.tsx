@@ -15,9 +15,9 @@ import OfficeFeaturesContext from "../../../contexts/OfficeFeaturesContext";
 
 async function LunchLoader(currentOfficeFeatures: IOfficeFeatures) {
 	if (currentOfficeFeatures && currentOfficeFeatures.canRegisterLunch == true) {
-		if (!(await IsAuthSlack()).payload) {
-			return redirect(`/slack-auth?previousLocation=${encodeURI("/office-details/lunch")}`)
-		}
+		// if (!(await IsAuthSlack()).payload) {
+		// 	return redirect(`/slack-auth?previousLocation=${encodeURI("/office-details/lunch")}`)
+		// }
 		if ((await IsAuth()).payload) {
 			return null
 		}
