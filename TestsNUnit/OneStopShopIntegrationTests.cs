@@ -7,8 +7,8 @@ namespace TestsNUnit;
 [TestFixture]
 internal class OneStopShopIntegrationTests : PageTest
 {
-    private const string p = "zaq1@#$ES";
-    private const string e = "malisgr@cronos.be";
+    private const string p = "";
+    private const string e = "";
 
     [SetUp]
     public void Setup()
