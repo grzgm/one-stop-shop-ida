@@ -31,7 +31,7 @@ async function LunchLoader(currentOfficeFeatures: IOfficeFeatures) {
 
 function Lunch() {
 	const officeName = useContext(CurrentOfficeContext).currentOffice;
-	const { officeFeatures } = useContext(OfficeFeaturesContext);
+	const { officeFeatures, setUpAllOfficeFeatures } = useContext(OfficeFeaturesContext);
 	const [isPushEnabled, setIsPushEnabled] = useState(false);
 	const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 	const { setAlert } = useContext(AlertContext);
@@ -65,6 +65,7 @@ function Lunch() {
 	};
 
 	useEffect(() => {
+		setUpAllOfficeFeatures()
 		if ("serviceWorker" in navigator && "PushManager" in window) {
 			navigator.serviceWorker
 				.register("/sw-push.js", { scope: "/office-details/lunch" })
