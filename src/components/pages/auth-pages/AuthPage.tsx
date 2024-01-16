@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import "../../../css/auth-pages.css"
 import { IActionResult } from '../../../api/Response';
 import { Auth as AuthJWT, IsAuth as IsAuthJWT } from '../../../api/AuthenticationAPI';
+import { capitalizeFirstLetter } from '../../../misc/TextFunctions';
 
 export interface AuthPageProps {
     authTarget: string,
@@ -89,7 +90,7 @@ function AuthPage({ authTarget, isAuth: IsAuth, authUrl: AuthUrl }: AuthPageProp
         <div className="content">
             <div className="description">
                 <HeadingLarge>Login with your</HeadingLarge>
-                <HeadingLarge>{authTarget.charAt(0).toUpperCase() + authTarget.slice(1)} Account</HeadingLarge>
+                <HeadingLarge>{capitalizeFirstLetter(authTarget)} Account</HeadingLarge>
                 <BodyNormal>Get access to all the benefits of app!</BodyNormal>
             </div>
             <main className="auth-main">
