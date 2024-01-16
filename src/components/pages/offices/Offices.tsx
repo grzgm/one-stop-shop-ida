@@ -6,6 +6,7 @@ import OfficeMap from "./OfficeMap";
 import { useNavigate } from "react-router-dom";
 import OfficeFeaturesContext from "../../../contexts/OfficeFeaturesContext";
 import { IOfficeFeatures } from "../../../api/OfficeFeaturesAPI";
+import { capitalizeFirstLetter } from "../../../misc/TextFunctions";
 
 function Offices() {
 	const { setCurrentOffice } = useContext(CurrentOfficeContext);
@@ -85,10 +86,6 @@ function CalculateDistance(userLat: number, userLng: number, destLat: number, de
 	// console.log("userLat: ", userLat, "userLng: ", userLng, "destLat: ", destLat, "destLng: ", destLng)
 	// console.log("distance ", distance)
 	return distance;
-}
-
-function capitalizeFirstLetter(str: string) {
-	return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 export default Offices;

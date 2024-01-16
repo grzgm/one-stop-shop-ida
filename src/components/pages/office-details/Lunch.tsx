@@ -12,6 +12,7 @@ import { PostSubscribe } from "../../../api/PushAPI";
 import AlertContext from "../../../contexts/AlertContext";
 import { IOfficeFeatures } from "../../../api/OfficeFeaturesAPI";
 import OfficeFeaturesContext from "../../../contexts/OfficeFeaturesContext";
+import { capitalizeFirstLetter } from "../../../misc/TextFunctions";
 
 async function LunchLoader(currentOfficeFeatures: IOfficeFeatures) {
 	if (currentOfficeFeatures && currentOfficeFeatures.canRegisterLunch == true) {
@@ -195,10 +196,6 @@ function isPastNoon(): boolean {
 
 	// Compare the current hours with 12 (noon)
 	return currentHours >= 12;
-}
-
-function capitalizeFirstLetter(str: string) {
-	return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 function isToday(date: Date) {

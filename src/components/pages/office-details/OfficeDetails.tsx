@@ -3,6 +3,7 @@ import { BodyNormal, HeadingLarge } from "../../text-wrapers/TextWrapers";
 import Panel from "../../tiles/Panel";
 import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
 import OfficeFeaturesContext from "../../../contexts/OfficeFeaturesContext";
+import { capitalizeFirstLetter } from "../../../misc/TextFunctions";
 
 function OfficeDetails() {
   const officeName = useContext(CurrentOfficeContext).currentOffice;
@@ -25,10 +26,6 @@ function OfficeDetails() {
       </div>}
     </div>
   );
-}
-
-function capitalizeFirstLetter(str: string) {
-	return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 export default OfficeDetails;

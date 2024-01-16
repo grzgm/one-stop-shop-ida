@@ -3,6 +3,7 @@ import { BodyNormal, BodySmall, HeadingLarge } from "../../text-wrapers/TextWrap
 import { InspectResponseSync } from '../../../api/Response';
 import { useEffect, useState } from 'react';
 import "../../../css/auth-pages.css"
+import { capitalizeFirstLetter } from '../../../misc/TextFunctions';
 
 export interface PopupLoginProps {
     authTarget: string,
@@ -68,10 +69,6 @@ function isValidJSON(str: string) {
     } catch (e) {
         return false;
     }
-}
-
-function capitalizeFirstLetter(str: string) {
-	return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 export default PopupLogin;

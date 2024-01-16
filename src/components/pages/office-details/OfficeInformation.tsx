@@ -4,6 +4,7 @@ import { BodyNormal, HeadingLarge, HeadingSmall } from "../../text-wrapers/TextW
 import "../../../css/components/pages/office-details/office-information.css"
 import OfficeFeaturesContext from "../../../contexts/OfficeFeaturesContext";
 import { officeInformationUtrechtDefaultData } from "../../../assets/OfficeInformationData";
+import { addSpaceBeforeCapitalLetters, capitalizeFirstLetter } from "../../../misc/TextFunctions";
 
 function OfficeInformation() {
 	const officeName = useContext(CurrentOfficeContext).currentOffice ?? 'Utrecht';
@@ -31,15 +32,6 @@ function OfficeInformation() {
 			</main>
 		</ div>
 	);
-}
-function capitalizeFirstLetter(str: string) {
-	return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-function addSpaceBeforeCapitalLetters(str: string) {
-	// Use a regular expression to match capital letters
-	// and insert a space before them using replace
-	return str.replace(/([A-Z])/g, ' $1');
 }
 
 export default OfficeInformation;

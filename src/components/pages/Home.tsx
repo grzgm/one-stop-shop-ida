@@ -4,6 +4,7 @@ import { BodyNormal, HeadingLarge } from "../text-wrapers/TextWrapers";
 import { useContext } from "react";
 import CurrentOfficeContext from "../../contexts/CurrentOfficeContext";
 import OfficeFeaturesContext from "../../contexts/OfficeFeaturesContext";
+import { capitalizeFirstLetter } from "../../misc/TextFunctions";
 
 function Home() {
   const officeName = useContext(CurrentOfficeContext).currentOffice;
@@ -31,7 +32,7 @@ function Home() {
         <BodyNormal>have everything you need!</BodyNormal>
       </div>
       <CardContainer title="EmployeePortal" cardProps={employeePortal}/>
-      <CardContainer title={`Office Details ${officeName}`} cardProps={officeDetails}/>
+      <CardContainer title={`Office Details ${capitalizeFirstLetter(officeName)}`} cardProps={officeDetails}/>
     </div>
   );
 }
