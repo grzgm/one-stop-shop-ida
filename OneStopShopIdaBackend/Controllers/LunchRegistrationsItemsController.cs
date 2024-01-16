@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using OneStopShopIdaBackend.Models;
@@ -32,15 +33,29 @@ public class LunchRegistrationsItemsController : CustomControllerBase
 
     private static string RegisterTodayMessage(string office, string name) =>
         "Hi,\n" +
-        $"I would like to register for today's lunch at {office} Office.\n" +
+        $"I would like to register for today's lunch at {CapitalizeFirstLetter(office)} Office.\n" +
         "Kind Regards,\n" +
         $"{name}";
 
     private static string DeregisterTodayMessage(string office, string name) =>
         "Hi,\n" +
-        $"I would like to deregister from today's lunch list at {office} Office.\n" +
+        $"I would like to deregister from today's lunch list at {CapitalizeFirstLetter(office)} Office.\n" +
         "Kind Regards,\n" +
         $"{name}";
+    
+    
+
+    private static string CapitalizeFirstLetter(string str)
+    {
+        if (string.IsNullOrEmpty(str))
+        {
+            return str;
+        }
+
+        // Use TextInfo to capitalize the first letter
+        TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+        return textInfo.ToTitleCase(str);
+    }
 
     [HttpGet("get-registration")]
     public async Task<ActionResult<LunchRegistrationsItemFrontend>> GetLunchIsRegisteredToday()
