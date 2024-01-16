@@ -17,7 +17,8 @@ public partial class SlackApiServices
             Content = new StringContent(JsonSerializer.Serialize(
             new
             {
-                message, channel
+                text = message,
+                channel = channel
             }))
             {
                 Headers =
