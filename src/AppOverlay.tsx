@@ -18,6 +18,7 @@ function AppOverlay() {
     const maxNavbarOptionsWidth = 1360
     const [navbarOptionsWidth, setNavbarOptionsWidth] = useState(navbarOptionsRef?.current?.offsetWidth);
     const [showSidebar, switchShowSidebar] = useState(false)
+    const [showSidebarAnimation, setShowSidebarAnimation] = useState(false)
 
     useEffect(() => {
         setNavbarOptionsWidth(navbarOptionsRef?.current?.offsetWidth);
@@ -45,10 +46,18 @@ function AppOverlay() {
         }
     }, [navbarOptionsRef.current?.offsetWidth]);
 
+    const onPressCloseSidebar = (displaySidebar: boolean) => {
+        setShowSidebarAnimation(!displaySidebar)
+        setTimeout(function () {
+            setShowSidebarAnimation(displaySidebar)
+            switchShowSidebar(displaySidebar)
+        }, 250);
+    }
+
     return (
         <>
             <Navbar onPressOpenSidebar={switchShowSidebar} navbarOptionsRef={navbarOptionsRef} />
-            {(navbarOptionsWidth && navbarOptionsWidth <= maxNavbarOptionsWidth) && showSidebar && (<Sidebar onPressCloseSidebar={switchShowSidebar} />)}
+            {(navbarOptionsWidth && navbarOptionsWidth <= maxNavbarOptionsWidth) && showSidebar && (<Sidebar onPressCloseSidebar={onPressCloseSidebar} showSidebarAnimation={showSidebarAnimation} />)}
             <Outlet />
         </>
     );

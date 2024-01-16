@@ -2,16 +2,16 @@ import { Link } from "react-router-dom";
 import "../../css/sidebar.css";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import CloseIcon from "@mui/icons-material/Close";
-import { Dispatch, SetStateAction } from "react";
 
 interface SidebarProps {
-	onPressCloseSidebar: Dispatch<SetStateAction<boolean>>;
+	onPressCloseSidebar: (displaySidebar: boolean) => void;
+	showSidebarAnimation: boolean;
 }
 
-function Sidebar({ onPressCloseSidebar }: SidebarProps) {
+function Sidebar({ onPressCloseSidebar, showSidebarAnimation }: SidebarProps) {
 	return (
 		<>
-			<nav id="sidebar">
+			<nav id="sidebar" className={showSidebarAnimation ? "sidebar--animation--slide-out" : "sidebar--animation--slide-in"}>
 				{/* <div className="sidebar__burger-menu heading--large">
 						<MenuIcon fontSize="inherit" />
 					</div> */}

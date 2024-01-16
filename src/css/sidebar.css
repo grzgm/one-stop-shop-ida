@@ -1,4 +1,4 @@
-#sidebar{
+#sidebar {
     position: fixed;
     top: 0;
     left: 0;
@@ -14,14 +14,14 @@
     overflow-y: auto;
 }
 
-#sidebar__options{
+#sidebar__options {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     gap: 8rem;
 }
 
-.sidebar__options__grouping{
+.sidebar__options__grouping {
     width: 100%;
     padding: 1rem 0;
     display: flex;
@@ -32,7 +32,7 @@
     border-bottom: 0.125rem var(--main-red) solid;
 }
 
-.sidebar__option{
+.sidebar__option {
     height: 100%;
     padding: 1rem;
     display: flex;
@@ -40,25 +40,25 @@
     border-bottom: 0.125rem var(--main-blue) solid;
 }
 
-.sidebar__option:hover{
+.sidebar__option:hover {
     color: var(--main-red);
     border-bottom: 0.125rem var(--main-red) solid;
 }
 
-.sidebar__burger-menu{
+.sidebar__burger-menu {
     padding: 1rem;
     display: flex;
     align-items: center;
 }
 
-.sidebar__arrow{
+.sidebar__arrow {
     display: flex;
     height: 100%;
     padding: 0 1rem;
     align-items: center;
 }
 
-#cover{
+#cover {
     position: fixed;
     top: 0;
     left: 0;
@@ -66,4 +66,25 @@
     height: 100%;
     z-index: 90;
     background-color: var(--grey2);
+}
+
+.sidebar--animation--slide-in {
+    animation: sidebar--slide 0.25s ease-out;
+    animation-fill-mode: forwards;
+}
+
+.sidebar--animation--slide-out {
+    animation: sidebar--slide 0.25s ease-out;
+    animation-fill-mode: forwards;
+    animation-direction: reverse;
+}
+
+@keyframes sidebar--slide {
+    0% {
+        left: -100%
+    }
+
+    100% {
+        left: 0;
+    }
 }
