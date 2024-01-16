@@ -172,7 +172,7 @@ function Lunch() {
 						<select value={selectedOffice} onChange={handleOfficeDropdownChange} className="body--normal">
 							{offices.map((office) => (
 								<option key={office} value={office}>
-									{office}
+									{capitalizeFirstLetter(office)}
 								</option>
 							))}
 						</select>
