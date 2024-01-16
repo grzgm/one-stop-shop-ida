@@ -3,13 +3,8 @@ import { BodyNormal, BodySmall, HeadingLarge } from "../../text-wrapers/TextWrap
 import { InspectResponseSync } from '../../../api/Response';
 import { useEffect, useState } from 'react';
 import "../../../css/auth-pages.css"
-import { capitalizeFirstLetter } from '../../../misc/TextFunctions';
 
-export interface PopupLoginProps {
-    authTarget: string,
-}
-
-function PopupLogin({ authTarget }: PopupLoginProps) {
+function PopupLogin() {
     const [countDown, setCountDown] = useState(5);
 
     useEffect(() => {
@@ -45,7 +40,7 @@ function PopupLogin({ authTarget }: PopupLoginProps) {
     return (
         <div className="popup__content">
             <div className="description">
-                <HeadingLarge>{capitalizeFirstLetter(authTarget)} Account</HeadingLarge>
+                <HeadingLarge>External Account</HeadingLarge>
                 {serverResponse && InspectResponseSync(serverResponse).success ?
                     <>
                         <BodyNormal additionalClasses={["font-colour--success"]}>You have been loged in</BodyNormal>
