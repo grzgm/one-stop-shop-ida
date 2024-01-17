@@ -9,7 +9,6 @@ interface CardContainerProps {
 
 function CardContainer({title, cardProps = [] }: CardContainerProps) {
   const cards = [];
-  console.log(cardProps)
   if (cardProps.length < 1) {
     for (let i = 0; i < 4; i++) {
       cards.push(<Card key={i} />);

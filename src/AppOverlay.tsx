@@ -27,7 +27,6 @@ function AppOverlay() {
             for (const entry of entries) {
                 const newWidth = entry.contentRect.width;
                 setNavbarOptionsWidth(newWidth);
-                console.log(newWidth);
 
                 if (newWidth > maxNavbarOptionsWidth) {
                     switchShowSidebar(false);
