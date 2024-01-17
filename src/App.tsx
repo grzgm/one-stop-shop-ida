@@ -18,7 +18,8 @@ function App() {
 	const cookies = new Cookies();
 
 	const setCurrentOfficeAndCookie = (newCurrentOffice: string) => {
-		newCurrentOffice = newCurrentOffice.toLowerCase()
+		if (newCurrentOffice !== undefined)
+			newCurrentOffice = newCurrentOffice.toLowerCase()
 		if (officeFeatures.hasOwnProperty(newCurrentOffice)) {
 			setCurrentOffice(newCurrentOffice);
 			cookies.set("currentOffice", newCurrentOffice, { path: '/', sameSite: 'none', secure: true });
@@ -54,12 +55,12 @@ function App() {
 				setOfficeFeatures(newOfficeFeatures)
 
 				let currentOfficeCookies = cookies.get("currentOffice");
-				currentOfficeCookies = currentOfficeCookies.toLowerCase();
 				if (currentOfficeCookies && newOfficeFeatures.hasOwnProperty(currentOfficeCookies)) {
+					currentOfficeCookies = currentOfficeCookies.toLowerCase();
 					setCurrentOffice(currentOfficeCookies)
 				}
 				else{
-					currentOfficeCookies = currentOffice
+					currentOfficeCookies = currentOffice.toLowerCase()
 					cookies.set("currentOffice", JSON.stringify(currentOfficeCookies), { path: "/", sameSite: 'none', secure: true })
 				}
 		}
