@@ -7,7 +7,7 @@ import { officeInformationUtrechtDefaultData } from "../../../assets/OfficeInfor
 import { addSpaceBeforeCapitalLetters, capitalizeFirstLetter } from "../../../misc/TextFunctions";
 
 function OfficeInformation() {
-	const officeName = useContext(CurrentOfficeContext).currentOffice ?? 'Utrecht';
+	const officeName = useContext(CurrentOfficeContext).currentOffice ?? 'utrecht';
 	const { officeFeatures } = useContext(OfficeFeaturesContext) ?? { officeInformationUtrechtDefaultData };
 	const currentOfficeInformationData = officeFeatures[officeName.toLocaleLowerCase()]
 
