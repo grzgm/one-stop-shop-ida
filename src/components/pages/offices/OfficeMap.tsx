@@ -47,7 +47,7 @@ function OfficeMap({ closestOfficeName, officeFeatures, switchOffice }: OfficeMa
         return (
             <GoogleMap
                 mapContainerStyle={mapStyles}
-                center={officeFeatures['utrecht'].officeInformation.officeCoordinates}
+                center={{ lat: 52.0722482, lng: 5.0746558, }}
                 zoom={7}>
                 {markers}
             </GoogleMap>
