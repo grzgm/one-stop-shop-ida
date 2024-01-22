@@ -1,0 +1,167 @@
+.office-space {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.office-space__date-picker {
+    width: 100%;
+    padding: 0.625rem 0;
+    display: flex;
+    justify-content: center;
+    gap: 0.625rem;
+    color: var(--font-colour-white);
+    background-color: var(--main-blue);
+}
+
+.office-space__date-picker__arrows {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+}
+
+.office-space__overview {
+    width: 100%;
+    padding: 5rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--light-red);
+}
+
+.desk-cluster {
+    margin: 1.5rem;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+    gap: 1.5rem;
+}
+
+.desk-cluster .desk:nth-child(2n) {
+    transform: scale(-1, 1);
+}
+
+.desk {
+    width: 5rem;
+    height: 5rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.desk__desk {
+    width: 3.75rem;
+    height: 5rem;
+    position: relative;
+    background-color: var(--light-blue);
+    border-radius: 10%;
+}
+
+.desk__chair {
+    width: 2.5rem;
+    height: 2.5rem;
+    position: absolute;
+    top: 50%;
+    left: -1.25rem;
+    transform: translate(0, -50%);
+    border-radius: 100%;
+}
+
+.desk__chair--available {
+    background-color: var(--light-blue);
+    border: 0.3125rem var(--font-colour-white) solid;
+}
+
+.desk__chair--user-booked {
+    background-color: var(--success);
+    border: 0.3125rem var(--font-colour-white) solid;
+}
+
+.desk__chair--half-booked {
+    background-color: var(--moderate);
+    border: 0.3125rem var(--font-colour-white) solid;
+}
+
+.desk__chair--mix-booked {
+    background: linear-gradient(to bottom left, var(--success) 50%, var(--moderate) 50%);
+    border: 0.3125rem var(--font-colour-white) solid;
+}
+
+.desk__chair--fully-booked {
+    background-color: var(--fail);
+    border: 0.3125rem var(--font-colour-white) solid;
+}
+
+.desk__chair--unavailable {
+    background-color: var(--light-blue);
+    border: none;
+}
+
+.desk__chair--selected {
+    border: 0.3125rem var(--success) solid;
+    /* box-shadow: var(--grey2) 0px 0px 10px 5px; */
+}
+
+.office-space__reservation-controlls {
+    min-height: 15rem;
+}
+
+.reservation-controlls__availability-bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.availability-bar__times {
+    display: flex;
+    justify-content: space-around;
+}
+
+.availability-bar__bars {
+    width: 20rem;
+    display: flex;
+    border-width: 0.0625rem 0;
+    border-color: var(--main-blue);
+    border-style: solid;
+}
+
+.availability-bar__bar {
+    width: 100%;
+    height: 2rem;
+}
+
+.availability-bar__bar--success {
+    background-color: var(--success);
+}
+
+.availability-bar__bar--fail {
+    background-color: var(--fail);
+}
+
+.availability-bar__form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.availability-bar__form label {
+    margin-left: 0.5rem;
+}
+
+.reservation-controlls__info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+@media (max-width: 35rem) {
+    .office-space__overview {
+        flex-wrap: nowrap;
+        overflow: scroll;
+        justify-content: unset;
+    }
+}

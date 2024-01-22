@@ -1,0 +1,106 @@
+:root {
+    font-family: 'Open Sans';
+    /* color-scheme: dark light; */
+
+    --main-red: #E30C31;
+    --dark-red: #B12028;
+    --light-red: #F8C1CA;
+    --main-blue: #000C6E;
+    --light-blue: #ABDBEB;
+    --very-light-blue: #ABDBEB7F;
+    --grey1: #7C7C7C;
+    --grey2: #7C7C7C33;
+    --grey3: #F2F5F6;
+    --success: #6BC16D;
+    --moderate: #FFD101;
+    --fail: #E65049;
+    --font-colour: #192B33;
+    --font-colour-white: #FFFFFF;
+
+    color: var(--font-colour);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+html, body {
+    width: 100%;
+}
+
+.heading--large {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 2.8125rem;
+}
+
+.heading--small {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.875rem;
+}
+
+.body--normal {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.125rem;
+    font-weight: 400;
+    line-height: 1.6875rem;
+}
+
+.body--small {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.25rem;
+}
+
+.buttons--large {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 1.875rem;
+    font-weight: bold;
+    line-height: 2.125rem;
+}
+
+.buttons--normal {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 0.875rem;
+    font-weight: bold;
+    line-height: 1rem;
+}
+
+.font-colour--fail {
+    color: var(--fail);
+}
+
+.background-colour--fail {
+    background-color: var(--fail);
+}
+
+.font-colour--success {
+    color: var(--success);
+}
+
+.background-colour--success {
+    background-color: var(--success);
+}
+
+.description {
+    padding: 1.25rem;
+    text-align: center;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

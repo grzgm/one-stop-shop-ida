@@ -1,0 +1,68 @@
+.button {
+    min-width: 7.5rem;
+    max-width: fit-content;
+    margin: 0.5rem;
+    padding: 0.5rem 2rem;
+    position: relative;
+    border: none;
+    text-align: center;
+    color: var(--font-colour-white);
+    background-color: var(--main-red);
+}
+
+.button:disabled {
+    background-color: var(--light-red);
+}
+
+.button-alt {
+    border: 0.125rem var(--main-red) solid;
+    color: var(--main-red);
+    background-color: var(--font-colour-white);
+}
+
+/* Corner Animation */
+.button-animation:not(:disabled):before, .button-animation:not(:disabled):after {
+    position: absolute;
+    width: 1rem;
+    height: 1rem;
+    background-color: var(--font-colour-white);
+    content: '';
+    transform: rotate(45deg);
+    transition: all 0.2s ease-in, width 0.1s ease-in, height 0.1s ease-in;
+}
+
+.button-animation:not(:disabled):before {
+    top: 0;
+    left: -0.875rem;
+    margin-top: -0.5rem;
+    margin-left: -0.5rem;
+}
+
+.button-animation:not(:disabled):after {
+    right: -0.875rem;
+    bottom: 0;
+    margin-right: -0.5rem;
+    margin-bottom: -0.5rem;
+}
+
+.button-animation:not(:disabled):hover::before, .button-animation:not(:disabled):active::before {
+    left: 0;
+}
+
+.button-animation:not(:disabled):hover::after, .button-animation:not(:disabled):active::after {
+    right: 0;
+}
+
+.button-animation:not(:disabled):active::before, .button-animation:not(:disabled):active::after {
+    width: 0.875rem;
+    height: 0.875rem;
+}
+
+.button-animation:not(:disabled):active {
+    background-color: var(--dark-red);
+    transition: all 0.1s ease-in;
+}
+
+.button-animation {
+    overflow: hidden;
+}

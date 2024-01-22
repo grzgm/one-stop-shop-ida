@@ -1,0 +1,26 @@
+.card-container {
+    width: 100%;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    background-color: var(--main-blue);
+}
+
+.card-container__title {
+    padding: 0.625rem;
+    border-top: 0.125rem var(--main-red) solid;
+    border-bottom: 0.125rem var(--main-red) solid;
+    text-align: center;
+    color: var(--font-colour-white);
+}
+
+.card-container__cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17.5rem, 1fr));
+    gap: 1.25rem;
+    justify-items: center;
+    /* display: flex;
+    flex-wrap: wrap;
+    justify-content: center; */
+}
