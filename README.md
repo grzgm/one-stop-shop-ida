@@ -1,6 +1,10 @@
-# one_stop_shop_ida
+# “One Stop Shop” iDA welcoming application
 
-Repository for “One Stop Shop” iDA welcoming application
+Final Repository for “One Stop Shop” iDA welcoming application
+
+## Directory Structure
+
+
 
 ## Branches
 
