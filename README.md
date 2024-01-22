@@ -4,7 +4,8 @@ Final Repository for “One Stop Shop” iDA welcoming application
 
 ## Directory Structure
 
-
+* *backend* directory consist of the final file structure of [backend](https://github.com/grzgm/one-stop-shop-ida/tree/backend) branch
+* *frontend* directory consist of the final file structure of [frontend](https://github.com/grzgm/one-stop-shop-ida/tree/frontend) branch
 
 ## Branches
 
