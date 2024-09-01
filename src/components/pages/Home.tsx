@@ -28,6 +28,7 @@ function Home() {
         <HeadingLarge>Welcome to</HeadingLarge>
         <HeadingLarge>iDA</HeadingLarge>
         <HeadingLarge>One Stop Shop</HeadingLarge>
+        <HeadingLarge additionalClasses={["font-colour--fail"]}>DEMO</HeadingLarge>
         <BodyNormal>Place where you</BodyNormal>
         <BodyNormal>have everything you need!</BodyNormal>
       </div>
