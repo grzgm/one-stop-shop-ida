@@ -38,7 +38,8 @@ function Router(currentOfficeFeatures: IOfficeFeatures) {
         </Route>
         <Route path="/office-details">
           <Route index element={<OfficeDetails />} />
-          <Route path="reserve-desk" element={<ReserveDesk />} loader={async () => await ReserveDeskLoader(currentOfficeFeatures)} />
+          {/* <Route path="reserve-desk" element={<ReserveDesk />} loader={async () => await ReserveDeskLoader(currentOfficeFeatures)} /> */}
+          <Route path="reserve-desk" element={<ReserveDesk />} />
           {/* <Route path="reserve-desk-overview" element={<ReserveDeskOverview />} /> */}
           <Route path="lunch" element={<Lunch />} loader={async () => await LunchLoader(currentOfficeFeatures)} />
           <Route path="office-information" element={<OfficeInformation />} />

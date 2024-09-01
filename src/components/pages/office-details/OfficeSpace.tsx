@@ -6,6 +6,7 @@ import { useContext, useEffect, useState } from "react";
 import CurrentOfficeContext from "../../../contexts/CurrentOfficeContext";
 import { DeleteDeskReservation, GetDeskReservationOfficeLayout, GetDeskReservationsForOfficeDate, IDesk, IDeskReservationItem, IDeskReservationsDay, PostDeskReservation } from "../../../api/DeskReservationAPI";
 import AlertContext from "../../../contexts/AlertContext";
+import { ContactlessOutlined } from "@mui/icons-material";
 
 export class Desk {
     clusterId: string
