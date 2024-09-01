@@ -40,7 +40,7 @@ function InspectResponseSync<T>(res: any): IActionResult<T> {
 		);
 	}
 
-	if (200 <= res.StatusCode && res.StatusCode <= 299) {
+	if (200 <= res.statusCode && res.statusCode <= 299) {
 		// Handle successful response (status code 200-299)
 		return {
 			success: true,

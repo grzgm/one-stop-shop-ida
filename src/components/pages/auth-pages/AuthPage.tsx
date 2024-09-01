@@ -28,7 +28,7 @@ function AuthPage({ authTarget, isAuth: IsAuth, authUrl: AuthUrl }: AuthPageProp
                 navigate("/")
             }
         };
-        IsAuthWrapper();
+        // IsAuthWrapper();
 
         // Client JWT config
         const getURL = async () => {

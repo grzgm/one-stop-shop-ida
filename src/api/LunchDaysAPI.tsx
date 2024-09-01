@@ -11,16 +11,33 @@ export interface ILunchDaysItem {
 
 async function GetRegisteredDays(): Promise<IActionResult<ILunchDaysItem>> {
 	try {
-		return await ExecuteApiCall<ILunchDaysItem>(`/lunch/days/get-days`, "GET");
+		return {
+			success: true,
+			statusCode: 200,
+			statusText: "OK",
+			payload: {
+				monday: false,
+				tuesday: false,
+				wednesday: false,
+				thursday: false,
+				friday: false,
+			},
+		}
+		// return await ExecuteApiCall<ILunchDaysItem>(`/lunch/days/get-days`, "GET");
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };
 	}
 }
 
-async function PutLunchDaysItem(lunchDaysItem: ILunchDaysItem): Promise<IActionResult<undefined>>{
+async function PutLunchDaysItem(lunchDaysItem: ILunchDaysItem): Promise<IActionResult<undefined>> {
 	try {
-		return await ExecuteApiCall<undefined>(`/lunch/days/update-days`, "PUT", JSON.stringify(lunchDaysItem));
+		return {
+			success: true,
+			statusCode: 200,
+			statusText: "OK",
+		}
+		// return await ExecuteApiCall<undefined>(`/lunch/days/update-days`, "PUT", JSON.stringify(lunchDaysItem));
 	} catch (error) {
 		console.error("Error:", error);
 		return { success: false, statusText: "Request could not be send." };

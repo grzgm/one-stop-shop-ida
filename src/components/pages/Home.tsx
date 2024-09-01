@@ -12,7 +12,7 @@ function Home() {
   const currentOfficeInformationData = officeFeatures[officeName]
 
   const officeDetails = [(currentOfficeInformationData.canReserveDesk ? {linkAddress:"/office-details/reserve-desk", title:"Reserve a Desk", description:"Reserve a Desk"} : {}),
-  (currentOfficeInformationData.canRegisterLunch ? {linkAddress:"/office-details/lunch", title:"Lunch", description:"Sign up for Lunch"} : {}),
+  (currentOfficeInformationData.canRegisterLunch ? {linkAddress:"/slack-auth?previousLocation=/office-details/lunch", title:"Lunch", description:"Sign up for Lunch"} : {}),
   {linkAddress:"/office-details/office-information", title:"Office Information", description:"Office Information Access Parking Wi-Fi How many ppl in the office"},
   (currentOfficeInformationData.canRegisterPresence ? {linkAddress:"/office-details/presence", title:"Presence", description:"Let your colleague know when you are present"} : {})].filter(item => Object.keys(item).length !== 0);
   

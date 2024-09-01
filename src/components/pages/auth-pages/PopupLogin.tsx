@@ -34,7 +34,12 @@ function PopupLogin() {
     const [searchParams] = useSearchParams();
 
     // Access server response
-    const queryServerResponse = searchParams.get('serverResponse');
+    // const queryServerResponse = searchParams.get('serverResponse');
+    const queryServerResponse = JSON.stringify({
+			success: true,
+			statusCode: 200,
+			statusText: "OK",
+		});
     const serverResponse = queryServerResponse && isValidJSON(queryServerResponse) ? JSON.parse(queryServerResponse) : queryServerResponse;
 
     return (
