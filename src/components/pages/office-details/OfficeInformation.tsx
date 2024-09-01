@@ -23,7 +23,7 @@ function OfficeInformation() {
 					if (information == "officeName" || information == "officeCoordinates" || !value)
 						return
 					return (
-						<section>
+						<section key={value.toString()}>
 							<HeadingSmall>{capitalizeFirstLetter(addSpaceBeforeCapitalLetters(information.toString()))}</HeadingSmall>
 							<BodyNormal>{value.toString()}</BodyNormal>
 						</section>)

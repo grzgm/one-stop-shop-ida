@@ -14,9 +14,9 @@ function Offices() {
 	const [closestOfficeName, setClosestOfficeName] = useState<string | undefined>(undefined);
 	const navigate = useNavigate();
 
-	useEffect(() => {
-		setUpAllOfficeFeatures()
-	}, []);
+	// useEffect(() => {
+	// 	setUpAllOfficeFeatures()
+	// }, []);
 
 	useEffect(() => {
 		if ('geolocation' in navigator) {

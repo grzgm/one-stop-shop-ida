@@ -42,14 +42,14 @@ function App() {
 
 	useEffect(() => {
 		const getAllOfficeFeaturesItemsWrapper = async () => {
-			const res = await GetAllOfficeFeaturesItems()
+			// const res = await GetAllOfficeFeaturesItems()
 			const newOfficeFeatures: { [key: string]: IOfficeFeatures } = {};
 
-			if (res.payload) {
-				for (const office of res.payload) {
-					newOfficeFeatures[office.officeName] = office;
-				}
-			}
+			// if (res.payload) {
+			// 	for (const office of res.payload) {
+			// 		newOfficeFeatures[office.officeName] = office;
+			// 	}
+			// }
 
 			if (Object.keys(newOfficeFeatures).length > 0)
 				setOfficeFeatures(newOfficeFeatures)
