@@ -1,5 +1,6 @@
 import { redirect } from "react-router-dom";
 import { IOfficeFeatures } from "../../../api/OfficeFeaturesAPI";
+import { HeadingLarge, BodyNormal } from "../../text-wrapers/TextWrapers";
 
 function PresenceLoader(currentOfficeFeatures: IOfficeFeatures) {
       if (currentOfficeFeatures && currentOfficeFeatures.canRegisterPresence == true) {
@@ -9,9 +10,13 @@ function PresenceLoader(currentOfficeFeatures: IOfficeFeatures) {
 }
 
 function Presence() {
-
       return (
-            <h1>Presence</h1>
+            <div className="content">
+                  <div className="description">
+                        <HeadingLarge>Presence</HeadingLarge>
+                        <BodyNormal additionalClasses={["font-colour--fail"]}>WORK IN PROGRESS</BodyNormal>
+                  </div>
+            </div>
       );
 }
 

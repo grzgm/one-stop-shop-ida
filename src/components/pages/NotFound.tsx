@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { HeadingLarge } from "../text-wrapers/TextWrapers";
 
 function NotFound() {
   const navigate = useNavigate();
@@ -9,7 +10,13 @@ function NotFound() {
       navigate("/");
     }, 1000);
   }, []);
-  return <h1>Not Found</h1>;
+  return (
+    <div className="content">
+          <div className="description">
+                <HeadingLarge>Not Found</HeadingLarge>
+          </div>
+    </div>
+  );
 }
 
 export default NotFound;

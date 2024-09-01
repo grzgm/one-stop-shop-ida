@@ -1,9 +1,14 @@
-function Settings() {
+import { HeadingLarge, BodyNormal } from "../text-wrapers/TextWrapers";
 
-    return (
-          <h1>Settings</h1>
-    );
-  }
-  
-  export default Settings;
-  
+function Settings() {
+      return (
+            <div className="content">
+                  <div className="description">
+                        <HeadingLarge>Settings</HeadingLarge>
+                        <BodyNormal additionalClasses={["font-colour--fail"]}>WORK IN PROGRESS</BodyNormal>
+                  </div>
+            </div>
+      );
+}
+
+export default Settings;

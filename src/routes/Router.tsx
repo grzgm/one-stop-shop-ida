@@ -12,9 +12,7 @@ import OfficeInformation from "../components/pages/office-details/OfficeInformat
 import Presence, { PresenceLoader } from "../components/pages/office-details/Presence";
 import Company101 from "../components/pages/Company101";
 import PersonalSkills from "../components/pages/PersonalSkills";
-import Expenses from "../components/pages/Expenses";
 import Settings from "../components/pages/Settings";
-// import ReserveDeskOverview from "../components/pages/office-details/ReserveDeskOverview";
 import Scheduling from "../components/pages/employee-portal/Scheduling";
 import AppOverlay, { AppLoader } from "../AppOverlay";
 import PopupLogin from "../components/pages/auth-pages/PopupLogin";
@@ -40,14 +38,12 @@ function Router(currentOfficeFeatures: IOfficeFeatures) {
           <Route index element={<OfficeDetails />} />
           {/* <Route path="reserve-desk" element={<ReserveDesk />} loader={async () => await ReserveDeskLoader(currentOfficeFeatures)} /> */}
           <Route path="reserve-desk" element={<ReserveDesk />} />
-          {/* <Route path="reserve-desk-overview" element={<ReserveDeskOverview />} /> */}
           <Route path="lunch" element={<Lunch />} loader={async () => await LunchLoader(currentOfficeFeatures)} />
           <Route path="office-information" element={<OfficeInformation />} />
           <Route path="presence" element={<Presence />} loader={() => PresenceLoader(currentOfficeFeatures)} />
         </Route>
         <Route path="/company101" element={<Company101 />} />
         <Route path="/personal-skills" element={<PersonalSkills />} />
-        <Route path="/expenses" element={<Expenses />} />
         <Route path="/offices" element={<Offices />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/slack-auth" element={<AuthPage authTarget="slack" isAuth={SlackIsAuth} authUrl={SlackAuthUrl} />} />
