@@ -27,7 +27,8 @@ function Router(currentOfficeFeatures: IOfficeFeatures) {
 
   return (
     <>
-      <Route path="/" element={<AppOverlay />} loader={async () => await AppLoader()}>
+      {/* <Route path="/" element={<AppOverlay />} loader={async () => await AppLoader()}> */}
+      <Route path="/" element={<AppOverlay />}>
         <Route index element={<Home />} />
         <Route path="/employee-portal">
           <Route index element={<EmployeePortal />} />
