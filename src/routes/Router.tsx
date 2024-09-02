@@ -22,19 +22,20 @@ import { AuthUrl as SlackAuthUrl, IsAuth as SlackIsAuth } from "../api/SlackAPI"
 import { IOfficeFeatures } from "../api/OfficeFeaturesAPI";
 
 function Router(currentOfficeFeatures: IOfficeFeatures) {
+  const baseUrlPath = import.meta.env.VITE_BASE_URL_PATH ? import.meta.env.VITE_BASE_URL_PATH : "";
 
   return (
     <>
       {/* <Route path="/" element={<AppOverlay />} loader={async () => await AppLoader()}> */}
-      <Route path="/" element={<AppOverlay />}>
+      <Route path={`${baseUrlPath}`} element={<AppOverlay />}>
         <Route index element={<Home />} />
-        <Route path="/employee-portal">
+        <Route path="employee-portal">
           <Route index element={<EmployeePortal />} />
           <Route path="sick-leave" element={<SickLeave />} />
           <Route path="vacation" element={<Vacation />} />
           <Route path="scheduling" element={<Scheduling />} />
         </Route>
-        <Route path="/office-details">
+        <Route path="office-details">
           <Route index element={<OfficeDetails />} />
           {/* <Route path="reserve-desk" element={<ReserveDesk />} loader={async () => await ReserveDeskLoader(currentOfficeFeatures)} /> */}
           <Route path="reserve-desk" element={<ReserveDesk />} />
@@ -42,15 +43,15 @@ function Router(currentOfficeFeatures: IOfficeFeatures) {
           <Route path="office-information" element={<OfficeInformation />} />
           <Route path="presence" element={<Presence />} loader={() => PresenceLoader(currentOfficeFeatures)} />
         </Route>
-        <Route path="/company101" element={<Company101 />} />
-        <Route path="/personal-skills" element={<PersonalSkills />} />
-        <Route path="/offices" element={<Offices />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/slack-auth" element={<AuthPage authTarget="slack" isAuth={SlackIsAuth} authUrl={SlackAuthUrl} />} />
+        <Route path="company101" element={<Company101 />} />
+        <Route path="personal-skills" element={<PersonalSkills />} />
+        <Route path="offices" element={<Offices />} />
+        <Route path="settings" element={<Settings />} />
+        <Route path="slack-auth" element={<AuthPage authTarget="slack" isAuth={SlackIsAuth} authUrl={SlackAuthUrl} />} />
         <Route path="*" element={<NotFound />} />
       </Route>
-      <Route path="/microsoft-auth" element={<AuthPage authTarget="microsoft" isAuth={MicrosoftIsAuth} authUrl={MicrosoftAuthUrl} />} />
-      <Route path="/popup-login" element={<PopupLogin />} />
+      <Route path={`${baseUrlPath}/microsoft-auth`} element={<AuthPage authTarget="microsoft" isAuth={MicrosoftIsAuth} authUrl={MicrosoftAuthUrl} />} />
+      <Route path={`${baseUrlPath}/popup-login`} element={<PopupLogin />} />
     </>
   );
 }

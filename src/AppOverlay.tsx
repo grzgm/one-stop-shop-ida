@@ -9,7 +9,7 @@ async function AppLoader() {
         return null
     }
     else {
-        return redirect(`/microsoft-auth?previousLocation=${encodeURI("/")}`)
+        return redirect(`${import.meta.env.VITE_BASE_URL_PATH ? import.meta.env.VITE_BASE_URL_PATH : ""}/microsoft-auth?previousLocation=${encodeURI(`${import.meta.env.VITE_BASE_URL_PATH ? import.meta.env.VITE_BASE_URL_PATH : ""}/`)}`)
     }
 }
 

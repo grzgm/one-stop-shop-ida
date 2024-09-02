@@ -11,7 +11,7 @@ async function ReserveDeskLoader(currentOfficeFeatures: IOfficeFeatures) {
 			return null
 		}
 		else {
-			return redirect(`/microsoft-auth?previousLocation=${encodeURI("/office-details/reserve-desk")}`)
+			return redirect(`${import.meta.env.VITE_BASE_URL_PATH ? import.meta.env.VITE_BASE_URL_PATH : ""}/microsoft-auth?previousLocation=${encodeURI(`${import.meta.env.VITE_BASE_URL_PATH ? import.meta.env.VITE_BASE_URL_PATH : ""}/office-details/reserve-desk`)}`)
 		}
 	}
 	throw redirect("/")

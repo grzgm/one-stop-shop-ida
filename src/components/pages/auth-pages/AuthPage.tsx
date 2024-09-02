@@ -10,7 +10,7 @@ import { capitalizeFirstLetter } from '../../../misc/TextFunctions';
 
 export interface AuthPageProps {
     authTarget: string,
-    isAuth: () =>  Promise<IActionResult<boolean>>,
+    isAuth: () => Promise<IActionResult<boolean>>,
     authUrl: () => Promise<IActionResult<string>>,
 }
 
@@ -38,13 +38,12 @@ function AuthPage({ authTarget, isAuth: IsAuth, authUrl: AuthUrl }: AuthPageProp
         }
 
         const UrlWrapper = async () => {
-            if ((await IsAuthJWT()).payload)
-            {
+            if ((await IsAuthJWT()).payload) {
                 await getURL();
             }
-            else{
+            else {
                 const res = await AuthJWT()
-                if(res.success)
+                if (res.success)
                     await getURL()
             }
         }
@@ -84,7 +83,7 @@ function AuthPage({ authTarget, isAuth: IsAuth, authUrl: AuthUrl }: AuthPageProp
 
     // Access specific query parameters
     const queryPreviousLocation = searchParams.get('previousLocation');
-    const previousLocation = queryPreviousLocation ? queryPreviousLocation : `/${authTarget}-auth`;
+    const previousLocation = queryPreviousLocation ? queryPreviousLocation : `${import.meta.env.VITE_BASE_URL_PATH ? import.meta.env.VITE_BASE_URL_PATH : ""}/${authTarget}-auth`;
 
     return (
         <div className="content">

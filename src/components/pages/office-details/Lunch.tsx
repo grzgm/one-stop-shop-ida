@@ -17,13 +17,13 @@ import { capitalizeFirstLetter } from "../../../misc/TextFunctions";
 async function LunchLoader(currentOfficeFeatures: IOfficeFeatures) {
 	if (currentOfficeFeatures && currentOfficeFeatures.canRegisterLunch == true) {
 		if (!(await IsAuthSlack()).payload) {
-			return redirect(`/slack-auth?previousLocation=${encodeURI("/office-details/lunch")}`)
+			return redirect(`${import.meta.env.VITE_BASE_URL_PATH ? import.meta.env.VITE_BASE_URL_PATH : ""}/slack-auth?previousLocation=${encodeURI(`${import.meta.env.VITE_BASE_URL_PATH ? import.meta.env.VITE_BASE_URL_PATH : ""}/office-details/lunch`)}`)
 		}
 		if ((await IsAuth()).payload) {
 			return null
 		}
 		else {
-			return redirect(`/microsoft-auth?previousLocation=${encodeURI("/office-details/lunch")}`)
+			return redirect(`${import.meta.env.VITE_BASE_URL_PATH ? import.meta.env.VITE_BASE_URL_PATH : ""}/microsoft-auth?previousLocation=${encodeURI(`${import.meta.env.VITE_BASE_URL_PATH ? import.meta.env.VITE_BASE_URL_PATH : ""}/office-details/lunch`)}`)
 		}
 	}
 	throw redirect("/")

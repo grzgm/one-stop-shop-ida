@@ -21,7 +21,7 @@ async function AuthUrl(): Promise<IActionResult<string>> {
 		return {
 			success: true,
 			statusCode: 200,
-			statusText: "http://localhost:5173/popup-login",
+			statusText: `${import.meta.env.VITE_FRONTEND_URI ? import.meta.env.VITE_FRONTEND_URI : ""}${import.meta.env.VITE_BASE_URL_PATH ? import.meta.env.VITE_BASE_URL_PATH : ""}/popup-login`,
 			payload: "https://grzegorzmalisz.com",
 		}
 		// return await ExecuteApiCall<string>(`/slack/auth/url`, "GET");

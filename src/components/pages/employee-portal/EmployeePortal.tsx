@@ -11,9 +11,9 @@ function EmployeePortal() {
       </div>
       <div className="content__panels">
         <Panel linkAddress="https://werknemer.loket.nl/#/login?returnUrl=%2Fstart" title="External" description="Werknemerloket Web Page" isOpenInNewTab={true}/>
-        <Panel linkAddress="/employee-portal/sick-leave" title="Sick Leave" description="Register your absence"/>
-        <Panel linkAddress="/employee-portal/vacation" title="Vacation" description="Plan your off days and see their balance"/>
-        <Panel linkAddress="/employee-portal/scheduling" title="Scheduling" description="Plan out your wor schedule"/>
+        <Panel linkAddress="sick-leave" title="Sick Leave" description="Register your absence"/>
+        <Panel linkAddress="vacation" title="Vacation" description="Plan your off days and see their balance"/>
+        <Panel linkAddress="scheduling" title="Scheduling" description="Plan out your wor schedule"/>
       </div>
     </div>
   );

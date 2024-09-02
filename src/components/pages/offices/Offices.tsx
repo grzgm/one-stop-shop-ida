@@ -48,7 +48,7 @@ function Offices() {
 			<OfficeMap switchOffice={SwitchOffice} closestOfficeName={closestOfficeName} officeFeatures={officeFeatures} />
 			<div className="content__panels">
 				{(Object.values(officeFeatures)).map((office) => {
-					return (<Panel key={office.officeName} linkAddress="/office-details" title={capitalizeFirstLetter(office.officeName)} description={office.officeInformation.address} onClick={() => setCurrentOffice(office.officeName)} />)
+					return (<Panel key={office.officeName} linkAddress={`${import.meta.env.VITE_BASE_URL_PATH ? import.meta.env.VITE_BASE_URL_PATH : ""}/office-details`} title={capitalizeFirstLetter(office.officeName)} description={office.officeInformation.address} onClick={() => setCurrentOffice(office.officeName)} />)
 				})}
 			</div>
 		</div>
