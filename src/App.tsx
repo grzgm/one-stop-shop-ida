@@ -1,14 +1,15 @@
-import "./css/App.css";
-import Router from "./routes/Router";
 import { useEffect, useState } from "react";
-import CurrentOfficeContext from "../src/contexts/CurrentOfficeContext.ts"
 import { RouterProvider, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
 import Cookies from "universal-cookie";
-import AlertContext from "./contexts/AlertContext.ts";
-import { Alert } from "./components/Alert.tsx";
-import { GetAllOfficeFeaturesItems, IOfficeFeatures } from "./api/OfficeFeaturesAPI.tsx";
-import OfficeFeaturesContext from "./contexts/OfficeFeaturesContext.ts";
+import CurrentOfficeContext from "../src/contexts/CurrentOfficeContext.ts";
+import { IOfficeFeatures } from "./api/OfficeFeaturesAPI.tsx";
 import { officeInformationUtrechtDefaultData } from "./assets/OfficeInformationData.ts";
+import { Alert } from "./components/Alert.tsx";
+import AlertContext from "./contexts/AlertContext.ts";
+import OfficeFeaturesContext from "./contexts/OfficeFeaturesContext.ts";
+import "./css/App.css";
+import DemoInformation from "./misc/DemoInformation.tsx";
+import Router from "./routes/Router";
 
 function App() {
 	// Current Office & Office Features
@@ -124,6 +125,7 @@ function App() {
 					</AlertContext.Provider>
 				</CurrentOfficeContext.Provider>
 			</OfficeFeaturesContext.Provider>
+			<DemoInformation />
 		</>
 	);
 }

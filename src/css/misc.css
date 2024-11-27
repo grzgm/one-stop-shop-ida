@@ -1,0 +1,27 @@
+#demo-information {
+    position: fixed;
+    top: 50%;
+    bottom: 50%;
+    left: 2rem;
+    height: 4rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: clip;
+    border-radius: 4rem;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.25) -5px 5px 15px 0px;
+    cursor: pointer;
+    text-overflow: clip;
+    transition: width 0.3s;
+}
+
+#demo-information>svg {
+    font-size: 3rem;
+    margin: 0.5rem;
+}
+
+#demo-information__text {
+    width: 6rem;
+    min-width: 6rem;
+}
